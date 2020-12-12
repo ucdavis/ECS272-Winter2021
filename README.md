@@ -2,8 +2,8 @@
 This repository contains class materials for ECS 272 in Winter 2020.
 
 ## Time and Location
-4:40 - 6:00pm Tuesday and Thursday
-Location: Remote via Zoom
+* Lecture Time: __4:40 - 6:00pm Tuesday and Thursday__
+* Location: __Remote via Zoom__
 
 ## Instructors and Office Hours
 * Instructor: [Kwan-Liu Ma](https://www.cs.ucdavis.edu/~ma)
