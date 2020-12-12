@@ -7,7 +7,7 @@ Location: Remote via Zoom
 
 ## Instructors and Office Hours
 * Instructor: [Kwan-Liu Ma](https://www.cs.ucdavis.edu/~ma)
-* Teaching Assistant: [Keshav Dasu]
+* Teaching Assistant: Keshav Dasu
 * TA Office Hours: TBD
 
 ## Course Description
