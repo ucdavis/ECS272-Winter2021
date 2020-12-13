@@ -5,7 +5,7 @@ For visualization, you will use [Observable Notebook](https://observablehq.com/)
 his is an individual assignment, so you may not work in groups. 
 Your final submission will take the form of a report including the visualizations you created and the description of the insights you gained from the visualizations.
 
-An example for visualization and analysis of a multidimensional dataset can be found in Observable. (Links to an external site.)
+An example for visualization and analysis of a multidimensional dataset can be found [here](https://observablehq.com/d/2600cf5224a01f25)
 
 * An Observable Tutorial:  [Five-Minute Introduction to Observable](https://observablehq.com/@observablehq/five-minute-introduction) 
 
