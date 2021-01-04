@@ -1,6 +1,15 @@
-# Homework 2: VIsualization Dashboard Pt 1
-In this assignment, you will create a dashboard with three visualization views. 
-You will use JavaScript with D3.js.Before coding, please go over one of the following tutorials:
+# Homework 2: Visualization Dashboard: Layout Design + Visual Encoding
+For homework 2, you will create a dashboard with three visualization views. This homework will not be using Observable. Instead, you will be developing a visualization dashboard system in JavaScript with [D3.js](https://d3js.org/)
+
+To begin, you need to first fork (Links to an external site.) this repository (Links to an external site.). After the fork, clone the forked repository using the following commands:
+
+
+    git clone https://github.com/<your-github-account-name>/ECS272-Winter2021
+    cd ECS272-Winter2021/Homework2
+    
+Create a new folder inside the Homework 2 directory in the forked repository. The name of the folder should be the same as your UC Davis email account name (without ' @ucdavis.edu'). Inside this folder, you will add all your code. 
+
+Before coding, please go over one of the following tutorials:
 * D3: [Introduction](https://d3js.org/#introduction), [Bar Chart Example](http://bost.ocks.org/mike/bar/), [Selection](http://bost.ocks.org/mike/selection/), [Update Patterns](https://www.d3indepth.com/enterexit/)
 
 If you need to learn more about JavaScript, you can refer to [A re-introduction to JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
@@ -16,26 +25,37 @@ In this assignment, you can choose one of the following datasets:
 * [SF Crime Dataset](https://www.kaggle.com/roshansharma/sanfranciso-crime-dataset)
 * [Global Terrorism Database](https://www.kaggle.com/START-UMD/gtd)
   
-To use a dataset, download data file from one of the URLs above and put it in the "datasets" folder under the Homework 2 directory. (Note: __DO NOT__ add or commit the data file to the Git repository).
+To use a dataset, download the data file from the respective URL above and put it in the "datasets" folder under the Homework 2 directory.
+
 
 ### Coding template
-To get started, you can use a template for setting up the application and loading the dataset. For D3.js, you can use the "D3-template" in the Templates folder inside the Homework 2 directory on Github.  
-You may also use existing frameworks. 
-* [Vue](https://vuejs.org/v2/guide/)
-* [React](https://reactjs.org/tutorial/tutorial.html) 
+To get started, you can use one of the provided templates for setting up the application and loading the dataset. These templates can be found in the "Templates" directory under  Homework 2  directory on Github.
 
-If you use one of the above or another framework provide a README.md file to explain how to run and view your system.
-There are some skeleton templates for each framework that I have added to the Templates directory.
+You are free to use other existing frameworks and libraries outside of vanilla javascript to implement the system. Some common frameworks and libraries include:
+* [Vue](https://vuejs.org/v2/guide/)
+  *  Vue is designed from the ground up to be incrementally adoptable. The core library is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects. On the other hand, Vue is also perfectly capable of powering sophisticated Single-Page Applications when used in combination with modern tooling and supporting libraries.
+* [React](https://reactjs.org/tutorial/tutorial.html)  (Links to an external site.)is a JavaScript library for building user interfaces.
+    * React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called “components”.
+
+If you use a framework or library to create your system, please provide a README.md file explaining all the steps to run and view your system.
 
 # Requirements
-Your task is to create a visualization dashboard. The design of this dashboard should facilitate the exploration of a dataset in an effective or interesting way. This dashboard must have three visualization views. Your visualizations should at least one advanced visualization method. The visualizations should depict different dimensions or aspects of the dataset to be examined.  The three visualizations should fit on a fullscreen browser. Consider where each view should be placed while designing the layout of your dashboard. Legends for each view need to be provided as well as labels for axis. One of your three views should serve as an overview of the data.
+Your task is to create a visualization dashboard. The design of this dashboard should facilitate the exploration of a dataset in an effective or interesting way.
 
-The design paradigm you be will be following is referred to as context + focus. 
+* This dashboard must have three visualization views.
+* Your visualizations should include at least one advanced visualization method.
+* The visualizations should depict different dimensions or aspects of the dataset to be examined. 
+* The three visualizations should fit on a fullscreen browser. Consider where each view should be placed while designing the layout of your dashboard.
+* Legends for each view need to be provided as well as labels for axis.
+* One of your three views should serve as an overview of the data.
+* Choose appropriate visual encodings.
+* Color choice matters and has an effect on the interpretability of the visualization. Depending on the data the type of color scale you will use will change (categorical, linear, etc).
+* Carefully consider the design for each encoding that you will use and its effectiveness for portraying the data.  Depending on the data you are visualizing, certain pairings of marks and channels will be more effective.
+
+The design paradigm you will be following is referred to as focus + context. 
+
 * A focus view is where the data of most interest is displayed at full size or with full details.
-* A context view is a peripheral zone, an overview,  where elements are displayed at reduced size or in a simplified way.
-
-For example, let's take a histogram depicting fires in California and their total acreage burnt. This histogram will be our context view. Upon clicking a bar in our histogram a secondary view,  the focus view will update and depict the activity of the selected fire until it was contained as a line chart. 
-
+* A context view is a peripheral zone, an overview,  where elements are displayed at reduced size or in a simplified way.
 For each view, you need to provide one or more visual interface widgets (e.g., a dropdown menu or slider) for changing the parameters of the visualization. For example, a drop-down menu can be provided for selecting the data dimension that maps to the x-axis of a scatter plot or the color encoding used in a 2D heatmap.
 
 ## Examples of basic visualization methods
