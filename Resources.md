@@ -7,13 +7,10 @@ Useful tools and tutorials for learning data visualization.
 ### Visualization Software and Systems
 * [Tableau Public](https://public.tableau.com/en-us/s/) - Free version of Tableau for publishing visualizations on the web
 * [Tableau for Students](https://www.tableau.com/academic/students) - Free license for students using the desktop version of Tableau
-* [RawGraphs](https://app.rawgraphs.io/) - an open source, online visualization tool
 * [Vega-Lite](https://vega.github.io/vega-lite/) - declarative visualization using JSON specifications
 
 ### Visualization Libraries and Toolkit
 * [D3.js](https://www.d3js.org) - popular JavaScript visualization library
-* [Google Charts](https://developers.google.com/chart) - Google's web-based charting library
-* [Echarts](https://echarts.apache.org/en/index.html) - JavaScript visualization library supporting both SVG and Canvas rendering
 * [Leafleat](https://leafletjs.com/) - a JavaScript library for interactive maps
 * [Mapbox](https://docs.mapbox.com/mapbox-gl-js/examples/) - WebGL accelerated maps
 
