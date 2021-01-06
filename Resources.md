@@ -12,8 +12,6 @@ Useful tools and tutorials for learning data visualization.
 
 ### Visualization Libraries and Toolkit
 * [D3.js](https://www.d3js.org) - popular JavaScript visualization library
-  * [D3-Tutorial](https://observablehq.com/@d3/learn-d3?collection=@d3/learn-d3) - tutorial on the basics of D3 js
-  * [D3 Book](https://proquest.safaribooksonline.com/book/databases/business-intelligence/9781491921296) - book on princples of D3
 * [Google Charts](https://developers.google.com/chart) - Google's web-based charting library
 * [Echarts](https://echarts.apache.org/en/index.html) - JavaScript visualization library supporting both SVG and Canvas rendering
 * [Leafleat](https://leafletjs.com/) - a JavaScript library for interactive maps
@@ -43,7 +41,10 @@ Here are some tutorials that could be helpful for completing the assignments and
 * [A re-introduction to JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript) (Mozilla Developer Network)
 * [Eloquent JavasScript](http://eloquentjavascript.net/) - free online book
 * [ES6 JavaScript Tutorial](https://www.javascripttutorial.net/es6/) - ECMAScript 2015, JavaScript version standardized in 2015.
+* [D3-Observable-Walkthrough](https://observablehq.com/@d3/learn-d3?collection=@d3/learn-d3) - tutorial for using D3 js
+* [D3 Book](https://proquest.safaribooksonline.com/book/databases/business-intelligence/9781491921296) - book on princples of D3
 
 #### Python
 * [Python Basics](https://www.learnpython.org/)
+ * Although python will not be used for visualization, you are free to use it for data preprocessing and processing.
 
