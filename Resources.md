@@ -13,6 +13,7 @@ Useful tools and tutorials for learning data visualization.
 ### Visualization Libraries and Toolkit
 * [D3.js](https://www.d3js.org) - popular JavaScript visualization library
   * [D3-Tutorial](https://observablehq.com/@d3/learn-d3?collection=@d3/learn-d3) - tutorial on the basics of D3 js
+  * [D3 Book](https://proquest.safaribooksonline.com/book/databases/business-intelligence/9781491921296) - book on princples of D3
 * [Google Charts](https://developers.google.com/chart) - Google's web-based charting library
 * [Echarts](https://echarts.apache.org/en/index.html) - JavaScript visualization library supporting both SVG and Canvas rendering
 * [Leafleat](https://leafletjs.com/) - a JavaScript library for interactive maps
