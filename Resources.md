@@ -9,6 +9,7 @@ Useful tools and tutorials for learning data visualization.
 * [Tableau for Students](https://www.tableau.com/academic/students) - Free license for students using the desktop version of Tableau
 * [RawGraphs](https://app.rawgraphs.io/) - an open source, online visualization tool
 * [Vega-Lite](https://vega.github.io/vega-lite/) - declarative visualization using JSON specifications
+* [D3-Tutorial](https://observablehq.com/@d3/learn-d3?collection=@d3/learn-d3) - tutorial on the basics of D3 js
 
 ### Visualization Libraries and Toolkit
 * [D3.js](https://www.d3js.org) - popular JavaScript visualization library
