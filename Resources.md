@@ -46,5 +46,5 @@ Here are some tutorials that could be helpful for completing the assignments and
 
 #### Python
 * [Python Basics](https://www.learnpython.org/)
- * Although python will not be used for visualization, you are free to use it for data preprocessing and processing.
+  * Although python will not be used in this course for implementing your visualizations, you are free to use it for data preprocessing and processing.
 
