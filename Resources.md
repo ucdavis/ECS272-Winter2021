@@ -28,6 +28,10 @@ Useful tools and tutorials for learning data visualization.
 
 Here are some tutorials that could be helpful for completing the assignments and final project. 
 
+#### Github
+* [Github Tutorial](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/set-up-git)
+* [Github Desktop](https://desktop.github.com/)
+
 #### Web Basics
 * [Basic Concepts](https://www.tutorialspoint.com/web_developers_guide/web_basic_concepts.htm)
 * [W3Schools HTML Tutorial](https://www.w3schools.com/html/default.asp)
