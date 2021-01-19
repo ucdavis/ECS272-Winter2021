@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 
+// https://www.chartfleau.com/tutorials/d3swarm/
+// https://observablehq.com/@d3/beeswarm
+
 class StreamGraph extends Component{
 
     componentDidMount(){
@@ -16,12 +19,13 @@ class StreamGraph extends Component{
         let height = 400;
         let margin = {left: 60, right: 20, top: 20, bottom: 60};
         
+        let months = new Set();
         let keys = new Set();
         let data = csv.map(row => {
 
-                keys.add(row["Month"]);
-
-                return ({
+            months.add(row["Month"]);
+            keys.add(row["Keyword1"]);
+            return ({
                         keyword: row["Keyword1"],
                         month: row["Month"],
                         pass: (row["Pass or Fail"]=="P")?1:0,
@@ -29,7 +33,7 @@ class StreamGraph extends Component{
                         });
             });
         let max_total = 0;
-        keys.forEach(key=>{
+        months.forEach(key=>{
             max_total= d3.max([max_total,d3.sum(data,d=>{
                 if(row["month"]==key){
                     return d["pass"];
@@ -52,12 +56,12 @@ class StreamGraph extends Component{
           .attr("translate(" + margin.left + "," + margin.top + ")");
 
         let x_scaler = d3.scaleBand()
-                          .domain(keys)
+                          .domain(months)
                           .rangeRound([margin.left,width - margin.right]);
         
-        // let y_scaler = d3.scaleLinear()
-        //                  .domain([0,max_total])
-        //                  .range([height-margin.bottom,margin.top]);
+        let y_scaler = d3.scaleLinear()
+                         .domain([0,max_total])
+                         .range([height-margin.bottom,margin.top]);
 
 
         svg.append("g")
@@ -67,7 +71,9 @@ class StreamGraph extends Component{
         // svg.append("g")
         //     .attr("transform", "translate("+margin.left+",0)")
         //     .call(d3.axisLeft(y_scaler));
-        
+        let color = d3.scaleOrdinal().domain(keys).range(d3.schemePaired);
+
+
         svg.append("g")
             .selectAll("circle")
             .data()

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Navbar from './My_Navbar';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import My_Navbar from './My_Navbar';
 import reportWebVitals from './reportWebVitals';
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,19 +14,29 @@ ReactDOM.render(
       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
       crossorigin="anonymous"
     />
-    <Router>
-      <div>
-          <Navbar/>
-          <Switch>
-            <Route exact path="/">
-              <App/>
-            </Route>
-            <Route exact path="/view_3">
-              <h2>1</h2>
-            </Route>
-          </Switch>
+    <link
+      rel="stylesheet"
+      href="./index.css"
+    />
+      <My_Navbar/>
+      <div className="sk_container">
+        <div className="sk_row">
+          <div className="sk_col">
+
+          </div>
+          <div className="sk_col">
+            <div className="sk_row">
+
+            </div>
+            <div className="sk_row">
+
+            </div>
+          </div>
         </div>
-    </Router>
+      </div>
+
+
+
   </React.StrictMode>,
   document.getElementById('root')
 );
