@@ -1,6 +1,7 @@
 (function () {
     // first, load the dataset from a CSV file
-    d3.csv('../datasets/SF_Historical_Ballot_Measures.csv')
+    //d3.csv('../datasets/SF_Historical_Ballot_Measures.csv')
+    d3.csv('SF_Historical_Ballot_Measures.csv')
       .then(csv => {
         // log csv in browser console
         console.log(csv);
