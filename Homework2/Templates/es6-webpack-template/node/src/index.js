@@ -4,6 +4,7 @@ import './css/style.scss';
 import './css/styles.css'; /* Example of connecting a style-sheet */
 import {drawBarChart} from "./js/barchart"; /* Example of importing one function from a js file for multiple {f(x), f(y), f(z)}*/
 
+/* path */
 
 let x = 2;
 console.log(testData);
