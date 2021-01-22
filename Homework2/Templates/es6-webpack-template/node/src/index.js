@@ -1,5 +1,6 @@
 
 import testData from "./data/test.json"; /* Example of reading in data */
+import './css/style.scss';
 import './css/styles.css'; /* Example of connecting a style-sheet */
 import {drawBarChart} from "./js/barchart"; /* Example of importing one function from a js file for multiple {f(x), f(y), f(z)}*/
 
