@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import data from  './datasets/Film_Locations_in_San_Francisco.csv';
 import App from './App';
 import My_Navbar from './My_Navbar';
 import reportWebVitals from './reportWebVitals';
+import Sk_BarChart from './Sk_BarChart';
 
 
 ReactDOM.render(
@@ -26,10 +28,10 @@ ReactDOM.render(
           </div>
           <div className="sk_col">
             <div className="sk_row">
-
+              <App kind="PieChart"/>
             </div>
             <div className="sk_row">
-
+              <App kind="BarChart"/>
             </div>
           </div>
         </div>

@@ -1,27 +1,41 @@
 import React from 'react';
-import BarChart from './BarChart';
-import data from  './datasets/SF_Historical_Ballot_Measures.csv';
-import './App.css';
+import Sk_BarChart from "./Sk_BarChart";
+import Sk_PieChart from "./Sk_PieChart";
+import csv from  './datasets/Film_Locations_in_San_Francisco.csv';
+
 
 class App extends React.Component{
   constructor(props){
     super(props);
     this.state ={
-      data: data,
-      id: "chart-1"
-    }
+      data: csv
+    };
+
   }
 
   render(){
-    return (
-      <div className="App">
-        <h2>ECS 272 Assignment 3 D3 Template</h2>
-        <div id="container"> 
-        <div id="tooltip"></div>
+    if(this.props.kind === "BarChart"){
+      return (
+        <div>
+          <div id="container"> 
+          </div>
+          <Sk_BarChart data={this.state.data} width={500} height={400} />
         </div>
-        <BarChart data={this.state.data} width={this.state.width} height={this.state.height} />
-      </div>
+      );
+    }else if(this.props.kind === "PieChart"){
+      return (
+        <div>
+          <div id="container_pie"> 
+          </div>
+          <Sk_PieChart data={this.state.data} width={700} height={500} />
+        </div>
+      );
+    }
+    
+    return (
+      <div></div>
     );
+
   }
 
 }
