@@ -19,6 +19,17 @@ module.exports = {
             use: {
               loader: 'url-loader',
             },
+          },
+          {
+            test: /\.(txt|csv|mmdb)$/,
+            use:
+              {
+                loader: 'file-loader',
+                options: {
+                  name: "[path][name].[ext]",
+                  emitFile: true,
+                },
+              },
           }
         ]
     },
