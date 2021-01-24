@@ -1,22 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import * as d3 from 'd3';
-
-@Component({
-  selector: 'app-lineplot',
-  templateUrl: './lineplot.component.html',
-  styleUrls: ['./lineplot.component.scss']
-})
-export class LineplotComponent implements OnInit {
-  @Input() data = ['i love python'];
-  constructor() { }
-
-  ngOnInit(): void {this.template_sample();
-
-  }
-
-  template_sample(){
+(function () {
     // first, load the dataset from a CSV file
-    d3.csv('../../../../datasets/SF_Historical_Ballot_Measures.csv')
+    d3.csv('https://raw.githubusercontent.com/ucdavis/ECS272-Winter2021/main/Homework2/Templates/react-template/react-d3/src/datasets/SF_Historical_Ballot_Measures.csv')
       .then(csv => {
         // log csv in browser console
         console.log(csv);
@@ -102,6 +86,4 @@ export class LineplotComponent implements OnInit {
             .text("No Votes");
   
       })
-  }
-
-}
+  })()
