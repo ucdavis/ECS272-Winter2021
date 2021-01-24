@@ -1,4 +1,31 @@
 import * as d3 from "d3";
+import csvPath from '../assets/data/SF_Historical_Ballot_Measures.csv';
+
+
+function drawBarFromCsv(){
+    //async method
+    d3.csv(csvPath).then((data) => {
+        // array of objects
+        console.log(data.length);
+        console.log(data);
+        // do something with the data (e.g process and render chart)
+        //  const pData = processData();
+        //  drawBarChart(pData, id);
+        //(data will only exist inside here since it is an async call to read in data) so all rendering and processsing with data has to occur inside the "then"
+    });
+}
+/* 
+    Same as the one above but we made the function itself asynch so we can use await
+    The two do the same thing essentially but it is cleaner to read
+*/
+export async function drawBarFromCsvAsync(){
+    const data = await d3.csv(csvPath);
+    console.log(data); 
+    //process data()
+    //draw chart ()
+    //There will be some delay in console before it prints the array
+}
+
 
 export function drawBarChart(data, id) {
 
@@ -56,6 +83,5 @@ export function drawBarChart(data, id) {
                 .attr("y", -80)
                 .attr("font-weight", "bold"))
 }
-
 
 

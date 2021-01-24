@@ -11,14 +11,25 @@ module.exports = {
             use: ['babel-loader']
           },
           {
-            test: /\.(css)$/,
-            use: ['style-loader', 'css-loader'],
+            test: /\.(scss|css)$/,
+            use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
           },
           {
             test: /\.(jpg|png)$/,
             use: {
               loader: 'url-loader',
             },
+          },
+          {
+            test: /\.(txt|csv|mmdb)$/,
+            use:
+              {
+                loader: 'file-loader',
+                options: {
+                  name: "[path][name].[ext]",
+                  emitFile: true,
+                },
+              },
           }
         ]
     },
