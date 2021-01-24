@@ -21,7 +21,7 @@ class ScatterPlot extends Component{
           })
         };
       });
-       var width = 800;
+       var width = 1000;
        var height = 600;
        var margin = {left: 60, right: 20, top: 20, bottom: 60}
 
@@ -40,7 +40,7 @@ class ScatterPlot extends Component{
       // Add X axis --> it is a date format
       var x = d3.scaleLinear()
         .domain([1920,2020])
-        .range([ 0, width ]);
+        .range([ 0, width-100 ]);
       svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
@@ -83,14 +83,28 @@ class ScatterPlot extends Component{
         .attr("r", 5)
         .attr("stroke", "white")
 
+        svg
+      .selectAll("myLabels")
+      .data(dataReady)
+      .enter()
+        .append('g')
+        .append("text")
+          .attr("class", function(d){ return d.name })
+          .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; }) // keep only the last value of each time series
+          .attr("transform", function(d) { return "translate(" + x(d.value.time) + "," + y(d.value.value) + ")"; }) // Put the text at the position of the last point
+          .attr("x", 12) // shift the text a bit more right
+          .text(function(d) { return d.name; })
+          .style("fill", function(d){ return myColor(d.name) })
+          .style("font-size", 15)
+
             // Add a legend (interactive)
     svg.selectAll("myLegend")
       .data(dataReady)
       .enter()
         .append('g')
         .append("text")
-          .attr('x', function(d,i){ return 30 + i*100})
-          .attr('y', function(d,i){ return 0 + i%6*30})
+          .attr('x', function(d,i){ return 30 + i*110-2*d.name.length})
+          .attr('y', function(d,i){ return 0 })
           .text(function(d) { return d.name; })
           .style("fill", function(d){ return myColor(d.name) })
           .style("font-size", 15)
@@ -110,7 +124,7 @@ class ScatterPlot extends Component{
     }
 
     render(){
-        return <div id={"#" + this.props.id}></div>
+        return <div id={"#" + "hey"}></div>
     }
 }
 
