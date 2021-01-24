@@ -24,7 +24,7 @@ class App extends React.Component{
         <div id="container"> 
         <div id="tooltip">asdasdssss</div>
         </div>
-        <ScatterPlot data={this.state.dataYear} width={this.state.width} height={this.state.height} />
+        <ScatterPlot data={this.state.dataYear} />
         <SpiderPlot data={this.state.dataGenre} />
       </div
  >   );
