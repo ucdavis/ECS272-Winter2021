@@ -104,7 +104,7 @@ class Sk_BarChart extends Component{
             * ********************************/
            var width = this.props.width;
            var height = this.props.height;
-           var margin = {left: 40, right: 85, top: 20, bottom: 20}
+           var margin = {left: 50, right: 85, top: 20, bottom: 20}
             
     
            let x_scale = d3.scaleBand()
@@ -155,7 +155,7 @@ class Sk_BarChart extends Component{
            .call(d3.axisLeft(y_scale));
            
         let legends = svg.append("g")
-           .attr("transform","translate(400,0)")
+           .attr("transform","translate("+(width-50)+",0)")
            .selectAll(".category").data(top_directors);
     
         let legend = legends.join("g")
@@ -175,9 +175,30 @@ class Sk_BarChart extends Component{
                            .attr("font-family", "Saira")
                            .attr("fill",data=>colors(data.number))
                            .attr("x",20)
-                           .attr("y",20);    
+                           .attr("y",20);
+        
+        svg.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "end")
+            .attr("x", -40)
+            .attr("y", 10)
+            .attr("dy", ".5em")
+            .attr("transform", "rotate(-90)")
+            .text("appearance (times)")
+            .attr("font-size","0.7em")
+            .attr("fill","black");
+        
+        svg.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "end")
+            .attr("x", width/2)
+            .attr("y", height+margin.bottom/2)
+            .text("directors")
+            .attr("font-size","0.7em")
+            .attr("fill","black");
 
         });
+
 
     
     }
@@ -191,9 +212,11 @@ class Sk_BarChart extends Component{
                 <input type="text" value={this.state.value} onChange={this.handleChange} />
                 </label>
             </form>
-            <select id="locations" value={this.state.location} onChange={this.handleSelect} >
-
-            </select>
+            <label>
+                Film location:
+                <select id="locations" value={this.state.location} onChange={this.handleSelect} >
+                </select>
+            </label>
         </div>);
     }
 }

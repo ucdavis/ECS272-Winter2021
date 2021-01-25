@@ -63,7 +63,7 @@ class Sk_VoronoiDiagram extends Component{
             }
             let width = this.props.width;
             let height = this.props.height;
-            let margin = {left: 20, right: 20, top: 20, bottom: 20}
+            let margin = {left: 50, right: 20, top: 20, bottom: 20}
 
             d3.select('#container_VoronoiDiagram').selectAll("*").remove();
             let svg = d3.select('#container_VoronoiDiagram')
@@ -109,7 +109,22 @@ class Sk_VoronoiDiagram extends Component{
                 .attr("cy",data=>data[1])
                 .attr("r",this.state.radius)
                 .attr("fill",data=>colors(data[2]));
-            
+
+            svg.append("g")
+                .attr("transform","translate("+margin.left+",0)")
+                .call(d3.axisLeft(y_scale))
+                .attr("fill","white")
+                .style("color","white");
+
+            svg.append("text")
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("x",-(width/2)+2*margin.top)
+                .attr("y", 6)
+                .attr("dy", ".75em")
+                .attr("transform", "rotate(-90)")
+                .text("appearances (times)")
+                .attr("fill","white");
 
 
         });
@@ -121,7 +136,7 @@ class Sk_VoronoiDiagram extends Component{
         return (
         <div id={"#" + this.props.id}>
             <form>
-                <label for="vol">Volume (between 0 and 50):</label>
+                <label for="vol">voronoi diagram scatterplots radius:</label>
                 <input type="range" min="0" max="25" onChange={this.handleChange}/>
             </form>
         </div>);

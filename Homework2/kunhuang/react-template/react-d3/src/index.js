@@ -24,13 +24,16 @@ ReactDOM.render(
       <div className="sk_container">
         <div className="sk_row">
           <div className="sk_col">
-            <App kind="VoronoiDiagram"/>
+            <h2>Overview (directors and their appearances)</h2>
+            <App kind="VoronoiDiagram"/> 
           </div>
           <div className="sk_col">
             <div className="sk_row">
+              <h2>Top X most popular directors in all film locations</h2>
               <App kind="PieChart"/>
             </div>
             <div className="sk_row">
+              <h2>Top X most popular directors in selected film locations</h2>
               <App kind="BarChart"/>
             </div>
           </div>

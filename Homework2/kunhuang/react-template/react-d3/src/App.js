@@ -20,7 +20,7 @@ class App extends React.Component{
         <div>
           <div id="container"> 
           </div>
-          <Sk_BarChart data={this.state.data} width={600} height={300} />
+          <Sk_BarChart data={this.state.data} width={700} height={200} />
         </div>
       );
     }else if(this.props.kind === "PieChart"){
