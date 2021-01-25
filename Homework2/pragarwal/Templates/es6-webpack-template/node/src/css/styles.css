@@ -1,5 +1,6 @@
 h1 {
-    color: red;
+    color: black;
+    font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* #bar {
@@ -7,5 +8,17 @@ h1 {
 } */
 
 #myClass {
-    color: greenyellow;
+    color: white;
+}
+
+body{
+    background-color : #1ed760;
+}
+
+.header {
+    font-weight : bold;
+    font-size: larger;
+    font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* padding-left: 50px; */
+    /* background-color: black; */
 }
