@@ -83,11 +83,11 @@ class Sk_BarChart extends Component{
                           .style("background","grey");
             let segments = d3.arc()
                              .innerRadius(0)
-                             .outerRadius(200)
+                             .outerRadius(150)
                              .padAngle(0.05)
                              .padRadius(50);
             let g = svg.append("g")
-                      .attr("transform","translate(250,250)")
+                      .attr("transform","translate(200,200)")
                       .selectAll("path")
                       .data(pie_data)
                       .join("path")
@@ -109,7 +109,7 @@ class Sk_BarChart extends Component{
                            .attr("fill","white");
             });
             let legends = svg.append("g")
-                             .attr("transform","translate(500,100)")
+                             .attr("transform","translate(400,100)")
                              .selectAll(".category").data(pie_data);
             let legend = legends.join("g")
                                 .classed("category",true)

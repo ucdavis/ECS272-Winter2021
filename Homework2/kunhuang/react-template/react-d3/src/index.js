@@ -24,7 +24,7 @@ ReactDOM.render(
       <div className="sk_container">
         <div className="sk_row">
           <div className="sk_col">
-
+            <App kind="VoronoiDiagram"/>
           </div>
           <div className="sk_col">
             <div className="sk_row">

@@ -2,6 +2,7 @@ import React from 'react';
 import Sk_BarChart from "./Sk_BarChart";
 import Sk_PieChart from "./Sk_PieChart";
 import csv from  './datasets/Film_Locations_in_San_Francisco.csv';
+import Sk_VoronoiDiagram from './Sk_VoronoiDiagram';
 
 
 class App extends React.Component{
@@ -19,7 +20,7 @@ class App extends React.Component{
         <div>
           <div id="container"> 
           </div>
-          <Sk_BarChart data={this.state.data} width={500} height={400} />
+          <Sk_BarChart data={this.state.data} width={600} height={300} />
         </div>
       );
     }else if(this.props.kind === "PieChart"){
@@ -27,7 +28,15 @@ class App extends React.Component{
         <div>
           <div id="container_pie"> 
           </div>
-          <Sk_PieChart data={this.state.data} width={700} height={500} />
+          <Sk_PieChart data={this.state.data} width={600} height={400} />
+        </div>
+      );
+    }else if(this.props.kind === "VoronoiDiagram"){
+      return (
+        <div>
+          <div id="container_VoronoiDiagram"> 
+          </div>
+          <Sk_VoronoiDiagram data={this.state.data} width={800} height={800} />
         </div>
       );
     }

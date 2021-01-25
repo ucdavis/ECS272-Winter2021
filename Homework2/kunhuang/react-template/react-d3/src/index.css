@@ -18,6 +18,8 @@ code {
   padding: 0px;
   margin-left: 0px;
   margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
   top:5vh;
   border: 0px;
   display: flex;
@@ -29,6 +31,10 @@ code {
   flex-grow: 1;
   flex-direction: row;
   height: 100%;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .sk_container > .sk_row > .sk_col{
@@ -36,11 +42,18 @@ code {
   flex-grow: 1;
   flex-direction: column;
   height: 100%;
-  padding: 2%;
+  padding: 1%;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .sk_container > .sk_row > .sk_col > .sk_row{
   flex-grow: 1;
-  padding-bottom: 2%;
   display: block;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
