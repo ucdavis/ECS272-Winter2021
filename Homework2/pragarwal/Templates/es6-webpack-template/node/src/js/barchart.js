@@ -1,94 +1,5 @@
 import * as d3 from "d3";
-
-export function drawBarChart(data, id) {
-
-    const margin = {top: 0, right: 10, bottom: 100, left: 70};
-    const height = 1000;
-    const width = 500;
-
-    const x = d3.scaleBand()
-                .domain(chartData.map(d => d.name))
-                .rangeRound([margin.left, width-margin.right])
-                .padding(0.5);
-
-    const y = d3.scaleLinear()
-                .domain([0, d3.max(chartData, d => d.average)])
-                .nice()
-                .rangeRound([height-margin.bottom, margin.top]);
-
-    const color = d3.scaleOrdinal()
-                    .range(["#23171b","#4a58dd","#2f9df5","#27d7c4","#4df884","#95fb51",
-                            "#dedd32","#ffa423","#f65f18","#ba2208","#900c00","#6e40aa",
-                            "#6054c8","#4c6edb","#368ce1","#23abd8","#1ac7c2","#1ddfa3",
-                            "#30ef82","#52f667","#7ff658","#aff05b"]);
-
-    let colorColumn = "average";
-
-    let svg = d3.select(id).append("svg")
-                .attr("viewBox", [0, 0, width, height])
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom);
-            
-    
-    
-    svg.selectAll(".bar")
-        .data(data)
-        .enter().append("rect")
-        .attr('x', d => x(d.name))  
-        .attr('y', d => y(d.average))
-        .attr("width", x.bandwidth()) 
-        .attr("height", d => height - margin.bottom - y(d.average)) 
-        .attr("fill", (d) => color(d[colorColumn]));
-
-    
-    const xAxis = g => g
-    .attr("transform", `translate(0,${height - margin.bottom})`)
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .style("text-anchor", "middle")
-    .attr("x", function(d,i){
-                    return x(i) + x.bandwidth() / 2;
-                  })
-    .attr("y", d => {height - margin.bottom - 500})
-    .attr("transform", "rotate(-90)")
-    .attr("font-family" , "sans-serif")
-    .attr("font-size" , "11px")
-  
-    const yAxis = g => g
-    .attr("transform", `translate(${margin.left},0)`)
-    .call(d3.axisLeft(y))
-
-    
-    svg.append("g")
-        .call(xAxis)
-        .call(g =>
-      g .select(".tick:last-of-type text")
-        .clone()
-        .attr("text-anchor", "middle")
-        .attr("x", -(width - margin.left - margin.right) / 2)
-        .attr("y", margin.bottom - 10)
-        .attr("font-weight", "bold")
-        .text("Type Description")
-      );
-
-    svg.append("g")
-        .call(yAxis)
-        .call(g =>
-    g .select(".tick:last-of-type text")
-      .clone()
-      .attr("transform", `rotate(-90)`)
-      .attr("text-anchor", "middle")
-      .attr("x", (-1000 - margin.top - margin.bottom) / 2)
-      .attr("y", -50)
-      .attr("font-weight", "bold")
-      .text("Average Score")
-      ); 
-
-}
-
-
-
-
+import csvPath from '../assets/data/SF_Historical_Ballot_Measures.csv';
 
 
 // export function drawBarChart(data, id) {
@@ -149,4 +60,27 @@ export function drawBarChart(data, id) {
 // }
 
 
+// function drawBarFromCsv(){
+//   //async method
+//   d3.csv(csvPath).then((data) => {
+//       // array of objects
+//       console.log(data.length);
+//       console.log(data);
+//       // do something with the data (e.g process and render chart)
+//       //  const pData = processData();
+//       //  drawBarChart(pData, id);
+//       //(data will only exist inside here since it is an async call to read in data) so all rendering and processsing with data has to occur inside the "then"
+//   });
+// }
+// /* 
+//   Same as the one above but we made the function itself asynch so we can use await
+//   The two do the same thing essentially but it is cleaner to read
+// */
+// export async function drawBarFromCsvAsync(){
+//   const data = await d3.csv(csvPath);
+//   console.log(data); 
+//   //process data()
+//   //draw chart ()
+//   //There will be some delay in console before it prints the array
+// }
 

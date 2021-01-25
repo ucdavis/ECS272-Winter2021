@@ -1,0 +1,72 @@
+{
+    "data":[
+      {
+        "name": "FOOD SERVICE", 
+        "average": 91.94759036144578
+        },
+        {
+          "name": "PRE-PACKAGED RETAIL", 
+          "average": 92.5375
+        },
+        {
+          "name": "FOOD SERVICE (DAY CARE / CHILD CARE CENTER", 
+          "average": 97.09411764705882
+        },
+        {
+          "name": "RETAIL-FOOD  10,000 SQ FT OR LESS", 
+          "average": 93.58257345491388
+        },
+        {
+          "name": "RETAIL-FOOD  10,001 SQ FT OR OVER", 
+          "average": 90.91005291005291
+        },
+        {
+          "name": "SCHOOL CAFETERIA OR FOOD SERVICE", 
+          "average": 98.40697674418605
+        },
+        {
+          "name": "STATIONARY RESTRICTED CONCESSON", 
+          "average": 99.46341463414635
+        },
+        {
+          "name": "SUPERMARKET WITH PROCESSING", 
+          "average": 85.21052631578948
+        },
+        {
+          "name": "CATERERS", 
+          "average": 97.29230769230769
+        },
+        {
+          "name": "FOOD SERVICE COMMISSARY", 
+          "average": 99
+        },
+        {
+          "name": "MOBILE RESTRICTED CONCESSION", 
+          "average": 100
+        },
+        {
+          "name": "FOOD SERVICE (HOSPITAL / NURSING HOME", 
+          "average": 93.45901639344262
+        },
+        {
+          "name": "RETAIL WITH LIMITED SERVICE", 
+          "average": 99.18518518518519
+        },
+        {
+          "name": "RETAIL BAKERY", 
+          "average": 97.21428571428571
+        },
+        {
+          "name": "MEAT MARKET (INCLUDING POULTRY)", 
+          "average": 97.71428571428571
+        },
+        {
+          "name": "SALVAGE DISTRIBUTOR", 
+          "average": 100
+        },
+        {
+          "name": "SELF-CONTAINED MOBILE FOOD UNITS", 
+          "average": 99.71428571428571
+        }
+    ]
+}
