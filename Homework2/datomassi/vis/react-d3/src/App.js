@@ -22,12 +22,13 @@ class App extends React.Component{
       <div className="App">
         <h2>ECS 272 Assignment 3 D3 Template</h2>
         <div id="container"> 
+
         <div id="tooltip">asdasdssss</div>
         </div>
-        <ScatterPlot data={this.state.dataYear} />
-        <SpiderPlot data={this.state.dataGenre} />
-      </div
- >   );
+        <div id="scatter"> <ScatterPlot data={this.state.dataYear} /> </div>
+        <div id="spider"> <SpiderPlot data={this.state.dataGenre} /></div>
+      </div>   
+      );
   }
 
 }

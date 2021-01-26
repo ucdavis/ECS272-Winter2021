@@ -12,12 +12,11 @@ class SpiderPlot extends Component{
       d3.csv( this.props.data)
         .then(csv => {
 
-        var data = csv.slice(0,3);
+        var data = csv;
         var allGroup = []
         data.forEach((d) => {
           allGroup.push(d.genres);
         });
-        // console.log(allGroup);
 
         // add the options to the button
       d3.select("#selectButton")
@@ -31,7 +30,7 @@ class SpiderPlot extends Component{
       var margin = {left: 60, right: 20, top: 20, bottom: 60}
        var width = 600;
        var height = 600; 
-       var svg = d3.select('#container')
+       var svg = d3.select('#spider')
                    .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom);
@@ -40,7 +39,6 @@ class SpiderPlot extends Component{
                            .domain([0,1])
                            .range([0,250]);
       let ticks = [0.2,0.4,0.6,0.8,1];
-      // let ticks = [2,4,6,8,10];
 
       ticks.forEach(t =>
         svg.append("circle")

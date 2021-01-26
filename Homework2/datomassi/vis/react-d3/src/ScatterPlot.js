@@ -25,7 +25,7 @@ class ScatterPlot extends Component{
        var height = 600;
        var margin = {left: 60, right: 20, top: 20, bottom: 60}
 
-      var svg = d3.select("#container")
+      var svg = d3.select("#scatter")
       .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
