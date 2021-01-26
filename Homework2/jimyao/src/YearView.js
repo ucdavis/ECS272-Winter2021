@@ -189,6 +189,7 @@ class YearView extends Component{
           .attr("dy", ".5em")
           .style("text-anchor", "end")
           .style("font-weight", 500)
+          .style("opacity", "0")
           .text("Click to select this year");
 
         mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
@@ -225,6 +226,14 @@ class YearView extends Component{
             var mouse = d3.pointer(event);
             change_year(Math.round(mouse[0]/width*100+1920.5));
           });
+      
+        svg.append('text')
+        .attr('class', 'axis-label')
+        .text("Year")
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('x', margin.left / 2 + (width - margin.left - margin.right) / 2)
+        .attr('y', 375) // Relative to the x axis.
 
       this.setState({
         data: data,
@@ -318,6 +327,7 @@ class YearView extends Component{
               .attr("dy", ".5em")
               .style("text-anchor", "end")
               .style("font-weight", 500)
+              .style("opacity", "0")
               .text("Click to select this year");
     
             mouseG.append('svg:rect') // append a rect to catch mouse movements on canvas
@@ -354,7 +364,13 @@ class YearView extends Component{
                 var mouse = d3.pointer(event);
                 change_year(Math.round(mouse[0]/width*100+1920.5));
               });
-    
+              svg.append('text')
+              .attr('class', 'axis-label')
+              .text("Year")
+              .attr('font-weight', 500)
+              .attr('font-size', "0.8em")
+              .attr('x', margin.left / 2 + (width - margin.left - margin.right) / 2)
+              .attr('y', 375) // Relative to the x axis.
   }
 
   render(){

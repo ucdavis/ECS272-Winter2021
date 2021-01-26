@@ -40,7 +40,7 @@ class Top10SongView extends Component{
     // Parse the Data
     d3.csv(this.props.data).then((data)=>{
       var keys = this.state.keys;
-
+      var select = this.state.select;
       var i, j;
 
       for(i=0; i<data.length; i++) {
@@ -107,6 +107,15 @@ class Top10SongView extends Component{
         .attr("height", function(d) { return height - y(d.acousticness); })
         .attr("fill", "#ed0345")
       
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .text(keys[select])
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+        .attr('y', -50); // Relative to the y axis.
+
       this.setState({
         data: data,
         svg: svg,
@@ -177,6 +186,14 @@ class Top10SongView extends Component{
       .attr("height", function(d) { return height - y(d[keys[select]]); })
       .attr("fill", colors[select])
     
+    svg.append('text')
+      .attr('class', 'axis-label')
+      .text(keys[select])
+      .attr('font-weight', 500)
+      .attr('font-size', "0.8em")
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+      .attr('y', -50); // Relative to the y axis.
 
   }
 

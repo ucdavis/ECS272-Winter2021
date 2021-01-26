@@ -77,8 +77,8 @@ class App extends React.Component{
         <div id="pad"></div>
         <div id="display">
           <div id="left-view">
-            <YearView id="year-view" change_year={this.state.change_year} size={{width: "850", height:"400", margin:{left:40, right:40, top:20, bottom:20}}} data={this.state.data} data_by_year={this.state.data_by_year} keys={this.state.keys} colors={this.state.colors}></YearView>
-            <YearDetailView id="year-detail-view" change_selected={this.state.change_selected} size={{width: "850", height:"200", margin:{left:40, right:40, top:20, bottom:20}}} data={this.state.data} data_by_year={this.state.data_by_year} keys={this.state.keys} colors={this.state.colors}></YearDetailView>
+            <YearView id="year-view" change_year={this.state.change_year} size={{width: "850", height:"400", margin:{left:50, right:40, top:20, bottom:40}}} data={this.state.data} data_by_year={this.state.data_by_year} keys={this.state.keys} colors={this.state.colors}></YearView>
+            <YearDetailView id="year-detail-view" change_selected={this.state.change_selected} size={{width: "850", height:"200", margin:{left:50, right:40, top:20, bottom:40}}} data={this.state.data} data_by_year={this.state.data_by_year} keys={this.state.keys} colors={this.state.colors}></YearDetailView>
           </div>
           <div id="right-view">
             <Top10SongView id="top-10-song-view" set_top_10_song={this.state.set_top_10_song} size={{width:"400", height:"300", margin:{left:80, right:40, top:40, bottom:100}}} data={this.state.data} data_by_year={this.state.data_by_year} keys={this.state.keys} colors={this.state.colors}></Top10SongView>

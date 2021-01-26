@@ -42,7 +42,7 @@ class Top10ArtistView extends Component{
     d3.csv(this.props.data).then((data)=>{
       d3.csv(this.props.data_by_artist).then((data_by_artist)=>{
       var keys = this.state.keys;
-
+      var select = this.state.select;
       var artists_year = [];
 
       var i, j;
@@ -115,12 +115,31 @@ class Top10ArtistView extends Component{
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");
 
+      // svg.append('text')
+      // .attr('class', 'axis-label')
+      // .text("Name")
+      // .attr('font-weight', 500)
+      // .attr('font-size', "0.8em")
+      // .attr('x', margin.left / 2 + (width - margin.left - margin.right) / 2)
+      // .attr('y', 250) // Relative to the x axis.
+      
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .text(keys[select])
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+        .attr('y', -50); // Relative to the y axis.
+
+
+
       // Add Y axis
       var y = d3.scaleLinear()
       .domain([0, 1])
       .range([ height, 0]);
       svg.append("g")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
 
       // Bars
       svg.selectAll("mybar")
@@ -139,7 +158,8 @@ class Top10ArtistView extends Component{
         x: x,
         y: y,
         height:height,
-        width:width
+        width:width,
+        margin: margin
       });
     });
 
@@ -159,6 +179,7 @@ class Top10ArtistView extends Component{
     var colors = this.state.colors;
     var height = this.state.height;
     var width = this.state.width;
+    var margin = this.state.margin;
 
     svg.selectAll("*").remove();
     var artists_year = [];
@@ -220,6 +241,23 @@ class Top10ArtistView extends Component{
         .attr("width", x.bandwidth())
         .attr("height", function(d) { return height - y(d[keys[select]]); })
         .attr("fill", colors[select])
+
+      // svg.append('text')
+      //   .attr('class', 'axis-label')
+      //   .text("Name")
+      //   .attr('font-weight', 500)
+      //   .attr('font-size', "0.8em")
+      //   .attr('x', margin.left / 2 + (width - margin.left - margin.right) / 2)
+      //   .attr('y', 250) // Relative to the x axis.
+        
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .text(keys[select])
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+        .attr('y', -50); // Relative to the y axis.
   };
 
   render(){

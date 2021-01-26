@@ -196,6 +196,23 @@ class YearDetailView extends Component{
           .style("filter", "url(#glow)")
           .attr("fill", function(d) { return color(d.value); })
 
+          svg.append('text')
+          .attr('class', 'axis-label')
+          .text("Year")
+          .attr('font-weight', 500)
+          .attr('font-size', "0.8em")
+          .attr('x', margin.left / 2 + (width - margin.left - margin.right) / 2)
+          .attr('y', 175) // Relative to the x axis.
+          
+          svg.append('text')
+          .attr('class', 'axis-label')
+          .text("acousticness")
+          .attr('font-weight', 500)
+          .attr('font-size', "0.8em")
+          .attr('transform', 'rotate(-90)')
+          .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - "acousticness".length * 2)
+          .attr('y', -32); // Relative to the y axis.
+
       this.setState({
         data: data,
         data_by_year: data_by_year,
@@ -206,7 +223,8 @@ class YearDetailView extends Component{
         width:width,
         glow_filter:glow_filter,
         shadow_filter:shadow_filter,
-        defs:defs
+        defs:defs,
+        margin: margin
       });
      });
     });
@@ -223,6 +241,7 @@ class YearDetailView extends Component{
     var select = this.state.select;
     var colors = this.state.colors;
     var data_by_year = this.state.data_by_year;
+    var margin = this.state.margin;
 
     svg.selectAll("*").remove();
 
@@ -321,6 +340,22 @@ class YearDetailView extends Component{
         .attr("d", d3.geoPath())
         .style("filter", "url(#glow)")
         .attr("fill", function(d) { return color(d.value); })
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .text("Year")
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('x', margin.left / 2 + (width - margin.left - margin.right) / 2)
+        .attr('y', 175) // Relative to the x axis.
+      
+        svg.append('text')
+        .attr('class', 'axis-label')
+        .text(keys[select])
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+        .attr('y', -32); // Relative to the y axis.
   }
 
   render(){
