@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import csvPath from '../assets/data/SpotifyData.csv';
 
-export function drawScatterPlot(){
+export async function drawScatterPlot(){
 
     var margin = {top: 10, right: 30, bottom: 30, left: 60},
         width = 460 - margin.left - margin.right,
@@ -17,11 +17,11 @@ export function drawScatterPlot(){
             "translate(" + margin.left + "," + margin.top + ")");
 
     //Read the data
-    const data = d3.csv(csvPath);
-    // for (var i = 0; i < data.length; i++) {
-    //     console.log("Valence of record " + i + ":" + data[i].valence);
-    //     console.log("Energy of record " + i + ":" + data[i].energy);
-    // }
+    const data = await d3.csv(csvPath);
+    for (var i = 0; i < data.length; i++) {
+        console.log("Valence of record " + i + ":" + data[i].valence);
+        console.log("Energy of record " + i + ":" + data[i].energy);
+    }
 
     console.log(data);
     (data, function(data) {
