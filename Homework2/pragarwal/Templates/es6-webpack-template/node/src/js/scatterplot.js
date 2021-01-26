@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-
+import csvPath from '../assets/data/SpotifyData.csv';
 
 export function drawScatterPlot(){
 
@@ -9,7 +9,7 @@ export function drawScatterPlot(){
 
     // append the svg object to the body of the page
     var svg = d3.select("#my_dataviz")
-    .append("svg")
+.append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -17,7 +17,14 @@ export function drawScatterPlot(){
             "translate(" + margin.left + "," + margin.top + ")");
 
     //Read the data
-    d3.csv("/Users/pratibhaagarwal/Documents/projects/ecs272/ECS272-Winter2021/Homework2/pragarwal/datasets/SpotifyData.csv", function(data) {
+    const data = d3.csv(csvPath);
+    // for (var i = 0; i < data.length; i++) {
+    //     console.log("Valence of record " + i + ":" + data[i].valence);
+    //     console.log("Energy of record " + i + ":" + data[i].energy);
+    // }
+
+    console.log(data);
+    (data, function(data) {
 
     // Add X axis
     var x = d3.scaleLinear()
@@ -46,4 +53,5 @@ export function drawScatterPlot(){
         .style("fill", "#69b3a2")
 
     })
+    return svg.node();
 }

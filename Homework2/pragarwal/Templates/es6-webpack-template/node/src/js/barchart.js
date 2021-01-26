@@ -83,4 +83,3 @@ import csvPath from '../assets/data/SF_Historical_Ballot_Measures.csv';
 //   //draw chart ()
 //   //There will be some delay in console before it prints the array
 // }
-
