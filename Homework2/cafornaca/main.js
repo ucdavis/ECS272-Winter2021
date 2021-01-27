@@ -1,119 +1,125 @@
 (function () {
-    // Load the dataset from a CSV URL
-    d3.csv('https://raw.githubusercontent.com/cafornaca/ECS272-Winter2021/main/Homework2/datasets/Police_Department_Incidents_-_Previous_Year__2016_.csv')
-      .then(csv => {
-        // Log CSV in browser console
-        console.log(csv);
-        
-        // Frequency of each category
-        categoryFreq= {};
+  var crimeData = [];
+  var dailyCrimes = {};
 
-        // Daily crime count
-        dailyCrimes= {};
+  // Load the dataset from a CSV URL
+  d3.csv('https://raw.githubusercontent.com/cafornaca/ECS272-Winter2021/main/Homework2/datasets/Police_Department_Incidents_-_Previous_Year__2016_.csv')
+    .then(csv => {
+      // Log CSV in browser console
+      console.log(csv);
 
-        // Create data by selecting columns from the CSV file
-        var data = csv.map(row => {
-          categoryFreq[String(row['Category'])] = categoryFreq[String(row['Category'])] ? categoryFreq[String(row['Category'])]+1 : 1
-          dailyCrimes[Date(row['Date'])] = dailyCrimes[Date(row['Date'])] ? dailyCrimes[Date(row['Date'])]+1 : 1
+      var parseTime = d3.timeParse("%d-%b-%y");
 
-         // console.log(row)
+      // Frequency of each category
+      // categoryFreq= {};
 
-          return {
-            Date: new Date(row['Date']),
-            Category: String(row['Category']),
-            Weekday: String(row['DayOfWeek']),
-            District: String(row['PdDistrict']),
-            X: parseFloat(row['X']),
-            Y: parseFloat(row['Y']) 
-          }
-        })
+      // Daily crime count
+      // dailyCrimes= {};
 
-        console.log(data)
+      // Create data by selecting columns from the CSV file
+      var data = csv.map(row => {
 
-        /********************************* 
-        * Visualization codes start here
-        * ********************************/
-        var width = 600;
-        var height = 400;
-        var margin = {left: 60, right: 20, top: 20, bottom: 60}
- 
-        var svg = d3.select('#container')
-          .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom) 
-  
-        var view = svg.append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  
-        //scale functions
-        // var x = d3.scaleLinear()
-        //   .domain([0, d3.max(data, d => data.Date)])
-        //   .range([0, width]);
-          
-        // var y = d3.scaleLinear()
-        //   .domain([0, d3.max(data, d => dailyCrimes)])
-        //   .range([height, 0]);
-  
-        
-        // Create a Line Graph
+        // categoryFreq[String(row['Category'])] = categoryFreq[String(row['Category'])] ? categoryFreq[String(row['Category'])]+1 : 1;
+        dailyCrimes[new Date(row['Date'])] = dailyCrimes[new Date(row['Date'])] ? dailyCrimes[new Date(row['Date'])]+1 : 1.0;
 
-        // Add X axis --> it is a date format
-        var x = d3.scaleTime()
-          .domain(d3.extent(data, function(d) { 
-            // console.log("x: ", d, d.Date)
-            return d.Date; }))
-          .range([ 0, width ]);
-        svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x));
+        //console.log("categoryfreq: ", categoryFreq)
+        //console.log("daily crimes: ", dailyCrimes)
+        // console.log(row)
 
-        // Add Y axis
-        var y = d3.scaleLinear()
-          .domain([0, d3.max(data, function(d) { 
-            // console.log("y: ", d, dailyCrimes)
-            return +dailyCrimes[d]; })])
-          .range([ height, 0 ]);
-        svg.append("g")
-          .call(d3.axisLeft(y));
+        return {
+          Date: parseTime(new Date(row['Date'])),
+          Category: String(row['Category']),
+          Weekday: String(row['DayOfWeek']),
+          District: String(row['PdDistrict']),
+          X: parseFloat(row['X']),
+          Y: parseFloat(row['Y'])
+        };
+      });
 
-        // Add the line
-        svg.append("path")
-          .datum(data)
-          .attr("fill", "none")
-          .attr("stroke", "teal")
-          .attr("stroke-width", 1.5)
-          .attr("d", d3.line()
-            .x(function(d) { 
-              // console.log("date line: ", d, d.Date)
-              return x(d.Date) })
-            .y(function(d) { 
-              // console.log("daily crimes line: ", d, dailyCrimes)
-              return y(dailyCrimes[d]) })
-        )
-  
-        // x axis
-        view.append("g")	
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x).ticks(6))
-            .append("text")
-            .attr("fill", "#000")
-            .attr("x", width / 2)
-            .attr('y', margin.bottom / 2)
-            .attr("dy", "0.71em")
-            .attr("text-anchor", "end")
-            .text("Date");
-  
-        // y axis
-        view.append("g")
-          .call(d3.axisLeft(y).ticks(6))
-          .append("text")
-            .attr("fill", "#000")
-            .attr("transform", "rotate(-90)")
-            .attr("x", - height / 2)
-            .attr("y", - margin.left)
-            .attr("dy", "0.71em")
-            .attr("text-anchor", "end")
-            .text("Number of Crimes");
-  
+      Object.keys(dailyCrimes).forEach( d => { 
+        // console.log("this is in crime data creations: ", d, dailyCrimes[d], crimeData)
+        if (typeof dailyCrimes[d] === "number"){
+          crimeData.push([ new Date(d), dailyCrimes[d] ]);
+        }
+      });
+
+      // Sort my crimeData so it doesn't draw jibberish
+      // crimeData.sort(function(a, b) {
+      //   return d3.ascending(a[0], b.year)
+      // });
+
+
+      crimeData = crimeData.sort((a, b) => {
+        return a[0] > b[0] ? 1 : -1
       })
+
+      // console.log(crimeData)
+
+      // set the dimensions and margins of the graph
+      var margin = {top: 20, right: 20, bottom: 100, left: 50},
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+  
+      // set the ranges
+      var x = d3.scaleTime().range([0, width]);
+      var y = d3.scaleLinear().range([height, 0]);
+  
+      // define the line
+      var valueline = d3.line()
+      .x( (d) => { 
+        console.log("inside x ", d, d[0])
+        return x(d[0]); 
+      })
+      .y(function(d) { return y(d[1]); });
+  
+      // append the svg obgect to the body of the page
+      // appends a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var svg = d3.select("div#container").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+  
+      // Scale the range of the data
+      x.domain(d3.extent(crimeData, function(d) { return d[0]; }));
+      y.domain([0, d3.max(crimeData, function(d) { return d[1]; })]);
+  
+      // Add the valueline path.
+      svg.append("path")
+      .data([crimeData])    //   Maybe try:   .data(crimeData)
+      .attr("class", "line")
+      .attr("fill", "none")
+      .attr("stroke", "teal")
+      .attr("stroke-width", 1.5)
+      .attr("d", valueline);
+  
+      // Add the X Axis
+      svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x)
+              .tickFormat(d3.timeFormat("%Y-%m-%d")))
+      .selectAll("text")	
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
+  
+      // Add the Y Axis
+      svg.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y));
+
+      svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("Number of Crimes per Day");
+  
+
+    })
+
   })()
