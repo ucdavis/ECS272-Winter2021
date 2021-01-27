@@ -14,8 +14,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * Import module dependencies.
  */
 
-let app = require('../app');
-let http = require('http');
+const app = require('../app');
+const http = require('http');
 
 /**
  * Get port from environment and store in Express.
@@ -43,7 +43,7 @@ app.get('http_server').setTimeout(3000000)
  */
 
 function normalize_port(val) {
-	let port = parseInt(val, 10);
+	const port = parseInt(val, 10);
 	// Named pipe
 	if (isNaN(port))
 		return val;
@@ -65,7 +65,7 @@ function on_server_error(error, port) {
 	if (error.syscall !== 'listen')
 		throw error;
 
-	let bind = typeof port === 'string'
+	const bind = typeof port === 'string'
 		? 'Pipe ' + port
 		: 'Port ' + port;
 
@@ -92,8 +92,8 @@ function on_http_server_listening() {
 }
 
 function on_server_listening(server) {
-	let addr = server.address();
-	let bind = typeof addr === 'string'
+	const addr = server.address();
+	const bind = typeof addr === 'string'
 		? 'pipe ' + addr
 		: 'port ' + addr.port;
 	console.log('Listening on ' + bind);

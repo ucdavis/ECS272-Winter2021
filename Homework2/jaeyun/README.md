@@ -8,7 +8,7 @@ cd ECS272-Winter2021/Homework2/jaeyun
 npm install
 ```
 
-To run the webserver, run the following command:
+To run the webserver, run the following commands:
 
 ```
 cd ECS272-Winter2021/Homework2/jaeyun

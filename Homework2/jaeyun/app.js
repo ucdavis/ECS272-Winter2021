@@ -70,7 +70,6 @@ app.use(function (req, res, next) {
  * Settings
  */
 
-app.set('default_title', 'Jaewan Yun');
 app.set('env', 'development');
 app.set('view engine', 'pug');
 app.set('public', path.join(__dirname, 'public'));
@@ -83,7 +82,6 @@ app.set('views', path.join(__dirname, 'views'));
  */
 
 let file = require(path.join(app.get('utilities'), 'file'));
-// let session = require(path.join(app.get('utilities'), 'session'));
 
 /**
  * Setup middleware.
@@ -101,21 +99,6 @@ app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(cookie_parser());
 // Serve public resource directory
 app.use(express.static(app.get('public')));
-// Log users server-side with session
-// app.use(session());
-
-/**
- * Set options for pug layout.
- */
-
-app.use(function (req, res, next) {
-	req.options = {title: app.get('default_title')};
-	// if (req.session.data)
-	// 	req.options.email = req.session.data.email;
-	if (req.cookies)
-		req.options.is_dark_theme = req.cookies.is_dark_theme;
-	next();
-});
 
 /**
  * Serve website routes according to middleware file paths.
