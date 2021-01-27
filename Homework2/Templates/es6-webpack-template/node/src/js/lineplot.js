@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { nest } from 'd3-collection'
 import csvPath from '../assets/data/Spotify_data2.csv';
 
 export async function drawLineFromCsvAsync(){
@@ -16,7 +17,7 @@ export function drawLinePlot(data, id) {
         height = 400 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    var svg = d3.select("lineplot")
+    var svg = d3.select(id)
         .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -26,7 +27,7 @@ export function drawLinePlot(data, id) {
 
 
     // group the data: I want to draw one line per group
-    var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+    var sumstat = d3Collection.nest() // nest function allows to group the calculation per level of a factor
         .key(function(d) { return d.artists;})
         .entries(data);
 
