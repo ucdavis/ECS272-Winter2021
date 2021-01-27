@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import csvPath from '../assets/data/SF_Historical_Ballot_Measures.csv';
+import csvPath from '../assets/data/Spotify_data.csv';
 
 
 function drawBarFromCsv(){
