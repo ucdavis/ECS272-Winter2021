@@ -1,3 +1,50 @@
+function initSelect(input){
+  // Set-up for date drop-downs
+  console.log("init select ", 
+    document.getElementById("startDate"), 
+    document.getElementsByClassName("start"))
+
+  var select1 = document.getElementById("startDate");
+  var select2 = document.getElementById("endDate");
+
+
+  for (let item of input) {
+    var option1 = document.createElement("option");
+    option1.text = item[0];
+    option1.value = item[0];
+
+    var option2 = document.createElement("option");
+    option2.text = item[0];
+    option2.value = item[0];
+
+    //console.log("select ", select1);
+    select1.appendChild(option1);
+    select2.appendChild(option2);
+
+  }
+}
+
+var range1 = -1
+var range2 = -1
+var datesValid = false
+
+function selectStart() {
+  range1 = new Date(document.getElementById("startDate").value)
+  compare() 
+  console.log(range1, range2, datesValid)
+}
+
+function selectEnd() {
+  range2 = new Date(document.getElementById("endDate").value)
+  compare()
+  console.log(range1, range2, datesValid)
+}
+
+function compare() {
+  datesValid = (range1 < range2) || (range1 === -1 && range2 !== -1) || (range1 !== -1 && range2 === -1)
+}
+
+
 (function () {
   var crimeData = [];
   var dailyCrimes = {};
@@ -12,9 +59,6 @@
 
       // Frequency of each category
       // categoryFreq= {};
-
-      // Daily crime count
-      // dailyCrimes= {};
 
       // Create data by selecting columns from the CSV file
       var data = csv.map(row => {
@@ -43,19 +87,15 @@
         }
       });
 
-      // Sort my crimeData so it doesn't draw jibberish
-      // crimeData.sort(function(a, b) {
-      //   return d3.ascending(a[0], b.year)
-      // });
 
-
+      // Sort dates
       crimeData = crimeData.sort((a, b) => {
         return a[0] > b[0] ? 1 : -1
       })
 
-      // console.log(crimeData)
-
-      // set the dimensions and margins of the graph
+      
+      
+      // Set the dimensions and margins of the graph
       var margin = {top: 20, right: 20, bottom: 100, left: 50},
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
@@ -63,11 +103,11 @@
       // set the ranges
       var x = d3.scaleTime().range([0, width]);
       var y = d3.scaleLinear().range([height, 0]);
-  
+
       // define the line
       var valueline = d3.line()
       .x( (d) => { 
-        console.log("inside x ", d, d[0])
+        // console.log("inside x ", d, d[0])
         return x(d[0]); 
       })
       .y(function(d) { return y(d[1]); });
@@ -112,14 +152,16 @@
       .attr("class", "axis")
       .call(d3.axisLeft(y));
 
+      // Add a title to the line graph
       svg.append("text")
         .attr("x", (width / 2))             
         .attr("y", 0 - (margin.top / 2))
         .attr("text-anchor", "middle")  
         .style("font-size", "16px") 
         .text("Number of Crimes per Day");
+
   
+      initSelect(crimeData)
 
     })
-
   })()
