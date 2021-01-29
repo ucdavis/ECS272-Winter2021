@@ -42,16 +42,17 @@ class Sk_BarChart extends Component{
         let director_stat = {};
         let locations = new Set();
         data.map(data=>{
-                locations.add(data["Locations"]);
-                if(data["Locations"]!=location){
+                locations.add(data["Locations"].trim());
+                if(data["Locations"].trim()!=location.trim()){
                   return;
                 }
                 if(director_stat.hasOwnProperty(data["Director"])){
                   director_stat[data["Director"]]+=1;
                 }else{
-                  director_stat[data["Director"]]=0;
+                  director_stat[data["Director"]]=1;
                 }
               });
+        locations.delete("City Hall");
         d3.select("#locations")
           .selectAll("options")
           .data(locations)
@@ -215,6 +216,7 @@ class Sk_BarChart extends Component{
             <label>
                 Film location:
                 <select id="locations" value={this.state.location} onChange={this.handleSelect} >
+                    <option>City Hall</option>
                 </select>
             </label>
         </div>);

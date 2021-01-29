@@ -10,6 +10,7 @@ class Sk_VoronoiDiagram extends Component{
             radius:25
         };
         this.handleChange = this.handleChange.bind(this);
+        
     }
 
     handleChange(event){

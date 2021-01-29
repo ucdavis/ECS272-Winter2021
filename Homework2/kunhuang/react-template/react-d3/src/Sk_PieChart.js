@@ -35,7 +35,7 @@ class Sk_BarChart extends Component{
           if(director_stat.hasOwnProperty(data["Director"])){
             director_stat[data["Director"]]+=1;
           }else{
-            director_stat[data["Director"]]=0;
+            director_stat[data["Director"]]=1;
           }
         });
         for(let i = 0; i<num; i++){
