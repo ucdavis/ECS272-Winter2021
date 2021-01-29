@@ -33,9 +33,11 @@ class ScatterPlot extends Component{
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
-      var myColor = d3.scaleOrdinal()
-      .domain(allGroup)
-      .range(d3.schemeSet2);
+      // var myColor = d3.scaleOrdinal()
+      // .domain(allGroup)
+      // .range(d3.schemeSet2);
+
+      var myColor = d3.scaleOrdinal(d3.schemeCategory10)
 
       // Add X axis --> it is a date format
       var x = d3.scaleLinear()

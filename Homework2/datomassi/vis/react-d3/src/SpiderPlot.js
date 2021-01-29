@@ -8,7 +8,7 @@ class SpiderPlot extends Component{
     }
 
     drawChart(){
-      console.log("hi")
+      
       d3.csv( this.props.data)
         .then(csv => {
 
@@ -17,7 +17,8 @@ class SpiderPlot extends Component{
         data.forEach((d) => {
           allGroup.push(d.genres);
         });
-
+        console.log(allGroup)
+console.log("hi")
         // add the options to the button
       d3.select("#selectButton")
       .selectAll('myOptions')

@@ -42,3 +42,9 @@
   min-height: 50px;
   background-color: white;
 }
+
+#wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -8,33 +8,46 @@ class RadialChart extends Component{
     }
 
     drawChart(){
-      console.log("hi")
+      
       d3.csv( this.props.data)
         .then(csv => {
-
-        var datas = csv.slice(0,1);
+          function getRandomSubarray(arr, size) {
+            var shuffled = arr.slice(0), i = arr.length, min = i - size, temp, index;
+            while (i-- > min) {
+                index = Math.floor((i + 1) * Math.random());
+                temp = shuffled[index];
+                shuffled[index] = shuffled[i];
+                shuffled[i] = temp;
+            }
+            return shuffled.slice(min);
+        }
+        var datas = getRandomSubarray(csv, 500);
         var keys  = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness"];
-        console.log(datas)
+        // console.log(datas)
         var data = []
         datas.forEach((d) => {
+          let datum = {"artists": d["artists"], "value": []}
           keys.forEach((k) => {
-            data.push({"name": k, "value": d[k]})
+            datum["value"].push({"name": k, "value": d[k]});
           });
-        });
-        console.log(data)
-        var allGroup = []
-        data.forEach((d) => {
-          allGroup.push(d.artists);
+          data.push(datum);
         });
 
-      //   // add the options to the button
-      // d3.select("#selectButton")
-      // .selectAll('myOptions')
-      // .data(allGroup)
-      // .enter()
-      // .append('option')
-      // .text(function (d) { return d; }) // text showed in the menu
-      // .attr("value", function (d) { return d; }); // corresponding value returned by the button
+        console.log(data)
+        var allGroup = []
+        datas.forEach((d) => {
+          allGroup.push(d.artists);
+        });
+        // console.log(allGroup)
+        console.log("hi")
+        // add the options to the button
+      d3.select("#selectButtonRadial")
+      .selectAll('myOptions')
+      .data(allGroup)
+      .enter()
+      .append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
       var margin = {left: 60, right: 20, top: 20, bottom: 60}
        var width = 600;
@@ -78,7 +91,7 @@ class RadialChart extends Component{
         let radialAxis = svg.append('g')
                             .attr('class', 'r axis')
                             .selectAll('g')
-                            .data(data)
+                            .data(data[0]["value"])
                             .enter().append('g');
          
         radialAxis.append('circle')
@@ -115,7 +128,7 @@ class RadialChart extends Component{
         let arcs = svg.append('g')
                       .attr('class', 'data')
                       .selectAll('path')
-                      .data(data)
+                      .data(data[0]["value"])
                       .enter().append('path')
                       .attr('class', 'arc')
                       .style('fill', (d, i) => color(i));
@@ -129,6 +142,8 @@ class RadialChart extends Component{
         // arcs.on('mouseout', hideTooltip)
 
         function arcTween(d, i) {
+          console.log("yo");
+          console.log(d);
           let interpolate = d3.interpolate(0, d.value);
           return t => arc(interpolate(t), i);
         }
@@ -155,11 +170,34 @@ class RadialChart extends Component{
         function getOuterRadius(index) {
           return getInnerRadius(index) + arcWidth;
         }
+
+         // A function that update the chart
+        function update(selectedGroup) {
+          console.log(selectedGroup)
+          // Create new data with the selection?
+          var dataFilter = data.find((d) => {return d["artists"] === selectedGroup})["value"];
+          console.log("dataFilter")
+          console.log(dataFilter)
+           arcs.data(dataFilter)
+            .transition()
+            .delay((d, i) => i * 200)
+            .duration(1000)
+            .attrTween('d', arcTween);
+              // .attr("stroke", function(d){ return myColor(selectedGroup) })
+        }
+
+        // When the button is changed, run the updateChart function
+        d3.select("#selectButtonRadial").on("change", function(d) {
+            // recover the option that has been chosen
+            var selectedOption = d3.select(this).property("value")
+            // run the updateChart function with this selected option
+            update(selectedOption)
+        });
      });
   }
 
     render(){
-        return <div><select id="selectButton"></select><div id={"#hi"}></div></div>
+        return <div><select id="selectButtonRadial"></select><div id={"#hi"}></div></div>
     }
 }
 
