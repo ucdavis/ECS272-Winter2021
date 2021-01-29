@@ -96,9 +96,10 @@ class Sk_VoronoiDiagram extends Component{
                 .data( top_directors.map((d,i) => voronoi.renderCell(i)) )
                 .join('path')
                 .attr('d', data => data)
+                .style("fill","grey")
                 .style('opacity', 0.8)
                 .style('stroke', 'white')
-                .style('stroke-opacity', 0.2)
+                .style('stroke-opacity', 1)
 
             console.log("scatterplot",scatterplots);
             svg.selectAll("circle")
