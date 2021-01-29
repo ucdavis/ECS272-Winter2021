@@ -4,32 +4,32 @@ import csvPath from '../assets/data/SpotifyData.csv';
 export async function drawScatterPlot(){
 
     var margin = {top: 10, right: 30, bottom: 30, left: 60},
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        width = 1000 - margin.left - margin.right,
+        height = 200 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select("#my_dataviz")
-.append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //Read the data
     const data = await d3.csv(csvPath);
-    for (var i = 0; i < data.length; i++) {
-        console.log("Valence of record " + i + ":" + data[i].valence);
-        console.log("Energy of record " + i + ":" + data[i].energy);
-    }
+    // for (var i = 0; i < data.length; i++) {
+    //     console.log("Valence of record " + i + ":" + data[i].valence);
+    //     console.log("Energy of record " + i + ":" + data[i].energy);
+    // }
 
-    console.log(data);
-    (data, function(data) {
+    //console.log(data);
+    //(data, function(data) {
 
     // Add X axis
     var x = d3.scaleLinear()
         .domain([0, 1])
         .range([ 0, width ]);
+    
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
@@ -38,6 +38,7 @@ export async function drawScatterPlot(){
     var y = d3.scaleLinear()
         .domain([0, 1])
         .range([ height, 0]);
+    
     svg.append("g")
         .call(d3.axisLeft(y));
 
@@ -50,8 +51,8 @@ export async function drawScatterPlot(){
         .attr("cx", function (d) { return x(d.valence); } )
         .attr("cy", function (d) { return y(d.energy); } )
         .attr("r", 1.5)
-        .style("fill", "#69b3a2")
+        .style("fill", "#1ed760")
 
-    })
+    //})
     return svg.node();
 }

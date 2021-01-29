@@ -12,7 +12,9 @@ h1 {
 }
 
 body{
-    background-color : #1ed760;
+    /* background-color : rgb(109, 108, 108); */
+    /* background-color : #1ed760; */
+    background-color: black;
 }
 
 .header {
@@ -21,4 +23,38 @@ body{
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
     /* padding-left: 50px; */
     /* background-color: black; */
+}
+
+.bubbles {
+    stroke-width: 2px;
+    stroke: white;
+  }
+  .bubbles:hover {
+    stroke: black;
+  }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.0px;
+}
+
+#linechart {
+    fill: white;
+    stroke: white;
+    text-decoration: white;
+    fill: white;
+    background-color: grey;
+    stroke-width: 2.5px;
 }
