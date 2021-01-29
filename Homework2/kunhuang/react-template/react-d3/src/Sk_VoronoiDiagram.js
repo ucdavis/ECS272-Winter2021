@@ -87,7 +87,7 @@ class Sk_VoronoiDiagram extends Component{
             let colors = d3.scaleSequential().domain([0,d3.max(top_directors,data=>data["appearance"])]).interpolator(d3.interpolateBlues);
 
             let scatterplots = top_directors.map(data=>{
-                return [x_scale(data["Director"]),y_scale(data["appearance"]),data["appearance"]];
+                return [x_scale(data["Director"]),y_scale(data["appearance"]),data["appearance"],data["Director"]];
             });
 
             let delaunay = d3.Delaunay.from(scatterplots,data=>data[0],data=>data[1]);
@@ -103,14 +103,18 @@ class Sk_VoronoiDiagram extends Component{
                 .style('stroke-opacity', 1)
 
             console.log("scatterplot",scatterplots);
-            svg.selectAll("circle")
+            svg.selectAll("text")
                 .data(scatterplots)
                 .enter()
-                .append("circle")
-                .attr("cx",data=>data[0])
-                .attr("cy",data=>data[1])
-                .attr("r",this.state.radius)
-                .attr("fill",data=>colors(data[2]));
+                .append("text")
+                .attr("transform",data=>{
+                    return "translate("+data[0]+","+data[1]+")";
+                })
+                .style("font-size",data=>{
+                    return this.state.radius+"px";
+                })
+                .attr("fill",data=>colors(data[2]))
+                .text(data=>data[3]);
 
             svg.append("g")
                 .attr("transform","translate("+margin.left+",0)")
@@ -138,7 +142,7 @@ class Sk_VoronoiDiagram extends Component{
         return (
         <div id={"#" + this.props.id}>
             <form>
-                <label for="vol">voronoi diagram scatterplots radius:</label>
+                <label for="vol">voronoi diagram scatterplots font-size(px):</label>
                 <input type="range" min="0" max="25" onChange={this.handleChange}/>
             </form>
         </div>);
