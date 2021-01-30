@@ -24,6 +24,33 @@ const data = await d3.csv(csvPath);
   // List of subgroups = header of the csv files = soil condition here
   var subgroups = data.columns.slice(1)
 
+    d3.stack()(["artist1", "artist2", "artist3", "artist4", "artist5"].map(function(d) {
+        return data.map(function(elem){
+        // console.log(typeof(elem.topartist));
+            if( d === elem.topartist){
+                //console.log(elem.year + " " + elem.artist)
+                var rect = groups.selectAll("rect")
+                            .data(function(d) { return d; })
+                            .enter()
+                            .append("rect")
+                            .attr("x", function(d) { return x(d.acousticness); })
+                            .attr("y", function(d) { return y(d.year + d.year); })
+                            .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+                            .attr("width", x.rangeBand());
+
+                            svg.append(rect)
+
+                            return svg.node();
+                //return{x:elem.year , y: elem.acousticness}
+            }
+            else{
+                console.log('not')
+                // console.log(elem.topartist)
+            }
+        }); 
+    }));
+    //console.log(dataset);
+    console.log(data)
   // List of groups = species here = value of the first column called group -> I show them on the X axis
   var groups = d3.map(data, function(d){return(d.topartist)}).keys()
 
@@ -54,20 +81,20 @@ const data = await d3.csv(csvPath);
     (data)
 
   // Show the bars
-  svg.append("g")
-    .selectAll("g")
-    // Enter in the stack data = loop key per key = group per group
-    .data(stackedData)
-    .enter().append("g")
-      .attr("fill", function(d) { return color(d.key); })
-      .selectAll("rect")
-      // enter a second time = loop subgroup per subgroup to add all rectangles
-      .data(function(d) { return d; })
-      .enter().append("rect")
-        .attr("x", function(d) { return x(d.data.topartist); })
-        .attr("y", function(d) { return y(d[1]); })
-        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-        .attr("width",x.bandwidth())
+//   svg.append("g")
+//     .selectAll("g")
+//     // Enter in the stack data = loop key per key = group per group
+//     .data(stackedData)
+//     .enter().append("g")
+//       .attr("fill", function(d) { return color(d.key); })
+//       .selectAll("rect")
+//       // enter a second time = loop subgroup per subgroup to add all rectangles
+//       .data(function(d) { return d; })
+//       .enter().append("rect")
+//         .attr("x", function(d) { return x(d.data.topartist); })
+//         .attr("y", function(d) { return y(d[1]); })
+//         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+//         .attr("width",x.bandwidth())
 
 
 

@@ -47,7 +47,8 @@ body{
 .line {
   fill: none;
   stroke: steelblue;
-  stroke-width: 1.0px;
+  stroke-width: 2.0px;
+  opacity: 1.0;
 }
 
 #linechart {
@@ -56,5 +57,6 @@ body{
     text-decoration: white;
     fill: white;
     background-color: grey;
-    stroke-width: 2.5px;
+    stroke-width: 2.0px;
+    opacity: 1.0;
 }

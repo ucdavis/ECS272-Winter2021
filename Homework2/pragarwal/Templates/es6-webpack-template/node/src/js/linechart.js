@@ -9,6 +9,26 @@ export async function drawLineChart(){
     width = 600 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
+
+
+    // List of groups (here I have one group per column)
+    var allGroup = ["danceability", "energy", "liveness", "acousticness", "valence"]
+
+
+    // add the options to the button
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+     	.data(allGroup)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+      var myColor = d3.scaleLinear()
+                        .domain(allGroup)
+                        .range(["#79d70f", "#c70039", "#f37121", "#ffbd69", "#cf7500"]);
+
+        console.log("colorrrrrr:   " + myColor["danceability"]);
     // parse the date / time
     var parseTime = d3.timeParse("%y");
 
@@ -69,7 +89,7 @@ export async function drawLineChart(){
     
     var tooltip = d3.select(".line")
                     .append("div")
-                    .style("opacity", 0)
+                    .style("opacity", 1.0)
                     .attr("class", "tooltip")
                     .style("background-color", "black")
                     // .style("border-radius", "5px")
@@ -86,8 +106,9 @@ export async function drawLineChart(){
                           .duration(200)
                           //.style("opacity", 1)
                     //tooltip
-                          .style("opacity", 1)
-                          .style("stroke-width", '5px')
+                          .style("opacity", 2)
+                          .style("stroke-width", '3.5px')
+
                           //.html("Attribute: " + d.valueline)
                         //   .style("left", (d3.mouse(this)[0]+30) + "px")
                         //   .style("top", (d3.mouse(this)[1]+30) + "px")
@@ -106,59 +127,60 @@ export async function drawLineChart(){
                     d3.select(this)
                           .transition()
                           .duration(100)
-                          .style("opacity", 0.7)
-                          .style("stroke-width", "2.5px")
+                          .style("opacity", 1.0)
+                          .style("stroke-width", "2px")
                       }
                     
     
     // Add the valueline path.
-    svg.append("path")
+    var line = svg.append("path")
     .data([data])
     .attr("class", "line")
+    .style("stroke", "#79d70f")
     .attr("d", valueline)
     .on("mouseover", handleMouseOver )
     //.on("mousemove", moveTooltip )
     .on("mouseleave", handleMouseOut );
 
     // Add the valueline2 path.
-    svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "red")
-    .attr("d", valueline2)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    // var line = svg.append("path")
+    // .data([data])
+    // .attr("class", "line")
+    // .style("stroke", "#c70039")
+    // .attr("d", valueline2)
+    // .on("mouseover", handleMouseOver )
+    // //.on("mousemove", moveTooltip )
+    // .on("mouseleave", handleMouseOut );
 
-    // Add the valueline3 path.
-    svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "orange")
-    .attr("d", valueline3)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    // // Add the valueline3 path.
+    // var line = svg.append("path")
+    // .data([data])
+    // .attr("class", "line")
+    // .style("stroke", "#f37121")
+    // .attr("d", valueline3)
+    // .on("mouseover", handleMouseOver )
+    // //.on("mousemove", moveTooltip )
+    // .on("mouseleave", handleMouseOut );
 
-    // Add the valueline4 path.
-    svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "yellow")
-    .attr("d", valueline4)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    // // Add the valueline4 path.
+    // var line = svg.append("path")
+    // .data([data])
+    // .attr("class", "line")
+    // .style("stroke", "#ffbd69")
+    // .attr("d", valueline4)
+    // .on("mouseover", handleMouseOver )
+    // //.on("mousemove", moveTooltip )
+    // .on("mouseleave", handleMouseOut );
 
-    // Add the valueline5 path.
-    svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "green")
-    .attr("d", valueline5)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    // // Add the valueline5 path.
+    // var line = svg.append("path")
+    // .data([data])
+    // .attr("class", "line")
+    // .style("stroke", "#cf7500")
+    // .attr("d", valueline5)
+    // .on("mouseover", handleMouseOver )
+    // //.on("mousemove", moveTooltip )
+    // .on("mouseleave", handleMouseOut );
 
     // Add the X Axis
     svg.append("g")
@@ -182,12 +204,30 @@ export async function drawLineChart(){
 
     // legendSpace = width;
 
-    // svg.append("text")
-    //         .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-    //         .attr("y", height + (margin.bottom/2)+ 5)
-    //         .attr("class", "legend")    // style the legend
-    //         .style("fill", function() { // Add the colours dynamically
-    //             return d.color = color(d.key); })
-    //         .text(d.key); 
+    function update(selectedGroup) {
+
+        // Create new data with the selection?
+        var dataFilter = data.map(function(d){return {year: d.year, value:d[selectedGroup]} })
+  
+        // Give these new data to update line
+        line
+            .datum(dataFilter)
+            .transition()
+            .duration(1000)
+            .attr("d", d3.line()
+                                .x(function(d) { return x(d.year) })
+                                .y(function(d) { return y(d.value) })
+            )
+            .attr("stroke", function(d){ return myColor(selectedGroup) })
+      }
+
+      // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+  
 
 }
