@@ -75,3 +75,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+### references
+https://github.com/d3/d3-voronoi
+https://observablehq.com/@thetylerwolf/day-22-delaunay-voronoi
+https://www.newline.co/@KumailP/wonders-of-react-d3--how-to-get-started--e452f3e1
+https://material-ui.com/getting-started/usage/
+https://reactjs.org/docs/forms.html
+https://medium.com/@varvara.munday/d3-in-react-a-step-by-step-tutorial-cba33ce000ce
+https://observablehq.com/d/7255bb66b88f4dc2
+https://observablehq.com/@d3/voronoi-labels?collection=@d3/d3-delaunay
+https://www.w3.org/TR/SVG/paths.html
+https://observablehq.com/@thetylerwolf/day-22-delaunay-voronoi
