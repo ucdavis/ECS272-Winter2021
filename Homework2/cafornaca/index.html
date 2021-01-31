@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Charlie Fornaca's ECS-272 Homework 2 Dashboard</title>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <style>
-      #tooltip {
-        min-width: 100px;
-        min-height: 50px;
-        background-color: rgb(231, 165, 182);
-        }
+    <head>
+        <meta charset="utf-8">
+        <title>Charlie Fornaca's ECS-272 Homework 2 Dashboard</title>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-    </style>
-  </head>
-  <body>
-    <h2>Charlie Fornaca's ECS-272 Homework 2 Dashboard</h2>
-    <div id="container"> <div id="tooltip"></div></div>
-    <script src="main.js"></script>
+    </head>
+  
+    <body>
+      <h2>Charlie Fornaca's ECS-272 Homework 2 Dashboard</h2>
+     <div id="container"></div>
 
-    <select id="startDate" class="start" onchange="selectStart()">
-        <option value="-1" selected disabled>Start</option>
-    </select>
-    <select id="endDate" class="end" onchange="selectEnd()">
-        <option value="-1" selected disabled>End</option>
-    </select>
+        <select id="startDate" class="start" onchange="selectStart()">
+            <option value="-1" selected disabled>Start</option>
+        </select>
+        <select id="endDate" class="end" onchange="selectEnd()">
+            <option value="-1" selected disabled>End</option>
+        </select>
+
+        <div id="piechart"></div>
+
+        <script src="main.js"></script>
 
   </body>
 </html>
