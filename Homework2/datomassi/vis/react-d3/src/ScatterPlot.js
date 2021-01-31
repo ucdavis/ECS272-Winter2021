@@ -8,12 +8,10 @@ class ScatterPlot extends Component{
     }
 
     drawChart(){
-      // console.log(d3.csv(this.props.data))
       d3.csv(this.props.data)
       .then(data => {
       var allGroup = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness"]
-      // dataReady = csv.forEach()
-      var dataReady = allGroup.map( function(grpName) { // .map allows to do something for each element of the list
+      var dataReady = allGroup.map( function(grpName) {
         return {
           name: grpName,
           values: data.map(function(d) {
@@ -22,7 +20,7 @@ class ScatterPlot extends Component{
         };
       });
        var width = 1000;
-       var height = 600;
+       var height = 500;
        var margin = {left: 60, right: 20, top: 20, bottom: 60}
 
       var svg = d3.select("#scatter")
@@ -33,9 +31,14 @@ class ScatterPlot extends Component{
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
-      // var myColor = d3.scaleOrdinal()
-      // .domain(allGroup)
-      // .range(d3.schemeSet2);
+          // add the options to the button
+      d3.select("#selectButton")
+      .selectAll('myOptions')
+      .data(allGroup)
+      .enter()
+      .append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
       var myColor = d3.scaleOrdinal(d3.schemeCategory10)
 
@@ -46,6 +49,12 @@ class ScatterPlot extends Component{
       svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
+        svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Year");
 
             // Add Y axis
     var y = d3.scaleLinear()
@@ -53,6 +62,15 @@ class ScatterPlot extends Component{
       .range([ height, 0 ]);
     svg.append("g")
       .call(d3.axisLeft(y));
+
+        // text label for the y axis
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Score");    
 
           // Add the lines
     var line = d3.line()
@@ -85,48 +103,32 @@ class ScatterPlot extends Component{
         .attr("r", 5)
         .attr("stroke", "white")
 
-        svg
-      .selectAll("myLabels")
-      .data(dataReady)
-      .enter()
-        .append('g')
-        .append("text")
-          .attr("class", function(d){ return d.name })
-          .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; }) // keep only the last value of each time series
-          .attr("transform", function(d) { return "translate(" + x(d.value.time) + "," + y(d.value.value) + ")"; }) // Put the text at the position of the last point
-          .attr("x", 12) // shift the text a bit more right
-          .text(function(d) { return d.name; })
-          .style("fill", function(d){ return myColor(d.name) })
-          .style("font-size", 15)
-
-            // Add a legend (interactive)
-    svg.selectAll("myLegend")
-      .data(dataReady)
-      .enter()
-        .append('g')
-        .append("text")
-          .attr('x', function(d,i){ return 30 + i*110-2*d.name.length})
-          .attr('y', function(d,i){ return 0 })
-          .text(function(d) { return d.name; })
-          .style("fill", function(d){ return myColor(d.name) })
-          .style("font-size", 15)
-        .on("click", function(d){
-          // is the element currently visible ?
-          // console.log(d)
-          // console.log(d.name)
-          // console.log(d3.selectAll("." + d.name));
-          let currentOpacity = d3.selectAll("." + d.path[0].innerHTML).style("opacity");
-          // console.log("hey " + currentOpacity);
-          // // Change the opacity: from 0 to 1 or from 1 to 0
-          d3.selectAll("." + d.path[0].innerHTML).transition().style("opacity", currentOpacity == 1 ? 0:1);
-        });
+        d3.select("#sc")
+        .selectAll("myButton")
+           .data(dataReady)
+           .enter()
+           .append("button")
+           .attr("id", function(d) { console.log(d.name); return d.name; })
+           .style("background-color", function(d){ return myColor(d.name) })
+           .style("width", "125px")
+           .style("height", "25px")
+           .style("margin-right", "10px")
+           .style("color", "white")
+           .style("border-radius", "5px")
+           .style("border", "0px")
+           .style("box-shadow", "2px 2px #888888")
+           .text(function(d){ return d.name })
+           .on("click", function(d){
+              let currentOpacity = d3.selectAll("." + d.path[0].innerHTML).style("opacity");
+              d3.selectAll("." + d.path[0].innerHTML).transition().style("opacity", currentOpacity == 1 ? 0:1);
+            });
  
      });
 
     }
 
     render(){
-        return <div id={"#" + "hey"}></div>
+        return <div id="sc"></div>
     }
 }
 
