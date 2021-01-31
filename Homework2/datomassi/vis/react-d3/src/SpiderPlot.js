@@ -17,8 +17,7 @@ class SpiderPlot extends Component{
         data.forEach((d) => {
           allGroup.push(d.genres);
         });
-        console.log(allGroup)
-console.log("hi")
+
         // add the options to the button
       d3.select("#selectButton")
       .selectAll('myOptions')
@@ -102,8 +101,8 @@ console.log("hi")
                 .y(d => d.y)
         )
         .attr("stroke-width", 3)
-        .attr("stroke", "darkorange")
-        .attr("fill", "darkorange")
+        .attr("stroke", "blue")
+        .attr("fill", "blue")
         .attr("stroke-opacity", 0.5)
         .attr("opacity", 0.25)
           
@@ -122,10 +121,8 @@ console.log("hi")
 
         // A function that update the chart
         function update(selectedGroup) {
-          console.log(selectedGroup)
           // Create new data with the selection?
           var dataFilter = data.find((d) => {return d["genres"] === selectedGroup});
-          console.log(dataFilter)
            let coordinates = getPathCoordinates(dataFilter);
                       //draw the path element
            line
@@ -136,8 +133,8 @@ console.log("hi")
               .x(d => d.x)
               .y(d => d.y))
             .attr("stroke-width", 3)
-            .attr("stroke", "darkorange")
-            .attr("fill", "darkorange")
+            .attr("stroke", "blue")
+            .attr("fill", "blue")
             .attr("stroke-opacity", 0.5)
             .attr("opacity", 0.25);
               // .attr("stroke", function(d){ return myColor(selectedGroup) })
