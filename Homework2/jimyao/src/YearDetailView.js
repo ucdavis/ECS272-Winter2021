@@ -366,12 +366,14 @@ class YearDetailView extends Component{
         <div id="year-detail-view-content">
           <div id="year-detail-view-graph"></div>
           <div id="toggle-panel">
-            <div class="toggle-btn" id="toggle-detail-acousticness">acousticness</div>
-            <div class="toggle-btn" id="toggle-detail-danceability">danceability</div>
-            <div class="toggle-btn" id="toggle-detail-energy">energy</div>
-            <div class="toggle-btn" id="toggle-detail-instrumentalness">instrumentalness</div>
-            <div class="toggle-btn" id="toggle-detail-liveness">liveness</div>
-            <div class="toggle-btn" id="toggle-detail-valence">valence</div>
+            <div>&nbsp;</div>
+            <div class="toggle-btn" id="toggle-detail-acousticness">Acousticness</div>
+            <div class="toggle-btn" id="toggle-detail-danceability">Danceability</div>
+            <div class="toggle-btn" id="toggle-detail-energy">Energy</div>
+            <div class="toggle-btn" id="toggle-detail-instrumentalness">Instrumentalness</div>
+            <div class="toggle-btn" id="toggle-detail-liveness">Liveness</div>
+            <div class="toggle-btn" id="toggle-detail-valence">Valence</div>
+            <div class="toggle-hint">Choose Feature</div>
           </div>
         </div>
       </div>

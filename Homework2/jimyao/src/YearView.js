@@ -379,14 +379,17 @@ class YearView extends Component{
         <div class="title">Audio Feature Trends</div>
         <div class="subtitle">Bandwidth of each stream represents the value of each audio feature</div>
         <div id="year-view-content">
+          
           <div id="year-view-graph"></div>
           <div id="toggle-panel">
-            <div class="toggle-btn" id="toggle-acousticness">acousticness</div>
-            <div class="toggle-btn" id="toggle-danceability">danceability</div>
-            <div class="toggle-btn" id="toggle-energy">energy</div>
-            <div class="toggle-btn" id="toggle-instrumentalness">instrumentalness</div>
-            <div class="toggle-btn" id="toggle-liveness">liveness</div>
-            <div class="toggle-btn" id="toggle-valence">valence</div>
+            <div>&nbsp;</div>
+            <div class="toggle-btn" id="toggle-acousticness">Acousticness</div>
+            <div class="toggle-btn" id="toggle-danceability">Danceability</div>
+            <div class="toggle-btn" id="toggle-energy">Energy</div>
+            <div class="toggle-btn" id="toggle-instrumentalness">Instrumentalness</div>
+            <div class="toggle-btn" id="toggle-liveness">Liveness</div>
+            <div class="toggle-btn" id="toggle-valence">Valence</div>
+            <div class="toggle-hint">Toggle Feature</div>
           </div>
         </div>
       </div>

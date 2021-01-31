@@ -32,7 +32,7 @@ class App extends React.Component{
       innerHeight: window.innerHeight,
       maxWidth: 1500,
       keys: ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "valence"],
-      colors: ['#ed0345','#377eb8','#4daf4a','#984ea3','#ff7f00','#022c7d','#a65628','#1a1334', '#aa88cc', '#22bb88'],
+      colors: ['#e75656','#3c97da','#9dd866','#7a5ebc','#f6c85f','#8dddd0','#a65628','#1a1334', '#aa88cc', '#22bb88'],
       change_year: (year)=>{
         this.state.top_10_song.changeYear(year);
         this.state.top_10_artist.changeYear(year);

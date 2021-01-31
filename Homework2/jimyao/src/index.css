@@ -148,6 +148,8 @@ div {
 .toggle-btn {
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.8em;
+  user-select: none;
 }
 
 #toggle-panel {
@@ -166,4 +168,18 @@ div {
   padding: 10px;
   width: 400px;
   height: 347px;
+}
+
+.toggle-hint {
+  display: block;
+  position: relative;
+  top: -10px;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #4c4c4c;
+}
+
+.hint {
+  text-shadow: 0 0 5px white;
+  fill: #222222;
 }
