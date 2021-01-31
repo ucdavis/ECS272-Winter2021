@@ -995,7 +995,7 @@ class BarUI {
 		const xAxis = g => g
 			.attr('transform', `translate(0,${height - margin.bottom})`)
 			// .call(d3.axisBottom(x).tickFormat(d3.format("d")));
-			.call(d3.axisBottom(x).tickFormat(d3.format("d")));
+			.call(d3.axisBottom(x).ticks(3, 'd'));
 		const yAxis = g => g
 			.attr('transform', `translate(${margin.left},0)`)
 			.call(d3.axisLeft(y));
