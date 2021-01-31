@@ -28,8 +28,8 @@ class SpiderPlot extends Component{
       .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
       var margin = {left: 60, right: 20, top: 20, bottom: 60}
-       var width = 600;
-       var height = 600; 
+       var width = 400;
+       var height = 400; 
        var svg = d3.select('#spider')
                    .append('svg')
         .attr("width", width + margin.left + margin.right)
@@ -37,13 +37,13 @@ class SpiderPlot extends Component{
 
       let radialScale = d3.scaleLinear()
                            .domain([0,1])
-                           .range([0,250]);
+                           .range([0,150]);
       let ticks = [0.2,0.4,0.6,0.8,1];
 
       ticks.forEach(t =>
         svg.append("circle")
-        .attr("cx", 300)
-        .attr("cy", 300)
+        .attr("cx", 200)
+        .attr("cy", 200)
         .attr("fill", "none")
         .attr("stroke", "gray")
         .attr("r", radialScale(t))
@@ -51,21 +51,21 @@ class SpiderPlot extends Component{
 
         ticks.forEach(t =>
           svg.append("text")
-          .attr("x", 305)
-          .attr("y", 300 - radialScale(t))
+          .attr("x", 205)
+          .attr("y", 200 - radialScale(t))
           .text(t.toString())
         );
 
         function angleToCoordinate(angle, value){
           let x = Math.cos(angle) * radialScale(value);
           let y = Math.sin(angle) * radialScale(value);
-          return {"x": 300 + x, "y": 300 - y};
+          return {"x": 200 + x, "y": 200 - y};
         }
 
         function angleToCoordinateAxis(angle, value){
           let x = Math.cos(angle) * radialScale(value) / 10;
           let y = Math.sin(angle) * radialScale(value)/ 10;
-          return {"x": 300 + x, "y": 300 - y};
+          return {"x": 200 + x, "y": 200 - y};
         }
        
 
@@ -78,8 +78,8 @@ class SpiderPlot extends Component{
 
           //draw axis line
           svg.append("line")
-          .attr("x1", 300)
-          .attr("y1", 300)
+          .attr("x1", 200)
+          .attr("y1", 200)
           .attr("x2", line_coordinate.x)
           .attr("y2", line_coordinate.y)
           .attr("stroke","black")
@@ -153,7 +153,7 @@ class SpiderPlot extends Component{
   }
 //
     render(){
-        return <div><select id="selectButton"></select><div id={"#hi"}></div></div>
+        return <div>Genre<br/><select id="selectButton"></select><div id={"#hi"}></div></div>
     }
 }
 

@@ -20,7 +20,7 @@ class ScatterPlot extends Component{
         };
       });
        var width = 1000;
-       var height = 500;
+       var height = 450;
        var margin = {left: 60, right: 20, top: 20, bottom: 60}
 
       var svg = d3.select("#scatter")
@@ -119,8 +119,10 @@ class ScatterPlot extends Component{
            .style("box-shadow", "2px 2px #888888")
            .text(function(d){ return d.name })
            .on("click", function(d){
-              let currentOpacity = d3.selectAll("." + d.path[0].innerHTML).style("opacity");
+              let name = d.path[0].innerHTML;
+              let currentOpacity = d3.selectAll("." + name).style("opacity");
               d3.selectAll("." + d.path[0].innerHTML).transition().style("opacity", currentOpacity == 1 ? 0:1);
+              d3.select("#" + name).transition().style("opacity", currentOpacity == 1 ? 0.5:1)
             });
  
      });
@@ -128,7 +130,7 @@ class ScatterPlot extends Component{
     }
 
     render(){
-        return <div id="sc"></div>
+        return <div id="sc">Click me! </div>
     }
 }
 

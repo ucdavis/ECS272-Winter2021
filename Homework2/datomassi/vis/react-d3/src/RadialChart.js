@@ -48,8 +48,8 @@ class RadialChart extends Component{
       .attr("value", function (d) { return d; }); // corresponding value returned by the button
 
       var margin = {left: 60, right: 20, top: 20, bottom: 60}
-       var width = 600;
-       var height = 600; 
+       var width = 400;
+       var height = 400; 
        var chartRadius = height / 2 - 40;
        var svg = d3.select('#radial')
                    .append('svg')
