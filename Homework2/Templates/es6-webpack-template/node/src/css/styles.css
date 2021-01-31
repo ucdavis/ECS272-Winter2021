@@ -1,6 +1,13 @@
-h1 {
+h1, h2, p {
     color: black;
     font-weight: bold;
+    text-align: center;
+}
+
+body {
+    background-color: whitesmoke;
+    text-align: center;
+
 }
 p {
     color: blue;

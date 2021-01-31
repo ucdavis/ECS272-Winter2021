@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { color } from "d3";
-import csvPath from '../assets/data/spotify_data/data_by_year.csv';
+import csvPath from '../assets/data/spotify_data/data_by_year_updated.csv';
 // import {legend, swatches} from @d3/color-legend
 
 function drawScatterFromCsv(){
@@ -65,7 +65,8 @@ export function drawScatterChart(data, id) {
         .range([0, visWidth]);
     
     const y = d3.scaleLinear()
-        .domain(d3.extent(data, d => d.energy)).nice()
+        // .domain(d3.extent(data, d => d.energy)).nice()
+        .domain([0,1]).nice()
         .range([visHeight, 0]);
     
     // create and add axes
@@ -81,6 +82,8 @@ export function drawScatterChart(data, id) {
         .attr('y', 40)
         .attr('fill', 'black')
         .attr('text-anchor', 'middle')
+        .attr("font-weight", "bold")
+        .attr("font-size", '12')
         .text('Year');
     
     const yAxis = d3.axisLeft(y);
@@ -93,7 +96,22 @@ export function drawScatterChart(data, id) {
         .attr('y', visHeight / 2)
         .attr('fill', 'black')
         .attr('dominant-baseline', 'middle')
-        .text('Energy');
+        // .attr("transform", "rotate(-65)")
+        .attr("font-weight", "bold")
+        .attr("font-size", '12')
+        .text('Popularity');
+
+        // svg.append("g")
+        // .attr("class", "x axis")
+        // .attr("transform", "translate(0," + height + ")")
+        // .call(xAxis)
+        // .selectAll("text")
+        // .style("text-anchor", "end")
+        // .attr("dx", "-.8em")
+        // .attr("dy", ".15em")
+        // .attr("transform", "rotate(-65)")
+        // .attr("font-weight", "bold")
+        // .attr("font-size", '12');
     
     // draw grid, based on https://observablehq.com/@d3/scatterplot
     
@@ -120,14 +138,26 @@ export function drawScatterChart(data, id) {
         .attr('y1', d => 0)
         .attr('y2', d => visHeight);
 
+    // Build color scale
+    var myColor = d3.scaleSequential()
+                  .interpolator(d3.interpolateInferno)
+                  .domain([-1,1])
+
     let tooltip = d3.select("body")
         .append("div")
         .style("position", "absolute")
         .style("font-family", "'Open Sans', sans-serif")
         .style("font-size", "12px")
         .style("z-index", "10")
-        .style("visibility", "hidden"); 
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("visibility", "hidden")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px"); 
     
+    // let myVar = d => (d.normalized_popularity)
+
     // draw points
     function drawPoints(data) {
       g.selectAll('circle')
@@ -135,21 +165,23 @@ export function drawScatterChart(data, id) {
         .join('circle')
           .attr('opacity', 0.75)
           .attr('cx', d => x(d.year))
-          .attr('cy', d => y(d.energy))
-          .attr('fill', d =>  color(d.energy))
-          .attr('r', 3)
+          .attr('cy', d => y(d.normalized_popularity))
+          // .attr('fill', d =>  myColor(d.normalized_popularity))
+          // .attr('size', d => y(d.normalized_popularity))
+          .attr('fill', d =>  color(d.normalized_popularity))
+          .attr('r', 4) //d => 20*(d.normalized_popularity))
 
           .on("mouseover", (e,d) => {
             // console.log(e)
             tooltip
              .style("visibility", "visible")
-             .text("Year:" + d.year + "; Energy: " + d.energy)})
+             .text("Year:" + d.year + "; Popularity: " + d.normalized_popularity)})
           .on("mousemove", (e,d) => {
               console.log(e)
               tooltip
               .style("top", (e.pageY-10)+"px")
               .style("left",(e.pageX+10)+"px")
-              .text("Year:" + d.year + "; Energy: " + d.energy)})
+              .text("Year:" + d.year + "; Popularity: " + d.normalized_popularity)})
             //   .text('Year' + d.year + ": " + d.energy))
             //   .attr('font-weight', 'bold')
           .on("mouseout", (e,d) => tooltip
@@ -160,48 +192,5 @@ export function drawScatterChart(data, id) {
     console.log('HEREEEEEE')
     drawPoints(data);
     
-    // // draw legend
     
-    // const legend = g.append('g')
-    //     .attr('transform', `translate(${visWidth})`);
-    
-    // const rows = legend.selectAll('g')
-    //   .data(origins)
-    //   .join('g')
-    //     .attr('transform', (d, i) => `translate(20, ${i * 20})`);
-    
-    // add a square green button/click
-    // svg.append('rect')
-    //     .attr('width', 15)
-    //     .attr('height', 15)
-    //     .attr('stroke-width', 2)
-    //     .attr('stroke', '#d3d3d3')
-    //     // .attr('stroke', d => (d.energy))
-    //     .attr('fill', d => 'green')
-    //     // .on('click', onclick);
-    
-    // svg.append('text')
-    //     .attr('font-size', 15)
-    //     .attr('x', 20)
-    //     .attr('y', 7.5)
-    //     .attr('font-family', 'sans-serif')
-    //     .attr('dominant-baseline', 'middle')
-    //     .text(d => d)
-    
-    // track which origins are selected
-    // const selected = new Map(origins.map(d => [d, true]));
-    
-    // function onclick(event, d) {
-    //   const isSelected = selected.get(d);
-      
-    //   // select the square and toggle it
-    //   const square = d3.select(this);
-    //   square.attr('fill', d => isSelected ? 'white' : color(d));
-    //   selected.set(d, !isSelected);
-      
-    //   // redraw the points
-    //   drawPoints(data.filter(d => selected.get(d.origin)));
-    // }
-    
-    // return svg.node();
   }
