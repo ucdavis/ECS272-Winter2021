@@ -1,5 +1,9 @@
 # Homework 2: Visualization Dashboard
 
+![alt tag](https://github.com/Jaewan-Yun/ECS272-Winter2021/blob/main/Homework2/jaeyun/res/screen1.png)
+
+---
+
 To set up, run the following commands:
 
 ```
