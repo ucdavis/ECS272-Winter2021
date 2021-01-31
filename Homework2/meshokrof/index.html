@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+<!-- Create a div where the graph will take place -->
+<div id="histogram"></div>
+
+<label >Attribute</label>
+<select  id="Hist_attribute">
+  <option value="acousticness">Acousticness</option>
+  <option value="danceability">Danceability</option>
+  <option value="duration_ms">Duration</option>
+  <option value="instrumentalness">Instrumentalness</option>
+  <option value="liveness">Liveness</option>
+  <option value="loudness">Loudness</option>
+  <option value="speechiness">Speechiness</option>
+  <option value="tempo">Tempo</option>
+  <option value="valence">Valence</option>
+  <option value="loudness">Loudness</option>
+  <option value="popularity">Popularity</option>
+  <option value="tempo">Tempo</option>
+  <option value="key">Key</option>
+  <option value="count">Count</option>
+</select>
+
+<p>
+  <label># bins</label>
+  <input type="number" min="1" max="100" step="30" value="20" id="nBin">
+</p>
+
+
+<div id="wordCount"></div>
+<div id="treeMap"></div>
+<div id="parrallel_coordinate"></div>
+
+<script src="main.js"></script>
