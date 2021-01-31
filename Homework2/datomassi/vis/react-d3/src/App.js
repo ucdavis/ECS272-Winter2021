@@ -24,10 +24,10 @@ class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <h2>ECS 272 Assignment 3 D3 Template</h2>
+        <h2>Spotify Dataset Metrics Visualization</h2>
         <div id="container"> 
 
-        <div id="tooltip">asdasdssss</div>
+        <div id="tooltip">View and compare metrics over time, by artist, or genre</div>
         </div>
         <div id="scatter"> <ScatterPlot data={this.state.dataYear} /> </div>
         <div id="wrapper">

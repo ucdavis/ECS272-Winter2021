@@ -48,3 +48,11 @@
   align-items: center;
   justify-content: center;
 }
+
+#selectButton{
+  width: 250px;
+}
+
+#selectButtonRadial{
+  width: 250px;
+}
