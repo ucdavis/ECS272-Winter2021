@@ -21,11 +21,13 @@ body {
 }
 
 .title {
+	/*display: flex;*/
+	/*flex-direction: row;*/
 	color: rgba(255, 255, 255, 0.8);
 	/*color: #2D46B9;*/
 	padding: 8px 16px;
-	font-size: 1.4em;
 	font-weight: bold;
+	font-size: 0.9em;
 }
 
 .left_pane,
@@ -59,6 +61,8 @@ body {
 }
 
 .right_pane > .bottom_pane {
+	display: flex;
+	flex-direction: column;
 	flex-grow: 1;
 	background-color: #fed;
 	max-height: 50%;
@@ -104,4 +108,9 @@ canvas {
 #table .table_row_highlight {
 	background-color: #777;
 	transition: 200ms all;
+}
+
+#bar_chart {
+	flex-grow: 1;
+
 }

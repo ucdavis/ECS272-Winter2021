@@ -35,30 +35,30 @@ const tsne_config = {
 const tsne_attrs = [
 	'acousticness',
 	'danceability',
-	'energy',
 	'duration_ms',
+	'energy',
 	'instrumentalness',
-	'valence',
-	'popularity',
-	'tempo',
 	'liveness',
 	'loudness',
+	'popularity',
 	'speechiness',
+	'tempo',
+	'valence',
 	// 'year',
 ];
 
 const pcoord_attrs = [
 	'acousticness',
 	'danceability',
-	'energy',
 	'duration_ms',
+	'energy',
 	'instrumentalness',
-	'valence',
-	'popularity',
-	'tempo',
 	'liveness',
 	'loudness',
+	'popularity',
 	'speechiness',
+	'tempo',
+	'valence',
 	// 'year',
 ];
 
@@ -86,6 +86,9 @@ class Dataset {
 					self.year_data.push(row);
 			}
 		}
+
+		// Sort descending popularity
+		self.year_data.sort((a, b) => (a.popularity < b.popularity) ? 1 : ((b.popularity < a.popularity) ? -1 : 0))
 
 		// Get genre popularity
 		self.genres_count_year = {};
@@ -524,7 +527,7 @@ class TsneUI {
 				n_selected++;
 			}
 			if (e.marked) {
-				self.context.lineWidth = 4;
+				self.context.lineWidth = 8;
 				radius = 10;
 			}
 
@@ -717,11 +720,13 @@ let dataset;
 let tsne_ui;
 let pcoord_ui;
 let table_ui;
+let bar_ui;
 
 function initialize_ui() {
 	tsne_ui = new TsneUI();
 	pcoord_ui = new PCoordUI();
 	table_ui = new TableUI();
+	bar_ui = new BarUI();
 
 	// Window resized
 	const $window = $(window);
@@ -738,14 +743,18 @@ function initialize_ui() {
 	}, 100);
 
 	const $year_filter = $('#year_filter');
+	const year = 1968;
+	dataset.year = year;
+	dataset.update();
 	// Create year select node
 	for (let i = dataset.year_range[0]; i <= dataset.year_range[1]; i++) {
 		const $elem = $('<option>')
 			.appendTo($year_filter)
 			.val(i)
 			.text(i);
-			if (i === dataset.year_range[1])
-				$elem.prop('selected', true);
+		// if (i === dataset.year_range[1])
+		if (i === year)
+			$elem.prop('selected', true);
 	}
 	// Filter year
 	$year_filter.on('change', function () {
@@ -803,7 +812,6 @@ class TableUI {
 		setInterval(function () {
 			const elem = self.$parent[0];
 			if (elem.scrollTop >= (elem.scrollHeight-elem.offsetHeight)-1) {
-				console.log('scrolled bottom');
 				let count = 0;
 				while (self.index < dataset.year_data.length && count < self.show_increment) {
 					const e = dataset.year_data[self.index];
@@ -882,31 +890,127 @@ class TableUI {
 
 	update() {
 		const self = this;
-
 		self.index = self.show_increment;
 		self.$body.empty();
-		// let count = 0;
-		// for (const e of dataset.year_data) {
-		// 	if (tsne_ui.has_selection() && !e.selected)
-		// 		continue;
+	}
+}
 
-		// 	const val = self.$table_search.val().toLowerCase();
-		// 	if (val != '') {
-		// 		let artists = '';
-		// 		if (e.artists.length > 0)
-		// 			artists = e.artists.reduce((a, c) => a + ', ' + c);
-		// 		let genres = '';
-		// 		if (e.genres.length > 0)
-		// 			genres = e.genres.reduce((a, c) => a + ', ' + c);
-		// 		if (!String(e.name).toLowerCase().includes(val) && !artists.toLowerCase().includes(val) && !genres.toLowerCase().includes(val))
-		// 			continue;
-		// 	}
+class BarUI {
+	constructor() {
+		const self = this;
+		self.parent_id = '#bar_chart';
+		self.$parent = $(self.parent_id);
+		self.$bar_group_select = $('#bar_group_select');
 
-		// 	if (count++ >= self.show_increment)
-		// 		break;
+		self.update();
+		window.addEventListener('update', function () {
+			self.update.apply(self);
+		}, false);
 
-		// 	const $row = self.create_row(e);
-		// 	$row.appendTo(self.$body);
-		// }
+		self.$bar_group_select.on('change', function () {
+			self.update.apply(self);
+		});
+	}
+
+	recalculate() {
+		const self = this;
+		self.width = self.$parent.innerWidth();
+		self.height = self.$parent.innerHeight();
+	}
+
+	update() {
+		const self = this;
+
+		self.$parent.empty();
+		self.recalculate();
+
+		const max_groups = 10;
+		const type = self.$bar_group_select.val();
+		const data_obj = {};
+		for (const e of dataset.year_data) {
+			if (tsne_ui.has_selection() && !e.selected)
+				continue;
+
+			if (type === 'genre') {
+				for (const g of e.genres) {
+					if (!data_obj.hasOwnProperty(g))
+						data_obj[g] = 0;
+					data_obj[g]++;
+				}
+			}
+			else if (type === 'artist') {
+				for (const a of e.artists) {
+					if (!data_obj.hasOwnProperty(a))
+						data_obj[a] = 0;
+					data_obj[a]++;
+				}
+			}
+		}
+		// Re-format into arr of obj
+		let data = [];
+		for (const k of Object.keys(data_obj)) {
+			const v = data_obj[k];
+			data.push({
+				'key': k,
+				'val': v,
+			});
+		}
+
+		// Sort bars by value
+		data = data.sort(function (a, b) {
+			return d3.descending(a.val, b.val);
+		});
+		data = data.splice(0, max_groups);
+
+		const margin = {
+			top: 15,
+			right: 25,
+			bottom: 30,
+			left: 100,
+		};
+		const width = self.width;
+		const height = self.height;
+
+		const svg = d3.select(self.parent_id)
+			.append('svg')
+			.attr('viewBox', [0, 0, width, height]);
+
+		const x = d3.scaleLinear()
+			.domain([0, d3.max(data, d => d.val)])
+			.range([margin.left, width - margin.right]);
+		const y = d3.scaleBand()
+			.domain(data.map(d => d.key))
+			.rangeRound([margin.top, height - margin.bottom])
+			.padding(0.1);
+
+		svg.selectAll('rect')
+			.data(data)
+			.join('rect')
+			.attr('x', d => x(0))
+			.attr('y', d => y(d.key))
+			.attr('height', y.bandwidth())
+			.attr('width', d =>  x(d.val) - x(0))
+			.attr('fill', '#1ed760');
+
+		const xAxis = g => g
+			.attr('transform', `translate(0,${height - margin.bottom})`)
+			// .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+			.call(d3.axisBottom(x).tickFormat(d3.format("d")));
+		const yAxis = g => g
+			.attr('transform', `translate(${margin.left},0)`)
+			.call(d3.axisLeft(y));
+		svg.append("g")
+			.call(xAxis)
+			.call(g => g
+				.select(".tick:last-of-type text")
+				.clone()
+				.attr("text-anchor", "middle")
+				.attr("x", -(width - margin.left - margin.right) / 2)
+				.attr("y", margin.bottom - 10)
+				.attr("font-weight", "bold")
+				.text('count')
+			);
+		svg.append("g")
+			.call(yAxis)
 	}
 }
