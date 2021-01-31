@@ -2,6 +2,14 @@ html,
 body {
 	width: 100%;
 	height: 100%;
+	min-height: 800px;
+	min-width: 800px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .page {
@@ -47,11 +55,13 @@ body {
 .right_pane > .top_pane {
 	flex-grow: 1;
 	background-color: #fde;
+	max-height: 50%;
 }
 
 .right_pane > .bottom_pane {
 	flex-grow: 1;
 	background-color: #fed;
+	max-height: 50%;
 }
 
 #scatter_plot_buttons {
@@ -68,11 +78,30 @@ body {
 }
 
 label.input-group-text {
-	width: 80px;
+	width: 110px;
 }
 
 canvas {
-	background-color: #000;
-	width: 100%;
-	height: 100%;
+	/*background-color: #000;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+}
+
+#table {
+	background-color: #343A40;
+	height: 250px;
+	padding: 4px 16px;
+	overflow: auto;
+	white-space: nowrap;
+}
+
+#table td {
+	max-width: 300px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+#table .table_row_highlight {
+	background-color: #777;
+	transition: 200ms all;
 }

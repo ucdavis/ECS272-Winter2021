@@ -29,14 +29,30 @@ html
 						div.input-group-prepend
 							label.input-group-text Year
 						select#year_filter.custom-select
+					div.input-group
+						div.input-group-prepend
+							label.input-group-text Table
+						input#table_search.form-control(type='text' placeholder='Search...')
+					div#table
+						table.table.table-sm.table-dark
+							thead
+								tr.head_row
+									th(scope='col' style='min-width: 200px;') Name
+									th(scope='col' style='min-width: 200px;') Artists
+									th(scope='col' style='min-width: 200px;') Genres
+									th(scope='col' style='width: 90px;') Popularity
+							tbody
 				div.bottom_pane
 					div#scatter_plot_buttons
 						div.input-group
 							div.input-group-prepend
-								label.input-group-text tSNE
-							input#run_tsne_button.form-control.btn.btn-outline-primary(type='button' value='Run' disabled)
-							// input#reset_tsne_button.form-control.btn.btn-outline-danger(type='button' value='Reset' disabled)
+								label.input-group-text Perplexity
+							input#tsne_perplexity.form-control(type='text' value='40')
+						div.input-group
+							div.input-group-prepend
+								label.input-group-text t-SNE
+							input#run_tsne_button.form-control.btn.btn-primary(type='button' value='Run' disabled)
 					div#scatter_plot
 			div.right_pane
-				div.top_pane
+				div#pcoord_plot.top_pane
 				div.bottom_pane
