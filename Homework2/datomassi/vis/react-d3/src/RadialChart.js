@@ -22,8 +22,8 @@ class RadialChart extends Component{
             return shuffled.slice(min);
         }
         var datas = getRandomSubarray(csv, 500);
+        datas[0] = csv[0];
         var keys  = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness"];
-        // console.log(datas)
         var data = []
         datas.forEach((d) => {
           let datum = {"artists": d["artists"], "value": []}
@@ -33,13 +33,11 @@ class RadialChart extends Component{
           data.push(datum);
         });
 
-        console.log(data)
         var allGroup = []
         datas.forEach((d) => {
           allGroup.push(d.artists);
         });
-        // console.log(allGroup)
-        console.log("hi")
+
         // add the options to the button
       d3.select("#selectButtonRadial")
       .selectAll('myOptions')
@@ -69,12 +67,10 @@ class RadialChart extends Component{
 
         const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-        console.log(color)
 
         let scale = d3.scaleLinear()
                       .domain([0, 1])
                       .range([0, 2 * PI]);
-        console.log(scale)
 
         let ticks = scale.ticks(numTicks).slice(0, -1);
 
@@ -142,8 +138,7 @@ class RadialChart extends Component{
         // arcs.on('mouseout', hideTooltip)
 
         function arcTween(d, i) {
-          console.log("yo");
-          console.log(d);
+
           let interpolate = d3.interpolate(0, d.value);
           return t => arc(interpolate(t), i);
         }
@@ -173,11 +168,9 @@ class RadialChart extends Component{
 
          // A function that update the chart
         function update(selectedGroup) {
-          console.log(selectedGroup)
           // Create new data with the selection?
           var dataFilter = data.find((d) => {return d["artists"] === selectedGroup})["value"];
-          console.log("dataFilter")
-          console.log(dataFilter)
+
            arcs.data(dataFilter)
             .transition()
             .delay((d, i) => i * 200)
@@ -197,7 +190,7 @@ class RadialChart extends Component{
   }
 
     render(){
-        return <div><select id="selectButtonRadial"></select><div id={"#hi"}></div></div>
+        return <div>Artist<br /><select id="selectButtonRadial"></select><div id={"#hi"}></div></div>
     }
 }
 
