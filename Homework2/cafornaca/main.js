@@ -4,7 +4,8 @@ var range2 = -1
 var datesValid = false
 var crimeData = [];
 var crimeTypeFreq = {};
-var categoryFreq = {}
+var categoryFreq = {};
+var parallelData = {};
 
 // Set-up for date drop-downs
 function initSelect(input){
@@ -90,12 +91,12 @@ function compare() {
         //console.log(categoryFreq)
 
         return {
-          Date: parseTime(new Date(row['Date'])),
+          // Date: parseTime(new Date(row['Date'])),
           Category: String(row['Category']),
           Weekday: String(row['DayOfWeek']),
-          District: String(row['PdDistrict']),
-          X: parseFloat(row['X']),
-          Y: parseFloat(row['Y'])
+          District: String(row['PdDistrict'])//,
+          // X: parseFloat(row['X']),
+          // Y: parseFloat(row['Y'])
         };
       });
 
@@ -114,7 +115,7 @@ function compare() {
 
       drawLineGraph(crimeData)
       initSelect(crimeData)
-      drawStreamGraph(crimeTypeFreq)
+      drawParallelCoords(parallelData)
       drawPieChart(categoryFreq)
     })
   })()
@@ -125,7 +126,7 @@ function drawPieChart(categoryFreq){
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 40, left: 200},
-    width = 3000 - margin.left - margin.right,
+    width = 2000 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -139,7 +140,7 @@ var svg = d3.select("#piechart")
 
 // Add X axis
 var x = d3.scaleLinear()
-  .domain([0, 50000])
+  .domain([0, 45000])
   .range([ 0, width]);
 svg.append("g")
   .attr("transform", "translate(0," + height + ")")
@@ -184,14 +185,10 @@ svg.selectAll("mycircle")
 
 
 
-function drawStreamGraph(crimeTypeFreq){
-  var colorrange = ["#58ABAE", "#A5CBC6", "#E5E5E5", "#FAF4F0", "#FFD6D4", "#FEB8C5"];
+function advplot(){
   
-  var area = d3.area()
-    .x(d => x(d.categoryFreq))
-    .y0(d => y(d[0]))
-    .y1(d => y(d[1]))
 }
+
   
 
 
