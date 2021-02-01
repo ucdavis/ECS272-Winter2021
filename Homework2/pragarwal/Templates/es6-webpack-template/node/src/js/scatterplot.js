@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import csvPath from '../assets/data/SpotifyData.csv';
+import csvPath from '../assets/data/data_by_year.csv';
 
 export async function drawScatterPlot(){
 
@@ -50,8 +50,8 @@ export async function drawScatterPlot(){
         .append("circle")
         .attr("cx", function (d) { return x(d.valence); } )
         .attr("cy", function (d) { return y(d.energy); } )
-        .attr("r", 1.5)
-        .style("fill", "#1ed760")
+        .attr("r", 2.5)
+        .style("fill", "#fbafa1")
 
     //})
     return svg.node();

@@ -26,7 +26,7 @@ export async function drawLineChart(){
 
       var myColor = d3.scaleLinear()
                         .domain(allGroup)
-                        .range(["#79d70f", "#c70039", "#f37121", "#ffbd69", "#cf7500"]);
+                        .range(["#79d70f", "#d7efb6", "#e8249a", "#c4fa70", "#cf7500"]);
 
         console.log("colorrrrrr:   " + myColor["danceability"]);
     // parse the date / time
@@ -136,51 +136,51 @@ export async function drawLineChart(){
     var line = svg.append("path")
     .data([data])
     .attr("class", "line")
-    .style("stroke", "#79d70f")
+    .style("stroke", "#fcd471")
     .attr("d", valueline)
     .on("mouseover", handleMouseOver )
     //.on("mousemove", moveTooltip )
     .on("mouseleave", handleMouseOut );
 
     // Add the valueline2 path.
-    // var line = svg.append("path")
-    // .data([data])
-    // .attr("class", "line")
-    // .style("stroke", "#c70039")
-    // .attr("d", valueline2)
-    // .on("mouseover", handleMouseOver )
-    // //.on("mousemove", moveTooltip )
-    // .on("mouseleave", handleMouseOut );
+    var line = svg.append("path")
+    .data([data])
+    .attr("class", "line")
+    .style("stroke", "#fbafa1")
+    .attr("d", valueline2)
+    .on("mouseover", handleMouseOver )
+    //.on("mousemove", moveTooltip )
+    .on("mouseleave", handleMouseOut );
 
-    // // Add the valueline3 path.
-    // var line = svg.append("path")
-    // .data([data])
-    // .attr("class", "line")
-    // .style("stroke", "#f37121")
-    // .attr("d", valueline3)
-    // .on("mouseover", handleMouseOver )
-    // //.on("mousemove", moveTooltip )
-    // .on("mouseleave", handleMouseOut );
+    // Add the valueline3 path.
+    var line = svg.append("path")
+    .data([data])
+    .attr("class", "line")
+    .style("stroke", "#fb84ce")
+    .attr("d", valueline3)
+    .on("mouseover", handleMouseOver )
+    //.on("mousemove", moveTooltip )
+    .on("mouseleave", handleMouseOut );
 
-    // // Add the valueline4 path.
-    // var line = svg.append("path")
-    // .data([data])
-    // .attr("class", "line")
-    // .style("stroke", "#ffbd69")
-    // .attr("d", valueline4)
-    // .on("mouseover", handleMouseOver )
-    // //.on("mousemove", moveTooltip )
-    // .on("mouseleave", handleMouseOut );
+    // Add the valueline4 path.
+    var line = svg.append("path")
+    .data([data])
+    .attr("class", "line")
+    .style("stroke", "#ef54f1")
+    .attr("d", valueline4)
+    .on("mouseover", handleMouseOver )
+    //.on("mousemove", moveTooltip )
+    .on("mouseleave", handleMouseOut );
 
-    // // Add the valueline5 path.
-    // var line = svg.append("path")
-    // .data([data])
-    // .attr("class", "line")
-    // .style("stroke", "#cf7500")
-    // .attr("d", valueline5)
-    // .on("mouseover", handleMouseOver )
-    // //.on("mousemove", moveTooltip )
-    // .on("mouseleave", handleMouseOut );
+    // Add the valueline5 path.
+    var line = svg.append("path")
+    .data([data])
+    .attr("class", "line")
+    .style("stroke", "#c4fa70")
+    .attr("d", valueline5)
+    .on("mouseover", handleMouseOver )
+    //.on("mousemove", moveTooltip )
+    .on("mouseleave", handleMouseOut );
 
     // Add the X Axis
     svg.append("g")

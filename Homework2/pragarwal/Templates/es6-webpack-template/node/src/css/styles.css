@@ -19,18 +19,19 @@ body{
 
 .header {
     font-weight : bold;
-    font-size: larger;
+    font-size: xx-large;
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: white;
     /* padding-left: 50px; */
     /* background-color: black; */
 }
 
 .bubbles {
-    stroke-width: 2px;
-    stroke: white;
+    stroke-width: 1px;
+    stroke: #c4fa70;
   }
   .bubbles:hover {
-    stroke: black;
+    stroke: #fb84ce;
   }
 
 .axis path,

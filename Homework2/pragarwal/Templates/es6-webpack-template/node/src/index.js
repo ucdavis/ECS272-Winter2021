@@ -7,15 +7,17 @@ import {drawScatterPlot} from "./js/scatterplot"
 import {drawBubbleChart} from "./js/bubblechart"
 import {drawLineChart} from "./js/linechart"
 import {drawStackedBarChart} from "./js/stackedbarchart"
+import {drawParallelCoordinateChart} from "./js/parallelcoordinate"
 
 let x = 2;
 //console.log(testData);
 //drawBarChart(testData["data"], "#bar");
 //drawBarFromCsvAsync();
-//drawScatterPlot();
-//drawBubbleChart();
+drawScatterPlot();
+drawBubbleChart();
 drawLineChart();
 drawStackedBarChart();
+//drawParallelCoordinateChart();
 
 /* 
     TODO: all the other logic for implementing your charts + adding in some basic filters 

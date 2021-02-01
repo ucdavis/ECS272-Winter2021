@@ -102,7 +102,7 @@ export async function drawBubbleChart(){
         .attr("cx", function (d) { return x(d.year); } )
         .attr("cy", function (d) { return y(d.danceability); } )
         .attr("r", function (d) { return z(d.popularity); } )
-        .style("fill", "#1ed760")
+        .style("fill", "#c4fa70")
         .style("opacity", "0.7")
         .attr("stroke", "black")
         // .on("mouseover", showTooltip )

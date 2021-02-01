@@ -9,8 +9,25 @@ export async function drawStackedBarChart(){
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
+
+    //BUTTON:-------
+    // List of groups (here I have one group per column)
+    var allGroup = ["danceability", "energy", "liveness", "acousticness", "valence"]
+
+
+    // add the options to the button
+    d3.select("#selectBarChartButton")
+      .selectAll('myOptions')
+     	.data(allGroup)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    //BUTTON END----
+
 // append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
+var svg = d3.select("#stackedbarchart")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -73,7 +90,7 @@ const data = await d3.csv(csvPath);
   // color palette = one color per subgroup
   var color = d3.scaleOrdinal()
     .domain(subgroups)
-    .range(['#e41a1c','#377eb8','#4daf4a', '#000000', '#111111'])
+    .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa70'])
 
   //stack the data? --> stack per subgroup
   var stackedData = d3.stack()
@@ -164,22 +181,22 @@ const data = await d3.csv(csvPath);
 //     .style("fill", function(d, i) { return colors[i]; });
 
 
-//     var rect = groups.selectAll("rect")
-//                     .data(function(d) { return d; })
-//                     .enter()
-//                     .append("rect")
-//                     .attr("x", function(d) { return x(d.x); })
-//                     .attr("y", function(d) { return y(d.y0 + d.y); })
-//                     .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
-//                     .attr("width", x.domain())
-//                     //.on("mouseover", function() { tooltip.style("display", null); })
-//                     //.on("mouseout", function() { tooltip.style("display", "none"); })
-// //                     .on("mousemove", function(d) {
-// //                         var xPosition = d3.mouse(this)[0] - 15;
-// //                         var yPosition = d3.mouse(this)[1] - 25;
-// //                         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-// //                         tooltip.select("text").text(d.y);
-// //   })
-//   ;
+    var rect = groups.selectAll("rect")
+                    .data(function(d) { return d; })
+                    .enter()
+                    .append("rect")
+                    .attr("x", function(d) { return x(d.x); })
+                    .attr("y", function(d) { return y(d.y0 + d.y); })
+                    .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+                    .attr("width", x.domain())
+                    //.on("mouseover", function() { tooltip.style("display", null); })
+                    //.on("mouseout", function() { tooltip.style("display", "none"); })
+//                     .on("mousemove", function(d) {
+//                         var xPosition = d3.mouse(this)[0] - 15;
+//                         var yPosition = d3.mouse(this)[1] - 25;
+//                         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+//                         tooltip.select("text").text(d.y);
+//   })
+  ;
 
 }
