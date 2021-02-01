@@ -6,6 +6,10 @@ var crimeData = [];
 var crimeTypeFreq = {};
 var categoryFreq = {};
 var parallelData = {};
+var mydata = [];
+var keys = [];
+var csv = {};
+var steamData = [];
 
 // Set-up for date drop-downs
 function initSelect(input){
@@ -59,12 +63,16 @@ function compare() {
 
 (function () {
   var dailyCrimes = {};
+  var districtFreqByDate = {};
+  var districts = {};
   
   // Load the dataset from a CSV URL
   d3.csv('https://raw.githubusercontent.com/cafornaca/ECS272-Winter2021/main/Homework2/datasets/Police_Department_Incidents_-_Previous_Year__2016_.csv')
     .then(csv => {
       // Log CSV in browser console
       console.log(csv);
+      //keys = data.columns.slice(1)
+
 
       var parseTime = d3.timeParse("%d-%b-%y");
       // Create data by selecting columns from the CSV file
@@ -85,19 +93,32 @@ function compare() {
           }
         }
 
-        //console.log(crimeTypeFreq)
-        
-        dailyCrimes[new Date(row['Date'])] ? dailyCrimes[new Date(row['Date'])]+1 : 1.0;
-        //console.log(categoryFreq)
 
-        return {
-          // Date: parseTime(new Date(row['Date'])),
+        // for steamdata
+        if (row['PdDistrict'] !== ""){
+        districts[row['PdDistrict']] = 0;
+        if (districtFreqByDate[new Date(row['Date'])]) {
+          if (districtFreqByDate[new Date(row['Date'])][row['PdDistrict']]){
+            districtFreqByDate[new Date(row['Date'])][row['PdDistrict']] += 1
+          } else {
+            districtFreqByDate[new Date(row['Date'])][row['PdDistrict']] = 1
+          } 
+        } else {
+          districtFreqByDate[new Date(row['Date'])] = {...districts}
+          districtFreqByDate[new Date(row['Date'])] = {[row['PdDistrict']] : 1}
+        }
+      }
+        dailyCrimes[new Date(row['Date'])] ? dailyCrimes[new Date(row['Date'])]+1 : 1.0;
+
+        mydata.push({
+          //Date: parseTime(new Date(row['Date'])),
           Category: String(row['Category']),
           Weekday: String(row['DayOfWeek']),
-          District: String(row['PdDistrict'])//,
-          // X: parseFloat(row['X']),
-          // Y: parseFloat(row['Y'])
-        };
+          District: String(row['PdDistrict']),
+          X: parseFloat(row['X']),
+          Y: parseFloat(row['Y'])
+        });
+
       });
 
       Object.keys(dailyCrimes).forEach( d => { 
@@ -113,16 +134,24 @@ function compare() {
         return a[0] > b[0] ? 1 : -1
       })
 
+      //console.log(mydata)
+
+      console.log(categoryFreq)
       drawLineGraph(crimeData)
       initSelect(crimeData)
-      drawParallelCoords(parallelData)
       drawPieChart(categoryFreq)
+      advplot(districtFreqByDate, districts)
+      
     })
   })()
 
+
+
+
+  
 function drawPieChart(categoryFreq){
   var data = categoryFreq
-  console.log(data)
+  //console.log(data)
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 40, left: 200},
@@ -181,11 +210,106 @@ svg.selectAll("mycircle")
     .style("fill", "teal")
     .attr("stroke", "teal")
 
+
+    svg.append("text")
+.attr("x", (width / 2))             
+.attr("y", 20)
+.attr("text-anchor", "middle")  
+.style("font-size", "16px") 
+.text("Frequency of Crime Types");
 }
 
 
 
-function advplot(){
+function advplot(districtFreqByDate, districts){
+//key = swatches({color, marginLeft: margin.left, columns: "180px"})
+
+var csvdata = ["date", ...Object.keys(districts)]
+
+Object.keys(districtFreqByDate).forEach( _key => {
+  steamData.push(
+    {
+      date : new Date(_key),
+      ...districtFreqByDate[_key]
+
+    }
+  )
+  csvdata.push([new Date(_key), ...Object.values(districtFreqByDate[_key])])
+  if (csvdata[csvdata.length-1].length === 12) {
+    csvdata[csvdata.length-1].splice(-1)
+  }
+}
+)
+
+// console.log(csvdata)
+//csvdata = d3.csv.format(csvdata)
+
+var keys = "date," + Object.keys(districts).join(",")
+
+
+// set the dimensions and margins of the graph
+ var margin = {top: 20, right: 30, bottom: 30, left: 60},
+  width = 460 - margin.left - margin.right,
+  height = 400 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  var svg = d3.select("#advplot")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+// Add X axis
+var x = d3.scaleLinear()
+.domain(d3.extent(csvdata, function(d) { return d.date; }))
+.range([ 0, width ]);
+svg.append("g")
+.attr("transform", "translate(0," + height + ")")
+.call(d3.axisBottom(x).ticks(5).tickFormat(d3.timeFormat("%Y-%m-%d")));
+
+
+// Add Y axis
+var y = d3.scaleLinear()
+.domain([-100000, 100000])
+.range([ height, 0 ]);
+svg.append("g")
+.call(d3.axisLeft(y));
+
+// color palette
+var color = d3.scaleOrdinal()
+.domain(keys)
+.range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
+
+//stack the data?
+var stackedData = d3.stack()
+.offset(d3.stackOffsetSilhouette)
+.keys(keys)
+(csvdata)
+
+// Show the areas
+svg
+.selectAll("mylayers")
+.data(stackedData)
+.enter()
+.append("path")
+  .style("fill", function(d) { return color(d.key); })
+  .attr("d", d3.area()
+    .x(function(d, i) { return x(d.data.date); })
+    .y0(function(d) { return y(d[0]); })
+    .y1(function(d) { return y(d[1]); })
+)
+
+svg.append("text")
+.attr("x", (width / 2))             
+.attr("y", 20)
+.attr("text-anchor", "middle")  
+.style("font-size", "16px") 
+.text("Number of Daily Incidents per District");
+
+//})
+
   
 }
 
@@ -256,7 +380,7 @@ function drawLineGraph(currentdata){
   // Add a title to the line graph
   svg.append("text")
     .attr("x", (width / 2))             
-    .attr("y", 0 - (margin.top / 2))
+    .attr("y", 20)
     .attr("text-anchor", "middle")  
     .style("font-size", "16px") 
     .text("Number of Crimes per Day");

@@ -5,22 +5,43 @@
         <title>Charlie Fornaca's ECS-272 Homework 2 Dashboard</title>
         <script src="https://d3js.org/d3.v6.min.js"></script>
 
+        <style>
+            #container{
+                display: inline-block;
+            }
+
+            #container + div {
+                display: inline-block;
+            }
+        </style>
+
+
     </head>
   
     <body>
       <h2>Charlie Fornaca's ECS-272 Homework 2 Dashboard</h2>
+      <p>I did my best. :') This takes a while to run.</p>
      <div id="container"></div>
-
+     
+     <div>
+        <div id="advplot"></div>
+     </div>
+     
+     <div>
         <select id="startDate" class="start" onchange="selectStart()">
             <option value="-1" selected disabled>Start</option>
         </select>
         <select id="endDate" class="end" onchange="selectEnd()">
             <option value="-1" selected disabled>End</option>
         </select>
+    </div>
 
-        <div id="piechart"></div>
 
-        <div id="advplot"></div>
+ 
+
+    
+    <div id="piechart"></div>
+
 
 
         <script src="main.js"></script>
