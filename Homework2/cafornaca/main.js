@@ -136,7 +136,7 @@ function compare() {
 
       //console.log(mydata)
 
-      console.log(categoryFreq)
+      //console.log(categoryFreq)
       drawLineGraph(crimeData)
       initSelect(crimeData)
       drawPieChart(categoryFreq)
@@ -226,7 +226,7 @@ function advplot(districtFreqByDate, districts){
   
   var margin = ({top: 20, right: 30, bottom: 30, left: 40})
   
-  var width = 1200
+  var width = 800
   
   var height = 600
   
@@ -409,7 +409,7 @@ function advplot(districtFreqByDate, districts){
 function drawLineGraph(currentdata){
   // Set the dimensions and margins of the graph
   var margin = {top: 20, right: 20, bottom: 100, left: 50},
-  width = 960 - margin.left - margin.right,
+  width = 800 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
 
   // set the ranges
