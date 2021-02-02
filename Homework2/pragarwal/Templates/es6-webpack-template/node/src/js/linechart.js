@@ -33,8 +33,11 @@ export async function drawLineChart(){
     var parseTime = d3.timeParse("%y");
 
     // set the ranges
-    var x = d3.scaleLinear().domain([1920, 2020]).range([0, width]);
-    var y = d3.scaleLinear().range([height, 0]);
+    var x = d3.scaleLinear()
+                .domain([1920, 2020])
+                .range([0, width]);
+    var y = d3.scaleLinear()
+                .range([height, 0]);
 
     // define the 1st line
     var valueline = d3.line()
@@ -61,12 +64,13 @@ export async function drawLineChart(){
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+    var svg = d3.select("#linechart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
 
     // Get the data
     const data = await d3.csv(csvPath);
@@ -186,6 +190,7 @@ export async function drawLineChart(){
     svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .attr("background-color", "white")
+    .attr("class", "axisWhite")
     .call(d3.axisBottom(x))
     .call(g =>
         g .select(".tick:last-of-type text")
@@ -193,12 +198,13 @@ export async function drawLineChart(){
           .attr("text-anchor", "middle")
           .attr("x", -width / 2)
           .attr("y", margin.bottom - 10)
-          .attr("font-weight", "bold")
+          //.attr("font-weight", "bold")
           .text("Year")
         );
 
     // Add the Y Axis
     svg.append("g")
+    .attr("class", "axisWhite")
     .call(d3.axisLeft(y));
 
 

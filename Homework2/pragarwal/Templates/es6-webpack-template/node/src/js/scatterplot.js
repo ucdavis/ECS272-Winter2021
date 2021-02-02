@@ -4,11 +4,11 @@ import csvPath from '../assets/data/data_by_year.csv';
 export async function drawScatterPlot(){
 
     var margin = {top: 10, right: 30, bottom: 30, left: 60},
-        width = 1000 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+        width = 600 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
+    var svg = d3.select("#mydataviz")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)

@@ -3,12 +3,15 @@ h1 {
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* #bar {
-    color: fuchsia;
-} */
 
-#myClass {
+#myClass1 {
     color: white;
+    float: left;
+}
+
+#myClass2 {
+    color: white;
+    float: left;
 }
 
 body{
@@ -22,6 +25,8 @@ body{
     font-size: xx-large;
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: white;
+    text-align: center;
+
     /* padding-left: 50px; */
     /* background-color: black; */
 }
@@ -32,6 +37,7 @@ body{
   }
   .bubbles:hover {
     stroke: #fb84ce;
+    color: #fb84ce;
   }
 
 .axis path,
@@ -57,7 +63,48 @@ body{
     stroke: white;
     text-decoration: white;
     fill: white;
-    background-color: grey;
-    stroke-width: 2.0px;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
     opacity: 1.0;
+    float: left;
+    /* width: 50%; */
+    /* height: 300px; */
+}
+
+.axisWhite line{
+    stroke: white;
+}
+
+.container2 {
+    width: 50%;
+    height: 300px;
+    float: left;
+    /* position: relative; */
+    margin: 20px;
+}
+
+.selectButton {
+    float: right;
+}
+
+
+.container1 {
+    width: 50%;
+    height: 300px;
+    float: left;
+    /* position: relative; */
+    margin-bottom: 60px;
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+#mydataviz {
+    fill: white;
+    stroke: white;
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
 }

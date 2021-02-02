@@ -10,8 +10,8 @@ export async function drawBubbleChart(){
     const data = await d3.csv(csvPath);
     
     var margin = {top: 40, right: 20, bottom: 30, left: 50},
-        width = 1000 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+        width = 600 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
 
     // var margin2 = {top: 440, right: 20, bottom: 10, left: 40},
     //     height2 = 200 - margin2.top - margin2.bottom;
@@ -19,7 +19,7 @@ export async function drawBubbleChart(){
     //var parseDate = d3.timeParse("%b %Y");
 
     // append the svg object to the body of the page
-    var svg = d3.select("#bubble")
+    var svg = d3.select("#mydataviz")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -102,9 +102,10 @@ export async function drawBubbleChart(){
         .attr("cx", function (d) { return x(d.year); } )
         .attr("cy", function (d) { return y(d.danceability); } )
         .attr("r", function (d) { return z(d.popularity); } )
-        .style("fill", "#c4fa70")
-        .style("opacity", "0.7")
+        //.style("fill", "#c4fa70")
+        .style("opacity", "1")
         .attr("stroke", "black")
+        .style("stroke-width", '2.5px')
         // .on("mouseover", showTooltip )
         // .on("mousemove", moveTooltip )
         // .on("mouseleave", hideTooltip )
