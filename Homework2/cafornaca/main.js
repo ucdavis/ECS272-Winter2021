@@ -220,98 +220,185 @@ svg.selectAll("mycircle")
 }
 
 
-
 function advplot(districtFreqByDate, districts){
-//key = swatches({color, marginLeft: margin.left, columns: "180px"})
+  //key = swatches({color, marginLeft: margin.left, columns: "180px"})
+  var parseTime = d3.timeParse("%d-%b-%y");
+  
+  var margin = ({top: 20, right: 30, bottom: 30, left: 40})
+  
+  var width = 1200
+  
+  var height = 600
+  
+  Object.keys(districtFreqByDate).forEach( _key => {
+    steamData.push(
+      {
+        date : new Date(_key),
+        ...districtFreqByDate[_key]
+      })
+    })
+    steamData['y'] = "Frequency";
+    steamData['columns'] = Object.keys(districts)
+    steamData.sort( (a, b) => {
+      return d3.ascending(a.date, b.date);
+    })
+    
+    var series = d3.stack()
+    .offset(d3.stackOffsetDiverging)
+    .keys(steamData.columns)(steamData)
+    
+    var area = d3.area()
+      .x(d => x(d.data.date))
+      .y0(d => y(d[0]))
+      .y1(d => y(d[1]))
+    
+      var x = d3.scaleUtc()
+      .domain(d3.extent(steamData, d => d.date))
+      .range([margin.left, width - margin.right])
+    
+      var y = d3.scaleLinear()
+      .domain([0, d3.max(series, d => d3.max(d, d => d[1]))]).nice()
+      .range([height - margin.bottom, margin.top])
+    
+      var color = d3.scaleOrdinal()
+      .domain(steamData.columns)
+      .range(d3.schemeCategory10)
+    
+      var xAxis = g => g
+      .attr("transform", `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
+    
+      var yAxis = g => g
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y))
+      .call(g => g.select(".domain").remove())
+      .call(g => g.select(".tick:last-of-type text").clone()
+          .attr("x", 3)
+          .attr("text-anchor", "start")
+          .attr("font-weight", "bold")
+          .text(steamData.y))
+      
+          let svg = d3.select("#advplot")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+      
+        svg.append("g")
+        .selectAll("path")
+        .data(series)
+        .join("path")
+          .attr("fill", ({key}) => color(key))
+          .attr("d", area)
+        .append("title")
+          .text(({key}) => key);
+      
+          svg.append("g")
+          .call(xAxis);
+      
+          svg.append("g")
+          .call(yAxis);
+          console.log(series)
 
-var csvdata = ["date", ...Object.keys(districts)]
-
-Object.keys(districtFreqByDate).forEach( _key => {
-  steamData.push(
-    {
-      date : new Date(_key),
-      ...districtFreqByDate[_key]
-
-    }
-  )
-  csvdata.push([new Date(_key), ...Object.values(districtFreqByDate[_key])])
-  if (csvdata[csvdata.length-1].length === 12) {
-    csvdata[csvdata.length-1].splice(-1)
+          svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 20)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("Frequency of Daily Incidents per District (hover for labels)");
+      
+          return svg.node();
   }
-}
-)
+// function advplot(districtFreqByDate, districts){
+// //key = swatches({color, marginLeft: margin.left, columns: "180px"})
 
-// console.log(csvdata)
-//csvdata = d3.csv.format(csvdata)
+// var csvdata = ["date", ...Object.keys(districts)]
 
-var keys = "date," + Object.keys(districts).join(",")
+// Object.keys(districtFreqByDate).forEach( _key => {
+//   steamData.push(
+//     {
+//       date : new Date(_key),
+//       ...districtFreqByDate[_key]
 
+//     }
+//   )
+//   csvdata.push([new Date(_key), ...Object.values(districtFreqByDate[_key])])
+//   if (csvdata[csvdata.length-1].length === 12) {
+//     csvdata[csvdata.length-1].splice(-1)
+//   }
+// }
+// )
 
-// set the dimensions and margins of the graph
- var margin = {top: 20, right: 30, bottom: 30, left: 60},
-  width = 460 - margin.left - margin.right,
-  height = 400 - margin.top - margin.bottom;
+// // console.log(csvdata)
+// //csvdata = d3.csv.format(csvdata)
 
-  // append the svg object to the body of the page
-  var svg = d3.select("#advplot")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-
-// Add X axis
-var x = d3.scaleLinear()
-.domain(d3.extent(csvdata, function(d) { return d.date; }))
-.range([ 0, width ]);
-svg.append("g")
-.attr("transform", "translate(0," + height + ")")
-.call(d3.axisBottom(x).ticks(5).tickFormat(d3.timeFormat("%Y-%m-%d")));
+// var keys = "date," + Object.keys(districts).join(",")
 
 
-// Add Y axis
-var y = d3.scaleLinear()
-.domain([-100000, 100000])
-.range([ height, 0 ]);
-svg.append("g")
-.call(d3.axisLeft(y));
+// // set the dimensions and margins of the graph
+//  var margin = {top: 20, right: 30, bottom: 30, left: 60},
+//   width = 460 - margin.left - margin.right,
+//   height = 400 - margin.top - margin.bottom;
 
-// color palette
-var color = d3.scaleOrdinal()
-.domain(keys)
-.range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
+//   // append the svg object to the body of the page
+//   var svg = d3.select("#advplot")
+//   .append("svg")
+//   .attr("width", width + margin.left + margin.right)
+//   .attr("height", height + margin.top + margin.bottom)
+//   .append("g")
+//   .attr("transform",
+//         "translate(" + margin.left + "," + margin.top + ")");
 
-//stack the data?
-var stackedData = d3.stack()
-.offset(d3.stackOffsetSilhouette)
-.keys(keys)
-(csvdata)
+// // Add X axis
+// var x = d3.scaleLinear()
+// .domain(d3.extent(csvdata, function(d) { return d.date; }))
+// .range([ 0, width ]);
+// svg.append("g")
+// .attr("transform", "translate(0," + height + ")")
+// .call(d3.axisBottom(x).ticks(5).tickFormat(d3.timeFormat("%Y-%m-%d")));
 
-// Show the areas
-svg
-.selectAll("mylayers")
-.data(stackedData)
-.enter()
-.append("path")
-  .style("fill", function(d) { return color(d.key); })
-  .attr("d", d3.area()
-    .x(function(d, i) { return x(d.data.date); })
-    .y0(function(d) { return y(d[0]); })
-    .y1(function(d) { return y(d[1]); })
-)
 
-svg.append("text")
-.attr("x", (width / 2))             
-.attr("y", 20)
-.attr("text-anchor", "middle")  
-.style("font-size", "16px") 
-.text("Number of Daily Incidents per District");
+// // Add Y axis
+// var y = d3.scaleLinear()
+// .domain([-100000, 100000])
+// .range([ height, 0 ]);
+// svg.append("g")
+// .call(d3.axisLeft(y));
 
-//})
+// // color palette
+// var color = d3.scaleOrdinal()
+// .domain(keys)
+// .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
+
+// //stack the data?
+// var stackedData = d3.stack()
+// .offset(d3.stackOffsetSilhouette)
+// .keys(keys)
+// (csvdata)
+
+// // Show the areas
+// svg
+// .selectAll("mylayers")
+// .data(stackedData)
+// .enter()
+// .append("path")
+//   .style("fill", function(d) { return color(d.key); })
+//   .attr("d", d3.area()
+//     .x(function(d, i) { return x(d.data.date); })
+//     .y0(function(d) { return y(d[0]); })
+//     .y1(function(d) { return y(d[1]); })
+// )
+
+// svg.append("text")
+// .attr("x", (width / 2))             
+// .attr("y", 20)
+// .attr("text-anchor", "middle")  
+// .style("font-size", "16px") 
+// .text("Number of Daily Incidents per District");
+
+// //})
 
   
-}
+// }
 
   
 
