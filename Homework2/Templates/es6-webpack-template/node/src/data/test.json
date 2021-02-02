@@ -1,41 +1,162 @@
 {
     "data":[
         {
-            "x": 21,
-            "y": "a"
+            "y": "LARCENY/THEFT",
+            "x": 40409
         },
         {
-            "x": 42,
-            "y": "b"
+            "y": "OTHER OFFENSES",
+            "x": 19599
         },
         {
-            "x": 43,
-            "y": "c"
+            "y": "NON-CRIMINAL",
+            "x": 17866
         },
         {
-            "x": 5,
-            "y": "d"
+            "y": "ASSAULT",
+            "x": 13577
         },
         {
-            "x": 26,
-            "y": "e"
+            "y": "VANDALISM",
+            "x": 8589
         },
         {
-            "x": 7,
-            "y": "f"
+            "y": "VEHICLE THEFT",
+            "x": 6419
         },
         {
-            "x": 10,
-            "y": "l"
+            "y": "WARRANTS",
+            "x": 5914
         },
         {
-            "x": 18,
-            "y": "s"
+            "y": "BURGLARY",
+            "x": 5802
         },
         {
-            "x": 85,
-            "y": "x"
+            "y": "SUSPICIOUS OCC",
+            "x": 5782
+        },
+        {
+            "y": "MISSING PERSON",
+            "x": 4338
+        },
+        {
+            "y": "DRUG/NARCOTIC",
+            "x": 4243
+        },
+        {
+            "y": "ROBBERY",
+            "x": 3299
+        },
+        {
+            "y": "FRAUD",
+            "x": 2635
+        },
+        {
+            "y": "SECONDARY CODES",
+            "x": 1841
+        },
+        {
+            "y": "TRESPASS",
+            "x": 1812
+        },
+        {
+            "y": "WEAPON LAWS",
+            "x": 1658
+        },
+        {
+            "y": "SEX OFFENSES, FORCIBLE",
+            "x": 940
+        },
+        {
+            "y": "STOLEN PROPERTY",
+            "x": 882
+        },
+        {
+            "y": "RECOVERED VEHICLE",
+            "x": 736
+        },
+        {
+            "y": "DISORDERLY CONDUCT",
+            "x": 658
+        },
+        {
+            "y": "PROSTITUTION",
+            "x": 641
+        },
+        {
+            "y": "FORGERY/COUNTERFEITING",
+            "x": 619
+        },
+        {
+            "y": "DRUNKENNESS",
+            "x": 465
+        },
+        {
+            "y": "DRIVING UNDER THE INFLUENCE",
+            "x": 378
+        },
+        {
+            "y": "ARSON",
+            "x": 286
+        },
+        {
+            "y": "KIDNAPPING",
+            "x": 257
+        },
+        {
+            "y": "EMBEZZLEMENT",
+            "x": 168
+        },
+        {
+            "y": "LIQUOR LAWS",
+            "x": 156
+        },
+        {
+            "y": "RUNAWAY",
+            "x": 140
+        },
+        {
+            "y": "SUICIDE",
+            "x": 69
+        },
+        {
+            "y": "BRIBERY",
+            "x": 66
+        },
+        {
+            "y": "EXTORTION",
+            "x": 60
+        },
+        {
+            "y": "FAMILY OFFENSES",
+            "x": 53
+        },
+        {
+            "y": "LOITERING",
+            "x": 42
+        },
+        {
+            "y": "SEX OFFENSES, NON FORCIBLE",
+            "x": 40
+        },
+        {
+            "y": "BAD CHECKS",
+            "x": 34
+        },
+        {
+            "y": "GAMBLING",
+            "x": 20
+        },
+        {
+            "y": "PORNOGRAPHY/OBSCENE MAT",
+            "x": 4
+        },
+        {
+            "y": "TREA",
+            "x": 3
         }
     ]
+          
 
 }

@@ -1,0 +1,1007 @@
+{
+  "data":[
+    
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-01",
+        "incidents": 85
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-01",
+        "incidents": 11
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-01",
+        "incidents": 118
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-01",
+        "incidents": 65
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-01",
+        "incidents": 61
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-01",
+        "incidents": 14
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-01",
+        "incidents": 20
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-01",
+        "incidents": 6
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-01",
+        "incidents": 15
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-01",
+        "incidents": 18
+      },
+      {
+        "Category": "RUNAWAY",
+        "date": "2016-01-01",
+        "incidents": 1
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-01",
+        "incidents": 9
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-01",
+        "incidents": 32
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-01",
+        "incidents": 7
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-01",
+        "incidents": 19
+      },
+      {
+        "Category": "FORGERY/COUNTERFEITING",
+        "date": "2016-01-01",
+        "incidents": 2
+      },
+      {
+        "Category": "EMBEZZLEMENT",
+        "date": "2016-01-01",
+        "incidents": 8
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-01",
+        "incidents": 28
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-01",
+        "incidents": 11
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-01",
+        "incidents": 6
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-01",
+        "incidents": 7
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-01",
+        "incidents": 2
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-01",
+        "incidents": 6
+      },
+      {
+        "Category": "EXTORTION",
+        "date": "2016-01-01",
+        "incidents": 1
+      },
+      {
+        "Category": "DISORDERLY CONDUCT",
+        "date": "2016-01-01",
+        "incidents": 1
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-01",
+        "incidents": 4
+      },
+      {
+        "Category": "ARSON",
+        "date": "2016-01-01",
+        "incidents": 1
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-02",
+        "incidents": 46
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-02",
+        "incidents": 116
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-02",
+        "incidents": 42
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-02",
+        "incidents": 27
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-02",
+        "incidents": 3
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-02",
+        "incidents": 21
+      },
+      {
+        "Category": "ARSON",
+        "date": "2016-01-02",
+        "incidents": 4
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-02",
+        "incidents": 24
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-02",
+        "incidents": 15
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-02",
+        "incidents": 8
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-02",
+        "incidents": 14
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-02",
+        "incidents": 16
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-02",
+        "incidents": 3
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-02",
+        "incidents": 10
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-02",
+        "incidents": 9
+      },
+      {
+        "Category": "EMBEZZLEMENT",
+        "date": "2016-01-02",
+        "incidents": 1
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-02",
+        "incidents": 1
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-02",
+        "incidents": 3
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-02",
+        "incidents": 3
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-02",
+        "incidents": 10
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-02",
+        "incidents": 7
+      },
+      {
+        "Category": "FORGERY/COUNTERFEITING",
+        "date": "2016-01-02",
+        "incidents": 3
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-02",
+        "incidents": 1
+      },
+      {
+        "Category": "DISORDERLY CONDUCT",
+        "date": "2016-01-02",
+        "incidents": 2
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-02",
+        "incidents": 4
+      },
+      {
+        "Category": "EXTORTION",
+        "date": "2016-01-02",
+        "incidents": 1
+      },
+      {
+        "Category": "RUNAWAY",
+        "date": "2016-01-02",
+        "incidents": 1
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-03",
+        "incidents": 47
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-03",
+        "incidents": 48
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-03",
+        "incidents": 7
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-03",
+        "incidents": 33
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-03",
+        "incidents": 10
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-03",
+        "incidents": 3
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-03",
+        "incidents": 13
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-03",
+        "incidents": 6
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-03",
+        "incidents": 65
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-03",
+        "incidents": 13
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-03",
+        "incidents": 6
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-03",
+        "incidents": 2
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-03",
+        "incidents": 19
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-03",
+        "incidents": 6
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-03",
+        "incidents": 3
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-03",
+        "incidents": 2
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-03",
+        "incidents": 3
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-03",
+        "incidents": 6
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-03",
+        "incidents": 3
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-03",
+        "incidents": 17
+      },
+      {
+        "Category": "KIDNAPPING",
+        "date": "2016-01-03",
+        "incidents": 1
+      },
+      {
+        "Category": "ARSON",
+        "date": "2016-01-03",
+        "incidents": 1
+      },
+      {
+        "Category": "DISORDERLY CONDUCT",
+        "date": "2016-01-03",
+        "incidents": 1
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-03",
+        "incidents": 1
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-04",
+        "incidents": 46
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-04",
+        "incidents": 8
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-04",
+        "incidents": 26
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-04",
+        "incidents": 17
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-04",
+        "incidents": 89
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-04",
+        "incidents": 1
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-04",
+        "incidents": 15
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-04",
+        "incidents": 50
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-04",
+        "incidents": 4
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-04",
+        "incidents": 16
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-04",
+        "incidents": 7
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-04",
+        "incidents": 4
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-04",
+        "incidents": 10
+      },
+      {
+        "Category": "ARSON",
+        "date": "2016-01-04",
+        "incidents": 3
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-04",
+        "incidents": 22
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-04",
+        "incidents": 15
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-04",
+        "incidents": 17
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-04",
+        "incidents": 2
+      },
+      {
+        "Category": "FORGERY/COUNTERFEITING",
+        "date": "2016-01-04",
+        "incidents": 3
+      },
+      {
+        "Category": "LIQUOR LAWS",
+        "date": "2016-01-04",
+        "incidents": 1
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-04",
+        "incidents": 6
+      },
+      {
+        "Category": "DISORDERLY CONDUCT",
+        "date": "2016-01-04",
+        "incidents": 2
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-04",
+        "incidents": 1
+      },
+      {
+        "Category": "KIDNAPPING",
+        "date": "2016-01-04",
+        "incidents": 1
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-05",
+        "incidents": 39
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-05",
+        "incidents": 12
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-05",
+        "incidents": 91
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-05",
+        "incidents": 13
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-05",
+        "incidents": 22
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-05",
+        "incidents": 6
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-05",
+        "incidents": 39
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-05",
+        "incidents": 4
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-05",
+        "incidents": 2
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-05",
+        "incidents": 59
+      },
+      {
+        "Category": "FORGERY/COUNTERFEITING",
+        "date": "2016-01-05",
+        "incidents": 2
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-05",
+        "incidents": 10
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-05",
+        "incidents": 18
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-05",
+        "incidents": 5
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-05",
+        "incidents": 14
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-05",
+        "incidents": 19
+      },
+      {
+        "Category": "ARSON",
+        "date": "2016-01-05",
+        "incidents": 1
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-05",
+        "incidents": 4
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-05",
+        "incidents": 4
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-05",
+        "incidents": 4
+      },
+      {
+        "Category": "PROSTITUTION",
+        "date": "2016-01-05",
+        "incidents": 2
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-05",
+        "incidents": 2
+      },
+      {
+        "Category": "FAMILY OFFENSES",
+        "date": "2016-01-05",
+        "incidents": 1
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-05",
+        "incidents": 7
+      },
+      {
+        "Category": "EMBEZZLEMENT",
+        "date": "2016-01-05",
+        "incidents": 1
+      },
+      {
+        "Category": "BAD CHECKS",
+        "date": "2016-01-05",
+        "incidents": 1
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-06",
+        "incidents": 25
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-06",
+        "incidents": 45
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-06",
+        "incidents": 118
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-06",
+        "incidents": 34
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-06",
+        "incidents": 24
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-06",
+        "incidents": 2
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-06",
+        "incidents": 15
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-06",
+        "incidents": 15
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-06",
+        "incidents": 3
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-06",
+        "incidents": 14
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-06",
+        "incidents": 12
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-06",
+        "incidents": 4
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-06",
+        "incidents": 15
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-06",
+        "incidents": 2
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-06",
+        "incidents": 3
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-06",
+        "incidents": 6
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-06",
+        "incidents": 2
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-06",
+        "incidents": 9
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-06",
+        "incidents": 7
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-06",
+        "incidents": 4
+      },
+      {
+        "Category": "EXTORTION",
+        "date": "2016-01-06",
+        "incidents": 1
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-07",
+        "incidents": 105
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-07",
+        "incidents": 61
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-07",
+        "incidents": 16
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-07",
+        "incidents": 22
+      },
+      {
+        "Category": "FORGERY/COUNTERFEITING",
+        "date": "2016-01-07",
+        "incidents": 5
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-07",
+        "incidents": 52
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-07",
+        "incidents": 16
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-07",
+        "incidents": 47
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-07",
+        "incidents": 15
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-07",
+        "incidents": 18
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-07",
+        "incidents": 14
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-07",
+        "incidents": 16
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-07",
+        "incidents": 8
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-07",
+        "incidents": 4
+      },
+      {
+        "Category": "KIDNAPPING",
+        "date": "2016-01-07",
+        "incidents": 1
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-07",
+        "incidents": 2
+      },
+      {
+        "Category": "EMBEZZLEMENT",
+        "date": "2016-01-07",
+        "incidents": 2
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-07",
+        "incidents": 7
+      },
+      {
+        "Category": "ARSON",
+        "date": "2016-01-07",
+        "incidents": 1
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-07",
+        "incidents": 1
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-07",
+        "incidents": 3
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-07",
+        "incidents": 1
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-07",
+        "incidents": 3
+      },
+      {
+        "Category": "BAD CHECKS",
+        "date": "2016-01-07",
+        "incidents": 1
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-07",
+        "incidents": 4
+      },
+      {
+        "Category": "LIQUOR LAWS",
+        "date": "2016-01-07",
+        "incidents": 3
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-07",
+        "incidents": 1
+      },
+      {
+        "Category": "ASSAULT",
+        "date": "2016-01-08",
+        "incidents": 38
+      },
+      {
+        "Category": "VANDALISM",
+        "date": "2016-01-08",
+        "incidents": 27
+      },
+      {
+        "Category": "LARCENY/THEFT",
+        "date": "2016-01-08",
+        "incidents": 131
+      },
+      {
+        "Category": "OTHER OFFENSES",
+        "date": "2016-01-08",
+        "incidents": 55
+      },
+      {
+        "Category": "BURGLARY",
+        "date": "2016-01-08",
+        "incidents": 24
+      },
+      {
+        "Category": "NON-CRIMINAL",
+        "date": "2016-01-08",
+        "incidents": 53
+      },
+      {
+        "Category": "ROBBERY",
+        "date": "2016-01-08",
+        "incidents": 8
+      },
+      {
+        "Category": "SECONDARY CODES",
+        "date": "2016-01-08",
+        "incidents": 9
+      },
+      {
+        "Category": "SUSPICIOUS OCC",
+        "date": "2016-01-08",
+        "incidents": 13
+      },
+      {
+        "Category": "MISSING PERSON",
+        "date": "2016-01-08",
+        "incidents": 12
+      },
+      {
+        "Category": "WEAPON LAWS",
+        "date": "2016-01-08",
+        "incidents": 5
+      },
+      {
+        "Category": "DRUNKENNESS",
+        "date": "2016-01-08",
+        "incidents": 1
+      },
+      {
+        "Category": "VEHICLE THEFT",
+        "date": "2016-01-08",
+        "incidents": 16
+      },
+      {
+        "Category": "EXTORTION",
+        "date": "2016-01-08",
+        "incidents": 2
+      },
+      {
+        "Category": "TRESPASS",
+        "date": "2016-01-08",
+        "incidents": 6
+      },
+      {
+        "Category": "STOLEN PROPERTY",
+        "date": "2016-01-08",
+        "incidents": 1
+      },
+      {
+        "Category": "PROSTITUTION",
+        "date": "2016-01-08",
+        "incidents": 4
+      },
+      {
+        "Category": "DRUG/NARCOTIC",
+        "date": "2016-01-08",
+        "incidents": 14
+      },
+      {
+        "Category": "WARRANTS",
+        "date": "2016-01-08",
+        "incidents": 10
+      },
+      {
+        "Category": "SEX OFFENSES, FORCIBLE",
+        "date": "2016-01-08",
+        "incidents": 1
+      },
+      {
+        "Category": "RECOVERED VEHICLE",
+        "date": "2016-01-08",
+        "incidents": 1
+      },
+      {
+        "Category": "DISORDERLY CONDUCT",
+        "date": "2016-01-08",
+        "incidents": 2
+      },
+      {
+        "Category": "FRAUD",
+        "date": "2016-01-08",
+        "incidents": 4
+      },
+      {
+        "Category": "DRIVING UNDER THE INFLUENCE",
+        "date": "2016-01-08",
+        "incidents": 2
+      }
+    ]
+        
+
+}

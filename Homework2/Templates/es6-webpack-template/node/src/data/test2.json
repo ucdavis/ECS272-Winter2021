@@ -1,0 +1,36 @@
+{
+    "data":[
+
+            {
+            "dayofweek": "Saturday",
+            "incidents": 22172
+            },  
+            {
+              "dayofweek": "Sunday",
+              "incidents": 20205
+            },
+
+            {
+                "dayofweek": "Monday",
+                "incidents": 20783
+            },
+            {
+              "dayofweek": "Tuesday",
+              "incidents": 21242
+            },
+            {
+              "dayofweek": "Wednesday",
+              "incidents": 21332
+            },
+            {
+              "dayofweek": "Thursday",
+              "incidents": 21395
+            },
+            {
+              "dayofweek": "Friday",
+              "incidents": 23371
+            }
+          ]
+          
+
+}

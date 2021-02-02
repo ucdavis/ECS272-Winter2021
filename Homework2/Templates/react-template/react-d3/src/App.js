@@ -15,7 +15,7 @@ class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <h2>ECS 272 Assignment 3 D3 Template</h2>
+        <h2>ECS 272 Assignment 3 D3 Template kms</h2>
         <div id="container"> 
         <div id="tooltip"></div>
         </div>
