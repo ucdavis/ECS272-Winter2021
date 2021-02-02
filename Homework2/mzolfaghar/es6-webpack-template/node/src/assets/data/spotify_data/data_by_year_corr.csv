@@ -1,0 +1,17 @@
+groups,variables,r
+dance.,dance.,1
+dance.,energy,0.538292018
+dance.,speech.,0.266628873
+dance.,live.,-0.384653097
+energy,dance.,0.538292018
+energy,energy,1
+energy,speech.,-0.420854301
+energy,live.,-0.500540245
+speech.,dance.,0.266628873
+speech.,energy,-0.420854301
+speech.,speech.,1
+speech.,live.,0.332920293
+live.,dance.,-0.384653097
+live.,energy,-0.500540245
+live.,speech.,0.332920293
+live.,live.,1
