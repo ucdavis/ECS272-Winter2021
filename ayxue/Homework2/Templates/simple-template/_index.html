@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+#map, #heatmap {
+    position: absolute;
+    top: 0;
+}
+
+#map {
+    background-color: black;
+}
+#map text {
+    font-family: proxima-nova;
+    font-size: 12px;
+    fill: #666;
+}
+.countries {
+    fill: #333333;
+}
+
+</style>
+    </head>
+    <body>
+        <div id='container'></div>
+        <svg width="200" height="200" id="svg1"></svg>
+        <!-- <svg width="200" height="200" id="svg2"></svg> -->
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script src="simpleheat.js"></script>  <!-- from https://github.com/mourner/simpleheat -->
+        <script>
+
+const width = 960;
+const height = 600;
+
+div = d3.select('#container');
+
+mapLayer = div.append('svg')
+              .attr('id', 'map')
+              .attr('width', width)
+              .attr('height', height);
+canvasLayer = div.append('canvas')
+                 .attr('id', 'heatmap')
+                 .attr('width', width)
+                 .attr('height', height);
+
+var canvas = canvasLayer.node(),
+    context = canvas.getContext("2d");
+
+// context.globalAlpha = 0.5;
+
+var projection = d3.geoMercator().translate([width/2, height/2]),
+    path = d3.geoPath(projection);
+
+d3.queue()
+    .defer(d3.json, 'world-50m.json')
+    .defer(d3.json, 'airports.json')
+    .defer(d3.csv, 'globalterrorismdb_0718dist.csv')
+    .await(main);
+
+
+function main(error, world, airports, dests) {
+    var countries = topojson.feature(world, world.objects.countries).features;
+    var borders = topojson.mesh(
+      world,
+      world.objects.countries,
+      (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
+      );
+
+    mapLayer
+        .append('g')
+        .classed('countries', true)
+        .selectAll(".country")
+        .data(countries)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", path);
+
+      mapLayer
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr('stroke-width', 0.1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(topojson.mesh(world, world.objects.countries, (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-'))));
+
+    var heat = simpleheat(canvas);
+
+    // set data of [[x, y, value], ...] format
+    heat.data(dests.map(d => {let coord = projection([d.longitude, d.latitude]);
+                              coord.push(1)
+                              return coord}));
+
+    // set point radius and blur radius (25 and 15 by default)
+    heat.radius(0.5, 1);
+
+    // optionally customize gradient colors, e.g. below
+    // (would be nicer if d3 color scale worked here)
+    // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
+
+    // set maximum for domain
+    // heat.max(d3.max(dests, d => +d.watches));
+    heat.max(1)
+
+    // draw into canvas, with minimum opacity threshold
+    heat.draw(0.05);
+}
+var svg1 = d3.select('#svg1')
+      svg1.append("circle")
+       .attr("cx",100)
+       .attr("cy", 100)
+       .attr("r", 90)
+       .attr("fill", "blue");
+        </script>
+    </body>
+</html>
