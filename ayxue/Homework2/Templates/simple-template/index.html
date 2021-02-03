@@ -1,75 +1,146 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<html>
+    <head>
+<style>
 
-<!-- Load d3.js & color scale-->
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+#flex-container {
+    display: flex;
+    flex-direction: column;
+}
 
-<!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
+#map {
+    top: 0;
+    background-color: black;
+}
 
-<script>
+#map text {
+    font-family: proxima-nova;
+    font-size: 12px;
+    fill: #666;
+}
 
-// set the dimensions and margins of the graph
-var margin = {top: 40, right: 30, bottom: 20, left: 30},
-    width = 460 - margin.left - margin.right,
-    height = 200 - margin.top - margin.bottom;
+.countries {
+    fill: #333333;
+}
 
-// append the svg object to the body of the page
-//     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//     .attr("transform",
-//           "translate(" + margin.left + "," + margin.top + ")");
+</style>
+    </head>
+    <body>
+        <div id="flex-container">
+            <div id='geomap'></div>
+            <div id="streamgraph"></div>
+        </div>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script>
 
-// Parse the Data
-d3.csv('month_gname.csv', function(data) {
-    // console.log(height)
-    // List of groups = header of the csv files
-    let keys = data.columns.slice(1);
+const map_width = 450;
+const map_height = 300;
+const stream_margin = {top: 40, right: 30, bottom: 20, left: 30},
+    stream_width = 450 - stream_margin.left - stream_margin.right,
+    stream_height = 300 - stream_margin.top - stream_margin.bottom;
 
+let mapsvg = d3.select('#geomap')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, map_width, map_height])
+                    .attr('id', 'map')
+                    .attr('width', map_width)
+                    .attr('height', map_height);
+let streamsvg = d3.select("#streamgraph")
+                    .append("svg")
+                    // .attr("viewBox", [0, 0, stream_width, stream_height])
+                    .attr("width", stream_width + stream_margin.left + stream_margin.right)
+                    .attr("height", stream_height + stream_margin.top + stream_margin.bottom)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + stream_margin.left + "," + stream_margin.top + ")");
+
+
+let projection = d3.geoMercator().translate([map_width/2, map_height/2]),
+    path = d3.geoPath(projection);
+
+
+d3.queue()
+    .defer(d3.json, 'world-50m.json')
+    .defer(d3.csv, 'date_coord.csv')
+    .defer(d3.csv, 'month_gname.csv')
+    .await(main);
+
+function main(error, world, date_coord, month_gname) {
+    let color = d3.scaleOrdinal()
+        .domain(month_gname.columns.slice(1))
+        .range(d3.schemeCategory10);
+
+    // draw map
+    date_coord.forEach(d => { d.coords = projection([d.longitude, d.latitude]); })
+    let countries = topojson.feature(world, world.objects.countries).features;
+    let borders = topojson.mesh(
+        world,
+        world.objects.countries,
+        (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
+        );
+
+    mapsvg
+        .append('g')
+        .classed('countries', true)
+        .selectAll(".country")
+        .data(countries)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", path);
+
+    mapsvg
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr('stroke-width', 0.1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(borders));
+
+    mapsvg
+        .append('g')
+        .classed('events', true)
+        .selectAll('.event')
+        .data(date_coord)
+        .enter()
+        .append('circle')
+        .attr("fill", function(d) { return color(d.gname); })
+        .attr('r', 1)
+            .attr('cx', function(d) {return d.coords[0];})
+            .attr('cy', function(d) {return d.coords[1];})
+
+    // draw streamgraph
     let series = d3.stack()
-        .keys(data.columns.slice(1))
+        .keys(month_gname.columns.slice(1))
         .offset(d3.stackOffsetWiggle)
         .order(d3.stackOrderInsideOut)
-    (data);
+    (month_gname);
 
   // Add X axis
     let x = d3.scaleUtc()
-        .domain(d3.extent(data, d => new Date(d.date)))
-        .range([margin.left, width - margin.right]);
+        .domain(d3.extent(month_gname, d => new Date(d.date)))
+        .range([stream_margin.left, stream_width - stream_margin.right]);
 
     let y = d3.scaleLinear()
         .domain([d3.min(series, d => d3.min(d, d => d[0])), d3.max(series, d => d3.max(d, d => d[1]))])
-        .range([height - margin.bottom, margin.top]);
+        .range([stream_height - stream_margin.bottom, stream_margin.top]);
 
     let xAxis = g => g
-        .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(width / 40).tickSizeOuter(0))
+        .attr("transform", `translate(0,${stream_height - stream_margin.bottom})`)
+        .call(d3.axisBottom(x).ticks(stream_width / 40).tickSizeOuter(0))
         .call(g => g.select(".domain").remove());
-
-    let color = d3.scaleOrdinal()
-        .domain(data.columns.slice(1))
-        .range(d3.schemeCategory10);
 
     let area = d3.area()
             .x(d => x(new Date(d.data.date)))
             .y0(d => y(d[0]))
             .y1(d => y(d[1]));
 
-    let svg = d3.select("#my_dataviz")
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-
-    svg.append("g")
+    streamsvg.append("g")
         .call(xAxis);
-    svg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+    streamsvg.selectAll(".tick line").attr("stroke", "#b8b8b8")
 
-    var Tooltip = svg
+    var Tooltip = streamsvg
         .append("text")
         .attr("x", 0)
         .attr("y", 0)
@@ -93,16 +164,17 @@ d3.csv('month_gname.csv', function(data) {
         d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
     }
 
-    svg.selectAll("mylayers")
-        .data(series)
-        .enter()
-        .append("path")
-        .attr("class", "myArea")
-        .style("fill", function(d) { return color(d.key); })
-        .attr("d", area)
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-
-})
-</script>
+    streamsvg.selectAll("mylayers")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("class", "myArea")
+            .style("fill", function(d) { return color(d.key); })
+            .attr("d", area)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+}
+        </script>
+    </body>
+</html>

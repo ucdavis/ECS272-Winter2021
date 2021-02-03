@@ -1,117 +1,108 @@
 <!DOCTYPE html>
-<html>
-    <head>
-<style>
-#map, #heatmap {
-    position: absolute;
-    top: 0;
-}
+<meta charset="utf-8">
 
-#map {
-    background-color: black;
-}
-#map text {
-    font-family: proxima-nova;
-    font-size: 12px;
-    fill: #666;
-}
-.countries {
-    fill: #333333;
-}
+<!-- Load d3.js & color scale-->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-</style>
-    </head>
-    <body>
-        <div id='container'></div>
-        <svg width="200" height="200" id="svg1"></svg>
-        <!-- <svg width="200" height="200" id="svg2"></svg> -->
-        <script src="https://d3js.org/d3.v4.min.js"></script>
-        <script src="https://d3js.org/topojson.v1.min.js"></script>
-        <script src="simpleheat.js"></script>  <!-- from https://github.com/mourner/simpleheat -->
-        <script>
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
 
-const width = 960;
-const height = 600;
+<script>
 
-div = d3.select('#container');
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 30, bottom: 20, left: 30},
+    width = 460 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
 
-mapLayer = div.append('svg')
-              .attr('id', 'map')
-              .attr('width', width)
-              .attr('height', height);
-canvasLayer = div.append('canvas')
-                 .attr('id', 'heatmap')
-                 .attr('width', width)
-                 .attr('height', height);
+// append the svg object to the body of the page
+//     .attr("width", width + margin.left + margin.right)
+//     .attr("height", height + margin.top + margin.bottom)
+//   .append("g")
+//     .attr("transform",
+//           "translate(" + margin.left + "," + margin.top + ")");
 
-var canvas = canvasLayer.node(),
-    context = canvas.getContext("2d");
+// Parse the Data
+d3.csv('month_gname.csv', function(data) {
+    // console.log(height)
+    // List of groups = header of the csv files
+    let keys = data.columns.slice(1);
 
-// context.globalAlpha = 0.5;
+    let series = d3.stack()
+        .keys(data.columns.slice(1))
+        .offset(d3.stackOffsetWiggle)
+        .order(d3.stackOrderInsideOut)
+    (data);
 
-var projection = d3.geoMercator().translate([width/2, height/2]),
-    path = d3.geoPath(projection);
+  // Add X axis
+    let x = d3.scaleUtc()
+        .domain(d3.extent(data, d => new Date(d.date)))
+        .range([margin.left, width - margin.right]);
 
-d3.queue()
-    .defer(d3.json, 'world-50m.json')
-    .defer(d3.json, 'airports.json')
-    .defer(d3.csv, 'globalterrorismdb_0718dist.csv')
-    .await(main);
+    let y = d3.scaleLinear()
+        .domain([d3.min(series, d => d3.min(d, d => d[0])), d3.max(series, d => d3.max(d, d => d[1]))])
+        .range([height - margin.bottom, margin.top]);
 
+    let xAxis = g => g
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x).ticks(width / 40).tickSizeOuter(0))
+        .call(g => g.select(".domain").remove());
 
-function main(error, world, airports, dests) {
-    var countries = topojson.feature(world, world.objects.countries).features;
-    var borders = topojson.mesh(
-      world,
-      world.objects.countries,
-      (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
-      );
+    let color = d3.scaleOrdinal()
+        .domain(data.columns.slice(1))
+        .range(d3.schemeCategory10);
 
-    mapLayer
-        .append('g')
-        .classed('countries', true)
-        .selectAll(".country")
-        .data(countries)
+    let area = d3.area()
+            .x(d => x(new Date(d.data.date)))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]));
+
+    let svg = d3.select("#my_dataviz")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+        .call(xAxis);
+    svg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+
+    var Tooltip = svg
+        .append("text")
+        .attr("x", 0)
+        .attr("y", 0)
+        .style("opacity", 0)
+        .style("font-size", 10)
+    // Three function that change the tooltip when user hover / move / leave a cell
+
+    var mouseover = function(d) {
+        Tooltip.style("opacity", 1)
+        d3.selectAll(".myArea").style("opacity", .2)
+        d3.select(this)
+        .style("stroke", "black")
+        .style("opacity", 1)
+    }
+    var mousemove = function(d,i) {
+        grp = keys[i]
+        Tooltip.text(grp)
+    }
+    var mouseleave = function(d) {
+        Tooltip.style("opacity", 0)
+        d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
+    }
+
+    svg.selectAll("mylayers")
+        .data(series)
         .enter()
         .append("path")
-        .attr("class", "country")
-        .attr("d", path);
+        .attr("class", "myArea")
+        .style("fill", function(d) { return color(d.key); })
+        .attr("d", area)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
 
-      mapLayer
-        .append("path")
-        .attr("fill", "none")
-        .attr("stroke", "white")
-        .attr('stroke-width', 0.1)
-        .attr("stroke-linejoin", "round")
-        .attr("d", path(topojson.mesh(world, world.objects.countries, (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-'))));
-
-    var heat = simpleheat(canvas);
-
-    // set data of [[x, y, value], ...] format
-    heat.data(dests.map(d => {let coord = projection([d.longitude, d.latitude]);
-                              coord.push(1)
-                              return coord}));
-
-    // set point radius and blur radius (25 and 15 by default)
-    heat.radius(0.5, 1);
-
-    // optionally customize gradient colors, e.g. below
-    // (would be nicer if d3 color scale worked here)
-    // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-
-    // set maximum for domain
-    // heat.max(d3.max(dests, d => +d.watches));
-    heat.max(1)
-
-    // draw into canvas, with minimum opacity threshold
-    heat.draw(0.05);
-}
-var svg1 = d3.select('#svg1')
-      svg1.append("circle")
-       .attr("cx",100)
-       .attr("cy", 100)
-       .attr("r", 90)
-       .attr("fill", "blue");
-        </script>
-    </body>
-</html>
+})
+</script>
