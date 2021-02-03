@@ -43,23 +43,28 @@
   background-color: white;
 }
 
+#map{
+  display: inline-block;
+}
 
 svg {
   display: block;
   width: 100%;
-  height: 300px;
+  height: 750px;
+  overflow: visible;
 }
 
 svg .district:hover {
-  stroke: black;
+  stroke: red;
   stroke-width: 1px;
   cursor: pointer;
 }
 
+
 #root {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  display: block;
+  flex-direction: row;
+  align-items: normal;
   justify-content: center;
   height: 100vh;
   padding: 0 50px 150px;
@@ -71,4 +76,57 @@ button {
   width: 100px;
   border: 1px solid black;
   margin: 0 auto 5px;
+}
+
+.background path {
+  fill: none;
+  stroke: none;
+  stroke-width: 20px;
+  pointer-events: stroke;
+}
+
+.foreground path {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.axis .title {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis.string {
+  font-size: 6px;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  /* stroke: blueviolet;
+  stroke-width: 1px; */
+  cursor: move;
+}
+
+.active .label:not(.inactive) {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.label.inactive {
+  fill: #ccc;
+}
+
+.foreground path.inactive {
+  stroke: #ccc;
+  stroke-opacity: .5;
+  stroke-width: 1px;
 }
