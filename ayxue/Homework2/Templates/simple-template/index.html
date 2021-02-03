@@ -3,7 +3,7 @@
     <head>
 <style>
 
-#map-container {
+#row-container {
     display: flex;
     flex-direction: row;
 }
@@ -14,7 +14,7 @@
 
 body {
     top: 0;
-    background-color: black;
+    /* background-color: black; */
 }
 
 text {
@@ -31,39 +31,47 @@ text {
     </head>
     <body>
         <div id='container'>
-            <div id="map-container">
-                <div id='geomap'></div>
+            <div id="row-container">
                 <div id='spikemap'></div>
+                <div id='parasets'></div>
             </div>
             <div id="streamgraph"></div>
         </div>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/topojson.v1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.7.1/d3-sankey.min.js"></script>
+
         <script>
 
 const map_margin = {top: 40, right: 30, bottom: 20, left: 30},
-    map_width = 960 - map_margin.left - map_margin.right,
-    map_height = 600 - map_margin.top - map_margin.bottom;
+    map_width = 640 - map_margin.left - map_margin.right,
+    map_height = 400 - map_margin.top - map_margin.bottom;
 // const map_width = 450;
 // const map_height = 300;
 const stream_margin = {top: 40, right: 30, bottom: 20, left: 30},
-    stream_width = 1860 - stream_margin.left - stream_margin.right,
-    stream_height = 300 - stream_margin.top - stream_margin.bottom;
+    stream_width = 1180 - stream_margin.left - stream_margin.right,
+    stream_height = 320 - stream_margin.top - stream_margin.bottom;
 
-let mapsvg = d3.select('#geomap')
+const para_margin = {top: 40, right: 30, bottom: 20, left: 30},
+    para_width = 640 - para_margin.left - para_margin.right,
+    para_height = 400 - para_margin.top - para_margin.bottom;
+
+
+
+let mapsvg = d3.select('#spikemap')
                     .append('svg')
                     // .attr("viewBox", [0, 0, map_width, map_height])
                     // .attr('id', 'map')
                     .attr('width', map_width)
                     .attr('height', map_height);
 
-let spike_mapsvg = d3.select('#spikemap')
+let parasvg = d3.select('#parasets')
                     .append('svg')
                     // .attr("viewBox", [0, 0, map_width, map_height])
                     // .attr('id', 'map')
-                    .attr('width', map_width)
-                    .attr('height', map_height);
+                    .attr('width', para_width)
+                    .attr('height', para_height);
 
 let streamsvg = d3.select("#streamgraph")
                     .append("svg")
@@ -87,9 +95,10 @@ d3.queue()
     .defer(d3.json, 'world-50m.json')
     .defer(d3.csv, 'date_coord.csv')
     .defer(d3.csv, 'month_gname.csv')
+    .defer(d3.csv, 'gname_attype.csv')
     .await(main);
 
-function main(error, world, date_coord, month_gname) {
+function main(error, world, date_coord, month_gname, gname_attype) {
     let color = d3.scaleOrdinal()
         .domain(month_gname.columns.slice(1))
         .range(d3.schemeCategory10);
@@ -124,51 +133,12 @@ function main(error, world, date_coord, month_gname) {
         .attr("stroke-linejoin", "round")
         .attr("d", path(borders));
 
-    // draw map
-    // date_coord.forEach(d => { d.coords = projection([d.longitude, d.latitude]); })
-    // let countries = topojson.feature(world, world.objects.countries).features;
-    // let borders = topojson.mesh(
-    //     world,
-    //     world.objects.countries,
-    //     (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
-    //     );
-
-    // length = d3.scaleLinear([0, d3.max(data, d => d.value)], [0, 200])
-
-    spike_mapsvg
-        .append('g')
-        .classed('countries', true)
-        .selectAll(".country")
-        .data(countries)
-        .enter()
-        .append("path")
-        .attr("class", "country")
-        .attr("d", path);
-
-    spike_mapsvg
-        .append("path")
-        .attr("fill", "none")
-        .attr("stroke", "white")
-        .attr('stroke-width', 0.1)
-        .attr("stroke-linejoin", "round")
-        .attr("d", path(borders));
-
     for (i in keys) {
         let gname = keys[i];
         let cl_name = gname.slice(0,3);
         g_data = date_coord.filter(d => d.gname == gname);
-        mapsvg.append('g')
-                .classed(cl_name, true)
-                .selectAll('.events')
-                .data(g_data)
-                .enter()
-                .append('circle')
-                .attr("fill", function(d) { return color(d.gname);})
-                .attr('r', 1)
-                .attr('cx', function(d) {return d.coords[0];})
-                .attr('cy', function(d) {return d.coords[1];})
 
-        spike_mapsvg.append("g")
+        mapsvg.append("g")
                     .classed(cl_name, true)
                     .selectAll('.events')
                     .data(g_data)
@@ -181,6 +151,106 @@ function main(error, world, date_coord, month_gname) {
                     .attr("d", d => spike(length(d.value)))
     }
 
+    // draw parasets
+    para_keys = gname_attype.columns.slice(0, -1)
+    console.log(para_keys)
+
+    let index = -1;
+    const _nodes = [];
+    const nodeByKey = new Map;
+    const indexByKey = new Map;
+    const _links = [];
+
+    for (const k of para_keys) {
+        for (const d of gname_attype) {
+        const key = JSON.stringify([k, d[k]]);
+        if (nodeByKey.has(key)) continue;
+        const node = {name: d[k]};
+        _nodes.push(node);
+        nodeByKey.set(key, node);
+        indexByKey.set(key, ++index);
+        }
+    }
+
+    for (let i = 1; i < para_keys.length; ++i) {
+        const a = para_keys[i - 1];
+        const b = para_keys[i];
+        const prefix = para_keys.slice(0, i + 1);
+        const linkByKey = new Map;
+        for (const d of gname_attype) {
+        const names = prefix.map(k => d[k]);
+        const key = JSON.stringify(names);
+        const value = d.value || 1;
+        let link = linkByKey.get(key);
+        if (link) { link.value += value; continue; }
+        link = {
+            source: indexByKey.get(JSON.stringify([a, d[a]])),
+            target: indexByKey.get(JSON.stringify([b, d[b]])),
+            names,
+            value
+        };
+        _links.push(link);
+        linkByKey.set(key, link);
+        }
+    }
+
+    let graph = {_nodes, _links};
+    let sankey = d3.sankey()
+                // .nodeSort(null)
+                // .linkSort(null)
+                .nodeWidth(4)
+                .nodePadding(20)
+                .extent([[0, 5], [para_width, para_height - 5]])
+
+    const {nodes, links} = sankey({
+        nodes: graph._nodes.map(d => Object.assign({}, d)),
+        links: graph._links.map(d => Object.assign({}, d))
+    });
+
+    parasvg.append("g")
+            .selectAll("rect")
+            .data(nodes)
+            .enter()
+            .append("rect")
+            .attr("x", d => d.x0)
+            .attr("y", d => d.y0)
+            .attr("height", d => d.y1 - d.y0)
+            .attr("width", d => d.x1 - d.x0)
+            .append("title")
+            .text(d => `${d.name}\n${d.value.toLocaleString()}`);
+
+    console.log(links)
+
+    parasvg.append("g")
+            .attr("fill", "none")
+            .selectAll("g")
+            .data(links)
+            .enter()
+            .append("path")
+            .attr("d", d3.sankeyLinkHorizontal())
+            .attr("stroke", d => color(d.names[0]))
+            .attr("stroke-width", d => d.width)
+            .style("mix-blend-mode", "multiply")
+            // .append("title")
+            // .text(d => `${d.names.join(" → ")}\n${d.value.toLocaleString()}`);
+
+    parasvg.append("g")
+            .style("font", "10px sans-serif")
+            .selectAll("text")
+            .data(nodes)
+            .enter()
+            .append("text")
+            .attr("x", d => d.x0 < para_width / 2 ? d.x1 + 6 : d.x0 - 6)
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", d => d.x0 < para_width / 2 ? "start" : "end")
+            .text(d => d.name)
+            .append("tspan")
+            .attr("fill-opacity", 0.7)
+            .text(d => ` ${d.value.toLocaleString()}`);
+
+
+
     // draw streamgraph
     let series = d3.stack()
         .keys(month_gname.columns.slice(1))
@@ -188,7 +258,7 @@ function main(error, world, date_coord, month_gname) {
         .order(d3.stackOrderInsideOut)
     (month_gname);
 
-  // Add X axis
+    // Add X axis
     let x = d3.scaleUtc()
         .domain(d3.extent(month_gname, d => new Date(d.date)))
         .range([stream_margin.left + 250, stream_width - stream_margin.right]);
@@ -239,7 +309,7 @@ function main(error, world, date_coord, month_gname) {
             .style("stroke", "black")
             .style("opacity", 1)
         grp = keys[i]
-        Tooltip.text(grp)
+        // Tooltip.text(grp)
         for (i in keys) {
             let gname = keys[i];
             let cl_name = gname.slice(0,3);
