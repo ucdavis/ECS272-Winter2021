@@ -234,6 +234,43 @@ export async function drawLineChart(){
         // run the updateChart function with this selected option
         update(selectedOption)
     })
+
+
+    var colors = ["#fcd471", "#fbafa1", "#fb84ce", "#ef54f1", "#c4fa70"]
+    var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
+    var padding = 400;
+
+    var legend = svg.append('g')
+                .attr('class', 'legend')
+                .attr('transform', 'translate(' + (padding + 12) + ', 0)');
+
+            legend.selectAll('rect')
+                .data(attr)
+                .enter()
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', function(d, i){
+                    return i * 16;
+                })
+                .attr('width', 10)
+                .attr('height', 10)
+                .attr('fill', function(d, i){
+                    return colors[i];
+                });
+            
+            legend.selectAll('text')
+                .data(attr)
+                .enter()
+                .append('text')
+                .text(function(d){
+                    return d;
+                })
+                .attr('x', 16)
+                .attr('y', function(d, i){
+                    return i * 16;
+                })
+                .attr('text-anchor', 'start')
+                .attr('alignment-baseline', 'hanging');
   
 
 }

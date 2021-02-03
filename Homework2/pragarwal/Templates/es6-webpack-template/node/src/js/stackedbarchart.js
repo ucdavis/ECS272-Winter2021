@@ -5,97 +5,85 @@ import csvPath from '../assets/data/TopArtistsDecadeNew.csv';
 export async function drawStackedBarChart(){
 
 
-    var margin = {top: 10, right: 30, bottom: 20, left: 50},
+    var margin = {top: 40, right: 20, bottom: 30, left: 50},
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
-
-    //BUTTON:-------
-    // List of groups (here I have one group per column)
-    var allGroup = ["danceability", "energy", "liveness", "acousticness", "valence"]
-
-
-    // add the options to the button
-    d3.select("#selectBarChartButton")
-      .selectAll('myOptions')
-     	.data(allGroup)
-      .enter()
-    	.append('option')
-      .text(function (d) { return d; }) // text showed in the menu
-      .attr("value", function (d) { return d; }) // corresponding value returned by the button
-
-    //BUTTON END----
+    height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#stackedbarchart")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
-
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+// console.log(svg);
 // Parse the Data
 const data = await d3.csv(csvPath);
 
   // List of subgroups = header of the csv files = soil condition here
   var subgroups = data.columns.slice(1)
 
-    d3.stack()(["artist1", "artist2", "artist3", "artist4", "artist5"].map(function(d) {
-        return data.map(function(elem){
+  var dataset = d3.stack()(["artist1", "artist2", "artist3", "artist4", "artist5"].map(function(d) {
+            // var elem;
+            return data.map(function(elem){
         // console.log(typeof(elem.topartist));
-            if( d === elem.topartist){
-                //console.log(elem.year + " " + elem.artist)
-                var rect = groups.selectAll("rect")
-                            .data(function(d) { return d; })
-                            .enter()
-                            .append("rect")
-                            .attr("x", function(d) { return x(d.acousticness); })
-                            .attr("y", function(d) { return y(d.year + d.year); })
-                            .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
-                            .attr("width", x.rangeBand());
-
-                            svg.append(rect)
-
-                            return svg.node();
-                //return{x:elem.year , y: elem.acousticness}
-            }
-            else{
-                console.log('not')
-                // console.log(elem.topartist)
+              if( d === elem.topartist){
+                console.log(elem[testOption])
+                return {x: elem.year , y: elem[testOption]}
             }
         }); 
     }));
     //console.log(dataset);
-    console.log(data)
+    // console.log(data)
   // List of groups = species here = value of the first column called group -> I show them on the X axis
-  var groups = d3.map(data, function(d){return(d.topartist)}).keys()
+  // var groups = d3.map(data, function(d){return(d.topartist)}).keys()
+
+
+    //BUTTON:-------
+    // List of groups (here I have one group per column)
+    var allGroup = ["danceability", "energy", "liveness", "acousticness", "valence"];
+
+
+    // add the options to the button
+   var buttonVal = d3.select("#selectBarChartButton")
+                        .selectAll('myOptions')
+                        .data(allGroup)
+                        .enter()
+                        .append('option')
+                        .text(function (d) { return d; }) // text showed in the menu
+                        .attr("value", function (d) { return d; }) // corresponding value returned by the button
+  // console.log(buttonVal);
+    //BUTTON END----
+
+var testOption = allGroup[0]
+console.log("Testinggggg:  " + testOption)
 
   // Add X axis
-  var x = d3.scaleBand()
-      .domain([1920, 2020])
-      .range([0, width])
-      .padding([0.2])
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    var x = d3.scaleBand()
+                .domain([1920, 2020])
+                .range([0, width])
+                .padding([0.2])
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickSizeOuter(0));
 
   // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([0, 1])
-    .range([ height, 0 ]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
+    var y = d3.scaleLinear()
+                .domain([0, 1])
+                .range([ height, 0 ]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
 
   // color palette = one color per subgroup
   var color = d3.scaleOrdinal()
-    .domain(subgroups)
-    .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa70'])
+                .domain(subgroups)
+                .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa70'])
 
-  //stack the data? --> stack per subgroup
-  var stackedData = d3.stack()
-    .keys(subgroups)
-    (data)
+  // //stack the data? --> stack per subgroup
+  // var stackedData = d3.stack()
+  //   .keys(subgroups)
+  //   (data)
 
   // Show the bars
 //   svg.append("g")
@@ -173,12 +161,15 @@ const data = await d3.csv(csvPath);
 //     // .attr("transform", "translate(0," + height + ")")
 //     // .call(d3.axisBottom(xAxis).tickSizeOuter(0));
 
-//     // Create groups for each series, rects for each segment 
-//     var groups = svg.selectAll("g.danceability")
-//     .data(dataset)
-//     .enter().append("g")
-//     .attr("class", "danceability")
-//     .style("fill", function(d, i) { return colors[i]; });
+    // Create groups for each series, rects for each segment 
+    var colors = ["b33040", "#d25c4d", "#f2b447", "#d9d574"];
+    //console.log("g."+String(testOption))
+    var groups = svg.selectAll("g."+String(testOption))
+                    .data(dataset)
+                    .enter()
+                    .append("g")
+                    .attr("class", String(testOption))
+                    .style("fill", function(d, i) { return colors[i]; });
 
 
     var rect = groups.selectAll("rect")
@@ -188,7 +179,8 @@ const data = await d3.csv(csvPath);
                     .attr("x", function(d) { return x(d.x); })
                     .attr("y", function(d) { return y(d.y0 + d.y); })
                     .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
-                    .attr("width", x.domain())
+                    .attr("width", x.domain());
+    svg.append(rect);
                     //.on("mouseover", function() { tooltip.style("display", null); })
                     //.on("mouseout", function() { tooltip.style("display", "none"); })
 //                     .on("mousemove", function(d) {
@@ -196,7 +188,11 @@ const data = await d3.csv(csvPath);
 //                         var yPosition = d3.mouse(this)[1] - 25;
 //                         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
 //                         tooltip.select("text").text(d.y);
-//   })
-  ;
+  // })
+  
+
+// return svg.node();
+
+
 
 }

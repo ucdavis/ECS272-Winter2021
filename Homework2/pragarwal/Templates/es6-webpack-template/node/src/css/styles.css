@@ -14,6 +14,11 @@ h1 {
     float: left;
 }
 
+#myClass3 {
+    color: white;
+    float: right;
+}
+
 body{
     /* background-color : rgb(109, 108, 108); */
     /* background-color : #1ed760; */
@@ -35,9 +40,11 @@ body{
     stroke-width: 1px;
     stroke: #c4fa70;
   }
-  .bubbles:hover {
+
+.bubbles:hover {
     stroke: #fb84ce;
     color: #fb84ce;
+    stroke-width: 3px;
   }
 
 .axis path,
@@ -60,7 +67,8 @@ body{
 
 #linechart {
     fill: white;
-    stroke: white;
+    color: white;
+    /* stroke: white; */
     text-decoration: white;
     fill: white;
     background-color: rgb(37, 34, 34);
@@ -76,7 +84,7 @@ body{
 }
 
 .container2 {
-    width: 50%;
+    width: 40%;
     height: 300px;
     float: left;
     /* position: relative; */
@@ -95,10 +103,33 @@ body{
     /* position: relative; */
     margin-bottom: 60px;
     margin-left: 20px;
-    margin-top: 30px;
+    margin-top: 50px;
 }
 
 #mydataviz {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
+}
+
+.container3 {
+    width: 40%;
+    height: 300px;
+    float: right;
+    /* position: relative; */
+    margin-bottom: 60px;
+    /* margin-left: 10px; */
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+#stackedbarchart {
     fill: white;
     stroke: white;
     text-decoration: white;
@@ -106,5 +137,52 @@ body{
     background-color: rgb(37, 34, 34);
     stroke-width: 1.0px;
     opacity: 1.0;
+    float: right;
+}
+
+#streamgraph {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
     float: left;
+    color: white;
+    /* width: 700px; 
+    height: 500px;  */
+}
+
+.container4 {
+    width: 50%;
+    height: 300px;
+    float: right;
+    /* position: relative; */
+    margin-bottom: 60px;
+    /* margin-right: 40px; */
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+#tooltip {
+    margin-bottom: 20px;
+}
+
+.legend {
+    height: 20px;
+    width: 30px;
+    margin-bottom: 10px;
+}
+
+#stackedbarcharttopartist {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
 }
