@@ -123,7 +123,7 @@ function createMap(choroDataMap, id) {
 
     let outline = ({ type: "Sphere" });
 
-    let color = createLegend(choroDataMap);
+    let color = createLegend(choroDataMap, 2011);
 
     console.log("Choropleth Has: " + choroDataMap.has("Afghanistan"))
 
@@ -235,13 +235,13 @@ function createNewMap(value) {
     /*choroDataMap.forEach(item => {
         console.log("choroDataMap on value change: " + JSON.stringify(item));
     })*/
-    updateMap(choroDataMap);
+    updateMap(choroDataMap,targetYear);
 
 }
 
-function updateMap(choroDataMap) {
+function updateMap(choroDataMap,year) {
 
-    let color = createLegend(choroDataMap);
+    let color = createLegend(choroDataMap,year);
 
     svg.select("g").select("g").selectAll("path")
         .data(countries.features)
@@ -267,25 +267,26 @@ ${choroDataMap.has(d.properties.name) ? choroDataMap.get(d.properties.name) : "N
 
 }
 
-function createLegend(choroDataMap) {
+function createLegend(choroDataMap, year) {
 
     let color = d3.scaleSequential()
         .domain(d3.extent(Array.from(choroDataMap.values())))
-        .interpolator(d3.interpolateYlGnBu)
+        .interpolator(d3.interpolateReds)
         .unknown("#ccc");
 
     let legendSvg = d3.select("#worldLegend");
 
     legendSvg.append("g")
         .attr("class", "legendLinear")
-        .attr("transform", "translate(20,20)");
+        .attr("transform", "translate(20,20)")
+        .attr("font-size","medium");
 
     var legendLinear = legend.legendColor()
         .labelFormat(d3.format(".0f"))
         .shapeWidth(50)
-        .title("Number of terror incidents beginning from 2011")
+        .title("Number of terror incidents in "+year)
         .titleWidth(350)
-        .cells(15)
+        .cells(17)
         .orient('horizontal')
         .scale(color);
 

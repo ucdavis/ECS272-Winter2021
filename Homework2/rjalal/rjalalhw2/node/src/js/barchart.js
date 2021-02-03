@@ -6,7 +6,7 @@ import { sliderBottom } from 'd3-simple-slider';
 let data, x, svg, bar, gx, xAxis, y, yAxis, gy;
 let margin = ({ top: 20, right: 0, bottom: 30, left: 40 });
 let height = 500;
-let width = 954;
+let width = 1100;
 export async function getBarChart(id) {
 
     getTimeSlider("#timeSilderBar");

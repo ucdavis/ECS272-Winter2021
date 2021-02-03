@@ -25,11 +25,12 @@
       <div class="col-sm">
       </div>
       <div class="col-sm">
-        <h1>GLOBAL TERROR INCIDENTS</h1>
+        <h2>GLOBAL TERROR INCIDENTS</h2>
       </div>
       <div class="col-sm">
       </div>
     </div>
+    <!--
     <div style="padding-left: 350px;">
       <div style="width: 1050px; border-style: double;">
         <p>There are 3 visualizations presented here:</p>
@@ -40,20 +41,18 @@
           wise</p>
       </div>
     </div>
+  -->
     <div class="row">
       <div class="col-sm">
       </div>
       <div class="col-sm">
         <div id="timeSilder" style="padding-left: 55px"></div>
-        <p style="padding-left: 70px;font-size: small;">(Slide the scale to view year wise incidents on the map below)
-        </p>
+        <!-- <p style="padding-left: 70px;font-size: small;">(Slide the scale to view year wise incidents on the map below) 
+        </p> -->
       </div>
       <div class="col-sm">
       </div>
     </div>
-    <br>
-    <br>
-    <br>
     <div class="row">
       <div class="col-sm">
       </div>
@@ -66,35 +65,44 @@
       <div class="col-sm">
       </div>
     </div>
-    <br>
-    <br>
     <div class="row">
-      <p style="padding-left:600px">*Hover on the countries to view the total incidents that occured there</p>
+      <p style="padding-left:600px;font-size: small;">*Hover on the countries to view the total incidents that occured
+        there</p>
       <div style="width: 100%;height: 600px;">
         <div id="bar"></div>
       </div>
     </div>
     <div class="row">
       <div class="col-sm">
-        <h3>Top 10 countries Affected by Terrorism</h3>
-        <div id="timeSilderBar"></div>
-        <p style="font-size: small;">(Slide the scale to view the top 10 countries affected by terrorism year wise)
-        </p>
+        <div class="row">
+          <div class="col-sm">
+            <h4>Top 10 Countries Affected by terrorism</h4>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small;">(Data is taken from the above Map)</p>
+          </div>
+          
+        </div>
+        <div class="row">
+          <div id="timeSilderBar"></div>
+        </div>
       </div>
       <div class="col-sm">
-        <h3>Type of Terror Incidents Per Country</h3>
-        <div style="padding-top: 20px;">
-          <select id="selectButton"></select>
+        <div class="row">
+          <div class="col-sm">
+            <h4>Types of Terror Incidents Per Country</h4>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small;">(Legend is provided below the Steam Graph)</p>
+          </div>
         </div>
-        <p style="font-size: small; padding-top: 20px;">(Choose the country from the drop down to view the types of
-          terror incidents occured there year wise)
-        </p>
-        <p style="font-size: small; font-weight: bold; padding-top: 10px;">*Legend is given below the streamGraph
-        </p>
+        <div class="row">
+          <div style="padding-top: 20px;">
+             Select Country <select id="selectButton"></select>
+          </div>
+        </div>
       </div>
     </div>
-    <br>
-    <br>
     <div class="row">
       <div class="col-sm">
         <p style="font-weight: bold;">Number of terror incidents</p>
@@ -112,9 +120,7 @@
       <div class="col-sm">
       </div>
       <div class="col-sm">
-
         <svg id="streamLegend" width="800px" height="800px"></svg>
-
       </div>
     </div>
   </div>

@@ -6,7 +6,7 @@ import { swatches } from "../common/legend";
 
 let margin = ({ top: 20, right: 30, bottom: 30, left: 40 });
 let height = 500;
-let width = 954;
+let width = 1100;
 let data = null;
 let svg = null;
 let x, y, xAxis, yAxis, gx, gy;
@@ -53,12 +53,7 @@ export async function getStreamGraph(id) {
     yAxis = g => g
         .attr("transform", `translate(${margin.left},0)`)
         .call(d3.axisLeft(y))
-        .call(g => g.select(".domain").remove())
-        .call(g => g.select(".tick:last-of-type text")
-            .attr("x", 3)
-            .attr("text-anchor", "start")
-            .attr("font-weight", "bold")
-            .text(data1.y))
+        .call(g => g.select(".domain").remove());
 
     var formatxAxis = d3.format('.0f');
 
@@ -131,64 +126,91 @@ export async function getStreamGraph(id) {
 function updateStreamGraph(selectedCntry) {
 
     let countryData = data.get(selectedCntry);
-    //countryData = data.get(selectedCntry);
 
-    console.log("Incidents for " + selectedCntry + " : " + JSON.stringify(countryData));
+    console.log("Data size for " + selectedCntry + " : " + countryData.length)
+    if (countryData.length <= 1) {
+        alert("The incidents for the selected country occured during a single year which cannot be represented on a streamgraph");
+    } else {
 
-    let series = d3.stack().keys(columns)(countryData);
+        //countryData = data.get(selectedCntry);
 
-    console.log("Series: " + JSON.stringify(series));
+        console.log("Incidents for " + selectedCntry + " : " + JSON.stringify(countryData));
 
+        let series = d3.stack().keys(columns)(countryData);
 
-    y.domain([0, d3.max(series, d => d3.max(d, d => d[1]))]).nice();
-
-    x.domain([2011, d3.max(countryData, d => d["year"])]);
-
-    console.log("Data size: " + countryData.length);
-
-    var formatxAxis = d3.format('.0f');
-    /*xAxis = g => g
-        .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).tickFormat(formatxAxis).ticks(countryData.length))
-        .call(g => g.select(".domain").remove())*/
-
-    let color = d3.scaleOrdinal()
-        .domain(series)
-        .range(d3.schemeCategory10);
+        console.log("Series: " + JSON.stringify(series));
 
 
-    let area = d3.area()
-        .x(d => x(d["data"].year))
-        .y0(d => y(d[0]))
-        .y1(d => y(d[1]));
+        y.domain([0, d3.max(series, d => d3.max(d, d => d[1]))]).nice();
+
+        x.domain([2011, d3.max(countryData, d => d["year"])]);
+
+        yAxis = g => g
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y))
+        .call(g => g.select(".domain").remove());
+
+        console.log("Data size: " + countryData.length);
+
+        var formatxAxis = d3.format('.0f');
+        /*xAxis = g => g
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(x).tickFormat(formatxAxis).ticks(countryData.length))
+            .call(g => g.select(".domain").remove())*/
+
+        let color = d3.scaleOrdinal()
+            .domain(series)
+            .range(d3.schemeCategory10);
 
 
-    svg.select("g")
-        .selectAll("path")
-        .data(series)
-        .join("path")
-        .transition()
-        .attr("fill", ({ key }) => color(key))
-        .attr("d", area);
+        let area = d3.area()
+            .x(d => x(d["data"].year))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]));
 
-    svg.select("g")
-        .selectAll("path")
-        .data(series)
-        .append("title")
-        .text(({ key }) => key);
 
-    gx.transition()
-        .call(xAxis);
+        svg.select("g")
+            .selectAll("path")
+            .data(series)
+            .join("path")
+            .transition()
+            .attr("fill", ({ key }) => color(key))
+            .attr("d", area);
 
-    gy.transition()
-        .call(yAxis);
+        svg.select("g")
+            .selectAll("path")
+            .data(series)
+            .append("title")
+            .text(({ key }) => key);
 
-    addLegend(color);
+        gx.transition()
+            .call(xAxis);
+
+        gy.transition()
+            .call(yAxis);
+
+        addLegend(color);
+
+    }
+
+
 
 }
 
 function addLegend(color) {
     let legendSVG3 = d3.select("#streamLegend");
+
+    let labelMap = new Map([
+        ["Assassination", "Assassination"],
+        ["ArmedAssault", "ArmedAssault"],
+        ["BombingOrExplosion", "Bombing/Explosion"],
+        ["Hijacking", "Hijacking"],
+        ["HostageOrBarricade", "Hostage Taking (Barricade Incident)"],
+        ["HostageKidnapping", "Hostage Taking (Kidnapping)"],
+        ["FacilityOrInfraAttack", "Facility/Infrastructure Attack"],
+        ["UnarmedAssault", "Unarmed Assault"],
+        ["Unknown", "Unknown"]
+    ]);
 
     /*legendSVG3.append("rect").attr("x", 40).attr("y", 30).attr("width", 20).attr("height", 20).style("fill", "#17becf")
     legendSVG3.append("rect").attr("x", 240).attr("y", 30).attr("width", 20).attr("height", 20).style("fill", "#1f77b4")
@@ -224,7 +246,7 @@ function addLegend(color) {
         .attr("y", function (d, i) { return 100 + i * (size + 5) }) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("width", size)
         .attr("height", size)
-        .style("fill", function (d) { return color(d) })
+        .style("fill", function (d) { console.log("Column Selected: "+d);return color(d) })
 
     // Add one dot in the legend for each name.
     legendSVG3.selectAll("mylabels")
@@ -234,7 +256,7 @@ function addLegend(color) {
         .attr("x", 100 + size * 1.2)
         .attr("y", function (d, i) { return 100 + i * (size + 5) + (size / 2) }) // 100 is where the first dot appears. 25 is the distance between dots
         .style("fill", function (d) { return color(d) })
-        .text(function (d) { return d })
+        .text(function (d) { return labelMap.get(d) })
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
 
