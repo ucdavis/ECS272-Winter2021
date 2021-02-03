@@ -116,7 +116,7 @@ function getTimeSlider(id) {
     var gTime = d3
         .select(id)
         .append('svg')
-        .attr('width', 500)
+        .attr('width', 400)
         .attr('height', 100)
         .append('g')
         .attr('transform', 'translate(30,30)');

@@ -79,12 +79,17 @@
             <h4>Top 10 Countries Affected by terrorism</h4>
           </div>
           <div class="col-sm">
-            <p style="font-size: small;">(Data is taken from the above Map)</p>
+            <!-- <p style="font-size: small;">(Data is taken from the above Map)</p> -->
           </div>
-          
+
         </div>
         <div class="row">
-          <div id="timeSilderBar"></div>
+          <div class="col-sm">
+            <div id="timeSilderBar"></div>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small; padding-top: 20px;"> This barchart picks up the top 10 countries for every year that are worst affected by terrorism from the above map</p>
+          </div>
         </div>
       </div>
       <div class="col-sm">
@@ -97,8 +102,13 @@
           </div>
         </div>
         <div class="row">
-          <div style="padding-top: 20px;">
-             Select Country <select id="selectButton"></select>
+          <div class="col-sm">
+            <div style="padding-top: 20px;">
+              Select Country <select id="selectButton"></select>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small;"> The total incidents per year for each country are comprised of the attacks shown by this streamGraph </p>
           </div>
         </div>
       </div>
