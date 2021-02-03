@@ -1,5 +1,6 @@
 (function () {
     // first, load the dataset from a CSV file
+
     d3.csv('../datasets/SF_Historical_Ballot_Measures.csv')
       .then(csv => {
         // log csv in browser console
@@ -29,6 +30,7 @@
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
         //scale functions
+
         var x = d3.scaleLinear()
           .domain([0, d3.max(data, d => d.yes)])
           .range([0, width]);
@@ -62,6 +64,7 @@
           })
   
         // x axis
+
         view.append("g")	
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x).ticks(6))
