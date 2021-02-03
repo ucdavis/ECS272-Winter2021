@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+
+#row-container {
+    display: flex;
+    flex-direction: row;
+}
+#container {
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    top: 0;
+}
+
+text {
+    font-family: proxima-nova;
+    font-size: 12px;
+    fill: #666;
+}
+
+.countries {
+    fill: #333333;
+}
+.ticks {
+    font-size: 10px;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+    stroke-linecap: round;
+}
+
+.track {
+    stroke: #000;
+    stroke-opacity: 0.3;
+    stroke-width: 10px;
+}
+
+.track-inset {
+    stroke: #dcdcdc;
+    stroke-width: 8px;
+}
+
+.track-overlay {
+    pointer-events: stroke;
+    stroke-width: 50px;
+    stroke: transparent;
+    cursor: crosshair;
+}
+
+.handle {
+    fill: #fff;
+    stroke: #000;
+    stroke-opacity: 0.5;
+    stroke-width: 1.25px;
+}
+#button-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding-top: 170px;
+}
+#selectButton {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+#resetButton {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 30px;
+}
+.titals {
+    font-weight: bold;
+}
+#desc {
+    margin-top: 50px;
+    font-size: 14px;
+}
+#desc text {
+    font-size: 17px;
+    padding-left: 30px;
+}
+</style>
+    </head>
+    <body>
+        <div id='container'>
+            <div id="row-container">
+                <div id="button-container">
+                    <text>select fatility range</text>
+                    <select id="selectButton"></select>
+                    <input name="resetButton"
+                        type="button"
+                        value="reset spikes"
+                        onclick="resetData()" />
+                </div>
+                <div id='spikemap'></div>
+                <div id='parasets'></div>
+            </div>
+            <div id="streamgraph"></div>
+        </div>
+        <div id='desc'>
+            <text>
+                10 most active terrorist groups' activities in 2017 visualization<br>
+            </text>
+            <ul>
+                <li>Top left view can be used to view each group's active areas. Support zoom and drag for more detailed view. Height of spikes represent fatalities in each attack. Drop down menu can be used to select range of fatality.</li>
+                <li>Top right view can be used to view each group's usage of different attack types. Hover over links to see on map where the different types of attacks are carries out by different groups.</li>
+                <li>Bottom view can be used to view each group's activities over time compare to other groups. Hover over different stream to see respective group's active areas on map. Use the slider to see attacks of respective months on map.</li>
+            </ul>
+        </div>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.7.1/d3-sankey.min.js"></script>
+        <script>
+
+function resetData() {
+    mapsvg.selectAll('.spikes').style('opacity', 1);
+}
+
+
+const map_margin = {top: 30, right: 0, bottom: 0, left: 0},
+    map_width = 640 - map_margin.left - map_margin.right,
+    map_height = 400 - map_margin.top - map_margin.bottom;
+// const map_width = 450;
+// const map_height = 300;
+const stream_margin = {top: 40, right: 0, bottom: 50, left: 30},
+    stream_width = 1200 - stream_margin.left - stream_margin.right,
+    stream_height = 320 - stream_margin.top - stream_margin.bottom;
+
+const para_margin = {top: 25, right: 0, bottom: 20, left: 30},
+    para_width = 440 - para_margin.left - para_margin.right,
+    para_height = 400 - para_margin.top - para_margin.bottom;
+
+
+
+let mapsvg = d3.select('#spikemap')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, map_width, map_height])
+                    // .attr('id', 'map')
+                    .attr("width", map_width + map_margin.left + map_margin.right)
+                    .attr("height", map_height + map_margin.top + map_margin.bottom)
+                    // .append("g")
+                    .attr("transform",
+                        "translate(" + map_margin.left + "," + map_margin.top + ")");
+
+let parasvg = d3.select('#parasets')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, para_width, para_height])
+                    // .attr('id', 'map')
+                    .attr("width", para_width + para_margin.left + para_margin.right)
+                    .attr("height", para_height + para_margin.top + para_margin.bottom)
+                    // .append("g")
+                    .attr("transform",
+                        "translate(" + para_margin.left + "," + para_margin.top + ")");
+
+let streamsvg = d3.select("#streamgraph")
+                    .append("svg")
+                    // .attr("viewBox", [0, 0, stream_width, stream_height])
+                    .attr("width", stream_width + stream_margin.left + stream_margin.right)
+                    .attr("height", stream_height + stream_margin.top + stream_margin.bottom)
+                    // .append("g")
+                    .attr("transform",
+                        "translate(" + stream_margin.left + "," + stream_margin.top + ")");
+
+let allGroup = ["0-20", "20-40", "40-60", "60-80", ">80"];
+let group_cl = ["zt", "tf", "fs", "se", "en"];
+
+d3.select("#selectButton")
+    .selectAll('myOptions')
+    .data(allGroup)
+    .enter()
+    .append('option')
+    .text(function (d) { return d; }) // text showed in the menu
+    .attr("value", function (d) { return d; });
+
+let projection = d3.geoMercator().translate([map_width/2, map_height/2]),
+    path = d3.geoPath(projection);
+
+let formatDate = d3.timeFormat("%b %Y");
+
+d3.queue()
+    .defer(d3.json, 'world-50m.json')
+    .defer(d3.csv, 'date_coord.csv')
+    .defer(d3.csv, 'month_gname.csv')
+    .defer(d3.csv, 'gname_attype.csv')
+    .await(main);
+
+function main(error, world, date_coord, month_gname, gname_attype) {
+    let color = d3.scaleOrdinal()
+        .domain(month_gname.columns.slice(1))
+        .range(d3.schemeCategory10);
+    let length = d3.scaleLinear([0, d3.max(date_coord, d => d.value)], [0, 10]);
+    let spike = (length, width = 7) => `M${-width / 2},0L0,${-length}L${width / 2},0`;
+    let keys = month_gname.columns.slice(1);
+    let months = month_gname
+
+    date_coord.forEach(d => { d.coords = projection([d.longitude, d.latitude]); })
+    let countries = topojson.feature(world, world.objects.countries).features;
+    let borders = topojson.mesh(
+        world,
+        world.objects.countries,
+        (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
+        );
+
+    mapsvg
+        .append('g')
+        .classed('countries', true)
+        .selectAll(".country")
+        .data(countries)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", path);
+
+    mapsvg.append('g')
+        .classed('boarders', true)
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr('stroke-width', 0.1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(borders));
+
+    mapsvg.append("g")
+            .classed('deaths', true)
+            .selectAll('.death')
+            .data(date_coord)
+            .enter()
+            .append('path')
+            .attr("fill-opacity", 0.3)
+            .attr("stroke", function(d) {return color(d.gname);})
+            .attr("transform", d => `translate(${d.coords})`)
+            .attr("d", d => spike(length(d.value)))
+            .attr('class', function(d) {
+                let month = formatDate(new Date(d.date));
+                month = month.slice(0,3);
+                let cl = 'spikes';
+                cl += ' ' + d.gname.slice(0,3);
+                cl += ' ' + d.attype.slice(0,4);
+                cl += ' ' + month;
+                let kill;
+                if (d.value < 20) {kill = group_cl[0];}
+                else if (d.value < 40) {kill = group_cl[1];}
+                else if (d.value < 60) {kill = group_cl[2];}
+                else if (d.value < 80) {kill = group_cl[3];}
+                else {kill = group_cl[4];}
+
+                cl += ' ' + kill;
+                return cl}),
+            drag_handler = d3.drag()
+            .on('start', drag_start)
+            .on('drag', drag_drag)
+
+        function drag_start() {
+            start_x = +d3.event.x
+            start_y = +d3.event.y
+        }
+
+        function drag_drag(d) {
+            d3.select(this)
+              .attr('cx', d.x = d3.event.x).attr('cy', d.y = d3.event.y)
+        }
+
+    drag_handler(mapsvg.selectAll('.spikes'));
+    // zoom and pan
+    const zoom = d3.zoom()
+        .on('zoom', () => {
+            let g = mapsvg.selectAll('g')
+            g.style('stroke-width', `${1.5 / d3.event.transform.k}px`)
+            g.attr('transform', d3.event.transform) // updated for d3 v4
+        })
+
+    mapsvg.call(zoom)
+    mapsvg.append("text")
+        .attr("x", 0)
+        .attr("y", map_height + map_margin.top - 5)
+        .attr('class', 'titals')
+        .text(function(d) { return "Terrorist attacks' fatalities over region"; });
+
+    function select_update(selectedGroup) {
+        for (let i = 0; i < allGroup.length; i+= 1) {
+            let kill = group_cl[i];
+            if (selectedGroup == allGroup[i]) {
+                mapsvg.selectAll('.'+kill).style('opacity', 1)
+            }
+            else {
+                mapsvg.selectAll('.'+kill).style('opacity', 0)
+            }
+        }
+    }
+
+
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        select_update(selectedOption)
+    })
+
+    // draw parasets
+    para_keys = gname_attype.columns.slice(0, -1)
+    // console.log(para_keys)
+
+    let index = -1;
+    const _nodes = [];
+    const nodeByKey = new Map;
+    const indexByKey = new Map;
+    const _links = [];
+
+    for (const k of para_keys) {
+        for (const d of gname_attype) {
+        const key = JSON.stringify([k, d[k]]);
+        if (nodeByKey.has(key)) continue;
+        const node = {name: d[k]};
+        _nodes.push(node);
+        nodeByKey.set(key, node);
+        indexByKey.set(key, ++index);
+        }
+    }
+
+    for (let i = 1; i < para_keys.length; ++i) {
+        const a = para_keys[i - 1];
+        const b = para_keys[i];
+        const prefix = para_keys.slice(0, i + 1);
+        const linkByKey = new Map;
+        for (const d of gname_attype) {
+        const names = prefix.map(k => d[k]);
+        const key = JSON.stringify(names);
+        const value = d.value || 1;
+        let link = linkByKey.get(key);
+        if (link) { link.value += value; continue; }
+        link = {
+            source: indexByKey.get(JSON.stringify([a, d[a]])),
+            target: indexByKey.get(JSON.stringify([b, d[b]])),
+            names,
+            value
+        };
+        _links.push(link);
+        linkByKey.set(key, link);
+        }
+    }
+
+    let graph = {_nodes, _links};
+    let sankey = d3.sankey()
+                // .nodeSort(null)
+                // .linkSort(null)
+                .nodeWidth(4)
+                .nodePadding(20)
+                .extent([[0, 5], [para_width, para_height - 5]])
+
+    const {nodes, links} = sankey({
+        nodes: graph._nodes.map(d => Object.assign({}, d)),
+        links: graph._links.map(d => Object.assign({}, d))
+    });
+
+    parasvg.append("g")
+            .selectAll("rect")
+            .data(nodes)
+            .enter()
+            .append("rect")
+            // .attr("x", d => d.x0)
+            .attr("x", function(d) {return d.x0})
+            .attr("y", d => d.y0)
+            .attr("height", d => d.y1 - d.y0)
+            .attr("width", d => d.x1 - d.x0)
+            .append("title")
+            .text(d => `${d.name}\n${d.value.toLocaleString()}`);
+
+    let link_mouseenter = function(d) {
+        d3.selectAll(".links").style("opacity", .2)
+        d3.select(this).style("opacity", 1)
+        mapsvg.selectAll('.spikes').style("opacity", 0);
+        let cl = '.' + d.names[0].slice(0, 3) + '.' + d.names[1].slice(0, 4);
+        mapsvg.selectAll(cl).style('opacity', 1);
+    };
+
+    let link_mouseleave = function(d) {
+        d3.selectAll(".links").style("opacity", 1)
+        mapsvg.selectAll('.spikes').style("opacity", 1);
+    }
+
+    parasvg.append("g")
+            .attr("fill", "none")
+            .selectAll("g")
+            .data(links)
+            .enter()
+            .append("path")
+            .attr("d", d3.sankeyLinkHorizontal())
+            .attr("stroke", d => color(d.names[0]))
+            .attr("stroke-width", d => d.width)
+            .style("mix-blend-mode", "multiply")
+            .on("mouseenter", link_mouseenter)
+            .on("mouseleave", link_mouseleave)
+            .attr('class', 'links')
+            // .append("title")
+            // .text(d => `${d.names.join(" → ")}\n${d.value.toLocaleString()}`);
+
+    parasvg.append("g")
+            .style("font", "10px sans-serif")
+            .selectAll("text")
+            .data(nodes)
+            .enter()
+            .append("text")
+            .attr("x", d => d.x0 < para_width / 2 ? d.x1 + 6 : d.x0 - 6)
+            .attr("y", d => (d.y1 + d.y0) / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", d => d.x0 < para_width / 2 ? "start" : "end")
+            .text(d => d.name)
+            .append("tspan")
+            .attr("fill-opacity", 0.7)
+            .text(d => ` ${d.value.toLocaleString()}`);
+
+    parasvg.append("text")
+            .attr("x", 0)
+            .attr("y", para_height + para_margin.top + 20)
+            .attr('class', 'titals')
+            .text(function(d) { return "Terrorist groups' attack types"; });
+
+    // draw streamgraph
+    let series = d3.stack()
+        .keys(month_gname.columns.slice(1))
+        .offset(d3.stackOffsetWiggle)
+        .order(d3.stackOrderInsideOut)
+    (month_gname);
+
+    // Add X axis
+    let x = d3.scaleUtc()
+        .domain(d3.extent(month_gname, d => new Date(d.date)))
+        .range([stream_margin.left + 250, stream_width - stream_margin.right])
+        .clamp(true);
+
+    let y = d3.scaleLinear()
+        .domain([d3.min(series, d => d3.min(d, d => d[0])), d3.max(series, d => d3.max(d, d => d[1]))])
+        .range([stream_height - stream_margin.bottom, stream_margin.top]);
+
+    let area = d3.area()
+            .x(d => x(new Date(d.data.date)))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]));
+
+    streamsvg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+
+    // streamgraph legend
+    streamsvg.append("g")
+        .attr("class", "legendOrdinal")
+        .attr("transform", "translate(15,30)");
+
+    var legendOrdinal = d3.legendColor()
+                    .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+                    .shapePadding(10)
+                    .scale(color);
+
+    streamsvg.select(".legendOrdinal")
+        .call(legendOrdinal);
+
+    let mouseenter = function(d, i) {
+        // Tooltip.style("opacity", 1)
+        d3.selectAll(".myArea").style("opacity", .2)
+        d3.select(this).style("opacity", 1)
+        grp = keys[i]
+        // Tooltip.text(grp)
+        mapsvg.selectAll('.spikes').style('opacity', 0);
+
+        mapsvg.selectAll('.'+grp.slice(0,3)).style('opacity', 1);
+    }
+
+    let mouseleave = function(d) {
+        // Tooltip.style("opacity", 0)
+        d3.selectAll(".myArea").style("opacity", 1)
+        for (i in keys) {
+            let gname = keys[i];
+            let cl_name = gname.slice(0,3);
+            d3.selectAll('.'+cl_name).style('opacity', 1);
+        }
+    }
+
+    var slider = streamsvg.append("g")
+                        .attr("class", "slider")
+                        .attr("transform", `translate(0,${stream_height})`);
+
+    slider.append("line")
+        .attr("class", "track")
+        .attr("x1", x.range()[0])
+        .attr("x2", x.range()[1])
+        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-inset")
+        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-overlay")
+        .call(d3.drag()
+            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start drag", function() {
+                currentValue = d3.event.x;
+                slider_update(x.invert(currentValue));
+            })
+        );
+
+    var startDate = new Date("2017-01-02")
+    slider.insert("g", ".track-overlay")
+        .attr("class", "ticks")
+        .attr("transform", "translate(0," + 18 + ")")
+        .selectAll("text")
+        .data(month_gname)
+        .enter()
+        .append("text")
+        .attr("x", d => x(new Date(d.date)))
+        .attr("y", 10)
+        .attr("text-anchor", "middle")
+        .text(function(d) { return formatDate(new Date(d.date));});
+
+    var handle = slider.insert("circle", ".track-overlay")
+            .attr("class", "handle")
+            .attr("r", 9)
+            .attr("cx", x(startDate));
+
+    var label = slider.append("text")
+            .attr("class", "label")
+            .attr("text-anchor", "middle")
+            .text(formatDate(startDate))
+            .attr("transform", "translate(0," + (-25) + ")")
+            .attr("x", x(startDate))
+
+    function slider_update(h) {
+        let month = formatDate(h);
+        month = month.slice(0,3);
+        // update position and text of label according to slider scale
+        handle.attr("cx", x(h));
+        label.attr("x", x(h))
+            .text(formatDate(h));
+
+        // update spikes
+        mapsvg.selectAll('.spikes').style('opacity', 0);
+        mapsvg.selectAll('.'+month).style('opacity', 1);
+    }
+
+    streamsvg.selectAll("mylayers")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("class", "myArea")
+            .style("fill", function(d) { return color(d.key); })
+            .attr("d", area)
+            .on("mouseenter", mouseenter)
+            .on("mouseleave", mouseleave)
+
+    streamsvg.append("text")
+            .attr("x", stream_width-200)
+            .attr("y", stream_height-60)
+            .attr('class', 'titals')
+            .text(function(d) { return "Terrorist groups' liveliness over time"; });
+}
+        </script>
+    </body>
+</html>
