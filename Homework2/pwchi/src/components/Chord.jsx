@@ -43,8 +43,46 @@ const Chord = ({ data }) => {
       )
     );
 
-    // Plotting
     const svg = d3.select(ref.current);
+
+    // Plot title
+    svg
+      .append("text")
+      .attr(
+        "transform",
+        "translate(" + -width * 0.3 + " ," + -height * 0.4 + ")"
+      )
+      .attr("fill", "#737373")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 20)
+      .attr("text-anchor", "middle")
+      .text("Overview");
+
+    // Legend
+    svg
+      .selectAll("legendDot")
+      .data(Object.keys(nodeColor))
+      .enter()
+      .append("circle")
+      .attr("cx", width * 0.25)
+      .attr("cy", (d, idx) => -height * 0.4 + idx * 15)
+      .attr("r", 3)
+      .attr("fill", (d) => nodeColor[d]);
+
+    svg
+      .selectAll("legendText")
+      .data(Object.keys(nodeColor))
+      .enter()
+      .append("text")
+      .attr("x", width * 0.25 + 10)
+      .attr("y", (d, idx) => -height * 0.4 + idx * 15)
+      .attr("font-size", 10)
+      .attr("fill", (d) => nodeColor[d])
+      .text((d) => d)
+      .attr("text-anchor", "left")
+      .attr("alignment-baseline", "middle");
+
+    // Plotting
     svg
       .append("g")
       .attr("font-family", "sans-serif")
@@ -122,12 +160,15 @@ const Chord = ({ data }) => {
         .attr("fill", (d) => nodeColor[d.parent.data.name])
         .attr("font-weight", null);
     }
-  }, [data, radius]);
+  }, []);
 
   return (
     <div className="chord">
       <svg className="d3-chord" id={id} viewBox={`0 0 ${width} ${height}`}>
-        <g ref={ref} transform={`translate(${horizontalShift}, ${radius})`}></g>
+        <g
+          ref={ref}
+          transform={`translate(${horizontalShift}, ${radius + 40})`}
+        ></g>
       </svg>
     </div>
   );

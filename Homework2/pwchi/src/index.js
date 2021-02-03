@@ -3,14 +3,15 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import "typeface-roboto";
 import "./css/index.css";
 
 ReactDOM.render(
-    <React.StrictMode>
-        <CssBaseline />
-        <App />
-    </React.StrictMode>,
-    document.getElementById("root")
+  <React.StrictMode>
+    <CssBaseline />
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
