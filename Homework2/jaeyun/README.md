@@ -2,7 +2,9 @@
 
 ![alt tag](https://github.com/Jaewan-Yun/ECS272-Winter2021/blob/main/Homework2/jaeyun/res/screen1.png)
 
-[Link to demo](https://jaewan-yun.com/project/song_recommender)
+![alt tag](https://github.com/Jaewan-Yun/ECS272-Winter2021/blob/main/Homework2/jaeyun/res/screen2.png)
+
+**[Link to demo](https://jaewan-yun.com/project/song_recommender)**. Tested on Chromium, requires WebGL capabilities.
 
 ---
 
@@ -14,7 +16,7 @@ cd ECS272-Winter2021/Homework2/jaeyun
 npm install
 ```
 
-To run the webserver, run the following commands:
+To start the webserver, run the following commands:
 
 ```
 cd ECS272-Winter2021/Homework2/jaeyun
