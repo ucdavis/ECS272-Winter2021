@@ -1,0 +1,19 @@
+.chord {
+    height: 80%;
+    display: grid;
+    grid-template-columns: 2fr 8fr 2fr;
+    grid-template-areas: " . d3-chord .";
+}
+.d3-chord {
+    grid-area: d3-chord;
+    place-self: center;
+}
+/* .title {
+    grid-area: title;
+}
+.location {
+    grid-area: location;
+}
+.director {
+    grid-area: director;
+} */
