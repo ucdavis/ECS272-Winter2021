@@ -8,10 +8,6 @@ function drawHeatFromCsv(){
         // array of objects
         console.log(data.length);
         console.log(data);
-        // do something with the data (e.g process and render chart)
-        //  const pData = processData();
-        //  drawBarChart(pData, id);
-        //(data will only exist inside here since it is an async call to read in data) so all rendering and processsing with data has to occur inside the "then"
     });
 }
 /* 
@@ -22,9 +18,6 @@ export async function drawHeatFromCsvAsync(){
     const data = await d3.csv(csvPath);
     console.log(data);
     drawHeatChart(data, "#heat"); 
-    //process data()
-    //draw chart ()
-    //There will be some delay in console before it prints the array
 }
 
 
@@ -35,8 +28,6 @@ export function drawHeatChart(data, id) {
     const width = parentDiv.clientWidth;
     const height = 460 - margin.top - margin.bottom;
     
-    console.log(data)
-
     let svg = d3.select(id).append("svg")
         .attr("viewBox", [0, 0, width, height])
         .attr("width", width + margin.left + margin.right)
@@ -50,6 +41,7 @@ export function drawHeatChart(data, id) {
     const xAxis = g => g
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(x).tickSize(0));  
+
         // text label for the x axis
     svg.append("text")             
             .attr("transform",
@@ -66,6 +58,7 @@ export function drawHeatChart(data, id) {
     const yAxis = g => g
             .attr("transform", `translate(${margin.left},-50)`)
             .call(d3.axisLeft(y).tickSize(0))
+            
     // text label for the x axis
     svg.append("text")             
             .attr("transform",
@@ -74,7 +67,6 @@ export function drawHeatChart(data, id) {
             .style("text-anchor", "middle")
             .attr("font-weight", "bold")
             .attr("font-size", 13)
-
 
     // Build color scale
     var myColor = d3.scaleSequential()
@@ -94,7 +86,6 @@ export function drawHeatChart(data, id) {
         .style("border-radius", "5px")
         .style("padding", "5px")
 
-    
     // Select and generate rectangle elements
     svg.selectAll()
         .data( data )
@@ -109,7 +100,7 @@ export function drawHeatChart(data, id) {
         .attr("ry", 4)
         .style("fill", function(d) { return myColor(d.r)} )
         .on("mouseover", (e,d) => {
-          console.log(e)
+        //   console.log(e)
           tooltip
            .style("visibility", "visible")
            .text("r-value: " + d.r)})

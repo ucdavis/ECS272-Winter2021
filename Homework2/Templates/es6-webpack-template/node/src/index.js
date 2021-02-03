@@ -7,7 +7,8 @@ import './css/style.scss';
 import './css/styles.css'; /* Example of connecting a style-sheet */
 import {drawScatterChart, drawScatterFromCsvAsync} from "./js/scatterchart"; /* Example of importing one function from a js file for multiple {f(x), f(y), f(z)}*/
 import {drawLineddChart, drawLineddFromCsvAsync} from "./js/linechartdd"; 
-import {drawHeatChart, drawHeatFromCsvAsync} from "./js/heatmapchart"; 
+// import {drawHeatChart, drawHeatFromCsvAsync} from "./js/heatmapchart"; 
+import {drawHeatChart, drawHeatFromCsvAsync} from "./js/heatmapleg"; 
 import { svg } from "d3";
 
 let x = 2;

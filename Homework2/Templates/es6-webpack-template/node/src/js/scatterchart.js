@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 import { color } from "d3";
 import csvPath from '../assets/data/spotify_data/data_by_year_updated.csv';
-// import {legend, swatches} from @d3/color-legend
 
 function drawScatterFromCsv(){
     //async method
@@ -9,10 +8,6 @@ function drawScatterFromCsv(){
         // array of objects
         console.log(data.length);
         console.log(data);
-        // do something with the data (e.g process and render chart)
-        //  const pData = processData();
-        //  drawScatterChart(pData, id);
-        //(data will only exist inside here since it is an async call to read in data) so all rendering and processsing with data has to occur inside the "then"
     });
 }
 /* 
@@ -23,35 +18,18 @@ export async function drawScatterFromCsvAsync(){
     const data = await d3.csv(csvPath);
     console.log(data);
     drawScatterChart(data, "#scatter"); 
-    //process data()
-    //draw chart ()
-    //There will be some delay in console before it prints the array
 }
 
 
 export function drawScatterChart(data, id) {
     
-    // const margin = { top: 40, right: 40, bottom: 120, left: 100 };
-    // const height = 300;
-    // const width = 500;
-    
-    console.log(data)
-   
-
     // margin convention
     const margin = {top: 10, right: 100, bottom: 50, left: 100};
     const parentDiv = document.getElementById(id.substring(1));
-    const visWidth = parentDiv.clientWidth; //600 - margin.left - margin.right;
-    // const visHeight = 460 - margin.top - margin.bottom;
+    const visWidth = parentDiv.clientWidth;
     const visHeight = 460 - margin.top - margin.bottom;
-    // const margin = {top: 40, right: 5, bottom: 100, left: 40};
-    // const parentDiv = document.getElementById(id.substring(1));
-    // const visWidth = parentDiv.clientWidth; //600 - margin.left - margin.right;
-    // const visHeight = 400; //460 - margin.top - margin.bottom;
   
     const svg = d3.select(id).append("svg")
-        // .attr("viewBox", [0, 0, 100, height])
-        // .attr('width', '100%') //visWidth + margin.left + margin.right)
         .attr('width', visWidth + margin.left + margin.right)
         .attr('height', visHeight + margin.top + margin.bottom);
   
@@ -59,18 +37,15 @@ export function drawScatterChart(data, id) {
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
     
     // create scales
-    
     const x = d3.scaleLinear()
         .domain(d3.extent(data, d => d.year)).nice()
         .range([0, visWidth]);
     
     const y = d3.scaleLinear()
-        // .domain(d3.extent(data, d => d.energy)).nice()
         .domain([0,1]).nice()
         .range([visHeight, 0]);
     
     // create and add axes
-    
     const xAxis = d3.axisBottom(x);
     
     g.append("g")
@@ -96,25 +71,10 @@ export function drawScatterChart(data, id) {
         .attr('y', visHeight / 2)
         .attr('fill', 'black')
         .attr('dominant-baseline', 'middle')
-        // .attr("transform", "rotate(-65)")
         .attr("font-weight", "bold")
         .attr("font-size", '12')
         .text('Popularity');
 
-        // svg.append("g")
-        // .attr("class", "x axis")
-        // .attr("transform", "translate(0," + height + ")")
-        // .call(xAxis)
-        // .selectAll("text")
-        // .style("text-anchor", "end")
-        // .attr("dx", "-.8em")
-        // .attr("dy", ".15em")
-        // .attr("transform", "rotate(-65)")
-        // .attr("font-weight", "bold")
-        // .attr("font-size", '12');
-    
-    // draw grid, based on https://observablehq.com/@d3/scatterplot
-    
     const grid = g.append('g')
         .attr('class', 'grid');
     
@@ -156,8 +116,6 @@ export function drawScatterChart(data, id) {
         .style("border-radius", "5px")
         .style("padding", "5px"); 
     
-    // let myVar = d => (d.normalized_popularity)
-
     // draw points
     function drawPoints(data) {
       g.selectAll('circle')
@@ -166,30 +124,23 @@ export function drawScatterChart(data, id) {
           .attr('opacity', 0.75)
           .attr('cx', d => x(d.year))
           .attr('cy', d => y(d.normalized_popularity))
-          // .attr('fill', d =>  myColor(d.normalized_popularity))
-          // .attr('size', d => y(d.normalized_popularity))
           .attr('fill', d =>  color(d.normalized_popularity))
-          .attr('r', 4) //d => 20*(d.normalized_popularity))
+          .attr('r', 4) 
 
           .on("mouseover", (e,d) => {
             // console.log(e)
             tooltip
              .style("visibility", "visible")
-             .text("Year:" + d.year + "; Popularity: " + d.normalized_popularity)})
+             .text("Year:" + d.year + "; Popularity: " + (1*d.normalized_popularity).toFixed(3))})
           .on("mousemove", (e,d) => {
-              console.log(e)
               tooltip
               .style("top", (e.pageY-10)+"px")
               .style("left",(e.pageX+10)+"px")
-              .text("Year:" + d.year + "; Popularity: " + d.normalized_popularity)})
-            //   .text('Year' + d.year + ": " + d.energy))
-            //   .attr('font-weight', 'bold')
+              .text("Year:" + d.year + "; Popularity: " + (1*d.normalized_popularity).toFixed(3))})
           .on("mouseout", (e,d) => tooltip
           .style("visibility", "hidden"));
-        //   .attr('r', d => 10000*size(d.enery));
     }
     
-    console.log('HEREEEEEE')
     drawPoints(data);
     
     

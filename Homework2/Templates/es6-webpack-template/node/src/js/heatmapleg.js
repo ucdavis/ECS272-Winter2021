@@ -99,6 +99,107 @@ export function drawHeatChart(data, id) {
     svg.select(".legendSequential")
         .call(legendSequential);
 
+    // let valRange = [-1,1]
+    // let legendBins = [...Array(5).keys()].map(x => d3.quantile(valRange, x * 0.1))
+
+    // const legend = svg.append("g")
+    //                 .attr("transform", d => `translate(${margin.left},0)`);
+    // let legendHeight = 20
+    // let legendElementWidth = 25      
+    // legend
+    //     .selectAll("rect")
+    //     .data(legendBins)
+    //     .enter()
+    //     .append("rect")
+    //     .attr("y", (d, i) => legendElementWidth * i)
+    //     .attr("x", width - margin.left - 10) // + (2*legendHeight) + 30)
+    //     .attr("width", legendElementWidth)
+    //     .attr("height", legendHeight)
+    //     .style("fill", function(d) { return myColor(d.r)})
+        // .style("fill", d => z(d));
+    
+    // legend
+    //     .selectAll("text")
+    //     .data(data)
+    //     .enter()
+    //     .append("text")
+    //     .text(d => "≥ " + (1*d.r).toFixed(1))
+    //     // .attr("x", (d, i) => legendElementWidth * i)
+    //     // .attr("y", height - (legendHeight / 2) + 11 )
+    //     .style("font-size", "9pt")
+    //     .style("font-family", "Consolas, courier")
+    //     .style("fill", "#aaa");                 
+    // const lPatchWidth=200;
+    // console.log('-----========')
+    // console.log((width+margin.right)/2-lPatchWidth/2 -margin.left/2) //170
+    // console.log((height+margin.bottom-35-20)) // 395
+    // console.log(width, margin.right, height, margin.bottom)
+
+    // const legend = svg.append('g')
+    //                     // .attr("transform","translate(" + ((width + margin.right)/2 - lPatchWidth/2 - margin.left/2) + "," +
+    //                                                     //   (height + margin.bottom - 35 - 24) + ")")
+    //                     .attr("transform","translate(" + ((width + margin.left) + 100 ) + "," +
+    //                                                       (height + margin.bottom - 35 - 24) + ")")
+    //                     .attr('x', 600)
+    //                     .attr("transform", "rotate(90)")                                
+   
+    //                     //  .attr('transform', `translate(170, 400)`) // ${years.length * yearHeight + cellSize * 4})`)
+    
+    // const categoriesCount = 3;
+    // // let arrayLength = data.length; // length of dataset
+    // let maxValue = 1//d3.max(data, d=> d.danceability); // get max value of our dataset
+
+    // const categories = [...Array(categoriesCount)].map((_, i) => {
+    // const upperBound = 1; //maxValue / categoriesCount * (i + 1);
+    // const lowerBound = -1; //maxValue / categoriesCount * i;
+    // // const legendWidth = 10;
+
+    
+
+    // return {
+    //     upperBound,
+    //     lowerBound,
+    //     // color: myColor //d3.interpolateBuGn(upperBound / maxValue)
+    //     color: d3.interpolateBuGn(upperBound / maxValue)
+    //     // color: myColor.range()
+    // };
+    // });
+
+    // const gridSize = Math.floor(width / 25)
+    // const legendWidth = (gridSize/2 + 4)
+    // console.log('gridSize', gridSize, 'lengthWidth', legendWidth)
+    // legend
+    //     .selectAll('rect')
+    //     // .data(categories)
+    //     // .data(myColor.range())
+    //     .enter()
+    //     .append('rect')
+    //     // .attr('fill', d => d.color)
+    //     .attr("fill", function(d) { return myColor(d.r)} )
+    //     .attr('x', (d, i) => 15 * i)
+    //     .attr('y', margin.left - width - 50)//(d, i) => 10 * i)
+    //     .attr('width', 10) //10
+    //     .attr('height', 15)
+    // // const all_text = ['-1', '0', '1']
+    // // legend.append("text")
+    // //     .attr("class", "mono")
+    // //     .text((d,i) => all_text[i]) //function(d) { return "≥ " + Math.round(d); })
+    // //     .attr("x",(d, i) => 15 * i )// function(d, i) { return gridSize * 11 + 25; })
+    // //     .attr("y", (d,i) => margin.left - width - 50) //function(d, i) { return (i * legendWidth + 20); })
+
+    // // legend
+    // //     .selectAll('rect')
+    // //     .attr("x", (d, i) => gridSize * 11)
+    // //     .attr("y", (d, i) => i * legendWidth + 7)
+    // //     .attr("width", gridSize/2)
+    // //     .attr("height", gridSize/2)
+    // //     .style("fill", (d, i) => myColor[i])
+    // //     .attr("class", "square");
+    // // legend.append("text")
+    // //     .attr("class", "mono")
+    // //     .text((d,i) => d) //function(d) { return "≥ " + Math.round(d); })
+    // //     .attr("x",width + gridSize * 11 + 35)// function(d, i) { return gridSize * 11 + 25; })
+    // //     .attr("y", (d,i) => height - 10 + i * legendWidth + 20) //function(d, i) { return (i * legendWidth + 20); })
 
     let tooltip = d3.select("body")
         .append("div")
