@@ -1,6 +1,7 @@
 import testData from "./assets/data/test.json"; /* Example of reading in data */
 // import sfGeoData from "./assets/data/san-francisco.json"; /* Example of reading in data */
-import sfGeoData from "./assets/data/san-francisco-test.json"; /* Example of reading in data */
+// import sfGeoData from "./assets/data/san-francisco-test.json"; /* Example of reading in data */
+import sfGeoData from "./assets/data/san-francisco-crime.json";
 
 // import sfGeoData from "./assets/data/world.json"; /* Example of reading in data */
 // import sfGeoData from "./assets/data/sf_test.json"; /* Example of reading in data */
@@ -54,6 +55,24 @@ function generateData(event) {
   }
 }
 
+var menu3 = document.getElementById("change_map");
+menu3.addEventListener("change", changeMap);
+
+function changeMap(event) {
+  console.log("Get the change!!!!");
+  if (menu3.value == '1') {
+    // alert(1);
+    drawSF(sfGeoData, "property crimes","#bar2");
+  } else if (menu3.value == '2') {
+    // alert(2);
+    drawSF(sfGeoData, "personal crimes","#bar2");
+  } else if (menu3.value == '3') {
+    // alert(3);
+    drawSF(sfGeoData, "statutory crimes","#bar2");
+  }
+  
+}
+
 // function initate()
 // {
 
@@ -93,7 +112,7 @@ drawStreamFromCsvAsync("coarse","#bar");
 drawCrimeTimeBarChart("WEAPON LAWS","#bar1");
 // drawCrimeTimeBarChart("#bar1")
 // drawSF(SFgeoData_update, "#bar");
-drawSF(sfGeoData, "#bar2");
+drawSF(sfGeoData, "property crimes","#bar2");
 
 // drawBarChart(testData["data"], "#bar2");
 // drawBarFromCsvAsync();

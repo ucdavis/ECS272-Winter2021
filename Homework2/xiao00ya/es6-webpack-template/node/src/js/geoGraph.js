@@ -1,13 +1,22 @@
 import * as d3 from "d3";
 
 
-export async function drawSF(data, id) {
+export async function drawSF(data, crime_type, id) {
+    d3.select(id).select("svg").remove();
 // ref: http://bl.ocks.org/sudeepdas/5167276
 // https://gist.github.com/cdolek/d08cac2fa3f6338d84ea
 // https://observablehq.com/@floledermann/drawing-maps-from-geodata-in-d3
 // http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922
 // https://opencagedata.com/reverse-geocoding/tutorial-building-a-reverse-geocoder
 // https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
+    var i;
+    var max_value = 0;
+    for (i = 0; i < data.features.length; i++) {
+        if (data.features[i].properties[crime_type] >max_value) {
+            max_value = data.features[i].properties[crime_type];
+        }
+    }
+
     const height = 0.5 * window.innerHeight;
     const width = 0.5 * window.innerWidth;
     const margin = ({top: 20, right: 10, bottom: 30, left: 10});
@@ -82,7 +91,7 @@ export async function drawSF(data, id) {
     // .style("fill", function() { return "teal" })
     .style("fill", function(d) { 
         // return color(d.properties.WEAPON_LAWS); })
-        return d3.interpolateOranges(d.properties.WEAPON_LAWS/100);})
+        return d3.interpolateOranges(d.properties[crime_type]/max_value);})
     .on("mouseover", function (d, i) {      
             // d3.select(this).transition()        
             //      .duration(50)      
@@ -90,7 +99,7 @@ export async function drawSF(data, id) {
             div.transition()        
       	        .duration(200)      
                 .style("opacity", .9);     
-            div.text("Crime Counts: " + i.properties.WEAPON_LAWS)
+            div.text("Crime Counts: " + i.properties[crime_type])
             //    .style("background-color", 'black')
                .style("left", (d.pageX) + "px")     
                .style("top", (d.pageY - 28) + "px");    
