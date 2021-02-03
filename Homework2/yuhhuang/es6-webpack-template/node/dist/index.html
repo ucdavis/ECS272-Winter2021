@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homework 2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+
+  </head>
+  <body>
+    <div>
+      <h1>ECS272 Homework 2</h1>
+      <h4>Yuhan Huang</h4>
+      <!--p class="myClass">Edit this :)</p-->
+</div>
+
+
+<div class="row">  
+  <div class="col-7">
+  <!-- col-sm-6 col-lg-8 -->
+  <div id="violinchart" ></div>
+  </div>
+
+  <div class="col-5"><div id="radarchart" ></div></div>
+  
+
+</div>
+
+<div class="row">
+  <div class="col-12"><div id="linechart" ></div></div>
+</div>
+
+  <div class="help-tip">
+    <p>Visualization 1: dynamic scatter plot shows the popularity metrics of the top 30 songs for each year from 1920; use the dropdown list to filter by years. Visualization 2: Spider chart illustrating different metrics for the 4 most popular song on Spotify since 1920; hover the cursor on data to highlight. Visualization 3: An overview time series of mean value of song metrics through the year; use the dropdown list to select the metric.</p>
+</div>
+
+
+
+
+
+
+<select id="selectButton_Violin">
+  <option selected="selected">1920-1945</option>
+  <option >1945-1970</option>
+  <option >1970-1995</option>
+  <option >1996-2021</option>
+</select>
+<select id="selectButton"></select>
+
+
+
+
+
+    <script src="./bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-array/1.2.1/d3-array.min.js" integrity="sha384-c+16cUIc0b/tqEZ9mRvDfI/r1Dg1Yq3JpWgZFW4mjN2QU7XXFWVB90PDFlV8SIAm" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-collection/1.0.4/d3-collection.min.js" integrity="sha384-H/Didu3qLpyrVmUqlvWapaxyhCzc+anaMa9uw+CHWHu+GNfClr91w8QgiLFIp7/V" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-dispatch/1.0.3/d3-dispatch.min.js" integrity="sha384-dGRK/lIqGrmmAoVA9K4pwKI4YL4BxIpaGa1dwU6lcRdpp5OJR6FoMZqxqzvCzFBS" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-request/1.0.6/d3-request.min.js" integrity="sha384-xsZEl8WRzIEBs+gkv/88ttcv7hmGnFJX8t8k6V+fZcrG2y5o1SXsCRLzl2S9HkFU" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-selection/1.1.0/d3-selection.min.js" integrity="sha384-AOxWgfcHKw/K6u7UX8IJ4vy418+zXnA6wB6P4/sobPFG0mM34UlLPHELGvI+aEX5" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.1/showdown.min.js" integrity="sha384-Mcx6WhltjdlkIwTWetAJIBNgD0lLtUcl//A7Ksp/vmVZVD2rzQ949wtmoehrDJd/" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+  </body>
+</html>
