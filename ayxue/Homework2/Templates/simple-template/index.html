@@ -39,6 +39,7 @@ text {
         </div>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
         <script>
 
 const map_margin = {top: 40, right: 30, bottom: 20, left: 30},
@@ -47,20 +48,20 @@ const map_margin = {top: 40, right: 30, bottom: 20, left: 30},
 // const map_width = 450;
 // const map_height = 300;
 const stream_margin = {top: 40, right: 30, bottom: 20, left: 30},
-    stream_width = 1920 - stream_margin.left - stream_margin.right,
+    stream_width = 1860 - stream_margin.left - stream_margin.right,
     stream_height = 300 - stream_margin.top - stream_margin.bottom;
 
 let mapsvg = d3.select('#geomap')
                     .append('svg')
                     // .attr("viewBox", [0, 0, map_width, map_height])
-                    .attr('id', 'map')
+                    // .attr('id', 'map')
                     .attr('width', map_width)
                     .attr('height', map_height);
 
 let spike_mapsvg = d3.select('#spikemap')
                     .append('svg')
                     // .attr("viewBox", [0, 0, map_width, map_height])
-                    .attr('id', 'map')
+                    // .attr('id', 'map')
                     .attr('width', map_width)
                     .attr('height', map_height);
 
@@ -190,7 +191,7 @@ function main(error, world, date_coord, month_gname) {
   // Add X axis
     let x = d3.scaleUtc()
         .domain(d3.extent(month_gname, d => new Date(d.date)))
-        .range([stream_margin.left, stream_width - stream_margin.right]);
+        .range([stream_margin.left + 250, stream_width - stream_margin.right]);
 
     let y = d3.scaleLinear()
         .domain([d3.min(series, d => d3.min(d, d => d[0])), d3.max(series, d => d3.max(d, d => d[1]))])
@@ -209,6 +210,19 @@ function main(error, world, date_coord, month_gname) {
     streamsvg.append("g")
         .call(xAxis);
     streamsvg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+
+    // streamgraph legend
+    streamsvg.append("g")
+        .attr("class", "legendOrdinal")
+        .attr("transform", "translate(0,0)");
+
+    var legendOrdinal = d3.legendColor()
+                    .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+                    .shapePadding(10)
+                    .scale(color);
+
+    streamsvg.select(".legendOrdinal")
+        .call(legendOrdinal);
 
     let Tooltip = streamsvg
                     .append("text")
