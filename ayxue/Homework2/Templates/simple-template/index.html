@@ -3,17 +3,21 @@
     <head>
 <style>
 
-#flex-container {
+#map-container {
+    display: flex;
+    flex-direction: row;
+}
+#container {
     display: flex;
     flex-direction: column;
 }
 
-#map {
+body {
     top: 0;
     background-color: black;
 }
 
-#map text {
+text {
     font-family: proxima-nova;
     font-size: 12px;
     fill: #666;
@@ -26,18 +30,24 @@
 </style>
     </head>
     <body>
-        <div id="flex-container">
-            <div id='geomap'></div>
+        <div id='container'>
+            <div id="map-container">
+                <div id='geomap'></div>
+                <div id='spikemap'></div>
+            </div>
             <div id="streamgraph"></div>
         </div>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/topojson.v1.min.js"></script>
         <script>
 
-const map_width = 450;
-const map_height = 300;
+const map_margin = {top: 40, right: 30, bottom: 20, left: 30},
+    map_width = 960 - map_margin.left - map_margin.right,
+    map_height = 600 - map_margin.top - map_margin.bottom;
+// const map_width = 450;
+// const map_height = 300;
 const stream_margin = {top: 40, right: 30, bottom: 20, left: 30},
-    stream_width = 450 - stream_margin.left - stream_margin.right,
+    stream_width = 1920 - stream_margin.left - stream_margin.right,
     stream_height = 300 - stream_margin.top - stream_margin.bottom;
 
 let mapsvg = d3.select('#geomap')
@@ -46,6 +56,14 @@ let mapsvg = d3.select('#geomap')
                     .attr('id', 'map')
                     .attr('width', map_width)
                     .attr('height', map_height);
+
+let spike_mapsvg = d3.select('#spikemap')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, map_width, map_height])
+                    .attr('id', 'map')
+                    .attr('width', map_width)
+                    .attr('height', map_height);
+
 let streamsvg = d3.select("#streamgraph")
                     .append("svg")
                     // .attr("viewBox", [0, 0, stream_width, stream_height])
@@ -60,6 +78,10 @@ let projection = d3.geoMercator().translate([map_width/2, map_height/2]),
     path = d3.geoPath(projection);
 
 
+// let date_coord_filter = function(gname) {
+//     let
+// }
+
 d3.queue()
     .defer(d3.json, 'world-50m.json')
     .defer(d3.csv, 'date_coord.csv')
@@ -70,6 +92,9 @@ function main(error, world, date_coord, month_gname) {
     let color = d3.scaleOrdinal()
         .domain(month_gname.columns.slice(1))
         .range(d3.schemeCategory10);
+    let length = d3.scaleLinear([0, d3.max(date_coord, d => d.value)], [0, 10])
+    let spike = (length, width = 7) => `M${-width / 2},0L0,${-length}L${width / 2},0`
+    let keys = month_gname.columns.slice(1);
 
     // draw map
     date_coord.forEach(d => { d.coords = projection([d.longitude, d.latitude]); })
@@ -98,17 +123,62 @@ function main(error, world, date_coord, month_gname) {
         .attr("stroke-linejoin", "round")
         .attr("d", path(borders));
 
-    mapsvg
+    // draw map
+    // date_coord.forEach(d => { d.coords = projection([d.longitude, d.latitude]); })
+    // let countries = topojson.feature(world, world.objects.countries).features;
+    // let borders = topojson.mesh(
+    //     world,
+    //     world.objects.countries,
+    //     (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
+    //     );
+
+    // length = d3.scaleLinear([0, d3.max(data, d => d.value)], [0, 200])
+
+    spike_mapsvg
         .append('g')
-        .classed('events', true)
-        .selectAll('.event')
-        .data(date_coord)
+        .classed('countries', true)
+        .selectAll(".country")
+        .data(countries)
         .enter()
-        .append('circle')
-        .attr("fill", function(d) { return color(d.gname); })
-        .attr('r', 1)
-            .attr('cx', function(d) {return d.coords[0];})
-            .attr('cy', function(d) {return d.coords[1];})
+        .append("path")
+        .attr("class", "country")
+        .attr("d", path);
+
+    spike_mapsvg
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr('stroke-width', 0.1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(borders));
+
+    for (i in keys) {
+        let gname = keys[i];
+        let cl_name = gname.slice(0,3);
+        g_data = date_coord.filter(d => d.gname == gname);
+        mapsvg.append('g')
+                .classed(cl_name, true)
+                .selectAll('.events')
+                .data(g_data)
+                .enter()
+                .append('circle')
+                .attr("fill", function(d) { return color(d.gname);})
+                .attr('r', 1)
+                .attr('cx', function(d) {return d.coords[0];})
+                .attr('cy', function(d) {return d.coords[1];})
+
+        spike_mapsvg.append("g")
+                    .classed(cl_name, true)
+                    .selectAll('.events')
+                    .data(g_data)
+                    .enter()
+                    .append('path')
+                    // .attr("fill", function(d) { return color(d.gname);})
+                    .attr("fill-opacity", 0.3)
+                    .attr("stroke", function(d) { return color(d.gname);})
+                    .attr("transform", d => `translate(${d.coords})`)
+                    .attr("d", d => spike(length(d.value)))
+    }
 
     // draw streamgraph
     let series = d3.stack()
@@ -140,28 +210,42 @@ function main(error, world, date_coord, month_gname) {
         .call(xAxis);
     streamsvg.selectAll(".tick line").attr("stroke", "#b8b8b8")
 
-    var Tooltip = streamsvg
-        .append("text")
-        .attr("x", 0)
-        .attr("y", 0)
-        .style("opacity", 0)
-        .style("font-size", 10)
+    let Tooltip = streamsvg
+                    .append("text")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .style("opacity", 0)
+                    .style("font-size", 10)
     // Three function that change the tooltip when user hover / move / leave a cell
 
-    var mouseover = function(d) {
+    let mouseover = function(d, i) {
         Tooltip.style("opacity", 1)
         d3.selectAll(".myArea").style("opacity", .2)
         d3.select(this)
-        .style("stroke", "black")
-        .style("opacity", 1)
-    }
-    var mousemove = function(d,i) {
+            .style("stroke", "black")
+            .style("opacity", 1)
         grp = keys[i]
         Tooltip.text(grp)
+        for (i in keys) {
+            let gname = keys[i];
+            let cl_name = gname.slice(0,3);
+            if (gname == grp) {
+                d3.selectAll('.'+cl_name).style('opacity', 1);
+            }
+            else {
+                d3.selectAll('.'+cl_name).style('opacity', 0);
+            }
+        }
     }
-    var mouseleave = function(d) {
+
+    let mouseleave = function(d) {
         Tooltip.style("opacity", 0)
         d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
+        for (i in keys) {
+            let gname = keys[i];
+            let cl_name = gname.slice(0,3);
+            d3.selectAll('.'+cl_name).style('opacity', 1);
+        }
     }
 
     streamsvg.selectAll("mylayers")
@@ -172,7 +256,7 @@ function main(error, world, date_coord, month_gname) {
             .style("fill", function(d) { return color(d.key); })
             .attr("d", area)
             .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
+            // .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
 }
         </script>
