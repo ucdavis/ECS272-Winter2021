@@ -28,10 +28,11 @@ export async function drawLineFromCsvAsync(){
 function drawLinePlot(data, id) {
 
     // set the dimensions and margins of the graph
-    const margin = {top: 50, right: 50, bottom: 50, left: 50};
-    const parentDiv = document.getElementById(id.substring(1));
-    const height = 400;
-    const width = parentDiv.clientWidth
+    const margin = {top: 20, right: 30, bottom: 100, left: 60};
+    //const parentDiv = document.getElementById(id.substring(1));
+    const height = 400 - margin.top - margin.bottom;
+    //const width = parentDiv.clientWidth;
+    const width = 460 - margin.left - margin.right;
 
     // var width = 500;
     // var height = 300;
@@ -60,22 +61,24 @@ function drawLinePlot(data, id) {
 
     // Add X axis --> it is a date format
     const xScale = d3.scaleTime()
-        .domain(d3.extent(data[0].values, d => d.year))
+        .domain([d3.min(data.map(year => d3.min(year.values.map(value => value.year))))
+            , d3.max(data.map(year => d3.max(year.values.map(value => value.year))))])
         //.domain(data.map(function(d) { return d.year; }))
         .range([ 0, width ]);
 
     // Add Y axis
     const yScale = d3.scaleLinear() 
-        .domain([0, d3.max(data[0].values, d => d.popularity)])
+        //.domain([0, d3.max(data[0].values, d => d.popularity)])
+        .domain([0, d3.max(data.map(artist => d3.max(artist.values.map(value => value.popularity))))])
         //.domain([0, d3.max(data, function(d) { return d.popularity; })])
         .range([ height, 0 ]);
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // append the svg object to the body of the page
-    const svg = d3.select(id)
+    var svg = d3.select("body")
         .append("svg")
-            .attr("width", '100%')
+            .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
         .append("g")
             .attr("transform",
@@ -99,7 +102,7 @@ function drawLinePlot(data, id) {
             svg.append("text")
                 .attr("class", "title-text")
                 .style("fill", color(i))
-                .text(d.artists)
+                .text(i.values[0].artists)
                 .attr("text-anchor", "middle")
                 .attr("x", (width-margin.left)/2)
                 .attr("y", 5);
@@ -140,7 +143,7 @@ function drawLinePlot(data, id) {
         .data(d => d.values).enter()
         .append("g")
         .attr("class", "circle")  
-        .on("mouseover", function(d) {
+        .on("mouseover", function(e, d) {
             d3.select(this)     
               .style("cursor", "pointer")
               .append("text")
@@ -195,8 +198,8 @@ function drawLinePlot(data, id) {
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")
-        .attr("x", -150)
-        .attr("y", -30)
+        .attr("x", -100)
+        .attr("y", -35)
         .attr("transform", "rotate(-90)")
         .attr("fill", "#000")
         .text("Popularity Levels");

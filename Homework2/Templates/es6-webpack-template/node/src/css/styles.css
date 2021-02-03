@@ -21,3 +21,10 @@ svg {
 .title-text {
   font-size: 12px;
 }
+
+.axis {
+  opacity: 0.4;
+}
+.axis:hover {
+  opacity: 1;
+}
