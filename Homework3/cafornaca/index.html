@@ -4,14 +4,28 @@
         <meta charset="utf-8">
         <title>Charlie Fornaca's ECS-272 Homework 3 Dashboard: Pokemon Edition</title>
         <script src="https://d3js.org/d3.v6.min.js"></script>
+        <style>
+            .bubbles {
+                stroke-width: 1px;
+                stroke: black;
+                opacity: .8
+            }
+
+            .bubbles:hover {
+                stroke: black;
+            }
+        </style>
     </head>
   
     <body>
-        <title>Charlie Fornaca's ECS-272 Homework 3 Dashboard: Pokemon Edition</title>
+        <h1>Charlie Fornaca's ECS-272 Homework 3 Dashboard: Pokemon Edition</h1>
+        
+        <!-- Load color scale -->
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-
-
+        <!-- Create a div where the graph will take place -->
+        <div id="my_dataviz_1"></div>
+        
         <script src="main.js"></script>
-
     </body>
 </html>
