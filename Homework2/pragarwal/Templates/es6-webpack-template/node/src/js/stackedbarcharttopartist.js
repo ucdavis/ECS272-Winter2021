@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 import csvPath from '../assets/data/TopArtistbyCent.csv';
 
-
 export async function drawStackedBarChartTopArtist(){
 
     // set the dimensions and margins of the graph
@@ -19,7 +18,7 @@ export async function drawStackedBarChartTopArtist(){
                     "translate(" + margin.left + "," + margin.top + ")");
 
 
-        const data = await d3.csv(csvPath);
+    const data = await d3.csv(csvPath);
 
     var subgroups = data.columns.slice(1)
 
@@ -31,8 +30,9 @@ export async function drawStackedBarChartTopArtist(){
     console.log("Groupsssss: " + groups)
 
 
+    
     var x = d3.scaleBand()
-        .domain(groups)
+        .domain([1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020])
         .range([0, width])
         .padding([0.2])
         svg.append("g")
@@ -50,23 +50,43 @@ export async function drawStackedBarChartTopArtist(){
                 .domain(subgroups)
                 .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7'])
 
+      
+
     var stackedData = d3.stack()
                         .keys(subgroups)
                         (data)
+
+
+    console.log("Xxxxxxx..." + x(1950))
 
     // Show the bars
     svg.append("g")
     .selectAll("g")
     .data(stackedData)
-    .enter()
-    .append("g")
-    .attr("fill", function(d) { return color(d.key); })
+    .enter().append("g")
+        .attr("fill", function(d) { return color(d.key); })
     .selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
         .attr("x", function(d) { return x(d.data.year); })
-        .attr("y", function(d) { return y(d[0] + d[1]); })
-        .attr("height", function(d) { return y(d[0]) - y(d[1]+d[0]); })
-        .attr("width",x.bandwidth()-1)
+        .attr("y", function(d) { return y(d[1]); })
+        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+        .attr("width",x.bandwidth())
+        .append("title")
+      //.text(d => `${d.data.year} ${d.key}`);
+
+    // svg.append("g")
+    // .selectAll("g")
+    // .data(stackedData)
+    // .join("g")
+    //   .attr("fill", d => color(d.key))
+    // .selectAll("rect")
+    // .data(d => d)
+    // .join("rect")
+    //   .attr("x", d => x(d.data.year))
+    //   .attr("y", d => y(d[1]))
+    //   .attr("height", d => y(d[0]) - y(d[1]))
+    //   .attr("width", x.bandwidth())
+    // .append("title")
     
 }

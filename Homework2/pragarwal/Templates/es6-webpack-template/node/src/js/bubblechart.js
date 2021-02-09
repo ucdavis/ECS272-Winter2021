@@ -97,6 +97,13 @@ export async function drawBubbleChart(){
                     .style("padding", "10px")
                     .style("color", "white")
 
+                    tooltip.append("text")
+                    .attr("x", 15)
+                    .attr("dy", "1.2em")
+                    .style("text-anchor", "middle")
+                    .attr("font-size", "12px")
+                    .attr("font-weight", "bold");
+
     
     var showTooltip = function(d) {
                         
@@ -141,7 +148,13 @@ export async function drawBubbleChart(){
         .style("opacity", "1")
         .attr("stroke", "black")
         .style("stroke-width", '2.5px')
-        .on('mouseover', showTooltip)
+        //.on('mouseover', showTooltip)
+        .on('mouseover', function(d) {
+            tooltip.transition()
+            tooltip.duration(200)
+            tooltip.style("opacity", 1)
+            tooltip.select("text").text(d.popularity);
+        })
         .on("mousemove", moveTooltip )
         .on("mouseleave", hideTooltip)
 
