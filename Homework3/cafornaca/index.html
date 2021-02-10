@@ -12,6 +12,7 @@
         <script src="https://d3js.org/d3.v3.js"></script>
         <script>
             var d3v3 = window.d3;
+            window.d3 = null;
         </script>
 
         <h2>Height vs. Weight by Primary Type</h2>
@@ -30,28 +31,29 @@
 
         <div>
             <script>
+                function drawgraph(){
                 var margin = {top: 20, right: 20, bottom: 30, left: 40},
                 width = 960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
 
                 // setup x 
                 var xValue = function(d) { return d.Weight_kg;}, // data -> value
-                    xScale = d3.scale.linear().range([0, width]), // value -> display
+                    xScale = d3v3.scale.linear().range([0, width]), // value -> display
                     xMap = function(d) { return xScale(xValue(d));}, // data -> display
-                    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+                    xAxis = d3v3.svg.axis().scale(xScale).orient("bottom");
 
                 // setup y
                 var yValue = function(d) { return d.Height_m; }, // data -> value
-                    yScale = d3.scale.linear().range([height, 0]), // value -> display
+                    yScale = d3v3.scale.linear().range([height, 0]), // value -> display
                     yMap = function(d) { return yScale(yValue(d));}, // data -> display
-                    yAxis = d3.svg.axis().scale(yScale).orient("left");
+                    yAxis = d3v3.svg.axis().scale(yScale).orient("left");
 
                 // setup fill color
                 var cValue = function(d) { return d.Type_1;},
-                    color = d3.scale.category20b();
+                    color = d3v3.scale.category20b();
 
                 // add the graph canvas to the body of the webpage
-                var svg = d3.select("#my_dataviz_1")
+                var svg = d3v3.select("#my_dataviz_1")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
@@ -59,13 +61,13 @@
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
                 // add the tooltip area to the webpage
-                var tooltip = d3.select("#my_dataviz_1")
+                var tooltip = d3v3.select("#my_dataviz_1")
                     .append("div")
                     .attr("class", "tooltip")
                     .style("opacity", 0);
 
                 // load data
-                d3.csv("https://raw.githubusercontent.com/cafornaca/ECS272-Winter2021/main/Homework3/cafornaca/pokemon_alopez247.csv", function(data) {
+                d3v3.csv("https://raw.githubusercontent.com/cafornaca/ECS272-Winter2021/main/Homework3/cafornaca/pokemon_alopez247.csv", function(data) {
 
                 // change string (from CSV) into number format
                 data.forEach(function(d) {
@@ -75,8 +77,8 @@
                 });
 
                 // don't want dots overlapping axis, so add in buffer to data domain
-                xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-                yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+                xScale.domain([d3v3.min(data, xValue)-1, d3v3.max(data, xValue)+1]);
+                yScale.domain([d3v3.min(data, yValue)-1, d3v3.max(data, yValue)+1]);
 
                 // x-axis
                 svg.append("g")
@@ -117,8 +119,8 @@
                             .style("opacity", .9);
                         tooltip.html(d.Type_1 + "<br/> (" + xValue(d) 
                             + ", " + yValue(d) + ")")
-                            .style("left", (d3.event.pageX + 5) + "px")
-                            .style("top", (d3.event.pageY - 28) + "px");
+                            .style("left", (d3v3.event.pageX + 5) + "px")
+                            .style("top", (d3v3.event.pageY - 28) + "px");
                     })
                     .on("mouseout", function(d) {
                         tooltip.transition()
@@ -147,7 +149,9 @@
                     .attr("dy", ".35em")
                     .style("text-anchor", "end")
                     .text(function(d) { return d;})
-                });
+                });}
+
+                drawgraph(d3v3);
 
             </script>
         </div>
@@ -157,19 +161,20 @@
 
 
 
-<!--            
+       
         <h2>Bodies & Breeding: How do egg groups and body types compare?</h2>   
-        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
+        <h3>Click a button to get started and change the data.</h3>
         <button onclick="update(data1)">Body Type</button>
         <button onclick="update(data2)">Egg Group</button> 
+        <p>I couldn't get my labels to be placed just right. :(</p>
+
 
 
         <script src="https://d3js.org/d3.v4.js"></script>
-        <script>
-            var d3v4 = window.d3;
-        </script>
-
+        <!-- <script>
+            var d3 = window.d3;
+            window.d3 = null;
+        </script> -->
 
         <div id="my_dataviz_2"></div>
         <div>
@@ -199,56 +204,66 @@
                     HumanLike: 37, Mineral: 46, Monster: 74, Undiscovered: 73, Water_1: 74, Water_2: 15, Water_3: 14};
 
                 // set the color scale
-                // var color = d3.scale.category20b();
-                var color = d3.scaleOrdinal()
-                .domain(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" , "m"])
-                .range(d3.schemeDark2);
-
+                var color = d3.scaleOrdinal(d3.schemeCategory20b)
+                
                 // A function that create / update the plot for a given variable:
                 function update(data) {
 
-                // Compute the position of each group on the pie:
-                var pie = d3.pie()
-                    .value(function(d) {return d.value; })
-                    .sort(function(a, b) { console.log(a) ; return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
-                var data_ready = pie(d3.entries(data))
+                    // Compute the position of each group on the pie:
+                    var pie = d3.pie()
+                        .value(function(d) {return d.value; })
+                        .sort(function(a, b) { console.log(a) ; return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
+                    var data_ready = pie(d3.entries(data))
 
-                // map to data
-                var u = svg.selectAll("path")
-                    .data(data_ready)
+                    // shape helper to build arcs:
+                    // var arcGenerator = d3.arc()
+                    // .innerRadius(0)
+                    // .outerRadius(radius)
 
-                // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-                u
-                    .enter()
-                    .append('path')
-                    .merge(u)
-                    .transition()
-                    .duration(1000)
-                    .attr('d', d3.arc()
-                    .innerRadius(0)
-                    .outerRadius(radius)
-                    )
-                    .attr('fill', function(d){ return(color(d.data.key)) })
-                    .attr("stroke", "white")
-                    .style("stroke-width", "2px")
-                    .style("opacity", 1)
+                    // map to data
+                    var u = svg.selectAll("path")
+                        .data(data_ready)
 
-                // remove the group that is not present anymore
-                u
-                    .exit()
-                    .remove()
+                    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+                    u
+                        .enter()
+                        .append('path')
+                        .merge(u)
+                        .transition()
+                        .duration(1000)
+                        .attr('d', d3.arc()
+                        .innerRadius(0)
+                        .outerRadius(radius)
+                        )
+                        .attr('fill', function(d){ return(color(d.data.key)) })
+                        .attr("stroke", "white")
+                        .style("stroke-width", "2px")
+                        .style("opacity", 1)
 
-                }
+                    // Now add the annotation. Use the centroid method to get the best coordinates
+                    svg
+                        .selectAll('mySlices')
+                        .data(data_ready)
+                        .enter()
+                        .append('text')
+                        .text(function(d){ return d.data.key})
+                        .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+                        .style("text-anchor", "middle")
+                        .style("font-size", 17)
+                    
+                    // remove the group that is not present anymore
+                    u.exit().remove()
+
 
                 // Initialize the plot with the first dataset
                 update(data1)
+                }
             </script>
         </div>
- -->
+ 
 
-        <script>window.d3 = null;</script>
-        <script src="https://d3js.org/d3.v6.js"></script>
-        <script src="main.js"></script>
+        <!-- <script src="https://d3js.org/d3.v6.js"></script>
+        <script src="main.js"></script> -->
 
 
 
