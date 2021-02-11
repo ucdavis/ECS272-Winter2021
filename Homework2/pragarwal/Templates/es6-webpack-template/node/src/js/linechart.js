@@ -4,12 +4,25 @@ import csvPath from '../assets/data/data_by_year.csv';
 
 export async function drawLineChart(){
 
+
     // set the dimensions and margins of the graph
     var margin = {top: 20, right: 20, bottom: 50, left: 50},
     width = 600 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
 
+var zoom = d3.zoom()
+    .scaleExtent([1, 5])
+    .extent([100, 100], [width-100, height-100])
+    .on("zoom", zoomed);
+
+function zoomed() {
+    svg.selectAll(".line")
+        .attr("transform", d3.event.transform);
+    d3.selectAll('.line').style("stroke-width", 2/d3.event.transform.k);
+    gX.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+    gY.call(yAxis.scale(d3.event.transform.rescaleY(y)));
+}
 
     // List of groups (here I have one group per column)
     var allGroup = ["danceability", "energy", "liveness", "acousticness", "valence"]
@@ -30,36 +43,34 @@ export async function drawLineChart(){
 
         console.log("colorrrrrr:   " + myColor["danceability"]);
     // parse the date / time
-    var parseTime = d3.timeParse("%y");
+    var parseTime = d3.timeParse("%Y");
 
     // set the ranges
-    var x = d3.scaleLinear()
-                .domain([1920, 2020])
+    var x = d3.scaleTime()
+                //.domain([1920, 2020])
                 .range([0, width]);
     var y = d3.scaleLinear()
                 .range([height, 0]);
 
-    // define the 1st line
     var valueline = d3.line()
-    .x(function(d) { return x(d.year); })
-    .y(function(d) { return y(d.danceability); });
+                        .x(function(d) { return x(d.year); })
+                        .y(function(d) { return y(d.danceability); });
 
-    // define the 2nd line
     var valueline2 = d3.line()
-    .x(function(d) { return x(d.year); })
-    .y(function(d) { return y(d.energy); });
+                        .x(function(d) { return x(d.year); })
+                        .y(function(d) { return y(d.energy); });
 
     var valueline3 = d3.line()
-    .x(function(d) { return x(d.year); })
-    .y(function(d) { return y(d.liveness); });
+                        .x(function(d) { return x(d.year); })
+                        .y(function(d) { return y(d.liveness); });
 
     var valueline4 = d3.line()
-    .x(function(d) { return x(d.year); })
-    .y(function(d) { return y(d.acousticness); });
+                        .x(function(d) { return x(d.year); })
+                        .y(function(d) { return y(d.acousticness); });
 
     var valueline5 = d3.line()
-    .x(function(d) { return x(d.year); })
-    .y(function(d) { return y(d.valence); });
+                        .x(function(d) { return x(d.year); })
+                        .y(function(d) { return y(d.valence); });
 
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
@@ -69,6 +80,7 @@ export async function drawLineChart(){
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
+                .call(zoom)
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
@@ -110,8 +122,8 @@ export async function drawLineChart(){
                           .duration(200)
                           //.style("opacity", 1)
                     //tooltip
-                          .style("opacity", 2)
-                          .style("stroke-width", '3.5px')
+                          //.style("opacity", 2)
+                          .style("stroke-width", '4.5px')
 
                           //.html("Attribute: " + d.valueline)
                         //   .style("left", (d3.mouse(this)[0]+30) + "px")
@@ -131,67 +143,84 @@ export async function drawLineChart(){
                     d3.select(this)
                           .transition()
                           .duration(100)
-                          .style("opacity", 1.0)
-                          .style("stroke-width", "2px")
+                          //.style("opacity", 4.5)
+                          .style("stroke-width", "4.5px")
                       }
                     
     
-    // Add the valueline path.
+
     var line = svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "#fcd471")
-    .attr("d", valueline)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+                    .data([data])
+                    .attr("class", "line")
+                     .style("stroke", "#ffffff")
+                     .style("stroke-width", "4.5px")
+                     .attr("d", valueline)
+                     .style("opacity", 1)
+                     .on("mouseover", handleMouseOver )
+                     //.on("mousemove", moveTooltip )
+                     .on("mouseleave", handleMouseOut );
+  
+    // Add the valueline path.
+    var line1 = svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .style("stroke", "#fcd471")
+                    .attr("d", valueline)
+                    .style("opacity", 0.4)
+                    //.on("mouseover", handleMouseOver )
+                    //.on("mousemove", moveTooltip )
+                    //.on("mouseleave", handleMouseOut );
 
     // Add the valueline2 path.
-    var line = svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "#fbafa1")
-    .attr("d", valueline2)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    var line2 = svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .style("stroke", "#fbafa1")
+                    .attr("d", valueline2)
+                    .style("opacity", 0.4)
+                    //.on("mouseover", handleMouseOver )
+                    //.on("mousemove", moveTooltip )
+                    //.on("mouseleave", handleMouseOut );
 
     // Add the valueline3 path.
-    var line = svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "#fb84ce")
-    .attr("d", valueline3)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    var line3 = svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .style("stroke", "#fb84ce")
+                    .attr("d", valueline3)
+                    .style("opacity", 0.4)
+                    //.on("mouseover", handleMouseOver )
+                    //.on("mousemove", moveTooltip )
+                    //.on("mouseleave", handleMouseOut );
 
     // Add the valueline4 path.
-    var line = svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "#ef54f1")
-    .attr("d", valueline4)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    var line4 = svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .style("stroke", "#ef54f1")
+                    .attr("d", valueline4)
+                    .style("opacity", 0.4)
+                    //.on("mouseover", handleMouseOver )
+                    //.on("mousemove", moveTooltip )
+                    //.on("mouseleave", handleMouseOut );
 
     // Add the valueline5 path.
-    var line = svg.append("path")
-    .data([data])
-    .attr("class", "line")
-    .style("stroke", "#c4fa70")
-    .attr("d", valueline5)
-    .on("mouseover", handleMouseOver )
-    //.on("mousemove", moveTooltip )
-    .on("mouseleave", handleMouseOut );
+    var line5 = svg.append("path")
+                    .data([data])
+                    .attr("class", "line")
+                    .style("stroke", "#c4fa70")
+                    .attr("d", valueline5)
+                    .style("opacity", 0.4)
+                    //.on("mouseover", handleMouseOver )
+                    //.on("mousemove", moveTooltip )
+                    //.on("mouseleave", handleMouseOut );
 
     // Add the X Axis
     svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .attr("background-color", "white")
     .attr("class", "axisWhite")
-    .call(d3.axisBottom(x))
+    .call(d3.axisBottom(x).tickFormat(d3.format("d")))
     .call(g =>
         g .select(".tick:last-of-type text")
           .clone()
@@ -219,12 +248,13 @@ export async function drawLineChart(){
         line
             .datum(dataFilter)
             .transition()
-            .duration(1000)
+            .duration(2000)
             .attr("d", d3.line()
                                 .x(function(d) { return x(d.year) })
                                 .y(function(d) { return y(d.value) })
             )
             .attr("stroke", function(d){ return myColor(selectedGroup) })
+            
       }
 
       // When the button is changed, run the updateChart function
@@ -235,7 +265,20 @@ export async function drawLineChart(){
         update(selectedOption)
     })
 
+    // Variable to Hold Total Length
+    var totalLength = line.node().getTotalLength();
 
+// Set Properties of Dash Array and Dash Offset and initiate Transition
+    line
+        .attr("stroke-dasharray", totalLength + " " + totalLength)
+        .attr("stroke-dashoffset", totalLength)
+    .transition() // Call Transition Method
+        .duration(7000) // Set Duration timing (ms)
+        .ease(d3.easeLinear) // Set Easing option
+        .attr("stroke-dashoffset", 0); // Set final value of dash-offset for transition
+
+
+    
     var colors = ["#fcd471", "#fbafa1", "#fb84ce", "#ef54f1", "#c4fa70"]
     var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
     var padding = 400;
@@ -271,6 +314,6 @@ export async function drawLineChart(){
                 })
                 .attr('text-anchor', 'start')
                 .attr('alignment-baseline', 'hanging');
-  
 
 }
+  

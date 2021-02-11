@@ -32,6 +32,7 @@ export async function drawStreamGraph(){
     svg.append("g")
         .attr("transform", "translate(0," + height*0.8 + ")")
         .call(d3.axisBottom(x)
+                .tickFormat(d3.format("d"))
                 .tickSize(-height*2)
                 .tickValues([1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020]))
         .select(".domain").remove()
@@ -73,7 +74,7 @@ export async function drawStreamGraph(){
     // Three function that change the tooltip when user hover / move / leave a cell
     var mouseover = function(d) {
     Tooltip.style("opacity", 0.5)
-    d3.selectAll(".myArea").style("opacity", .2)
+    d3.selectAll(".myArea").style("opacity", 0.1)
     d3.select(this)
     //.style("stroke", "black")
     .style("opacity", 0.8)
