@@ -21,6 +21,7 @@ class Sk_CirclePlot extends Component{
         let width = this.props.width;
         let height = this.props.height;
         let radius = this.props.radius;
+        d3.select('#CirclePlot').selectAll("*").remove();
         let svg = d3.select('#CirclePlot')
                     .append('svg')
                     .attr("width",width)

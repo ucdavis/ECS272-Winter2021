@@ -64,7 +64,8 @@ class Sk_VoronoiDiagram extends Component{
     drawCirclePlot(data){
         let width = this.props.width;
         let height = this.props.height;
-        let radius = width/10;
+        let radius = width/40;
+        d3.select('#CirclePlot').selectAll("*").remove();
         let svg = d3.select('#CirclePlot')
                     .append('svg')
                     .attr("width",width)
@@ -74,22 +75,18 @@ class Sk_VoronoiDiagram extends Component{
         console.log("circleplotting");
 
         const circles = data.map((data)=>{
-            data["cx"] = Math.random() * (width - radius*2);
-            data["cy"] = Math.random() * (height - radius*2);
+            data["cx"] = Math.random() * (width - radius*2)+radius/4;
+            data["cy"] = Math.random() * (height - radius*2)+radius/4;
             return data;
         });
 
-        let drag = d3.drag()
-                     .on("start",(event,data)=>{
-                         d3.select(this).raise().attr("stroke","black");
-                     })
-                     .on("drag",(event,data)=>{
-                        d3.select(this).attr("cx", data.cx = event.x)
-                                        .attr("cy", data.cy = event.y);
-                     })
-                     .on("end",(event,data)=>{
-                        d3.select(this).attr("stroke", null);
-                     });
+        console.log("circles",circles)
+
+        svg.append("text")
+            .attr("transform","translate(50,50)")
+            .attr("id","cp_counter")
+            .text("Selected Appearances Sum: 0");
+
 
         svg.selectAll("circle")
             .data(circles)
@@ -98,7 +95,33 @@ class Sk_VoronoiDiagram extends Component{
             .attr("cy",data=>data["cy"])
             .attr("r",radius)
             .attr("fill",data=>data["color"])
-            .call(drag);
+            .attr("id", (data,index)=>{
+                return "cp"+index;
+            })
+            .on("click",(event)=>{
+                // d3.select(this).transition()
+                //                .attr("fill", "black");
+                const curr_text = d3.select("#cp_counter").text();
+                let split_text = curr_text.split(":");
+                if(d3.select("#"+event.target.id).attr("stroke")!="rgb(255, 0, 0)"){
+                    d3.select("#"+event.target.id)
+                    .transition()
+                    .attr("stroke", "red");
+                    let appearance = Number(circles[Number(event.target.id.replace("cp",""))]["appearance"]);
+                    d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])+appearance));
+                
+                }else{
+                    d3.select("#"+event.target.id)
+                    .transition()
+                    .attr("stroke", "none");  
+                    // d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])-circles[Number(event.target.id.replace("cp"))]["appearance"]));
+                    let appearance = Number(circles[Number(event.target.id.replace("cp",""))]["appearance"]);
+                    d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])-appearance));
+                }
+                // console.log(d3.select("#"+event.target.id).attr("stroke"));
+
+
+            });
     }
 
 
