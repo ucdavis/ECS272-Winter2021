@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 import { data_processing,data_cleaning } from './data_processing';
-import { zoomTransform } from 'd3';
+import Sk_CirclePlot from './Sk_CirclePlot'
 
 class Sk_VoronoiDiagram extends Component{
 
     constructor(props){
         super(props);
         this.state = {
-            radius:25,
-            zoomState: null
+            radius:10,
+            zoomState: null,
+            circlePlotData:null
         };
         this.handleChange = this.handleChange.bind(this);
         
@@ -53,11 +54,51 @@ class Sk_VoronoiDiagram extends Component{
     
       }
 
-    handleZoom(state){
-        // console.log("handle zooming");
-        this.setState({
-            zoomState: state
+    // handleZoom(state){
+    //     // console.log("handle zooming");
+    //     this.setState({
+    //         zoomState: state
+    //     });
+    // }
+
+    drawCirclePlot(data){
+        let width = this.props.width;
+        let height = this.props.height;
+        let radius = width/10;
+        let svg = d3.select('#CirclePlot')
+                    .append('svg')
+                    .attr("width",width)
+                    .attr("height",height)
+                    .style("background","grey");
+
+        console.log("circleplotting");
+
+        const circles = data.map((data)=>{
+            data["cx"] = Math.random() * (width - radius*2);
+            data["cy"] = Math.random() * (height - radius*2);
+            return data;
         });
+
+        let drag = d3.drag()
+                     .on("start",(event,data)=>{
+                         d3.select(this).raise().attr("stroke","black");
+                     })
+                     .on("drag",(event,data)=>{
+                        d3.select(this).attr("cx", data.cx = event.x)
+                                        .attr("cy", data.cy = event.y);
+                     })
+                     .on("end",(event,data)=>{
+                        d3.select(this).attr("stroke", null);
+                     });
+
+        svg.selectAll("circle")
+            .data(circles)
+            .join("circle")
+            .attr("cx",data=>data["cx"])
+            .attr("cy",data=>data["cy"])
+            .attr("r",radius)
+            .attr("fill",data=>data["color"])
+            .call(drag);
     }
 
 
@@ -88,6 +129,7 @@ class Sk_VoronoiDiagram extends Component{
                 return data["Director"];
             });
 
+
             names = [...new Set(names)];
             // console.log(names);
 
@@ -102,15 +144,15 @@ class Sk_VoronoiDiagram extends Component{
                             .domain([0,d3.max(top_directors,data=>data["appearance"])])
                             .range([height-margin.bottom,margin.top]);
             
-            if(this.state.zoomState!=null){
-                const updated_y_domain = this.state.zoomState.rescaleY(y_scale).domain();
-                y_scale.domain(updated_y_domain);
-                const updated_x_domain = this.state.zoomState.rescaleX(x_scale).domain();
-                x_scale.domain(updated_x_domain);
-                console.log(x_scale.domain());
-                console.log(y_scale.domain());
+            // if(this.state.zoomState!=null){
+            //     const updated_y_domain = this.state.zoomState.rescaleY(y_scale).domain();
+            //     y_scale.domain(updated_y_domain);
+            //     const updated_x_domain = this.state.zoomState.rescaleX(x_scale).domain();
+            //     x_scale.domain(updated_x_domain);
+            //     console.log(x_scale.domain());
+            //     console.log(y_scale.domain());
 
-            }
+            // }
 
             let colors = d3.scaleSequential().domain([0,d3.max(top_directors,data=>data["appearance"])]).interpolator(d3.interpolateBlues);
 
@@ -131,42 +173,93 @@ class Sk_VoronoiDiagram extends Component{
                 .style('stroke-opacity', 1);
 
             // console.log("scatterplot",scatterplots);
-            svg.selectAll("text")
-                .data(scatterplots)
-                .enter()
-                .append("text")
-                .attr("transform",data=>{
-                    return "translate("+data[0]+","+data[1]+")";
-                })
-                .style("font-size",data=>{
-                    return this.state.radius+"px";
-                })
-                .attr("fill",data=>colors(data[2]))
-                .text(data=>data[3]);
+            let words = svg.selectAll("text")
+                            .data(scatterplots)
+                            .enter()
+                            .append("text")
+                            .attr("transform",data=>{
+                                return "translate("+data[0]+","+data[1]+")";
+                            })
+                            .style("font-size",data=>{
+                                return this.state.radius+"px";
+                            })
+                            .attr("fill",data=>colors(data[2]))
+                            .style("text-anchor", "middle")
+                            .text(data=>data[3]);
+
 
             svg.append("g")
                 .attr("transform","translate("+margin.left+",0)")
                 .call(d3.axisLeft(y_scale))
-                .attr("fill","white")
-                .style("color","white");
+                .attr("fill","black")
+                .style("color","black");
 
             svg.append("text")
                 .attr("class", "y label")
                 .attr("text-anchor", "end")
-                .attr("x",-(width/2)+2*margin.top)
+                .attr("x",-110)
                 .attr("y", 6)
                 .attr("dy", ".75em")
                 .attr("transform", "rotate(-90)")
                 .text("appearances (times)")
-                .attr("fill","white");
+                .attr("fill","black");
 
-            const zoomi = d3.zoom().on("zoom",(event)=>{
-                                        //   console.log("zomming");               
-                                        const zoomState = event.transform;
-                                        this.handleZoom(zoomState);
+            // const zoomi = d3.zoom().on("zoom",(event)=>{
+            //                             //   console.log("zomming");               
+            //                             const zoomState = event.transform;
+            //                             this.handleZoom(zoomState);
                                         //   console.log(zoomState);
-                                    });
-            svg.call(zoomi);
+                                    // });
+
+            let selected = ({selection})=>{
+                if(selection==null){
+
+                    words.attr("font-weight","")
+                }else{
+                    const [[x0, y0], [x1, y1]] = selection;
+                    words.attr("font-weight", ([x, y]) => {
+                      return x0 <= x && x <= x1
+                          && y0 <= y && y <= y1
+                          ? "bold" : "";
+                    });
+                    words.style("font-size", ([x, y]) => {
+                        return x0 <= x && x <= x1
+                            && y0 <= y && y <= y1
+                            ? (this.state.radius*4) + "px": this.state.radius+"px";
+                      });
+                    let selected_names = [];
+
+                    for(let i = 0; i < scatterplots.length; i++){
+                        if(x0 <= scatterplots[i][0] && scatterplots[i][0] <= x1 && y0 <= scatterplots[i][1] && scatterplots[i][1] <= y1){
+                            selected_names.push({
+                                director : scatterplots[i][3],
+                                appearance : scatterplots[i][2],
+                                color : colors(scatterplots[i][2])
+                            });
+                        }
+                    }
+                    console.log(selected_names);
+
+                    this.drawCirclePlot(selected_names);
+
+                }
+            }
+
+            const brush = d3.brush()
+                            .filter(event => !event.ctrlKey&&(event.metaKey||event.target.__data__.type!="overlay")&&!event.button)
+                            .on("start brush end",selected);
+
+            svg.append("g")
+                .attr("class","brush")
+                .call(brush)
+                .call(brush.move,[[100,100],[200,200]])
+                .call(g => g.select(".overlay").style("cursor","default"));
+
+            // svg.call(zoomi)
+            // this.setState({
+            //     circlePlotData: selected_names
+            // })
+
 
 
 
@@ -178,10 +271,7 @@ class Sk_VoronoiDiagram extends Component{
     render(){
         return (
         <div id={"#" + this.props.id}>
-            <form>
-                <label for="vol">voronoi diagram scatterplots font-size(px):</label>
-                <input type="range" min="0" max="25" onChange={this.handleChange}/>
-            </form>
+            {/* <Sk_CirclePlot data={this.state.circlePlotData} width={this.props.width} height={this.props.height}/> */}
         </div>);
     }
 }

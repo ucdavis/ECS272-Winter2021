@@ -24,8 +24,14 @@ ReactDOM.render(
       <div className="sk_container">
         <div className="sk_row">
           <div className="sk_col">
-            <h2>Context view: Directors and their appearances</h2>
-            <App kind="VoronoiDiagram"/> 
+            <div className="sk_row">
+              <h2>Context view: Directors and their appearances</h2>
+              <App kind="VoronoiDiagram"/> 
+            </div>
+            <div className="sk_row">
+              <div id="CirclePlot"></div>
+            </div>
+
           </div>
           <div className="sk_col">
             <div className="sk_row">

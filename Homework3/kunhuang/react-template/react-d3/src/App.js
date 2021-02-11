@@ -36,7 +36,7 @@ class App extends React.Component{
         <div>
           <div id="container_VoronoiDiagram"> 
           </div>
-          <Sk_VoronoiDiagram data={this.state.data} width={800} height={800} />
+          <Sk_VoronoiDiagram data={this.state.data} width={800} height={400} />
         </div>
       );
     }
