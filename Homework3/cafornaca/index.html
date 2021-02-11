@@ -16,7 +16,7 @@
         </script>
 
         <h2>Height vs. Weight by Primary Type</h2>
-        <h3>(Mouse-over scatterplot dots to interact)</h3>
+        <h3>(Mouse-over scatterplot dots to select; scroll to zoom/pan)</h3>
     
         <div id="my_dataviz_1">
             <style>            
@@ -57,8 +57,11 @@
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
+                    .call(d3v3.behavior.zoom().on("zoom", function () {svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")}))
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                
 
                 // add the tooltip area to the webpage
                 var tooltip = d3v3.select("#my_dataviz_1")
