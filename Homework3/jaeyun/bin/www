@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+
+/*
+Copyright 2021 Jaewan Yun <jaeyun@ucdavis.edu>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/**
+ * Import module dependencies.
+ */
+
+const app = require('../app');
+const http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+app.set('http_port', normalize_port(process.env.PORT || '3000'));
+
+/**
+ * Create servers.
+ */
+
+app.set('http_server', http.createServer(app));
+
+/**
+ * Listen on provided ports, on all network interfaces.
+ */
+
+app.get('http_server').listen(3000);
+app.get('http_server').on('error', on_http_server_error);
+app.get('http_server').on('listening', on_http_server_listening);
+app.get('http_server').setTimeout(3000000)
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalize_port(val) {
+	const port = parseInt(val, 10);
+	// Named pipe
+	if (isNaN(port))
+		return val;
+	// Port number
+	if (port >= 0)
+		return port;
+	return false;
+}
+
+/**
+ * Handle error events.
+ */
+
+function on_http_server_error(error) {
+	on_server_error(error, app.get('http_port'));
+}
+
+function on_server_error(error, port) {
+	if (error.syscall !== 'listen')
+		throw error;
+
+	const bind = typeof port === 'string'
+		? 'Pipe ' + port
+		: 'Port ' + port;
+
+	switch (error.code) {
+		case 'EACCES':
+			console.error(bind + ' requires elevated privileges');
+			process.exit(1);
+			break;
+		case 'EADDRINUSE':
+			console.error(bind + ' is already in use');
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function on_http_server_listening() {
+	on_server_listening(app.get('http_server'));
+}
+
+function on_server_listening(server) {
+	const addr = server.address();
+	const bind = typeof addr === 'string'
+		? 'pipe ' + addr
+		: 'port ' + addr.port;
+	console.log('Listening on ' + bind);
+}
