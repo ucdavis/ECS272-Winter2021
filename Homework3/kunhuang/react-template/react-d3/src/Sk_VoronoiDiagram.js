@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 import { data_processing,data_cleaning } from './data_processing';
-import Sk_CirclePlot from './Sk_CirclePlot'
+
 
 class Sk_VoronoiDiagram extends Component{
 
@@ -61,7 +61,7 @@ class Sk_VoronoiDiagram extends Component{
     //     });
     // }
 
-    drawCirclePlot(data){
+    drawCirclePlot(data,colorsCallback){
         let width = this.props.width;
         let height = this.props.height;
         let radius = width/40;
@@ -88,8 +88,8 @@ class Sk_VoronoiDiagram extends Component{
         //     .text("Selected Appearances Sum: 0");
 
         d3.select("#cp_counter")
-          .text("Selected Appearances Sum: 0");
-
+          .text("Selected Appearances Sum: 0")
+          .style("color","white");
 
         svg.selectAll("circle")
             .data(circles)
@@ -111,7 +111,8 @@ class Sk_VoronoiDiagram extends Component{
                     .transition()
                     .attr("stroke", "red");
                     let appearance = Number(circles[Number(event.target.id.replace("cp",""))]["appearance"]);
-                    d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])+appearance));
+                    d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])+appearance))
+                                            .style("color",colorsCallback((Number(split_text[1])+appearance)));
                 
                 }else{
                     d3.select("#"+event.target.id)
@@ -270,7 +271,10 @@ class Sk_VoronoiDiagram extends Component{
                     }
                     console.log(selected_names);
 
-                    this.drawCirclePlot(selected_names);
+
+
+                    this.drawCirclePlot(selected_names,colors);
+
 
                 }
             }
