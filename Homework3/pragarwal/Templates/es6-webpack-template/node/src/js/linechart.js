@@ -165,7 +165,7 @@ function zoomed() {
     var line1 = svg.append("path")
                     .data([data])
                     .attr("class", "line")
-                    .style("stroke", "#fcd471")
+                    .style("stroke", "#03dac5")
                     .attr("d", valueline)
                     .style("opacity", 0.4)
                     //.on("mouseover", handleMouseOver )
@@ -198,7 +198,7 @@ function zoomed() {
     var line4 = svg.append("path")
                     .data([data])
                     .attr("class", "line")
-                    .style("stroke", "#79d70f")
+                    .style("stroke", "#eeff01")
                     .attr("d", valueline4)
                     .style("opacity", 0.4)
                     //.on("mouseover", handleMouseOver )
@@ -209,7 +209,7 @@ function zoomed() {
     var line5 = svg.append("path")
                     .data([data])
                     .attr("class", "line")
-                    .style("stroke", "#ffff00")
+                    .style("stroke", "#bb86fc")
                     .attr("d", valueline5)
                     .style("opacity", 0.4)
                     //.on("mouseover", handleMouseOver )
@@ -283,7 +283,7 @@ function zoomed() {
 
 
     
-    var colors = ["#fcd471", "#e8249a", "#fb84ce", "#79d70f", "#ffff00"]
+    var colors = ["#03dac5", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]
     var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
     var padding = 400;
 
