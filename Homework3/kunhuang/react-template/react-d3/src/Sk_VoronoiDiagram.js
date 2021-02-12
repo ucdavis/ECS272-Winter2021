@@ -121,7 +121,9 @@ class Sk_VoronoiDiagram extends Component{
                 // console.log(d3.select("#"+event.target.id).attr("stroke"));
 
 
-            });
+            })
+            .append("title")
+            .text(data=>data["director"]+":"+data["appearance"]);
     }
 
 
@@ -190,7 +192,9 @@ class Sk_VoronoiDiagram extends Component{
                 .data( top_directors.map((d,i) => voronoi.renderCell(i)) )
                 .join('path')
                 .attr('d', data => data)
-                .style("fill","grey")
+                .style("fill",(data,index)=>{
+                    return colors(top_directors[index]["appearance"]);
+                })
                 .style('opacity', 0.8)
                 .style('stroke', 'white')
                 .style('stroke-opacity', 1);
@@ -206,7 +210,7 @@ class Sk_VoronoiDiagram extends Component{
                             .style("font-size",data=>{
                                 return this.state.radius+"px";
                             })
-                            .attr("fill",data=>colors(data[2]))
+                            .attr("fill","black")
                             .style("text-anchor", "middle")
                             .text(data=>data[3]);
 
