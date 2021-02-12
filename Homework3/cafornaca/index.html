@@ -33,7 +33,7 @@
             <script>
                 function drawgraph(){
                 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-                width = 1960 - margin.left - margin.right,
+                width = 1500 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
 
                 // setup x 
@@ -164,7 +164,7 @@
         <h3>Click a button to get started and change the data.</h3>
         <button onclick="update(data1)">Body Type</button>
         <button onclick="update(data2)">Egg Group</button> 
-        <p>I couldn't get my labels to be placed just right. :(</p>
+        <p>I had to remove my labels because they were stacking on top of eachother and breaking. :(</p>
 
         <div id="my_dataviz_2"></div>
         <div>
@@ -224,6 +224,7 @@
                         .attr("stroke", "white")
                         .style("stroke-width", "2px")
                         .style("opacity", 1)
+
             
                     u
                         .exit()
