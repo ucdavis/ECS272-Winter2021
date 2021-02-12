@@ -25,21 +25,23 @@ ReactDOM.render(
         <div className="sk_row">
           <div className="sk_col">
             <div className="sk_row">
-              <h2>Context view: Directors and their appearances</h2>
+              <h4>Context view: Directors and their appearances (brush to get detailed word infos!)</h4>
               <App kind="VoronoiDiagram"/> 
             </div>
             <div className="sk_row">
+              <h6>Sub-context view (toggle on circles and count the appearance sum! Mouseover for individual detail tooltips!)</h6>
+              <h6 id="cp_counter"></h6>
               <div id="CirclePlot"></div>
             </div>
 
           </div>
           <div className="sk_col">
             <div className="sk_row">
-              <h2>Focus view: Top X most popular directors in all film locations</h2>
+              <h4>Focus view: Top X most popular directors in all film locations</h4>
               <App kind="PieChart"/>
             </div>
             <div className="sk_row">
-              <h2>Focus view: Top X most popular directors in selected film locations</h2>
+              <h4>Focus view: Top X most popular directors in selected film locations</h4>
               <App kind="BarChart"/>
             </div>
           </div>

@@ -82,10 +82,13 @@ class Sk_VoronoiDiagram extends Component{
 
         console.log("circles",circles)
 
-        svg.append("text")
-            .attr("transform","translate(50,50)")
-            .attr("id","cp_counter")
-            .text("Selected Appearances Sum: 0");
+        // svg.append("text")
+        //     .attr("transform","translate(50,50)")
+        //     .attr("id","cp_counter")
+        //     .text("Selected Appearances Sum: 0");
+
+        d3.select("#cp_counter")
+          .text("Selected Appearances Sum: 0");
 
 
         svg.selectAll("circle")
