@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import csvPath from '../assets/data/data_by_year.csv';
+import {drawStackedBarChartTopArtist} from "./stackedbarcharttopartist"
 
 
 export async function drawLineChart(){
@@ -175,7 +176,7 @@ function zoomed() {
     var line2 = svg.append("path")
                     .data([data])
                     .attr("class", "line")
-                    .style("stroke", "#fbafa1")
+                    .style("stroke", "#e8249a")
                     .attr("d", valueline2)
                     .style("opacity", 0.4)
                     //.on("mouseover", handleMouseOver )
@@ -197,7 +198,7 @@ function zoomed() {
     var line4 = svg.append("path")
                     .data([data])
                     .attr("class", "line")
-                    .style("stroke", "#ef54f1")
+                    .style("stroke", "#79d70f")
                     .attr("d", valueline4)
                     .style("opacity", 0.4)
                     //.on("mouseover", handleMouseOver )
@@ -208,7 +209,7 @@ function zoomed() {
     var line5 = svg.append("path")
                     .data([data])
                     .attr("class", "line")
-                    .style("stroke", "#c4fa70")
+                    .style("stroke", "#ffff00")
                     .attr("d", valueline5)
                     .style("opacity", 0.4)
                     //.on("mouseover", handleMouseOver )
@@ -253,7 +254,7 @@ function zoomed() {
                                 .x(function(d) { return x(d.year) })
                                 .y(function(d) { return y(d.value) })
             )
-            .attr("stroke", function(d){ return myColor(selectedGroup) })
+            //.attr("stroke", function(d){ return myColor(selectedGroup) })       
             
       }
 
@@ -263,10 +264,13 @@ function zoomed() {
         var selectedOption = d3.select(this).property("value")
         // run the updateChart function with this selected option
         update(selectedOption)
+
+        drawStackedBarChartTopArtist(selectedOption);
     })
 
     // Variable to Hold Total Length
     var totalLength = line.node().getTotalLength();
+    console.log("Totessssss: " +totalLength)
 
 // Set Properties of Dash Array and Dash Offset and initiate Transition
     line
@@ -279,7 +283,7 @@ function zoomed() {
 
 
     
-    var colors = ["#fcd471", "#fbafa1", "#fb84ce", "#ef54f1", "#c4fa70"]
+    var colors = ["#fcd471", "#e8249a", "#fb84ce", "#79d70f", "#ffff00"]
     var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
     var padding = 400;
 

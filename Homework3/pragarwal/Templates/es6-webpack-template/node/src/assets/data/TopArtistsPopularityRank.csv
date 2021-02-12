@@ -1,0 +1,56 @@
+year,artist,popularity,topartist
+2020,['CJ'],94,artist1
+2020,['Boza'],92,artist2
+2020,['Farruko'],90,artist3
+2020,['HVME'],90,artist4
+2020,['Camilo'],90,artist5
+2010,['Regard'],86,artist1
+2010,['Calum Scott'],82,artist2
+2010,['Anne-Marie'],82,artist3
+2010,['Duncan Laurence'],82,artist4
+2010,['Chord Overstreet'],82,artist5
+2000,['Daniel Powter'],75,artist1
+2000,['Modjo'],72,artist2
+2000,['Angel Y Khriz'],72,artist3
+2000,['Zion & Lennox'],72,artist4
+2000,['The Calling'],72,artist5
+1990,['Fools Garden'],76,artist1
+1990,['Lou Bega'],75,artist2
+1990,['Gala'],71,artist3
+1990,['Crazy Town'],71,artist4
+1990,['Mr. President'],71,artist5
+1980,['Michael Sembello'],74,artist1
+1980,['John Waite'],70,artist2
+1980,['U.S.A. For Africa'],69,artist3
+1980,['Black'],66,artist4
+1980,['Miguel Ríos'],65,artist5
+1970,['Aliotta Haynes Jeremiah'],65,artist1
+1970,['Randy VanWarmer'],62,artist2
+1970,['Ace'],60,artist3
+1970,['Starland Vocal Band'],60,artist4
+1970,['Milionário & José Rico'],60,artist5
+1960,['Thurl Ravenscroft'],59,artist1
+1960,['Darlene Love'],57.75,artist2
+1960,['Mal Waldron'],57,artist3
+1960,['Thunderclap Newman'],54,artist4
+1960,['Skaldowie'],53,artist5
+1950,['Gayla Peevey'],62,artist1
+1950,['Jonny Bombastic'],44,artist2
+1950,['Count Basie Orchestra'],40,artist3
+1950,['Benny Golson Sextet'],34,artist4
+1950,['Larry Williams'],32.5,artist5
+1940,['Jimmy Boyd'],26,artist1
+1940,['Mitch Miller & The Gang'],23,artist2
+1940,['Bob Keeshan (Captain Kangaroo)'],22,artist3
+1940,['Gerap Gurita'],19,artist4
+1940,['Pony Poindexter'],18,artist5
+1930,['Russell Malone'],33,artist1
+1930,['Teo Macero And His Orchestra'],32,artist2
+1930,['Art Carney'],25,artist3
+1930,['The Munchkins'],21.4,artist4
+1930,['The Raymond Scott Quintette'],21,artist5
+1920,['Bix Beiderbecke'],23.666667,artist1
+1920,['Marbella Corella'],22,artist2
+1928,"['Jimmy McPartland', 'Gil Rodin']",21,artist3
+1920,"['Bessie Smith', 'Louis Armstrong']",20,artist4
+1920,['Null'],0,artist5

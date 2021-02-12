@@ -48,15 +48,15 @@ export async function drawStreamGraph(){
 
     // Add Y axis
     var y = d3.scaleLinear()
-    .domain([-1, 1])
+    .domain([-2, 1])
     .range([ height, 0 ]);
 
     // color palette
     var color = d3.scaleOrdinal()
                     .domain(keys)
-                    .range(["#79d70f", "#d7efb6", "#e8249a", "#c4fa70", "#cf7500", "#ffffff"]);
+                    .range(["#79d70f", "#fcd471", "#e8249a", "#fb84ce", "#ffff00"]);
 
-    //stack the data?
+    //stack the data
     var stackedData = d3.stack()
                         .offset(d3.stackOffsetSilhouette)
                         //.order(d3.stackOrderInsideOut)
@@ -73,11 +73,11 @@ export async function drawStreamGraph(){
 
     // Three function that change the tooltip when user hover / move / leave a cell
     var mouseover = function(d) {
-    Tooltip.style("opacity", 0.5)
-    d3.selectAll(".myArea").style("opacity", 0.1)
-    d3.select(this)
-    //.style("stroke", "black")
-    .style("opacity", 0.8)
+            Tooltip.style("opacity", 0.5)
+            d3.selectAll(".myArea").style("opacity", 0.1)
+            d3.select(this)
+            //.style("stroke", "black")
+            .style("opacity", 0.8)
     }
 
     console.log(keys)
@@ -88,17 +88,17 @@ export async function drawStreamGraph(){
                             }
 
     var mouseleave = function(d) {
-    Tooltip.style("opacity", 0)
-    d3.selectAll(".myArea")
-        .style("opacity", 0.5)
-        .style("stroke", "none")
+            Tooltip.style("opacity", 0)
+            d3.selectAll(".myArea")
+                .style("opacity", 0.5)
+                .style("stroke", "none")
     }
 
     // Area generator
     var area = d3.area()
-    .x(function(d) { return x(d.data.year); })
-    .y0(function(d) { return y(d[0]); })
-    .y1(function(d) { return y(d[1]); })
+                .x(function(d) { return x(d.data.year); })
+                .y0(function(d) { return y(d[0]); })
+                .y1(function(d) { return y(d[1]); })
 
     // Show the areas
     svg
@@ -114,8 +114,8 @@ export async function drawStreamGraph(){
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
 
-        var colors = ["#79d70f", "#d7efb6", "#e8249a", "#c4fa70", "#cf7500", "#ffffff"]
-        var attr = ["acousticness", "danceability", "energy", "liveness", "speechiness", "valence"]
+        var colors = [ "#fcd471", "#e8249a", "#fb84ce", "#79d70f", "#ffff00"]
+        var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
         var padding = 400;
     
         var legend = svg.append('g')

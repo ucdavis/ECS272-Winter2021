@@ -1,0 +1,56 @@
+year,artist,popularity
+2020,['CJ'],94
+2020,['Boza'],92
+2020,['Farruko'],90
+2020,['HVME'],90
+2020,['Camilo'],90
+2010,['Regard'],86
+2010,['Calum Scott'],82
+2010,['Anne-Marie'],82
+2010,['Duncan Laurence'],82
+2010,['Chord Overstreet'],82
+2000,['Daniel Powter'],75
+2000,['Modjo'],72
+2000,['Angel Y Khriz'],72
+2000,['Zion & Lennox'],72
+2000,['The Calling'],72
+1990,['Fools Garden'],76
+1990,['Lou Bega'],75
+1990,['Gala'],71
+1990,['Crazy Town'],71
+1990,['Mr. President'],71
+1980,['Michael Sembello'],74
+1980,['John Waite'],70
+1980,['U.S.A. For Africa'],69
+1980,['Black'],66
+1980,['Miguel Ríos'],65
+1970,['Aliotta Haynes Jeremiah'],65
+1970,['Randy VanWarmer'],62
+1970,['Ace'],60
+1970,['Starland Vocal Band'],60
+1970,['Milionário & José Rico'],60
+1960,['Thurl Ravenscroft'],59
+1960,['Darlene Love'],57.75
+1960,['Mal Waldron'],57
+1960,['Thunderclap Newman'],54
+1960,['Skaldowie'],53
+1950,['Gayla Peevey'],62
+1950,['Jonny Bombastic'],44
+1950,['Count Basie Orchestra'],40
+1950,['Benny Golson Sextet'],34
+1950,['Larry Williams'],32.5
+1940,['Jimmy Boyd'],26
+1940,['Mitch Miller & The Gang'],23
+1940,['Bob Keeshan (Captain Kangaroo)'],22
+1940,['Gerap Gurita'],19
+1940,['Pony Poindexter'],18
+1930,['Russell Malone'],33
+1930,['Teo Macero And His Orchestra'],32
+1930,['Art Carney'],25
+1930,['The Munchkins'],21.4
+1930,['The Raymond Scott Quintette'],21
+1920,['Bix Beiderbecke'],23.666667
+1920,['Marbella Corella'],22
+1928,"['Jimmy McPartland', 'Gil Rodin']",21
+1920,"['Bessie Smith', 'Louis Armstrong']",20
+1920,['Null'],0

@@ -536,3 +536,349 @@ export async function drawLineChart(){
   
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function scatterPlot(data, id) {
+    /*0 where we are drawing*/
+    const svg = d3.select(id);
+    /* 1 height & width how big am i drawing this thing */
+    const parentDiv = document.getElementById(id.substring(1));
+    const height = svg.node().height.baseVal.value;
+    const width = parentDiv.clientWidth;
+    const margin = { top: 40, right: 5, bottom: 100, left: 40 };
+    const k = height / width
+    const x = d3.scaleLinear()
+        .domain([-4.5, 4.5])
+        .range([0, width])
+    const y = d3.scaleLinear()
+        .domain([-4.5 * k, 4.5 * k])
+        .range([height, 0])
+    const z = d3.scaleOrdinal()
+        .domain(data.map(d => d[2]))
+        .range(d3.schemeCategory10)
+    const xAxis = (g, x) => g
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisTop(x).ticks(12))
+        .call(g => g.select(".domain").attr("display", "none"))
+    const yAxis = (g, y) => g
+        .call(d3.axisRight(y).ticks(12 * k))
+        .call(g => g.select(".domain").attr("display", "none"))
+    const grid = (g, x, y) => g
+        .attr("stroke", "currentColor")
+        .attr("stroke-opacity", 0.1)
+        .call(g => g
+            .selectAll(".x")
+            .data(x.ticks(12))
+            .join(
+                enter => enter.append("line").attr("class", "x").attr("y2", height),
+                update => update,
+                exit => exit.remove()
+            )
+            .attr("x1", d => 0.5 + x(d))
+            .attr("x2", d => 0.5 + x(d)))
+        .call(g => g
+            .selectAll(".y")
+            .data(y.ticks(12 * k))
+            .join(
+                enter => enter.append("line").attr("class", "y").attr("x2", width),
+                update => update,
+                exit => exit.remove()
+            )
+            .attr("y1", d => 0.5 + y(d))
+            .attr("y2", d => 0.5 + y(d)));
+    const zoom = d3.zoom().scaleExtent([0.5, 32]).on("zoom", zoomed);
+    const gGrid = svg.append("g");
+    const gDot = svg.append("g")
+        .attr("fill", "none")
+        .attr("stroke-linecap", "round");
+    gDot.selectAll("path")
+        .data(data)
+        .join("path")
+        .attr("d", d => `M${x(d[0])},${y(d[1])}h0`)
+        .attr("stroke", d => z(d[2]));
+    const gx = svg.append("g");
+    const gy = svg.append("g");
+    svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
+    function zoomed({ transform }) {
+        const zx = transform.rescaleX(x).interpolate(d3.interpolateRound);
+        const zy = transform.rescaleY(y).interpolate(d3.interpolateRound);
+        gDot.attr("transform", transform).attr("stroke-width", 5 / transform.k);
+        gx.call(xAxis, zx);
+        gy.call(yAxis, zy);
+        gGrid.call(grid, zx, zy);
+    }
+}
+function createData() {
+    const random = d3.randomNormal(0, 0.2);
+    const sqrt3 = Math.sqrt(3);
+    return [].concat(
+        Array.from({ length: 300 }, () => [random() + sqrt3, random() + 1, 0]),
+        Array.from({ length: 300 }, () => [random() - sqrt3, random() + 1, 1]),
+        Array.from({ length: 300 }, () => [random(), random() - 1, 2])
+    );
+}
+
+
+
+
+
+
+
+
+import * as d3 from "d3";
+import csvPath from '../assets/data/TopArtistbyCent.csv';
+import newcsv from '../assets/data/TopArtistsDecadeNew.csv';
+
+export async function drawStackedBarChartTopArtist(){
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 40, right: 20, bottom: 30, left: 30},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#stackedbarcharttopartist")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+    
+    // const data = await d3.csv(csvPath);
+    const data2 = await d3.csv(newcsv);
+
+
+    // var subgroups = data.columns.slice(1)
+    // var subgroups = data2.columns.slice(1)
+    // subgroups.pop(); 
+    // remove topartist field
+    var subgroups = ['artist1','artist2','artist3','artist4','artist5'];
+    console.log("Sliceeee: " + subgroups)
+
+
+    // var groups = d3.map(data, function(d){
+    //     console.log(d.year);
+    //     return d.year}).sort()
+    // removed keys as it was not needed, instead sorted the data
+    var groups = d3.map(data2, function(d){
+        return d.year}).sort()
+    groups = [... new Set(groups)]; //another way to get unique values (https://stackoverflow.com/a/42123984)
+
+    console.log("Groupsssss: " + groups)
+
+
+    
+    var x = d3.scaleBand()
+        .domain(groups)
+        .range([0, width])
+        .padding([0.2])
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x).tickSizeOuter(0));
+
+
+    var y = d3.scaleLinear()
+                .domain([0,5])
+                .range([ height, 0 ]);
+                svg.append("g")
+                .call(d3.axisLeft(y));
+
+    var color = d3.scaleOrdinal()
+                .domain(subgroups)
+                .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7'])
+
+      
+
+    
+    
+
+    // console.log("Xxxxxxx..." + x(1950))
+    //var dropDownValue='valence';
+
+    //https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
+    
+    
+    function selectedAttr() {  
+        var mylist = document.getElementById("selectButton1");  
+        const dropDownValueOpt = mylist.options[mylist.selectedIndex].text; 
+        return dropDownValueOpt; 
+        }  
+
+    //$("#selectButton1").on("change", selectedAttr);
+    var dropDownValue = selectedAttr();
+
+
+    console.log("Valueeeeeee:   " + dropDownValue)
+
+
+    function getBarValue(data,groups,dropDownValue){
+        var y_array = [];
+        for (let y in groups){
+            var y_value = {};
+        for(var i =0 ; i<data.length; i++){
+            var row=data[i];
+                if (row.year === groups[y]){
+                    if (!y_value['year']){y_value['year']=groups[y]}
+                    if (!y_value[row.topartist]){y_value[row.topartist]=row[dropDownValue];}
+                }
+            }
+            y_array.push(y_value);
+        }
+        return y_array; 
+    };
+
+    var y_test = getBarValue(data2,groups,dropDownValue);
+    // console.log(y_test)
+    var stackedData = d3.stack()
+                        .keys(subgroups)(y_test)
+    console.log(stackedData);
+    // Show the bars
+
+    svg.append("g")
+    .selectAll("g")
+    .data(stackedData)
+    .enter().append("g")
+        .attr("fill", function(d) { return color(d.key); })
+    .selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+        .attr("x", function(d) { return x(d.data.year); })
+        .attr("y", function(d) { return y(d[1]); })
+        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+        .attr("width",x.bandwidth())
+        .append("title")
+      //.text(d => `${d.data.year} ${d.key}`);
+
+    // svg.append("g")
+    // .selectAll("g")
+    // .data(stackedData)
+    // .join("g")
+    //   .attr("fill", d => color(d.key))
+    // .selectAll("rect")
+    // .data(d => d)
+    // .join("rect")
+    //   .attr("x", d => x(d.data.year))
+    //   .attr("y", d => y(d[1]))
+    //   .attr("height", d => y(d[0]) - y(d[1]))
+    //   .attr("width", x.bandwidth())
+    // .append("title")
+    
+}
+
+
+// import * as d3 from "d3";
+// import csvPath from '../assets/data/TopArtistbyCent.csv';
+
+// export async function drawStackedBarChartTopArtist(){
+
+//     // set the dimensions and margins of the graph
+//     var margin = {top: 40, right: 20, bottom: 30, left: 30},
+//     width = 600 - margin.left - margin.right,
+//     height = 300 - margin.top - margin.bottom;
+
+//     // append the svg object to the body of the page
+//     var svg = d3.select("#stackedbarcharttopartist")
+//                 .append("svg")
+//                 .attr("width", width + margin.left + margin.right)
+//                 .attr("height", height + margin.top + margin.bottom)
+//                 .append("g")
+//                 .attr("transform",
+//                     "translate(" + margin.left + "," + margin.top + ")");
+
+
+//     const data = await d3.csv(csvPath);
+
+//     var subgroups = data.columns.slice(1)
+
+//     console.log("Sliceeee: " + data.columns.slice(1))
+
+
+//     var groups = d3.map(data, function(d){return(d.year)}).keys()
+
+//     console.log("Groupsssss: " + groups)
+
+
+    
+//     var x = d3.scaleBand()
+//         .domain([1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020])
+//         .range([0, width])
+//         .padding([0.2])
+//         svg.append("g")
+//             .attr("transform", "translate(0," + height + ")")
+//             .call(d3.axisBottom(x).tickSizeOuter(0));
+
+
+//     var y = d3.scaleLinear()
+//                 .domain([0, 5])
+//                 .range([ height, 0 ]);
+//                 svg.append("g")
+//                 .call(d3.axisLeft(y));
+
+//     var color = d3.scaleOrdinal()
+//                 .domain(subgroups)
+//                 .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7'])
+
+      
+
+//     var stackedData = d3.stack()
+//                         .keys(subgroups)
+//                         (data)
+
+
+//     console.log("Xxxxxxx..." + x(1950))
+
+//     // Show the bars
+//     svg.append("g")
+//     .selectAll("g")
+//     .data(stackedData)
+//     .enter().append("g")
+//         .attr("fill", function(d) { return color(d.key); })
+//     .selectAll("rect")
+//     .data(function(d) { return d; })
+//     .enter().append("rect")
+//         .attr("x", function(d) { return x(d.data.year); })
+//         .attr("y", function(d) { return y(d[1]); })
+//         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+//         .attr("width",x.bandwidth())
+//         .append("title")
+//       //.text(d => `${d.data.year} ${d.key}`);
+
+//     // svg.append("g")
+//     // .selectAll("g")
+//     // .data(stackedData)
+//     // .join("g")
+//     //   .attr("fill", d => color(d.key))
+//     // .selectAll("rect")
+//     // .data(d => d)
+//     // .join("rect")
+//     //   .attr("x", d => x(d.data.year))
+//     //   .attr("y", d => y(d[1]))
+//     //   .attr("height", d => y(d[0]) - y(d[1]))
+//     //   .attr("width", x.bandwidth())
+//     // .append("title")
+    
+// }

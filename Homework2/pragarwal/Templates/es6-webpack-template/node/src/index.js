@@ -9,6 +9,7 @@ import {drawLineChart} from "./js/linechart"
 //import {drawStackedBarChart} from "./js/stackedbarchart"
 import {drawStreamGraph} from "./js/streamgraph"
 import {drawStackedBarChartTopArtist} from "./js/stackedbarcharttopartist"
+import {drawClevelandPlot} from "./js/clevelandplot"
 
 let x = 2;
 //console.log(testData);
@@ -19,7 +20,8 @@ drawBubbleChart();
 drawLineChart();
 //drawStackedBarChart();
 drawStreamGraph();
-drawStackedBarChartTopArtist();
+drawStackedBarChartTopArtist("danceability");
+drawClevelandPlot();
 
 /* 
     TODO: all the other logic for implementing your charts + adding in some basic filters 

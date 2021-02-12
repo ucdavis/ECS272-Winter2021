@@ -19,6 +19,11 @@ h1 {
     float: left;
 }
 
+#myClass5 {
+    color: white;
+    float: left;
+}
+
 body{
     /* background-color : rgb(109, 108, 108); */
     /* background-color : #1ed760; */
@@ -176,6 +181,30 @@ body{
 }
 
 #stackedbarcharttopartist {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
+}
+
+.container5 {
+    color: white;
+    width: 40%;
+    height: 300px;
+    float: left;
+    /* position: relative; */
+    margin-bottom: 60px;
+    /* margin-right: 40px; */
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+#clevelandplot {
     fill: white;
     /* stroke: white; */
     text-decoration: white;

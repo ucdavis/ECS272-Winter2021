@@ -2,8 +2,17 @@ import * as d3 from "d3";
 import csvPath from '../assets/data/TopArtistbyCent.csv';
 import newcsv from '../assets/data/TopArtistsDecadeNew.csv';
 
-export async function drawStackedBarChartTopArtist(){
+export async function drawStackedBarChartTopArtist(selectedOption){
 
+    
+    var myElement = document.getElementById("stackedbarcharttopartist");
+
+    if(myElement){
+        //#myElementID element DOES exists
+        d3.select("#remove_svg").remove();
+    }
+    
+    
     // set the dimensions and margins of the graph
     var margin = {top: 40, right: 20, bottom: 30, left: 30},
     width = 600 - margin.left - margin.right,
@@ -11,8 +20,9 @@ export async function drawStackedBarChartTopArtist(){
 
 
     // append the svg object to the body of the page
-    var svg = d3.select("#stackedbarcharttopartist")
+    var svg1 = d3.select("#stackedbarcharttopartist")
                 .append("svg")
+                .attr("id","remove_svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
@@ -50,7 +60,7 @@ export async function drawStackedBarChartTopArtist(){
         .domain(groups)
         .range([0, width])
         .padding([0.2])
-        svg.append("g")
+        svg1.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x).tickSizeOuter(0));
 
@@ -58,8 +68,8 @@ export async function drawStackedBarChartTopArtist(){
     var y = d3.scaleLinear()
                 .domain([0,5])
                 .range([ height, 0 ]);
-                svg.append("g")
-                .call(d3.axisLeft(y));
+        svg1.append("g")
+            .call(d3.axisLeft(y));
 
     var color = d3.scaleOrdinal()
                 .domain(subgroups)
@@ -71,19 +81,19 @@ export async function drawStackedBarChartTopArtist(){
     
 
     // console.log("Xxxxxxx..." + x(1950))
-    //var dropDownValue='valence';
+    var dropDownValue=selectedOption;
 
     //https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
     
     
-    function selectedAttr() {  
-        var mylist = document.getElementById("selectButton1");  
-        const dropDownValueOpt = mylist.options[mylist.selectedIndex].text; 
-        return dropDownValueOpt; 
-        }  
+    // function selectedAttr() {  
+    //     var mylist = document.getElementById("selectButton1");  
+    //     const dropDownValueOpt = mylist.options[mylist.selectedIndex].text; 
+    //     return dropDownValueOpt; 
+    //     }  
 
-    //$("#selectButton1").on("change", selectedAttr);
-    var dropDownValue = selectedAttr();
+    // //$("#selectButton1").on("change", selectedAttr);
+    // var dropDownValue = selectedAttr();
 
 
     console.log("Valueeeeeee:   " + dropDownValue)
@@ -112,7 +122,7 @@ export async function drawStackedBarChartTopArtist(){
     console.log(stackedData);
     // Show the bars
 
-    svg.append("g")
+    svg1.append("g")
     .selectAll("g")
     .data(stackedData)
     .enter().append("g")
@@ -125,6 +135,11 @@ export async function drawStackedBarChartTopArtist(){
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width",x.bandwidth())
         .append("title")
+
+
+        
+        
+        
       //.text(d => `${d.data.year} ${d.key}`);
 
     // svg.append("g")

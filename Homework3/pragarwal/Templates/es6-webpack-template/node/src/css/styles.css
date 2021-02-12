@@ -1,0 +1,217 @@
+h1 {
+    color: black;
+    font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+#myClass1 {
+    color: white;
+    float: left;
+}
+
+#myClass2 {
+    color: white;
+    float: left;
+}
+
+#myClass3 {
+    color: white;
+    float: left;
+}
+
+#myClass5 {
+    color: white;
+    float: left;
+}
+
+body{
+    /* background-color : rgb(109, 108, 108); */
+    /* background-color : #1ed760; */
+    background-color: black;
+}
+
+.header {
+    font-weight : bold;
+    font-size: xx-large;
+    font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: white;
+    text-align: center;
+
+    /* padding-left: 50px; */
+    /* background-color: black; */
+}
+
+.bubbles {
+    stroke-width: 1px;
+    stroke: #c4fa70;
+  }
+
+.bubbles:hover {
+    stroke: #fb84ce;
+    color: #fb84ce;
+    stroke-width: 3px;
+  }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2.0px;
+  opacity: 1.0;
+}
+
+#linechart {
+    fill: white;
+    color: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    /* width: 50%; */
+    /* height: 300px; */
+}
+
+.axisWhite line{
+    stroke: white;
+}
+
+.container2 {
+    width: 40%;
+    height: 300px;
+    float: left;
+    /* position: relative; */
+    margin: 20px;
+}
+
+.selectButton {
+    float: right;
+}
+
+
+.container1 {
+    width: 40%;
+    height: 300px;
+    float: left;
+    /* position: relative; */
+    margin-bottom: 60px;
+    margin-left: 20px;
+    margin-top: 50px;
+}
+
+#mydataviz {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
+}
+
+.container3 {
+    width: 50%;
+    height: 300px;
+    float: right;
+    /* position: relative; */
+    margin-bottom: 60px;
+    /* margin-left: 10px; */
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+#stackedbarchart {
+    fill: white;
+    stroke: white;
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: right;
+}
+
+#streamgraph {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
+    /* width: 700px; 
+    height: 500px;  */
+}
+
+.container4 {
+    width: 50%;
+    height: 300px;
+    float: right;
+    /* position: relative; */
+    margin-bottom: 60px;
+    /* margin-right: 40px; */
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+#tooltip {
+    margin-bottom: 20px;
+}
+
+.legend {
+    height: 20px;
+    width: 30px;
+    margin-bottom: 10px;
+}
+
+#stackedbarcharttopartist {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
+}
+
+.container5 {
+    color: white;
+    width: 40%;
+    height: 300px;
+    float: left;
+    /* position: relative; */
+    margin-bottom: 60px;
+    /* margin-right: 40px; */
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+#clevelandplot {
+    fill: white;
+    /* stroke: white; */
+    text-decoration: white;
+    fill: white;
+    background-color: rgb(37, 34, 34);
+    stroke-width: 1.0px;
+    opacity: 1.0;
+    float: left;
+    color: white;
+}
