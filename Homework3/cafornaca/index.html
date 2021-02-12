@@ -33,7 +33,7 @@
             <script>
                 function drawgraph(){
                 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-                width = 960 - margin.left - margin.right,
+                width = 1960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
 
                 // setup x 
@@ -60,8 +60,6 @@
                     .call(d3v3.behavior.zoom().on("zoom", function () {svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")}))
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-                
 
                 // add the tooltip area to the webpage
                 var tooltip = d3v3.select("#my_dataviz_1")
@@ -238,10 +236,9 @@
         </div>
 
 
-
         <br>
         <h2>Comparing the stats of my favorite Pokemon</h2>   
-        <h3>This is not an exhaustive list.</h3>
+        <h3>Note: This is not an exhaustive list of my favorites.</h3>
 
         <button onclick="update_bar(fave1)">Nidoking</button>
         <button onclick="update_bar(fave2)">Typhlosion</button>
@@ -340,16 +337,12 @@
                 // Initialize the plot with the first dataset
                 update_bar(fave1)
             </script>
-        </div> 
-
-
+        </div>
+<!-- 
  
-
-        <!-- <script src="https://d3js.org/d3.v6.js"></script>
+        <script>d3.window = null;</script>
+        <script src="https://d3js.org/d3.v6.js"></script>
         <script src="main.js"></script> -->
-
-
-
 
 
     </body>
