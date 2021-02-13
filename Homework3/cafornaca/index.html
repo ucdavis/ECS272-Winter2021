@@ -26,6 +26,12 @@
                   height: 28px;
                   pointer-events: none;
                 }
+
+                .container {
+                    display: inline-block;
+                    max-width: 40%;
+                }
+                
             </style>
         </div>
 
@@ -34,7 +40,7 @@
                 function drawgraph(){
                 var margin = {top: 20, right: 20, bottom: 30, left: 40},
                 width = 1500 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+                height = 450 - margin.top - margin.bottom;
 
                 // setup x 
                 var xValue = function(d) { return d.Weight_kg;}, // data -> value
@@ -160,25 +166,27 @@
 
         <script src="https://d3js.org/d3.v4.js"></script>
        
-        <h2>Bodies & Breeding: How do egg groups and body types compare?</h2>   
+        <div class='container'>
+        <h2>Bodies & Breeding: </h2>
+        <h2>How do egg groups and body types compare?</h2>  
         <h3>Click a button to get started and change the data.</h3>
         <button onclick="update(data1)">Body Type</button>
         <button onclick="update(data2)">Egg Group</button> 
-        <p>I had to remove my labels because they were stacking on top of eachother and breaking. :(</p>
+        <p>I couldn't get my legend to draw on this one. Inspect for labels.</p>
 
         <div id="my_dataviz_2"></div>
         <div>
             <script>        
                 // set the dimensions and margins of the graph
-                var width = 450
-                    height = 450
+                var width = 350
+                    height = 350
                     margin = 40
 
                 // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
                 var radius = Math.min(width, height) / 2 - margin
 
                 // append the svg object to the div called 'my_dataviz'
-                var svg = d3.select("#my_dataviz_2")
+                var svg2 = d3.select("#my_dataviz_2")
                 .append("svg")
                     .attr("width", width)
                     .attr("height", height)
@@ -206,7 +214,7 @@
                     var data_ready = pie(d3.entries(data))
 
                     // map to data
-                    var u = svg.selectAll("path")
+                    var u = svg2.selectAll("path")
                         .data(data_ready)
 
                     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
@@ -225,19 +233,43 @@
                         .style("stroke-width", "2px")
                         .style("opacity", 1)
 
+                    // var legend2 = svg2.selectAll(".legend")
+                    //     .data(color.domain())
+                    //     .enter().append("g")
+                    //     .attr("class", "legend")
+                    //     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+                    // // draw legend colored rectangles
+                    // legend2.append("rect")
+                    //     .attr("x", width - 18)
+                    //     .attr("width", 18)
+                    //     .attr("height", 18)
+                    //     .style("fill", color);
+
+                    // // draw legend text
+                    // legend2.append("text")
+                    //     .attr("x", width - 24)
+                    //     .attr("y", 9)
+                    //     .attr("dy", ".35em")
+                    //     .style("text-anchor", "end")
+                    //     .text(function(d) { return d;})
+
             
                     u
                         .exit()
                         .remove()
+
+                    
                 }
+
                 // Initialize the plot with the first dataset
                 update(data1)  
                
             </script>
         </div>
+        </div>
 
-
-        <br>
+        <div class='container'>
         <h2>Comparing the stats of my favorite Pokemon</h2>   
         <h3>Note: This is not an exhaustive list of my favorites.</h3>
 
@@ -291,7 +323,7 @@
                     height = 400 - margin.top - margin.bottom;
                 
                 // append the svg object to the body of the page
-                var svg = d3.select("#my_dataviz_3")
+                var svg3 = d3.select("#my_dataviz_3")
                 .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
@@ -304,7 +336,7 @@
                 .range([ 0, width ])
                 .domain(fave1.map(function(d) { return d.group; }))
                 .padding(0.2);
-                svg.append("g")
+                svg3.append("g")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x))
                 
@@ -312,14 +344,14 @@
                 var y = d3.scaleLinear()
                 .domain([0, 150])
                 .range([ height, 0]);
-                svg.append("g")
+                svg3.append("g")
                 .attr("class", "myYaxis")
                 .call(d3.axisLeft(y));
                 
                 // A function that create / update the plot for a given variable:
                 function update_bar(data) {
                 
-                var m = svg.selectAll("rect")
+                var m = svg3.selectAll("rect")
                     .data(data)
                 
                 m
@@ -338,6 +370,7 @@
                 // Initialize the plot with the first dataset
                 update_bar(fave1)
             </script>
+        </div>
         </div>
 <!-- 
  
