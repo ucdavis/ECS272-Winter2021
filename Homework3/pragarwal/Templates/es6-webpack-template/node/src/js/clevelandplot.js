@@ -51,7 +51,7 @@ export async function drawClevelandPlot(){
         .attr("x2", function(d) { return x(d.TikTok); })
         .attr("y1", function(d) { return y(d.artists); })
         .attr("y2", function(d) { return y(d.artists); })
-        .attr("stroke", "white")
+        .attr("stroke", "black")
         .attr("stroke-width", "2px")
 
 
@@ -65,9 +65,9 @@ export async function drawClevelandPlot(){
         .attr("cx", function(d) { return x(d.Spotify); })
         .attr("cy", function(d) { return y(d.artists); })
         .attr("r", "5")
-        .style("fill", "#fcd471")
-        .style("stroke", "white")
-        .style("stroke-width", "1")
+        .style("fill", "#1DB954")
+        .style("stroke", "black")
+        .style("stroke-width", "1.5")
         
 
     // Circles of variable 2
@@ -80,8 +80,48 @@ export async function drawClevelandPlot(){
         .attr("cx", function(d) { return x(d.TikTok); })
         .attr("cy", function(d) { return y(d.artists); })
         .attr("r", "8")
-        .style("fill", "#ef54f1")
-        .style("stroke", "white")
+        .style("fill", "#EE1D52")
+        .style("stroke", "black")
         .style("stroke-width", "3")
+
+
+    var colors = [ '#1DB954','#EE1D52']
+    var attr = ['Spotify', 'TikTok']
+        
+        
+        
+        var n = 2;
+        var itemWidth =80;
+        var itemHeight = 18;
+        var width = 500;
+    
+        //var svg = d3.select("svg");
+    
+        //var color = d3.scale.category10();
+    
+        var legendGroup = svg.append("g")
+            .attr("transform", "translate("+(width-350)+", -5)");
+    
+        var legend = legendGroup.selectAll(".legend")
+            .data(attr)
+            .enter()
+            .append("g")
+            .attr("transform", function(d,i) { return "translate(" + i%n * itemWidth + "," + Math.floor(i/n) * itemHeight + ")"; })
+            .attr("class","legend");
+            
+        var circles = legend.append('circle')
+            .attr("r",6)
+            .attr("stroke", "black")
+            .attr("stroke-width", "2")
+            .attr("fill", function(d,i) { return colors[i]; });
+            
+        var text = legend.append('text')
+            .data(attr)
+            .attr("x", 10)
+            .attr("y",10)
+            .text(function(d, i) { return attr[i]; });
+
+
+
 
 }

@@ -148,40 +148,37 @@ export async function drawStackedBarChartTopArtist(selectedOption){
     
     var colors = [ '#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7']
     var attr = ['artist1','artist2','artist3','artist4','artist5']
-    var padding = 450;
     
-        
-        
-        var legend = svg1.append('g')
-                    .attr('class', 'legend')
-                    .attr('transform', 'translate(' + (padding + 12) + ', 0)');
     
-                legend.selectAll('rect')
-                    .data(attr)
-                    .enter()
-                    .append('rect')
-                    .attr('x', 0)
-                    .attr('y', function(d, i){
-                        return i + 16;
-                    })
-                    .attr('width', 10)
-                    .attr('height', 10)
-                    .attr('fill', function(d, i){
-                        return colors[i];
-                    });
-                
-                legend.selectAll('text')
-                    .data(attr)
-                    .enter()
-                    .append('text')
-                    .text(function(d){
-                        return d;
-                    })
-                    .attr('x', 16)
-                    .attr('y', function(d, i){
-                        return i + 16;
-                    })
-                    .attr('text-anchor', 'start')
-                    .attr('alignment-baseline', 'hanging');
+    
+    var n = 5;
+    var itemWidth =80;
+    var itemHeight = 18;
+    var width = 500;
+
+    //var svg = d3.select("svg");
+
+    //var color = d3.scale.category10();
+
+    var legendGroup = svg1.append("g")
+        .attr("transform", "translate("+(width-400)+", 0)");
+
+    var legend = legendGroup.selectAll(".legend")
+        .data(attr)
+        .enter()
+        .append("g")
+        .attr("transform", function(d,i) { return "translate(" + i%n * itemWidth + "," + Math.floor(i/n) * itemHeight + ")"; })
+        .attr("class","legend");
+        
+    var rects = legend.append('rect')
+        .attr("width",15)
+        .attr("height",15)
+        .attr("fill", function(d,i) { return colors[i]; });
+        
+    var text = legend.append('text')
+        .data(attr)
+        .attr("x", 20)
+        .attr("y",12)
+        .text(function(d, i) { return attr[i]; });
            
 }
