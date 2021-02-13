@@ -9,7 +9,7 @@ import Drawer from "./components/Drawer";
 import FocusPage from "./components/FocusPage";
 import OverviewPage from "./components/OverviewPage";
 
-const rawDataPath = "/dataset/Film_Locations_in_San_Francisco.csv";
+const rawDataName = "Film_Locations_in_San_Francisco.csv";
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
   },
   title: {
+    position: "fixed",
+    width: "100%",
     height: "50px",
     backgroundColor: "#5D10A8",
     color: "white",
@@ -25,10 +27,21 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "5px",
     fontWeight: "lighter",
     fontFamily: "Roboto",
+    zIndex: 0,
+  },
+  titleDummy: {
+    width: "100%",
+    height: "50px",
+    backgroundColor: "white",
+    color: "white",
+    paddingLeft: "10px",
+    paddingTop: "5px",
+    zIndex: -1,
   },
   iconBtn: {
-    position: "absolute",
+    position: "fixed",
     right: "10px",
+    zIndex: 1,
   },
   icon: {
     color: "white",
@@ -42,9 +55,14 @@ export default function App(props) {
     right: false,
     page: "Overview",
   });
+  const [overviewSelectInfo, setOverviewSelectInfo] = useState({
+    column: "",
+    rows: [],
+  });
+  const [isFocusUpdate, setIsFocusUpdate] = useState(false);
 
   useEffect(() => {
-    csv(process.env.PUBLIC_URL + rawDataPath)
+    csv(process.env.PUBLIC_URL + "/dataset/" + rawDataName)
       .then((csv) => {
         // Data Preprocessing
         csv = csv.filter((ele) => ele.Locations !== "");
@@ -91,9 +109,9 @@ export default function App(props) {
     setDrawerInfo({ ...drawerInfo, [anchor]: open });
   };
 
-  const isVisible = (pageName) => {
-    return drawerInfo.page === pageName ? true : false;
-  };
+  // const isVisible = (pageName) => {
+  //   return drawerInfo.page === pageName ? true : false;
+  // };
 
   const classes = useStyles();
 
@@ -109,6 +127,7 @@ export default function App(props) {
         <FormatListBulletedIcon className={classes.icon} />
       </IconButton>
       <h1 className={classes.title}>Film Locations in San Francisco</h1>
+      <div className={classes.titleDummy} />
       <Drawer
         anchor={"right"}
         drawerInfo={drawerInfo}
@@ -116,8 +135,19 @@ export default function App(props) {
         toggleDrawer={toggleDrawer}
       />
       <div className={classes.root}>
-        <OverviewPage data={data} visible={isVisible("Overview")} />
-        <FocusPage data={data} setData={setData} visible={isVisible("Focus")} />
+        <OverviewPage
+          data={data}
+          setOverviewSelectInfo={setOverviewSelectInfo}
+          isFocusUpdate={isFocusUpdate}
+          visible={true}
+        />
+        <FocusPage
+          data={data}
+          setData={setData}
+          setIsFocusUpdate={setIsFocusUpdate}
+          overviewSelectInfo={overviewSelectInfo}
+          visible={true}
+        />
       </div>
     </div>
   );

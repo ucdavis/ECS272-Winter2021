@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
 
 import "../css/Chord.css";
 
-const Chord = ({ data }) => {
+const Chord = ({ data, returnClickedItems, toCleanClickedItems }) => {
   const ref = useRef();
+  const [clickedItems, setClickedItems] = useState({
+    parent: "",
+    children: [],
+  });
 
   const width = window.innerHeight;
   const height = window.innerHeight;
@@ -13,6 +17,7 @@ const Chord = ({ data }) => {
 
   useEffect(() => {
     // Data Preprocessing
+    var tmpClickedItems = { ...clickedItems };
     const colorIn = "#00f";
     const colorOut = "#f00";
     const colorNone = "#ccc";
@@ -45,9 +50,15 @@ const Chord = ({ data }) => {
 
     const svg = d3.select(ref.current);
 
-    // Plot title
+    // Clean
+    svg.select("#title").remove();
+    svg.select("#nodes").remove();
+    svg.select("#links").remove();
+
+    // Title
     svg
       .append("text")
+      .attr("id", "title")
       .attr(
         "transform",
         "translate(" + -width * 0.3 + " ," + -height * 0.4 + ")"
@@ -82,9 +93,10 @@ const Chord = ({ data }) => {
       .attr("text-anchor", "left")
       .attr("alignment-baseline", "middle");
 
-    // Plotting
+    // Nodes
     svg
       .append("g")
+      .attr("id", "nodes")
       .attr("font-family", "sans-serif")
       .attr("font-size", 8)
       .selectAll("g")
@@ -98,6 +110,9 @@ const Chord = ({ data }) => {
       .attr("dy", "0.31em")
       .attr("x", (d) => (d.x < Math.PI ? 6 : -6))
       .attr("fill", (d) => nodeColor[d.parent.data.name])
+      .attr("font-weight", (d) =>
+        clickedItems.children.includes(d.data.name) ? "bold" : null
+      )
       .attr("text-anchor", (d) => (d.x < Math.PI ? "start" : "end"))
       .attr("transform", (d) => (d.x >= Math.PI ? "rotate(180)" : null))
       .text((d) => {
@@ -107,6 +122,7 @@ const Chord = ({ data }) => {
       .each(function (d) {
         d.text = this;
       })
+      .on("click", handleClick)
       .on("mouseover", overed)
       .on("mouseout", outed)
       .call((text) =>
@@ -117,22 +133,24 @@ const Chord = ({ data }) => {
         )
       );
 
-    const link = svg
+    // Links
+    const links = svg
       .append("g")
+      .attr("id", "links")
       .attr("stroke", colorNone)
       .attr("stroke-width", (d) => "0.075%")
       .attr("fill", "none")
       .selectAll("path")
       .data(root.leaves().flatMap((leaf) => leaf.outgoing))
       .join("path")
-      .style("mix-blend-mode", "multiply")
+      .attr("mix-blend-mode", "multiply")
       .attr("d", ([i, o]) => line(i.path(o)))
       .each(function (d) {
         d.path = this;
       });
 
     function overed(event, d) {
-      link.style("mix-blend-mode", null);
+      links.style("mix-blend-mode", null);
       d3.select(this).attr("font-weight", "bold");
       d3.selectAll(d.incoming.map((d) => d.path))
         .attr("stroke", colorIn)
@@ -149,8 +167,7 @@ const Chord = ({ data }) => {
     }
 
     function outed(event, d) {
-      link.style("mix-blend-mode", "multiply");
-      d3.select(this).attr("font-weight", null);
+      links.style("mix-blend-mode", "multiply");
       d3.selectAll(d.incoming.map((d) => d.path)).attr("stroke", null);
       d3.selectAll(d.incoming.map(([d]) => d.text))
         .attr("fill", (d) => nodeColor[d.parent.data.name])
@@ -159,9 +176,41 @@ const Chord = ({ data }) => {
       d3.selectAll(d.outgoing.map(([, d]) => d.text))
         .attr("fill", (d) => nodeColor[d.parent.data.name])
         .attr("font-weight", null);
-    }
-  }, []);
 
+      if (clickedItems.children.includes(d.data.name)) return;
+      d3.select(this).attr("font-weight", null);
+    }
+
+    function handleClick(event, d) {
+      const clickedParentName = d.parent.data.name;
+      const clickedChildrenName = d.data.name;
+
+      if (clickedParentName !== clickedItems.parent) {
+        tmpClickedItems = {
+          parent: clickedParentName,
+          children: [clickedChildrenName],
+        };
+      } else if (clickedItems.children.includes(clickedChildrenName)) {
+        // double click
+        tmpClickedItems = {
+          ...clickedItems,
+          children: clickedItems.children.filter(
+            (ele) => ele !== clickedChildrenName
+          ),
+        };
+      } else {
+        tmpClickedItems = {
+          ...clickedItems,
+          children: [...clickedItems.children, clickedChildrenName],
+        };
+      }
+
+      returnClickedItems(tmpClickedItems);
+      setClickedItems((clickedItems) => ({
+        ...tmpClickedItems,
+      }));
+    }
+  });
   return (
     <div className="chord">
       <svg className="d3-chord" id={id} viewBox={`0 0 ${width} ${height}`}>
