@@ -32,10 +32,10 @@ class App extends React.Component{
         <div id="map"></div>
         <div class="info">Attempted Chloropleth map of crime over each district</div>
         <GeoChart mapData={this.state.worldData} pdData={this.state.pdData}/>
-        <div class="info">Line Chart of Crime Incidents in SanFrancisco over each month in 2016</div>
+        {/* <div class="info">Line Chart of Crime Incidents in SanFrancisco over each month in 2016</div>
         <LineChart data={this.state.pdData}/>
         <div class="info">Parallel Coord Chart of Crime Incidents in SanFrancisco </div>
-        <ParallelCoordChart data={this.state.pdData}/>
+        <ParallelCoordChart data={this.state.pdData}/> */}
         {/* <div class="info">Stacked Area Chart of Crime Incidents in SanFrancisco </div> */}
         {/* <StackedAreaChart data={this.state.pdData}/>  //NOT IMPLEMENTED   */}
         {/* <BarChart data={this.state.data} width={this.state.width} height={this.state.height} />   */}

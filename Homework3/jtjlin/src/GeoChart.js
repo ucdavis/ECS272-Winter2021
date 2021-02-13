@@ -47,7 +47,7 @@ function GeoChart({mapData, pdData}){
               Category: row['Category'],
               cDate: dateParse(row['Date']),
               cMonth: dateParse(row['Date']).getMonth()+1
-              }
+              }          
           })
 
           filterdata.sort(function(a,b){
@@ -57,18 +57,42 @@ function GeoChart({mapData, pdData}){
           });
           //console.log(filterdata);
 
-          const sortedata = GroupBy(filterdata,"district");
-          //console.log(sortedata);
-          //console.log(Object.values(sortedata));
+          var sortedata = GroupBy(filterdata,"district");
 
+          
           var plotdata = Object.values(sortedata).map((row,index) => {
-              return {
-                  District: Object.keys(sortedata)[index],
-                  TotCrime: row.length
-              }
+            return {
+                District: Object.keys(sortedata)[index],
+                TotCrime: row.length
+            }
           })
-          plotdata.splice(-1,1); // get rid of last array entry (extra)
+          plotdata.splice(-1,1) // get rid of outlier data point  (last array entry)
           //console.log(plotdata);
+
+          sortedata = Object.keys(sortedata).map((key) => [(key), sortedata[key]]);//convert from object array to array
+          sortedata.splice(-1,1) //get rid of outlier data point with no district name attached. returns array from (starting index, ending index)
+
+          // console.log(sortedata)
+          // console.log(sortedata[0][0]);
+          // console.log(mapData.features);
+          // console.log(mapData.features.length);
+          // console.log(mapData.features[0].properties.DISTRICT);
+
+          for(var i = 0; i < mapData.features.length; i++){
+            var checkDistrict = mapData.features[i].properties.DISTRICT;
+            for(var j = 0; j < sortedata.length; j++){
+              if(sortedata[j][0] === checkDistrict){
+                mapData.features[i].properties['INCIDENTS'] = sortedata[j][1];
+                mapData.features[i].properties['TOTALCRIME'] = plotdata[j].TotCrime;
+                break; //break after found
+              }
+            }
+            
+          }
+
+          console.log(mapData.features);
+          //console.log(mapData.features.map (function(e) {  return e.properties.TOTALCRIME;}));
+
 
           //use dimensions otherwise fallback to boundingClientRect dom element
           const{width, height} = 
@@ -93,10 +117,8 @@ function GeoChart({mapData, pdData}){
           //   .attr("xlink:href", "datasets/sf-map.svg");
           /********************************************************************************************************************* */
 
-          //console.log(plotdata.map (function(e) {  return e.TotCrime;}));
-          const minProp = min(plotdata.map (function(e) {  return e.TotCrime;}));
-          const maxProp = max(plotdata.map (function(e) {  return e.TotCrime;}));
-          console.log(plotdata)
+          const minProp = min(mapData.features.map (function(e) {  return e.properties.TOTALCRIME;}));
+          const maxProp = max(mapData.features.map (function(e) {  return e.properties.TOTALCRIME;}));
           console.log(minProp,maxProp);
           const colorScale = d3.scaleLinear()
             .domain([minProp,maxProp])
@@ -109,21 +131,23 @@ function GeoChart({mapData, pdData}){
           .data(mapData.features) //map to Features array in json
           .join("path") //draw a path for every new piece of data
           .on("click", feature =>{
-              setSelectedDistrict(selectedDistrict === feature ? null : feature); //if selected district is already selected set selected to null.
+              //console.log(feature);
+              //console.log(feature.target["__data__"].properties.DISTRICT);
+              //console.log(selectedDistrict);
+              setSelectedDistrict(selectedDistrict === feature.target["__data__"].properties.DISTRICT ? null : feature.target["__data__"].properties.DISTRICT); //if selected district is already selected set selected to null.
           })
           .attr("class", "district") //attach class name neighborhood to each
-          .transition()
-          //.attr("fill", "#ccc")
-          .attr("fill",  (d) =>colorScale(d.TotCrime))
+          //.transition()
+          .attr("fill", feature =>{colorScale(feature.properties.TOTALCRIME); console.log(feature.properties)})
           .attr("d", feature => pathGenerator(feature)); //define callback function that receives current feature from features array and pass to path gen and return appropriate d
 
           //render text element of district name and stats
           svg.selectAll(".label")
-            //.data([selectedDistrict])
-            .data(plotdata)
+            .data([selectedDistrict])
             .join("text")
             .attr("class", "label")
-            //.text(feature => feature.District.toLocaleString())
+            .text(selectedDistrict)
+            //.text(feature => { feature.toLocaleString(); console.log(feature)})
             .attr("x", 10)
             .attr("y", 25);
 

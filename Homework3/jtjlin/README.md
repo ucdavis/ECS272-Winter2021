@@ -1,13 +1,6 @@
 # Final notes before submission
 
-I started with the React-d3 template. This was a mistake as my knowledge of React and well, javascript, was not as fresh as I thought.
-Unfortunately even with the deadline extensions I know there is still a lot of work that needs to be done such as legend, axis labels, interactability/filters, and even adding data to the geographic map(problem figuring out how to bind data from stats dataset to the drawn map json dataset) in order to meet the assignment requirements.
-As you can see from the files I tried implementing multiple different charts but many of them I ran into problems and aren't completed...
-Further, it seems the current charts that are displayed run into performance issues(lag and using a lot of RAM) and possibly are not implemented correctly as per the recommended react and d3 DOM interaction.
-Also, as you can plainly see I was not able to get around to the css portion or even arranging things on the page neatly.
-There was just too much for me to be able to try to learn and understand and the vast majority of the time was spent wrestling with reading in data properly then displaying it with d3
-
-Thanks for reading! Hopefully these problems do not hinder the grading too much and hw 3 will be better.  
+Homework3
 
 # Getting Started with Create React App
 
