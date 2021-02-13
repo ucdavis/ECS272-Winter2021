@@ -25,17 +25,17 @@ class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <h2>ECS 272 Assignment 2 - Jeremy Lin</h2>
+        <h2>ECS 272 Assignment 3 - Jeremy Lin</h2>
         <div id="container"> 
         <div id="tooltip"></div>
         </div>
         <div id="map"></div>
-        <div class="info">Attempted Chloropleth map of crime over each district</div>
+        <div class="info">Attempted Choropleth map of crime over each district</div>
         <GeoChart mapData={this.state.worldData} pdData={this.state.pdData}/>
-        {/* <div class="info">Line Chart of Crime Incidents in SanFrancisco over each month in 2016</div>
+        <div class="info">Line Chart of Crime Incidents in SanFrancisco over each month in 2016</div>
         <LineChart data={this.state.pdData}/>
         <div class="info">Parallel Coord Chart of Crime Incidents in SanFrancisco </div>
-        <ParallelCoordChart data={this.state.pdData}/> */}
+        <ParallelCoordChart data={this.state.pdData}/>
         {/* <div class="info">Stacked Area Chart of Crime Incidents in SanFrancisco </div> */}
         {/* <StackedAreaChart data={this.state.pdData}/>  //NOT IMPLEMENTED   */}
         {/* <BarChart data={this.state.data} width={this.state.width} height={this.state.height} />   */}

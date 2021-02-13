@@ -23,6 +23,7 @@ function GeoChart({mapData, pdData}){
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [selectedDistrictCrime, setSelectedDistrictCrime] = useState(null);
     //console.log(data);
     var dateParse = d3.timeParse("%m/%d/%Y %H:%M:%S %p");
 
@@ -34,6 +35,8 @@ function GeoChart({mapData, pdData}){
     //called initially and then for each data update
     useEffect(() => {
         const svg = select(svgRef.current);
+        var lowColor = '#ccc'
+        var highColor = 'red'
 
         //data filtering
         d3.csv(pdData)
@@ -116,52 +119,80 @@ function GeoChart({mapData, pdData}){
           //   .attr("height", height)
           //   .attr("xlink:href", "datasets/sf-map.svg");
           /********************************************************************************************************************* */
+          const minProp = d3.min(mapData.features.map(function (e) {return e.properties.TOTALCRIME;}));
+          const maxProp = d3.max(mapData.features.map(function (e) {return e.properties.TOTALCRIME;}));
+          function get_color(v) {
+            const r = 255;
+            const g = 16;
+            const b = 16;
+            const a = 3*v/4 + 0.25;
+            return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+          }
 
-          const minProp = min(mapData.features.map (function(e) {  return e.properties.TOTALCRIME;}));
-          const maxProp = max(mapData.features.map (function(e) {  return e.properties.TOTALCRIME;}));
-          console.log(minProp,maxProp);
-          const colorScale = d3.scaleLinear()
-            .domain([minProp,maxProp])
-            .range("#ccc","red")
+        //project to 2d plane using geoMercator function
+        let projection = d3.geoMercator().fitSize([width, height], mapData).precision(100);
+        //path generator that the function returns, transform json to d attribute of path element
+        let pathGenerator = d3.geoPath().projection(projection);
+        let label = svg.selectAll(".label")
+          .data([selectedDistrict])
+          .join("text")
+          .attr("class", "label")                    
+          .style("text-anchor", "middle");
+        const map = svg.selectAll(".district") //select all existing elements with class name neighborhood/district
+            .data(mapData.features) //map to Features array in json
+            .join("path") //draw a path for every new piece of data
+            .on("mouseover", feature => {
+                //if selected district is already selected set selected to null.
+                setSelectedDistrict(feature.target["__data__"].properties.DISTRICT);
+                //setSelectedDistrict(selectedDistrict === feature.target["__data__"].properties.DISTRICT);
+                setSelectedDistrictCrime(feature.target["__data__"].properties.TOTALCRIME);
+                const pointer = d3.pointer(feature, svg.node());
+                //render text element of district name and stats
+                label.text(selectedDistrict + " District Crimes Reported: " + selectedDistrictCrime)
+                  .attr("x", pointer[0])
+                  .attr("y", pointer[1] - 20);
+            })
+            .on('mouseleave', function (e) {
+              if (label)
+                label.text('');
+            })
+            .attr("class", "district") //attach class name neighborhood to each
+            //.transition()
+            .attr("fill", feature => {
+                // colorScale(feature.properties.TOTALCRIME);
+                // console.log(feature.properties);
+                const v = (feature.properties.TOTALCRIME - minProp) / maxProp;
+                const color = get_color(v);
+                //console.log(color);
+                return color;
+            })
+            .attr("d", feature => pathGenerator(feature));//define callback function that receives current feature from features array and pass to path gen and return appropriate d
+        const zoom = 2;
+        let zoom_in = true;
+        map.on("click", feature => {
+            const pointer = d3.pointer(feature, svg.node());
+            //console.log(pointer);
 
-          const projection = geoMercator().fitSize([width, height], mapData).precision(100); //project to 2d plane using geoMercator function
-          const pathGenerator = geoPath().projection(projection) //path generator that the function returns, transform json to d attribute of path element
-      
-          svg.selectAll(".district") //select all existing elements with class name neighborhood/district
-          .data(mapData.features) //map to Features array in json
-          .join("path") //draw a path for every new piece of data
-          .on("click", feature =>{
-              //console.log(feature);
-              //console.log(feature.target["__data__"].properties.DISTRICT);
-              //console.log(selectedDistrict);
-              setSelectedDistrict(selectedDistrict === feature.target["__data__"].properties.DISTRICT ? null : feature.target["__data__"].properties.DISTRICT); //if selected district is already selected set selected to null.
-          })
-          .attr("class", "district") //attach class name neighborhood to each
-          //.transition()
-          .attr("fill", feature =>{colorScale(feature.properties.TOTALCRIME); console.log(feature.properties)})
-          .attr("d", feature => pathGenerator(feature)); //define callback function that receives current feature from features array and pass to path gen and return appropriate d
-
-          //render text element of district name and stats
-          svg.selectAll(".label")
-            .data([selectedDistrict])
-            .join("text")
-            .attr("class", "label")
-            .text(selectedDistrict)
-            //.text(feature => { feature.toLocaleString(); console.log(feature)})
-            .attr("x", 10)
-            .attr("y", 25);
-
-          // // add circles to svg
-          // svg.selectAll("circle")
-          //  .data([filterdata.xCoord,filterdata.yCoord]).enter //UNDEFINED DATA...
-          //  .append("circle")
-          //  .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
-          //  .attr("cy", function (d) { return projection(d)[1]; })
-          //  .attr("r", "8px")
-          //  .attr("fill", "red");
+            if (zoom_in) {
+                projection = d3.geoMercator().fitSize([width*zoom, height*zoom], mapData).precision(100);
+                pathGenerator = d3.geoPath().projection(projection);
+                const x = -pointer[0];
+                const y = -pointer[1];
+                map.attr('transform', 'translate(' + x + ',' + y + ')');
+                map.attr("d", feature => pathGenerator(feature));
+                zoom_in = false;
+            }
+            else {
+                projection = d3.geoMercator().fitSize([width, height], mapData).precision(100);
+                pathGenerator = d3.geoPath().projection(projection);
+                map.attr('transform', 'translate(' + 0 + ',' + 0 + ')');
+                map.attr("d", feature => pathGenerator(feature));
+                zoom_in = true;
+            }
+        });  
             
-        });
-    }, [mapData, pdData, dimensions, dateParse, selectedDistrict]); //dependencies
+      });
+    }, [mapData, pdData, dimensions, dateParse, selectedDistrict, selectedDistrictCrime]); //dependencies
 
     return (
         //reference wrapperRef for dimensions of div
