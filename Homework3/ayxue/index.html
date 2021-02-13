@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+
+#row-container {
+    display: flex;
+    flex-direction: row;
+    padding-left: 42px;
+}
+#container {
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    top: 0;
+}
+
+text {
+    font-family: proxima-nova;
+    font-size: 12px;
+    fill: #666;
+}
+.ticks text {
+    font-size: 10px;
+}
+
+.countries {
+    fill: #333333;
+}
+.ticks {
+    font-size: 10px;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+    stroke-linecap: round;
+}
+
+.track {
+    stroke: #000;
+    stroke-opacity: 0.3;
+    stroke-width: 10px;
+}
+
+.track-inset {
+    stroke: #dcdcdc;
+    stroke-width: 8px;
+}
+
+.track-overlay {
+    pointer-events: stroke;
+    stroke-width: 50px;
+    stroke: transparent;
+    cursor: crosshair;
+}
+
+.handle {
+    fill: #fff;
+    stroke: #000;
+    stroke-opacity: 0.5;
+    stroke-width: 1.25px;
+}
+
+.titals {
+    font-weight: bold;
+}
+#desc {
+    margin-top: 50px;
+    font-size: 14px;
+}
+#desc text {
+    font-size: 17px;
+    padding-left: 30px;
+}
+#scatterplot .handle {
+    width: 0px;
+}
+
+</style>
+    </head>
+    <body>
+        <div id='container'>
+            <div id="row-container">
+                <div id='spikemap'></div>
+                <div id='scatterplot'></div>
+            </div>
+            <div id="streamgraph"></div>
+        </div>
+        <div id='desc'>
+            <text>
+                Global Significant Earthquakes since 1996<br>
+            </text>
+            <ul>
+                Data retrieved from <a href="https://www.kaggle.com/mohitkr05/global-significant-earthquake-database-from-2150bc">Global Significant Earthquake Database from 2150BC</a><br>
+                <li>Top left view can be used to view earthquake activities geographically. Support zoom and drag for more detailed view. Height of spikes represent number of deaths and injuries in each earthquake.</li>
+                <li>Top right view can be used to view earthquake magnitude versus deaths and injuries. Support brush to select subset of earthquakes to display on map. Click to deselect when there exist selection.</li>
+                <li>Bottom view can be used to view each earthquakes' activities over time. Use the slider to see earthquakes of respective year on map. Hover over different stream to see respective magnitude earthquake <br>
+                    activities on map. When time frame is specified, hover over stream will be disabled. Click to reset map view.</li>
+                <li>References are listed <a href="references.txt">here</a></li>
+            </ul>
+        </div>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.7.1/d3-sankey.min.js"></script>
+        <script>
+
+function resetData() {
+    mapsvg.selectAll('.spikes').style('opacity', 1);
+}
+
+
+const map_margin = {top: 30, right: 0, bottom: 0, left: 0},
+    map_width = 640 - map_margin.left - map_margin.right,
+    map_height = 400 - map_margin.top - map_margin.bottom;
+// const map_width = 450;
+// const map_height = 300;
+const stream_margin = {top: 40, right: 0, bottom: 50, left: 30},
+    stream_width = 1200 - stream_margin.left - stream_margin.right,
+    stream_height = 320 - stream_margin.top - stream_margin.bottom;
+
+const sctr_margin = {top: 25, right: 0, bottom: 20, left: 60},
+    sctr_width = 440 - sctr_margin.left - sctr_margin.right,
+    sctr_height = 400 - sctr_margin.top - sctr_margin.bottom;
+
+
+
+let mapsvg = d3.select('#spikemap')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, map_width, map_height])
+                    // .attr('id', 'map')
+                    .attr("width", map_width + map_margin.left + map_margin.right)
+                    .attr("height", map_height + map_margin.top + map_margin.bottom)
+                    // .append("g")
+                    .attr("transform",
+                        "translate(" + map_margin.left + "," + map_margin.top + ")");
+
+let sctrplt = d3.select('#scatterplot')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, sctr_width, sctr_height])
+                    // .attr('id', 'map')
+                    .attr("width", sctr_width + sctr_margin.left + sctr_margin.right)
+                    .attr("height", sctr_height + sctr_margin.top + sctr_margin.bottom)
+                    // .append("g")
+                    .attr("transform",
+                        "translate(" + sctr_margin.left + "," + sctr_margin.top + ")");
+
+let streamsvg = d3.select("#streamgraph")
+                    .append("svg")
+                    // .attr("viewBox", [0, 0, stream_width, stream_height])
+                    .attr("width", stream_width + stream_margin.left + stream_margin.right)
+                    .attr("height", stream_height + stream_margin.top + stream_margin.bottom)
+                    // .append("g")
+                    .attr("transform",
+                        "translate(" + stream_margin.left + "," + stream_margin.top + ")");
+
+
+let projection = d3.geoMercator().translate([map_width/2, map_height/2]),
+    path = d3.geoPath(projection);
+
+let formatDate = d3.timeFormat("%b %Y");
+
+d3.queue()
+    .defer(d3.json, 'world-50m.json')
+    .defer(d3.csv, 'full_out.csv')
+    .defer(d3.csv, 'year_mag.csv')
+    .await(main);
+
+function main(error, world, full_out, year_mag) {
+    let color = d3.scaleOrdinal()
+        .domain(year_mag.columns.slice(1))
+        .range(d3.schemeCategory10);
+    // let length = d3.scaleLinear([0, d3.max(full_out, d => d.value)], [0, 1]);
+    let length = d3.scaleLinear()
+                    .domain([0, d3.max(full_out, d => d.value)])
+                    .range([0,15]);
+    let spike = (length, width = 7) => `M${-width / 2},0L0,${-length}L${width / 2},0`;
+    let keys = year_mag.columns.slice(1);
+    let months = year_mag
+
+    full_out.forEach(d => { d.coords = projection([d.longitude, d.latitude]); })
+    let countries = topojson.feature(world, world.objects.countries).features;
+    let borders = topojson.mesh(
+        world,
+        world.objects.countries,
+        (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
+        );
+
+    mapsvg
+        .append('g')
+        .classed('countries', true)
+        .selectAll(".country")
+        .data(countries)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", path);
+
+    mapsvg.append('g')
+        .classed('boarders', true)
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr('stroke-width', 0.1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(borders));
+
+    mapsvg.append("g")
+            .classed('deaths', true)
+            .selectAll('.death')
+            .data(full_out)
+            .enter()
+            .append('path')
+            .attr("fill-opacity", 0.3)
+            .attr("stroke", function(d) {return color(d.mag_key);})
+            .attr("transform", d => `translate(${d.coords})`)
+            .attr("d", d => spike(length(d.value)))
+            .attr('id', d => 'id' + d.id)
+            .attr('class', function(d) {
+                let cl = 'spikes';
+                cl += ' year' + d.date;
+                cl += ' magkey' + d.mag_key
+                // cl += ' year' + year
+                // cl += ' ' + d.gname.slice(0,3);
+                // cl += ' ' + d.attype.slice(0,4);
+                // cl += ' ' + month;
+                // let kill;
+                // if (d.value < 20) {kill = group_cl[0];}
+                // else if (d.value < 40) {kill = group_cl[1];}
+                // else if (d.value < 60) {kill = group_cl[2];}
+                // else if (d.value < 80) {kill = group_cl[3];}
+                // else {kill = group_cl[4];}
+
+                // cl += ' ' + kill;
+                return cl});
+
+        drag_handler = d3.drag()
+            .on('start', drag_start)
+            .on('drag', drag_drag)
+
+        function drag_start() {
+            start_x = +d3.event.x
+            start_y = +d3.event.y
+        }
+
+        function drag_drag(d) {
+            d3.select(this)
+              .attr('cx', d.x = d3.event.x).attr('cy', d.y = d3.event.y)
+        }
+
+    drag_handler(mapsvg.selectAll('.spikes'));
+    // zoom and pan
+    const zoom = d3.zoom()
+        .on('zoom', () => {
+            let g = mapsvg.selectAll('g')
+            g.style('stroke-width', `${1.5 / d3.event.transform.k}px`)
+            g.attr('transform', d3.event.transform) // updated for d3 v4
+        })
+
+    mapsvg.call(zoom)
+    mapsvg.append("text")
+        .attr("x", 0)
+        .attr("y", map_height + map_margin.top - 5)
+        .attr('class', 'titals')
+        .text(function(d) { return "Earthquakes' deaths and injuries over region"; });
+
+    function select_update(selectedGroup) {
+        for (let i = 0; i < allGroup.length; i+= 1) {
+            let kill = group_cl[i];
+            if (selectedGroup == allGroup[i]) {
+                mapsvg.selectAll('.'+kill).style('opacity', 1)
+            }
+            else {
+                mapsvg.selectAll('.'+kill).style('opacity', 0)
+            }
+        }
+    }
+
+    // draw scatter pot
+    let sctr_x = d3.scaleLinear()
+        .domain([0, 10])
+        .range([sctr_margin.left, sctr_width]);
+    let sctr_xAxis = (g, x) => g
+        .attr("transform", `translate(0,${sctr_height})`)
+        .call(d3.axisBottom(x))
+        .call(g => g.select(".domain").attr("display", "none"))
+
+    // sctrplt.append("g")
+    //     .attr("transform", "translate(0," + sctr_height + ")")
+    //     .call(d3.axisBottom(sctr_x));
+
+    let sctr_y = d3.scaleLinear()
+        .domain([0, 500000])
+        .range([sctr_height, sctr_margin.top]);
+    let sctr_yAxis = (g, y) => g
+        .attr("transform", `translate(${sctr_margin.left},0)`)
+        .call(d3.axisLeft(y))
+        .call(g => g.select(".domain").attr("display", "none"))
+    // sctrplt.append("g")
+    //     .attr("transform", "translate(" + sctr_margin.left + ',' + 0 + ")")
+    //     .call(d3.axisLeft(sctr_y));
+
+    const gDot = sctrplt.append('g')
+        .selectAll("dot")
+        .data(full_out)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return sctr_x(d.magnitude); } )
+        .attr("cy", function (d) { return sctr_y(d.value); } )
+        .attr("r", 5)
+        .style("fill", d=>color(d.mag_key))
+
+    const brush = d3.brush()
+        .on("start brush end", brushed);
+
+    // const sctr_zoom = d3.zoom()
+    //     // .filter(event => !d3.event.ctrlKey
+    //     //     && !d3.event.button
+    //     //     && (d3.event.metaKey
+    //     //     || d3.event.target.__data__.type !== "overlay"))
+    //     .scaleExtent([0.5, 1000])
+    //     .on("zoom", sctr_zoomed);
+
+    const gx = sctrplt.append("g");
+    const gy = sctrplt.append("g");
+    gx.call(sctr_xAxis, sctr_x);
+    gy.call(sctr_yAxis, sctr_y);
+
+    let x0 = 0,
+        y0 = 0,
+        x1 = 0,
+        y1 = 0;
+    function brushed() {
+        let value = [];
+        if (d3.event.selection) {
+
+            mapsvg.selectAll('.spikes').style('opacity', 0);
+            [[x0, y0], [x1, y1]] = d3.event.selection;
+            value = gDot
+                .style("fill", "gray")
+                .filter(d => x0 <= sctr_x(d.magnitude) && sctr_x(d.magnitude) < x1 && y0 <= sctr_y(d.value) && sctr_y(d.value) < y1)
+                .style("fill", function(d){
+                    mapsvg.selectAll('#id'+d.id).transition().duration(500).style('opacity', 1);
+                    return color(d.mag_key);})
+                .data();
+        }
+        sctrplt.property("value", value).dispatch("input");
+    }
+    // function sctr_zoomed() {
+    //     const zx = d3.event.transform.rescaleX(sctr_x).interpolate(d3.interpolateRound);
+    //     const zy = d3.event.transform.rescaleY(sctr_y).interpolate(d3.interpolateRound);
+    //     gDot.attr("transform", d3.event.transform).attr("r", 5 / d3.event.transform.k);
+    //     gx.call(sctr_xAxis, zx);
+    //     gy.call(sctr_yAxis, zy);
+    // }
+
+    function clicked(event, d) {
+        let [cur_x, cur_y] = d3.mouse(this);
+        if (x0 <= cur_x && cur_x < x1 && y0 <= cur_y && cur_y < y1) {return;}
+        value = gDot
+            .style("fill", d=>color(d.mag_key))
+            .data();
+        mapsvg.selectAll('.spikes').transition().duration(500).style('opacity', 1);
+    }
+
+    sctrplt.call(brush);
+    sctrplt.on('click', clicked)
+
+    sctrplt.append("text")
+        .attr("x", 0)
+        .attr("y", map_height + map_margin.top - 5)
+        .attr('class', 'titals')
+        .text(function(d) {return "Earthquakes' magnitude vs. deaths and injuries"; });
+
+    // draw streamgraph
+    let series = d3.stack()
+        .keys(year_mag.columns.slice(1))
+        .offset(d3.stackOffsetWiggle)
+        .order(d3.stackOrderInsideOut)
+    (year_mag);
+
+    // Add X axis
+    let x = d3.scaleUtc()
+        .domain(d3.extent(year_mag, d => new Date(d.date)))
+        .range([stream_margin.left + 40, stream_width - stream_margin.right])
+        .clamp(true);
+
+    let y = d3.scaleLinear()
+        .domain([d3.min(series, d => d3.min(d, d => d[0])), d3.max(series, d => d3.max(d, d => d[1]))])
+        .range([stream_height - stream_margin.bottom, stream_margin.top]);
+
+    let area = d3.area()
+            .x(d => x(new Date(d.data.date)))
+            .y0(d => y(d[0]))
+            .y1(d => y(d[1]));
+
+    streamsvg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+
+    // streamgraph legend
+    streamsvg.append("g")
+        .attr("class", "legendOrdinal")
+        .attr("transform", "translate(15,30)")
+        .append('text')
+        .attr("transform", "translate(-3,-20)")
+        .attr('class', 'titals')
+        .text(d=>'Earthquake magnitude');
+
+
+    var legendOrdinal = d3.legendColor()
+                    .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+                    .shapePadding(10)
+                    .scale(color)
+
+
+    streamsvg.select(".legendOrdinal")
+        .call(legendOrdinal);
+
+    let in_focus_view = false;
+    let mouseenter = function(d, i) {
+        if (in_focus_view) {return}
+        // Tooltip.style("opacity", 1)
+        d3.selectAll(".myArea").style("opacity", .2)
+        d3.select(this).transition().duration(200).style("opacity", 1)
+        grp = keys[i]
+        // Tooltip.text(grp)
+        mapsvg.selectAll('.spikes').style('opacity', 0);
+
+        mapsvg.selectAll('.magkey'+grp).transition().duration(200).style('opacity', 1);
+    }
+
+    let mouseleave = function(d) {
+        if (in_focus_view) {return}
+        // Tooltip.style("opacity", 0)
+        d3.selectAll(".myArea").style("opacity", 1)
+        d3.selectAll('.spikes').style('opacity', 1);
+    }
+
+    var slider = streamsvg.append("g")
+                        .attr("class", "slider")
+                        .attr("transform", `translate(0,${stream_height})`);
+
+    slider.append("line")
+        .attr("class", "track")
+        .attr("x1", x.range()[0])
+        .attr("x2", x.range()[1])
+        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-inset")
+        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-overlay")
+        .call(d3.drag()
+            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start drag", function() {
+                currentValue = d3.event.x;
+                slider_update(x.invert(currentValue));
+            })
+        );
+
+    var startDate = new Date("1996-01-02")
+    slider.insert("g", ".track-overlay")
+        .attr("class", "ticks")
+        .attr("transform", "translate(0," + 18 + ")")
+        .selectAll("text")
+        .data(year_mag)
+        .enter()
+        .append("text")
+        .attr("x", d => x(new Date(d.date)))
+        .attr("y", 10)
+        .attr("text-anchor", "middle")
+        .text(function(d) { return formatDate(new Date(d.date));});
+
+    var handle = slider.insert("circle", ".track-overlay")
+            .attr("class", "handle")
+            .attr("r", 9)
+            .attr("cx", x(startDate));
+
+    var label = slider.append("text")
+            .attr("class", "label")
+            .attr("text-anchor", "middle")
+            .text(formatDate(startDate))
+            .attr("transform", "translate(0," + (-15) + ")")
+            .attr("x", x(startDate))
+
+    function slider_update(h) {
+        in_focus_view = true;
+        let year = formatDate(h);
+        year = year.slice(4,);
+        // update position and text of label according to slider scale
+        handle.attr("cx", x(h));
+        label.attr("x", x(h))
+            .text(formatDate(h));
+
+        // update spikes
+        mapsvg.selectAll('.spikes').transition().duration(500).style('opacity', 0);
+        mapsvg.selectAll('.year'+year).transition().duration(500).style('opacity', 1);
+    }
+
+    streamsvg.selectAll("mylayers")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("class", "myArea")
+            .style("fill", function(d) { return color(d.key); })
+            .attr("d", area)
+            .on("mouseenter", mouseenter)
+            .on("mouseleave", mouseleave)
+
+    streamsvg.append("text")
+            .attr("x", stream_width-290)
+            .attr("y", stream_height-30)
+            .attr('class', 'titals')
+            .text(function(d) { return "Different magnitude earthquake occurance over time"; });
+
+    streamsvg.on('click', function clicked(event, d) {
+        in_focus_view = false;
+        let [cur_x, cur_y] = d3.mouse(this);
+        if (cur_y < 200) {
+            mapsvg.selectAll('.spikes').transition().duration(500).style('opacity', 1);
+        }
+    })
+}
+        </script>
+    </body>
+</html>

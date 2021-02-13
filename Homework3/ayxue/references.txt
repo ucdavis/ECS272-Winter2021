@@ -1,0 +1,10 @@
+references:
+https://bl.ocks.org/patricksurry/803a131d4c34fde54b9fbb074341daa5
+https://observablehq.com/@d3/spike-map
+https://observablehq.com/@d3/brexit-voting?collection=@d3/d3-sankey
+https://blockbuilder.org/sistemawebpro/8ef27771795b451d0589e95e5674aa41
+https://bl.ocks.org/d3noob/7030f35b72de721622b8
+http://bl.ocks.org/NPashaP/96447623ef4d342ee09b
+https://d3-legend.susielu.com/
+https://observablehq.com/@d3/zoomable-scatterplot?collection=@d3/d3-zoom
+https://observablehq.com/@d3/brush-filter?collection=@d3/d3-brush
