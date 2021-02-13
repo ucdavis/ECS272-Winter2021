@@ -110,7 +110,13 @@ class Sk_VoronoiDiagram extends Component{
                 if(d3.select("#"+event.target.id).attr("stroke")!="rgb(255, 0, 0)"){
                     d3.select("#"+event.target.id)
                     .transition()
+                    .duration(500)
+                    .attr("r",radius*2)
+                    .transition()
+                    .duration(500)
+                    .attr("r",radius)
                     .attr("stroke", "red");
+
                     let appearance = Number(circles[Number(event.target.id.replace("cp",""))]["appearance"]);
                     d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])+appearance))
                                             .style("color",colorsCallback((Number(split_text[1])+appearance)));

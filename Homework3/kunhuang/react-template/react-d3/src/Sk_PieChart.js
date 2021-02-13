@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 import { data_processing,data_cleaning } from './data_processing';
+import {legendColor} from "d3-svg-legend";
 
 class Sk_BarChart extends Component{
 
@@ -86,12 +87,16 @@ class Sk_BarChart extends Component{
                              .outerRadius(150)
                              .padAngle(0.05)
                              .padRadius(50);
+
             let g = svg.append("g")
                       .attr("transform","translate(200,200)")
                       .selectAll("path")
                       .data(pie_data)
                       .join("path")
                       .attr("d",segments)
+                      .attr("fill",colors(50))
+                      .transition()
+                      .duration(2000)
                       .attr("fill",data=>colors(data.data.number));
                       
             let caption = svg.select("g")
@@ -109,7 +114,7 @@ class Sk_BarChart extends Component{
                            .attr("fill","white");
             });
             let legends = svg.append("g")
-                             .attr("transform","translate(400,100)")
+                             .attr("transform","translate("+(width-400)+",60)")
                              .selectAll(".category").data(pie_data);
             let legend = legends.join("g")
                                 .classed("category",true)
@@ -126,6 +131,20 @@ class Sk_BarChart extends Component{
                                  .attr("fill",data=>colors(data.data.number))
                                  .attr("x",20)
                                  .attr("y",20);
+            svg.append("g")
+                .attr("class", "colorLegend")
+                .attr("transform", "translate("+(width-400)+",20)")
+                .attr("fill","black");
+                               
+            var colorlegend = legendColor().shapeWidth(60)
+                                     .orient('horizontal')
+                                     .title("appearance range")
+                                     .titleWidth(200)
+                                     .labelFormat(d3.format(".2f"))
+                                     .scale(colors);
+                               
+            svg.select(".colorLegend")
+              .call(colorlegend);
 
         });
 

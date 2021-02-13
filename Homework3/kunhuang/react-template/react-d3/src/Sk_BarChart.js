@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 import { data_processing,data_cleaning } from './data_processing';
+import { sort } from 'd3';
+import {legendColor} from "d3-svg-legend";
 
 class Sk_BarChart extends Component{
 
@@ -8,15 +10,23 @@ class Sk_BarChart extends Component{
         super(props);
         this.state = {
             value: 5,
-            location: "City Hall"
+            location: "City Hall",
+            sort:true
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleSort = this.handleSort.bind(this);
     }
 
     handleChange(event){
         this.setState({
             value: event.target.value
+        });
+    }
+
+    handleSort(event){
+        this.setState({
+            sort:!this.state.sort
         });
     }
 
@@ -78,6 +88,13 @@ class Sk_BarChart extends Component{
             }
         
           console.log(top_directors);
+          if(this.state.sort){
+            top_directors.sort((a,b)=>a["number"]-b["number"]);
+          }else{
+            top_directors.sort((a,b)=>b["number"]-a["number"]);             
+          }
+          console.log(this.state.sort);
+
           return top_directors;
     
       }
@@ -130,9 +147,13 @@ class Sk_BarChart extends Component{
                .data(top_directors)
                .join("rect")
                .attr("x",data=>x_scale(data.name))
+               .attr("width",x_scale.bandwidth())
+               .attr("y",data=>y_scale(0))
+               .attr("height",data=>0)
+               .transition()
+               .duration(2000)
                .attr("y",data=>y_scale(data.number))
                .attr("height",data=>{return y_scale(0)-y_scale(data.number)})
-               .attr("width",x_scale.bandwidth())
                .attr("fill",data=>colors(data.number));
             
             let captions = svg.append("g")
@@ -156,24 +177,25 @@ class Sk_BarChart extends Component{
            .call(d3.axisLeft(y_scale));
            
         let legends = svg.append("g")
-           .attr("transform","translate("+(width-50)+",0)")
+           .attr("transform","translate("+(width-90)+",0)")
            .selectAll(".category").data(top_directors);
     
         let legend = legends.join("g")
               .classed("category",true)
               .attr("transform",(data,index)=>{
-                return "translate(0,"+(index+1)*30+")";
+                return "translate(0,"+((index+1)*30)+")";
      
             });
         
         legend.append("rect")
-            .attr("width",20)
-            .attr("height",20)
+            .attr("width",5)
+            .attr("height",15)
             .attr("fill",data=>colors(data.number));
     
         legend.append("text").text(data=>data.name)
                            .attr("font-weight","bold")
                            .attr("font-family", "Saira")
+                           .attr("font-size","0.8em")
                            .attr("fill",data=>colors(data.number))
                            .attr("x",20)
                            .attr("y",20);
@@ -198,6 +220,22 @@ class Sk_BarChart extends Component{
             .attr("font-size","0.7em")
             .attr("fill","black");
 
+        svg.append("g")
+            .attr("class", "colorLegend")
+            .attr("transform", "translate("+(width+45)+",20)")
+            .attr("fill","black");
+          
+        var colorlegend = legendColor()
+                .shapeWidth(10)
+                .title("appearance range")
+                .titleWidth(50)
+                .labelFormat(d3.format(".2f"))
+                .scale(colors);
+          
+        svg.select(".colorLegend")
+            .call(colorlegend);
+
+
         });
 
 
@@ -219,6 +257,7 @@ class Sk_BarChart extends Component{
                     <option>City Hall</option>
                 </select>
             </label>
+            <button onClick={this.handleSort}>sort(ascend/descend)</button>
         </div>);
     }
 }

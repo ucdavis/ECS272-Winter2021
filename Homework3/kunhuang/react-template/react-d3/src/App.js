@@ -20,7 +20,7 @@ class App extends React.Component{
         <div>
           <div id="container"> 
           </div>
-          <Sk_BarChart data={this.state.data} width={700} height={200} />
+          <Sk_BarChart data={this.state.data} width={800} height={280} />
         </div>
       );
     }else if(this.props.kind === "PieChart"){
@@ -28,7 +28,7 @@ class App extends React.Component{
         <div>
           <div id="container_pie"> 
           </div>
-          <Sk_PieChart data={this.state.data} width={600} height={400} />
+          <Sk_PieChart data={this.state.data} width={800} height={350} />
         </div>
       );
     }else if(this.props.kind === "VoronoiDiagram"){
@@ -36,7 +36,7 @@ class App extends React.Component{
         <div>
           <div id="container_VoronoiDiagram"> 
           </div>
-          <Sk_VoronoiDiagram data={this.state.data} width={800} height={400} />
+          <Sk_VoronoiDiagram data={this.state.data} width={800} height={350} />
         </div>
       );
     }
