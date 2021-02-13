@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.5.0",
     "bootstrap": "^4.5.3",
     "d3": "^6.3.1",
+    "d3-svg-legend": "^2.25.6",
     "d3-voronoi": "^1.1.4",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",

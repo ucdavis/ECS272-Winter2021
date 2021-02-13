@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 import { data_processing,data_cleaning } from './data_processing';
+import {legendColor} from "d3-svg-legend";
 
 
 class Sk_VoronoiDiagram extends Component{
@@ -293,9 +294,23 @@ class Sk_VoronoiDiagram extends Component{
             // this.setState({
             //     circlePlotData: selected_names
             // })
-
-
-
+          
+          
+          svg.append("g")
+            .attr("class", "colorLegend")
+            .attr("transform", "translate("+(width-320)+",20)")
+            .attr("fill","black");
+          
+          var legend = legendColor()
+                .shapeWidth(60)
+                .orient('horizontal')
+                .title("appearance range")
+                .titleWidth(200)
+                .labelFormat(d3.format(".2f"))
+                .scale(colors);
+          
+          svg.select(".colorLegend")
+            .call(legend);
 
         });
 

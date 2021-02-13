@@ -20,6 +20,10 @@ You will also see any lint errors in the console.
 
 Download bootstrap for advance data visualization method.
 
+### `npm i d3-svg-legend -S`
+
+Download a standard d3 color legend module for latest d3 version
+
 
 ### `npm test`
 

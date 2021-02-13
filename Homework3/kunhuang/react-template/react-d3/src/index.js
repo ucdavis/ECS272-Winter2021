@@ -20,6 +20,7 @@ ReactDOM.render(
       rel="stylesheet"
       href="./index.css"
     />
+
       <My_Navbar/>
       <div className="sk_container">
         <div className="sk_row">
