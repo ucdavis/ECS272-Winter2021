@@ -111,7 +111,7 @@ class Sk_BarChart extends Component{
                            .text(data.data.name+":"+data.data.number)
                            .attr("font-family","Saira")
                            .attr("font-weight","bold")
-                           .attr("fill","white");
+                           .attr("fill","red");
             });
             let legends = svg.append("g")
                              .attr("transform","translate("+(width-400)+",60)")

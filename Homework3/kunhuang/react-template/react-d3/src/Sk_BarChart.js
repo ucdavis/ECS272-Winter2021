@@ -165,7 +165,7 @@ class Sk_BarChart extends Component{
                .attr("y",data=>y_scale(data.number)+15)
                .text(data=>data.name+":"+data.number)
                .attr("font-size", "11px")
-               .attr("fill","white");
+               .attr("fill","red");
      
            
            // create a scatter plot

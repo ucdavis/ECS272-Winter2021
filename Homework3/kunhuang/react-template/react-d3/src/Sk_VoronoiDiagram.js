@@ -124,10 +124,16 @@ class Sk_VoronoiDiagram extends Component{
                 }else{
                     d3.select("#"+event.target.id)
                     .transition()
+                    .duration(500)
+                    .attr("r",radius/2)
+                    .transition()
+                    .duration(500)
+                    .attr("r",radius)
                     .attr("stroke", "none");  
                     // d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])-circles[Number(event.target.id.replace("cp"))]["appearance"]));
                     let appearance = Number(circles[Number(event.target.id.replace("cp",""))]["appearance"]);
-                    d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])-appearance));
+                    d3.select("#cp_counter").text(split_text[0]+":"+(Number(split_text[1])-appearance))
+                                            .style("color",colorsCallback((Number(split_text[1])-appearance)));
                 }
                 // console.log(d3.select("#"+event.target.id).attr("stroke"));
 
@@ -221,7 +227,7 @@ class Sk_VoronoiDiagram extends Component{
                             .style("font-size",data=>{
                                 return this.state.radius+"px";
                             })
-                            .attr("fill","black")
+                            .attr("fill","red")
                             .style("text-anchor", "middle")
                             .text(data=>data[3]);
 
