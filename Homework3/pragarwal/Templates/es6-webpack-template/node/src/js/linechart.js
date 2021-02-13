@@ -2,28 +2,19 @@ import * as d3 from "d3";
 import csvPath from '../assets/data/data_by_year.csv';
 import {drawStackedBarChartTopArtist} from "./stackedbarcharttopartist"
 
+//https://bl.ocks.org/EfratVil/92f894ac0ba265192411e73f633a3e2f
+
 
 export async function drawLineChart(){
 
 
     // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 20, bottom: 50, left: 50},
+    var margin = {top: 20, right: 10, bottom: 100, left: 30},
+    margin2 = {top: 230, right: 10, bottom: 30, left: 30},
     width = 600 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+    height = 300 - margin.top - margin.bottom,
+    height2 = 300 - margin2.top - margin2.bottom;
 
-
-var zoom = d3.zoom()
-    .scaleExtent([1, 5])
-    .extent([100, 100], [width-100, height-100])
-    .on("zoom", zoomed);
-
-function zoomed() {
-    svg.selectAll(".line")
-        .attr("transform", d3.event.transform);
-    d3.selectAll('.line').style("stroke-width", 2/d3.event.transform.k);
-    gX.call(xAxis.scale(d3.event.transform.rescaleX(x)));
-    gY.call(yAxis.scale(d3.event.transform.rescaleY(y)));
-}
 
     // List of groups (here I have one group per column)
     var allGroup = ["danceability", "energy", "liveness", "acousticness", "valence"]
@@ -48,30 +39,26 @@ function zoomed() {
 
     // set the ranges
     var x = d3.scaleTime()
-                //.domain([1920, 2020])
                 .range([0, width]);
     var y = d3.scaleLinear()
                 .range([height, 0]);
 
-    var valueline = d3.line()
+    var x2 = d3.scaleTime()
+                .range([0, width]);
+
+    var y2 = d3.scaleLinear()
+                .range([height2, 0]);
+
+
+
+    var line = d3.line()
                         .x(function(d) { return x(d.year); })
                         .y(function(d) { return y(d.danceability); });
 
-    var valueline2 = d3.line()
-                        .x(function(d) { return x(d.year); })
-                        .y(function(d) { return y(d.energy); });
+    var line2 = d3.line()
+                        .x(function(d) { return x2(d.year); })
+                        .y(function(d) { return y2(d.danceability); });
 
-    var valueline3 = d3.line()
-                        .x(function(d) { return x(d.year); })
-                        .y(function(d) { return y(d.liveness); });
-
-    var valueline4 = d3.line()
-                        .x(function(d) { return x(d.year); })
-                        .y(function(d) { return y(d.acousticness); });
-
-    var valueline5 = d3.line()
-                        .x(function(d) { return x(d.year); })
-                        .y(function(d) { return y(d.valence); });
 
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
@@ -81,7 +68,6 @@ function zoomed() {
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .call(zoom)
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
@@ -99,10 +85,7 @@ function zoomed() {
             d.valence = +d.valence;
     });
 
-    // Scale the range of the data
-    x.domain([1920, 2020])
-    y.domain([0, 1]);
-
+    
     
     var tooltip = d3.select(".line")
                     .append("div")
@@ -121,22 +104,9 @@ function zoomed() {
                     d3.select(this)
                           .transition()
                           .duration(200)
-                          //.style("opacity", 1)
-                    //tooltip
-                          //.style("opacity", 2)
                           .style("stroke-width", '4.5px')
-
-                          //.html("Attribute: " + d.valueline)
-                        //   .style("left", (d3.mouse(this)[0]+30) + "px")
-                        //   .style("top", (d3.mouse(this)[1]+30) + "px")
                       }
 
-    // var moveTooltip = function(d) {
-                        
-    //                 tooltip
-    //                       .style("left", (d3.mouse(this)[0]+30) + "px")
-    //                       .style("top", (d3.mouse(this)[1]+30) + "px")
-    //                   }
     
     //var hideTooltip = 
     function handleMouseOut(d) {
@@ -144,101 +114,120 @@ function zoomed() {
                     d3.select(this)
                           .transition()
                           .duration(100)
-                          //.style("opacity", 4.5)
                           .style("stroke-width", "4.5px")
                       }
                     
     
+    // Scale the range of the data
+    x.domain([1920, 2020])
+    y.domain([0, 1]);
+    x2.domain(x.domain());
+    y2.domain(y.domain());
 
-    var line = svg.append("path")
-                    .data([data])
-                    .attr("class", "line")
-                     .style("stroke", "#ffffff")
-                     .style("stroke-width", "4.5px")
-                     .attr("d", valueline)
-                     .style("opacity", 1)
-                     .on("mouseover", handleMouseOver )
-                     //.on("mousemove", moveTooltip )
-                     .on("mouseleave", handleMouseOut );
+    
+    var xAxis = d3.axisBottom(x).tickFormat(d3.format("d")),
+    xAxis2 = d3.axisBottom(x2).tickFormat(d3.format("d")),
+    yAxis = d3.axisLeft(y);
+
+    var brush = d3.brushX()
+                    .extent([[0, 0], [width, height2]])
+                    .on("brush end", brushed);
+                  
+                  
+    var zoom = d3.zoom()
+                    .scaleExtent([1, Infinity])
+                    .translateExtent([[0, 0], [width, height]])
+                    .extent([[0, 0], [width, height]])
+                    .on("zoom", zoomed);
+                      
+
+
+    var clip = svg.append("defs").append("svg:clipPath")
+                    .attr("id", "clip")
+                    .append("svg:rect")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("x", 0)
+                    .attr("y", 0); 
+
+    var Line_chart = svg.append("g")
+                        .attr("class", "focus")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                        .attr("clip-path", "url(#clip)");
+
+    var focus = svg.append("g")
+                    .attr("class", "focus")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var context = svg.append("g")
+                        .attr("class", "context")
+                        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+    
+
+    focus.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    focus.append("g")
+        .attr("class", "axis axis--y")
+        .call(yAxis);
+
+    
+    var lineonly = Line_chart.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line);
+
+    context.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line2);
+
+
+    context.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height2 + ")")
+        .call(xAxis2);
   
-    // Add the valueline path.
-    var line1 = svg.append("path")
-                    .data([data])
-                    .attr("class", "line")
-                    .style("stroke", "#03dac5")
-                    .attr("d", valueline)
-                    .style("opacity", 0.4)
-                    //.on("mouseover", handleMouseOver )
-                    //.on("mousemove", moveTooltip )
-                    //.on("mouseleave", handleMouseOut );
+    context.append("g")
+        .attr("class", "brush")
+        .call(brush)
+        .call(brush.move, x.range());
+  
+    
+    svg.append("rect")
+        .attr("class", "zoom")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(zoom);
+  
 
-    // Add the valueline2 path.
-    var line2 = svg.append("path")
-                    .data([data])
-                    .attr("class", "line")
-                    .style("stroke", "#e8249a")
-                    .attr("d", valueline2)
-                    .style("opacity", 0.4)
-                    //.on("mouseover", handleMouseOver )
-                    //.on("mousemove", moveTooltip )
-                    //.on("mouseleave", handleMouseOut );
+    
+    function brushed() {
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+            var s = d3.event.selection || x2.range();
+            x.domain(s.map(x2.invert, x2));
+            Line_chart.select(".line").attr("d", valueline);
+            focus.select(".axis--x").call(xAxis);
+            svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                .scale(width / (s[1] - s[0]))
+                .translate(-s[0], 0));
+          }
+          
+    function zoomed() {
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+            var t = d3.event.transform;
+            x.domain(t.rescaleX(x2).domain());
+            Line_chart.select(".line").attr("d", valueline);
+            focus.select(".axis--x").call(xAxis);
+            context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+          }
+          
 
-    // Add the valueline3 path.
-    var line3 = svg.append("path")
-                    .data([data])
-                    .attr("class", "line")
-                    .style("stroke", "#fb84ce")
-                    .attr("d", valueline3)
-                    .style("opacity", 0.4)
-                    //.on("mouseover", handleMouseOver )
-                    //.on("mousemove", moveTooltip )
-                    //.on("mouseleave", handleMouseOut );
-
-    // Add the valueline4 path.
-    var line4 = svg.append("path")
-                    .data([data])
-                    .attr("class", "line")
-                    .style("stroke", "#eeff01")
-                    .attr("d", valueline4)
-                    .style("opacity", 0.4)
-                    //.on("mouseover", handleMouseOver )
-                    //.on("mousemove", moveTooltip )
-                    //.on("mouseleave", handleMouseOut );
-
-    // Add the valueline5 path.
-    var line5 = svg.append("path")
-                    .data([data])
-                    .attr("class", "line")
-                    .style("stroke", "#bb86fc")
-                    .attr("d", valueline5)
-                    .style("opacity", 0.4)
-                    //.on("mouseover", handleMouseOver )
-                    //.on("mousemove", moveTooltip )
-                    //.on("mouseleave", handleMouseOut );
-
-    // Add the X Axis
-    svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .attr("background-color", "white")
-    .attr("class", "axisWhite")
-    .call(d3.axisBottom(x).tickFormat(d3.format("d")))
-    .call(g =>
-        g .select(".tick:last-of-type text")
-          .clone()
-          .attr("text-anchor", "middle")
-          .attr("x", -width / 2)
-          .attr("y", margin.bottom - 10)
-          //.attr("font-weight", "bold")
-          .text("Year")
-        );
-
-    // Add the Y Axis
-    svg.append("g")
-    .attr("class", "axisWhite")
-    .call(d3.axisLeft(y));
-
-
-    // legendSpace = width;
+    
 
     function update(selectedGroup) {
 
@@ -246,16 +235,23 @@ function zoomed() {
         var dataFilter = data.map(function(d){return {year: d.year, value:d[selectedGroup]} })
   
         // Give these new data to update line
-        line
+        lineonly
             .datum(dataFilter)
             .transition()
-            .duration(2000)
+            .duration(1000)
             .attr("d", d3.line()
                                 .x(function(d) { return x(d.year) })
-                                .y(function(d) { return y(d.value) })
-            )
-            //.attr("stroke", function(d){ return myColor(selectedGroup) })       
-            
+                                .y(function(d) { return y(d.value) }));
+
+            //console.log("year:   " + year + "   " + "value:    " +    value)   
+
+        // line2
+        //     .datum(dataFilter)
+        //     // .transition()
+        //     // .duration(1000)
+        //     .attr("d", d3.line()
+        //                         .x(function(d) { return x(d.year) })
+        //                         .y(function(d) { return y(d.value) }));     
       }
 
       // When the button is changed, run the updateChart function
@@ -268,22 +264,27 @@ function zoomed() {
         drawStackedBarChartTopArtist(selectedOption);
     })
 
-    // Variable to Hold Total Length
-    var totalLength = line.node().getTotalLength();
-    console.log("Totessssss: " +totalLength)
+//     // Variable to Hold Total Length
+//     // var totalLength = line.node().getTotalLength();
+//     var totalLength = 6500;
+//     console.log("Totessssss: " +totalLength)
 
-// Set Properties of Dash Array and Dash Offset and initiate Transition
-    line
-        .attr("stroke-dasharray", totalLength + " " + totalLength)
-        .attr("stroke-dashoffset", totalLength)
-    .transition() // Call Transition Method
-        .duration(7000) // Set Duration timing (ms)
-        .ease(d3.easeLinear) // Set Easing option
-        .attr("stroke-dashoffset", 0); // Set final value of dash-offset for transition
+// // Set Properties of Dash Array and Dash Offset and initiate Transition
+//     line
+//         .attr("stroke-dasharray", totalLength + " " + totalLength)
+//         .attr("stroke-dashoffset", totalLength)
+//         .transition() // Call Transition Method
+//             .duration(15000) // Set Duration timing (ms)
+//             .ease(d3.easeLinear) // Set Easing option
+//             .attr("stroke-dashoffset", 0); // Set final value of dash-offset for transition
 
 
     
-    var colors = ["#03dac5", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]
+    
+
+//Legend
+
+var colors = ["#03dac5", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]
     var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
     var padding = 400;
 

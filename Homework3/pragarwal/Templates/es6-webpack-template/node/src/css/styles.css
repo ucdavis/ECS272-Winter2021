@@ -65,7 +65,7 @@ body{
 
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: #03dac5;
   stroke-width: 2.0px;
   opacity: 1.0;
 }
@@ -94,6 +94,7 @@ body{
     float: left;
     /* position: relative; */
     margin: 20px;
+    margin-bottom: 50px;
 }
 
 .selectButton {
@@ -215,3 +216,9 @@ body{
     float: left;
     color: white;
 }
+
+.zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+  }

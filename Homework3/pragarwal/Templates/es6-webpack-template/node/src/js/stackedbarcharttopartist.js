@@ -123,24 +123,32 @@ export async function drawStackedBarChartTopArtist(selectedOption){
     // Show the bars
 
     svg1.append("g")
-    .selectAll("g")
-    .data(stackedData)
-    .enter().append("g")
-        .attr("fill", function(d) { return color(d.key); })
-    .selectAll("rect")
-    .data(function(d) { return d; })
-    .enter().append("rect")
-        .attr("x", function(d) { return x(d.data.year); })
-        .attr("y", function(d) { return y(d[1]); })
-        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-        .attr("width",x.bandwidth())
-        .append("title")
+        .selectAll("g")
+        .data(stackedData)
+        .enter().append("g")
+            .attr("fill", function(d) { return color(d.key); })
+            .selectAll("rect")
+            .data(function(d) { return d; })
+        .enter().append("rect")
+                .attr("x", function(d) { return x(d.data.year); })
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                .attr("width",x.bandwidth())
+                .append("title")
 
-
+    //https://bl.ocks.org/ricardo-marino/ca2db3457f82dbb10a8753ecba8c0029
+    // svg1.selectAll("rect")
+    //     .transition()
+    //     .duration(800)
+    //     .attr("y", function(d) { return y(d[1]); })
+    //     .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+    //     .delay(function(d,i){console.log(i) ; return(i*1000)})
+      
         
-        var colors = [ '#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7']
-        var attr = ['artist1','artist2','artist3','artist4','artist5']
-        var padding = 450;
+    
+    var colors = [ '#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7']
+    var attr = ['artist1','artist2','artist3','artist4','artist5']
+    var padding = 450;
     
         
         
