@@ -1,0 +1,77 @@
+*{
+  font-family: 'Raleway', sans-serif;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Padding bottom by footer height */
+  padding-bottom: 20px;
+}
+
+.jumbotron {
+  margin-top: 20px;
+  background-image: url(https://news.ubc.ca/wp-content/uploads/2018/08/wildfire-1024x536.jpg);
+  background-size: cover;
+  color: white;
+
+}
+
+.jumbotron p {
+  font-style:italic;
+  font-weight: bolder;
+}
+
+a{
+  color: white;
+  font-weight: bold;
+}
+
+.btn.btn-primary.btn-lg {
+  position: relative;
+  align-items: center;
+}
+
+.col-lg-4, .col-sm-6 {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.pb-5, .py-5 {
+  padding-left: 1.5rem !important;
+}
+
+.px-4 {
+  padding-right: 1.5rem !important;
+}
+
+h5 {
+  font-weight: bolder;
+}
+.card {
+  width: 450px;
+  height: 450px;
+  background: white;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0;
+  transform: scale(0.95);
+  transition: box-shadow 0.5s, transform 0.5s;
+}
+  
+.card:hover{
+    transform: scale(1);
+    box-shadow: 5px 20px 30px rgba(0,0,0,0.2);
+  }
+
+img {
+  width: 150px;
+  height: 150px;
+}

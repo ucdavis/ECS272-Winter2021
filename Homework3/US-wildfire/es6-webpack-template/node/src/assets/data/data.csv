@@ -1,0 +1,313 @@
+cause,count,date
+Arson,11162,1992
+Arson,10945,1993
+Arson,10080,1994
+Arson,12648,1995
+Arson,10206,1996
+Arson,10936,1997
+Arson,14103,1998
+Arson,19282,1999
+Arson,17827,2000
+Arson,16939,2001
+Arson,12785,2002
+Arson,10006,2003
+Arson,11429,2004
+Arson,13354,2005
+Arson,18902,2006
+Arson,13600,2007
+Arson,9483,2008
+Arson,8842,2009
+Arson,10196,2010
+Arson,9109,2011
+Arson,9560,2012
+Arson,6590,2013
+Arson,6845,2014
+Arson,6626,2015
+Campfire,2570,1992
+Campfire,2767,1993
+Campfire,3726,1994
+Campfire,3987,1995
+Campfire,4038,1996
+Campfire,2490,1997
+Campfire,2661,1998
+Campfire,3266,1999
+Campfire,2723,2000
+Campfire,3121,2001
+Campfire,3022,2002
+Campfire,2436,2003
+Campfire,2266,2004
+Campfire,3662,2005
+Campfire,2845,2006
+Campfire,3510,2007
+Campfire,3336,2008
+Campfire,3314,2009
+Campfire,3585,2010
+Campfire,3015,2011
+Campfire,3471,2012
+Campfire,2796,2013
+Campfire,3801,2014
+Campfire,3731,2015
+Children,2916,1992
+Children,2501,1993
+Children,3201,1994
+Children,3310,1995
+Children,3039,1996
+Children,2884,1997
+Children,3109,1998
+Children,3517,1999
+Children,3492,2000
+Children,3537,2001
+Children,2906,2002
+Children,2250,2003
+Children,2041,2004
+Children,2507,2005
+Children,3186,2006
+Children,2580,2007
+Children,2215,2008
+Children,1890,2009
+Children,1903,2010
+Children,1894,2011
+Children,2119,2012
+Children,1400,2013
+Children,1420,2014
+Children,1350,2015
+Debris Burning,12729,1992
+Debris Burning,12353,1993
+Debris Burning,14845,1994
+Debris Burning,16719,1995
+Debris Burning,16827,1996
+Debris Burning,14750,1997
+Debris Burning,15111,1998
+Debris Burning,22343,1999
+Debris Burning,21790,2000
+Debris Burning,21377,2001
+Debris Burning,19269,2002
+Debris Burning,12546,2003
+Debris Burning,16911,2004
+Debris Burning,18703,2005
+Debris Burning,25951,2006
+Debris Burning,18703,2007
+Debris Burning,18825,2008
+Debris Burning,18402,2009
+Debris Burning,19835,2010
+Debris Burning,19524,2011
+Debris Burning,16613,2012
+Debris Burning,16703,2013
+Debris Burning,19860,2014
+Debris Burning,18339,2015
+Equipment Use,5633,1992
+Equipment Use,5516,1993
+Equipment Use,5429,1994
+Equipment Use,5594,1995
+Equipment Use,6028,1996
+Equipment Use,5744,1997
+Equipment Use,6027,1998
+Equipment Use,7643,1999
+Equipment Use,6608,2000
+Equipment Use,6581,2001
+Equipment Use,5382,2002
+Equipment Use,5595,2003
+Equipment Use,5526,2004
+Equipment Use,7148,2005
+Equipment Use,9569,2006
+Equipment Use,7230,2007
+Equipment Use,7464,2008
+Equipment Use,6225,2009
+Equipment Use,5809,2010
+Equipment Use,6896,2011
+Equipment Use,5628,2012
+Equipment Use,4334,2013
+Equipment Use,4519,2014
+Equipment Use,5484,2015
+Fireworks,213,1992
+Fireworks,243,1993
+Fireworks,413,1994
+Fireworks,202,1995
+Fireworks,322,1996
+Fireworks,276,1997
+Fireworks,306,1998
+Fireworks,330,1999
+Fireworks,292,2000
+Fireworks,426,2001
+Fireworks,433,2002
+Fireworks,444,2003
+Fireworks,420,2004
+Fireworks,543,2005
+Fireworks,1009,2006
+Fireworks,689,2007
+Fireworks,412,2008
+Fireworks,634,2009
+Fireworks,666,2010
+Fireworks,451,2011
+Fireworks,910,2012
+Fireworks,709,2013
+Fireworks,572,2014
+Fireworks,585,2015
+Lightning,12230,1992
+Lightning,7539,1993
+Lightning,16204,1994
+Lightning,8075,1995
+Lightning,12634,1996
+Lightning,8447,1997
+Lightning,10880,1998
+Lightning,11797,1999
+Lightning,16547,2000
+Lightning,13825,2001
+Lightning,12465,2002
+Lightning,13828,2003
+Lightning,11726,2004
+Lightning,11103,2005
+Lightning,16949,2006
+Lightning,12711,2007
+Lightning,9904,2008
+Lightning,10449,2009
+Lightning,8983,2010
+Lightning,12538,2011
+Lightning,11130,2012
+Lightning,10154,2013
+Lightning,8538,2014
+Lightning,9812,2015
+Miscellaneous,7364,1992
+Miscellaneous,6848,1993
+Miscellaneous,7070,1994
+Miscellaneous,7297,1995
+Miscellaneous,7115,1996
+Miscellaneous,9663,1997
+Miscellaneous,9334,1998
+Miscellaneous,12408,1999
+Miscellaneous,19037,2000
+Miscellaneous,12038,2001
+Miscellaneous,12424,2002
+Miscellaneous,11098,2003
+Miscellaneous,10300,2004
+Miscellaneous,16370,2005
+Miscellaneous,21846,2006
+Miscellaneous,17893,2007
+Miscellaneous,20677,2008
+Miscellaneous,15697,2009
+Miscellaneous,17221,2010
+Miscellaneous,17629,2011
+Miscellaneous,16223,2012
+Miscellaneous,15161,2013
+Miscellaneous,14973,2014
+Miscellaneous,18119,2015
+Missing/Undefined,8366,1992
+Missing/Undefined,8826,1993
+Missing/Undefined,10183,1994
+Missing/Undefined,8360,1995
+Missing/Undefined,9764,1996
+Missing/Undefined,1816,1997
+Missing/Undefined,2079,1998
+Missing/Undefined,2509,1999
+Missing/Undefined,1423,2000
+Missing/Undefined,2560,2001
+Missing/Undefined,2052,2002
+Missing/Undefined,7539,2003
+Missing/Undefined,6026,2004
+Missing/Undefined,11927,2005
+Missing/Undefined,9569,2006
+Missing/Undefined,15142,2007
+Missing/Undefined,10048,2008
+Missing/Undefined,9220,2009
+Missing/Undefined,7458,2010
+Missing/Undefined,13903,2011
+Missing/Undefined,3735,2012
+Missing/Undefined,4241,2013
+Missing/Undefined,3701,2014
+Missing/Undefined,6276,2015
+Powerline,128,1992
+Powerline,133,1993
+Powerline,144,1994
+Powerline,154,1995
+Powerline,166,1996
+Powerline,180,1997
+Powerline,371,1998
+Powerline,364,1999
+Powerline,351,2000
+Powerline,364,2001
+Powerline,312,2002
+Powerline,268,2003
+Powerline,191,2004
+Powerline,313,2005
+Powerline,344,2006
+Powerline,390,2007
+Powerline,295,2008
+Powerline,1266,2009
+Powerline,1434,2010
+Powerline,2828,2011
+Powerline,773,2012
+Powerline,666,2013
+Powerline,1433,2014
+Powerline,1580,2015
+Railroad,1999,1992
+Railroad,1844,1993
+Railroad,1965,1994
+Railroad,2142,1995
+Railroad,2896,1996
+Railroad,2177,1997
+Railroad,1873,1998
+Railroad,2524,1999
+Railroad,3143,2000
+Railroad,2293,2001
+Railroad,1900,2002
+Railroad,612,2003
+Railroad,719,2004
+Railroad,768,2005
+Railroad,1014,2006
+Railroad,913,2007
+Railroad,778,2008
+Railroad,577,2009
+Railroad,715,2010
+Railroad,660,2011
+Railroad,621,2012
+Railroad,423,2013
+Railroad,529,2014
+Railroad,370,2015
+Smoking,2618,1992
+Smoking,2420,1993
+Smoking,2628,1994
+Smoking,2895,1995
+Smoking,2454,1996
+Smoking,1971,1997
+Smoking,2406,1998
+Smoking,3250,1999
+Smoking,3047,2000
+Smoking,3381,2001
+Smoking,2535,2002
+Smoking,1525,2003
+Smoking,1589,2004
+Smoking,2038,2005
+Smoking,2737,2006
+Smoking,2063,2007
+Smoking,1848,2008
+Smoking,1615,2009
+Smoking,1827,2010
+Smoking,1865,2011
+Smoking,1629,2012
+Smoking,1366,2013
+Smoking,1278,2014
+Smoking,1884,2015
+Structure,47,1992
+Structure,54,1993
+Structure,67,1994
+Structure,89,1995
+Structure,85,1996
+Structure,116,1997
+Structure,110,1998
+Structure,130,1999
+Structure,136,2000
+Structure,145,2001
+Structure,171,2002
+Structure,114,2003
+Structure,135,2004
+Structure,168,2005
+Structure,83,2006
+Structure,149,2007
+Structure,93,2008
+Structure,194,2009
+Structure,257,2010
+Structure,240,2011
+Structure,357,2012
+Structure,237,2013
+Structure,284,2014
+Structure,335,2015
