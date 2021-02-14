@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Homework 2</title>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <!-- 
+  <div class="container-fluid">
+    <div class="row">
+      <div>
+        <div id="parent">
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <div>
+          <select id="selectStates"></select><select id="selectMonth"></select>
+          <div id="beeswarm"></div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div id="barChart"></div>
+        <div>
+          <select id="selectMonthBar"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+
+  <div class="container-fluid">
+    <div class="row">
+      <p style="padding-left: 33%;"><h2>COVID-19 TRACKER FOR UNITED STATES</h2></p>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <p style="padding-left: 15%;">
+          <h4>COVID-19 Growth in the country from March to December</h4>
+        </p>
+        <div>
+          <div id="parent"></div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <div>
+
+          <select id="selectStates"></select><select id="selectMonth"></select>
+          <br><br><br>
+          <div id="parentBees"></div>
+          <p id="selectedCounties"></p>
+        </div>
+      </div>
+      <div class="col-sm">
+        <h4>COVID-19 Growth for every state from March to December</h4>
+        <div>
+          <select id="selectMonthBar"></select>
+        </div>
+        <div style="padding-left: 10px;">
+          <div id="barChart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./bundle.js"></script>
+
+</body>
+
+</html>
