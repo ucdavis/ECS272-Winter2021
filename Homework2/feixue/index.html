@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ECS 272 InfoVis Assignment 2</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel='stylesheet' href='./style.css'>
+
+    <script src="main.js" type="module"></script>
+</head>
+<body style="background-color:#eee8e8;">
+<h2>ECS 272 Assignment 2 Fei Xue</h2>
+<div id="wrapper_top">
+    <p></p>
+    <span>View the passenger count of each terminal over time with  </span>
+    <select id="view_selector">
+        <option value="1">All</option>
+        <option value="2">Domestic</option>
+        <option value="3">International</option>
+    </select>
+    <div id='streamgraph_svg_area'></div>
+</div>
+
+
+
+
+<div id="wrapper_bottom">
+    <div class="col_split">
+        <span>View the percentage of passenger count per terminal with</span>
+        <select id="view_selector2">
+            <option value="1">Arrival</option>
+            <option value="2">Departure</option>
+        </select>
+        <div id="piechart_svg_area"></div>
+    </div>
+    <!-- <div class = "legends">
+    </div> -->
+
+
+
+    <div class="col_split">
+        <!-- <br><br> -->
+        <span>View the monthly average passenger count per terminal with </span>
+        <input id="month_range" type="range" min="1" max="12" value="7" class="slider">
+        <div id="barchart_svg_area"></div>
+    </div>
+</div>
+</body>
+</html>
