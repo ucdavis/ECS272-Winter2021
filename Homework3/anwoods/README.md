@@ -1,5 +1,5 @@
 # Homework 3: Visualization Dashboard:  Interaction Design for Spotify
-To see homework 3, download all the files in anwoods folder and then open the html page in FireFox. The whole thing takes a minute to load, be patient. The dropdown menu for the donut chart also takes time to load. To get the dropdown menu for the donut chart, press it once and wait for a minute. The detail charts are initially showing all the dat from 1921-2020.
+To see homework 3, download all the files in anwoods folder and then open the html page in FireFox. The whole thing takes a minute to load, be patient. The dropdown menu for the donut chart also takes time to load. To get the dropdown menu for the donut chart, press it once and wait for a minute. The detail charts are initially showing all the data from 1921-2020.
 
 ## Bar Chart Interactions
 For the bar chart you can hover over the bars to see a tooltip.
