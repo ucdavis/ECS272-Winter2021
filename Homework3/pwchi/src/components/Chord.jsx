@@ -4,16 +4,36 @@ import * as d3 from "d3";
 import "../css/Chord.css";
 
 const Chord = ({ data, returnClickedItems, toCleanClickedItems }) => {
+  const width = window.innerHeight;
+  const height = window.innerHeight;
+  const radius = height / 2.5;
+  const verticalShift = radius * 1.5; // it's a global shifting, not related to the grid in Chord.css
+  const horizontalShift = (width * 6) / 12; // it's a global shifting, not related to the grid in Chord.css
+
   const ref = useRef();
   const [clickedItems, setClickedItems] = useState({
     parent: "",
     children: [],
   });
+  const [root, _] = useState(() => {
+    const tree = d3.cluster().size([2 * Math.PI, radius - 100]);
+    const uniTitle = getColumnUniCount(data, "Title");
+    const uniLoc = getColumnUniCount(data, "Locations");
+    const uniDirector = getColumnUniCount(data, "Director");
+    const data_hierachy = hierachy_SF(data, uniTitle, uniLoc, uniDirector);
 
-  const width = window.innerHeight;
-  const height = window.innerHeight;
-  const radius = height / 2.5;
-  const horizontalShift = (width * 6) / 12; // it's a global shifting, not related to the grid in Chord.css
+    return tree(
+      bilink(
+        d3
+          .hierarchy(data_hierachy)
+          .sort(
+            (a, b) =>
+              d3.ascending(a.height, b.height) ||
+              d3.ascending(a.data.name, b.data.name)
+          )
+      )
+    );
+  });
 
   useEffect(() => {
     // Data Preprocessing
@@ -26,27 +46,11 @@ const Chord = ({ data, returnClickedItems, toCleanClickedItems }) => {
       Locations: "#E6A42E",
       Director: "#1777E6",
     };
-    const tree = d3.cluster().size([2 * Math.PI, radius - 100]);
     const line = d3
       .lineRadial()
       .curve(d3.curveBundle.beta(0.85))
       .radius((d) => d.y)
       .angle((d) => d.x);
-    const uniTitle = getColumnUniCount(data, "Title");
-    const uniLoc = getColumnUniCount(data, "Locations");
-    const uniDirector = getColumnUniCount(data, "Director");
-    const data_hierachy = hierachy_SF(data, uniTitle, uniLoc, uniDirector);
-    const root = tree(
-      bilink(
-        d3
-          .hierarchy(data_hierachy)
-          .sort(
-            (a, b) =>
-              d3.ascending(a.height, b.height) ||
-              d3.ascending(a.data.name, b.data.name)
-          )
-      )
-    );
 
     const svg = d3.select(ref.current);
 
@@ -216,7 +220,7 @@ const Chord = ({ data, returnClickedItems, toCleanClickedItems }) => {
       <svg className="d3-chord" id={id} viewBox={`0 0 ${width} ${height}`}>
         <g
           ref={ref}
-          transform={`translate(${horizontalShift}, ${radius + 40})`}
+          transform={`translate(${horizontalShift}, ${verticalShift})`}
         ></g>
       </svg>
     </div>
@@ -226,6 +230,7 @@ const Chord = ({ data, returnClickedItems, toCleanClickedItems }) => {
 const id = (node) => {
   return `${node.parent ? id(node.parent) + "." : ""}${node.data.name}`;
 };
+
 const bilink = (root) => {
   const map = new Map(root.leaves().map((d) => [id(d), d]));
   for (const d of root.leaves()) {
@@ -239,6 +244,7 @@ const bilink = (root) => {
   }
   return root;
 };
+
 const construct_children = (data, tgtData, tgtInfo, restsInfo) => {
   return tgtData.map((tgt) => {
     if (tgt.name === "Others") {
@@ -272,6 +278,7 @@ const construct_children = (data, tgtData, tgtInfo, restsInfo) => {
     };
   });
 };
+
 const hierachy_SF = (data, uniTitle, uniLoc, uniDirector) => {
   const titleInfo = {
     name: "Title",
@@ -316,6 +323,7 @@ const hierachy_SF = (data, uniTitle, uniLoc, uniDirector) => {
     children: [title, loc, director],
   };
 };
+
 const getColumnUniCount = (data, columnName) => {
   var tgtList = data.map((ele) => ele[columnName]);
 

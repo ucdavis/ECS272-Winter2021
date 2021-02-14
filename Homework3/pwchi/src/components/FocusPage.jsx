@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Grid, LinearProgress } from "@material-ui/core";
+import { Paper, Grid } from "@material-ui/core";
 
 import BarChart from "./BarChart";
 import GlobalControlPanel from "./GlobalControlPanel";
@@ -12,12 +12,8 @@ import Map from "./Map";
 import getGeocodePromise from "../uitls/getGeocodePromise";
 
 const useStyles = makeStyles((theme) => ({
-  progress: {
-    zIndex: -1,
-  },
   root: {
     flexGrow: 1,
-    marginTop: "16px",
   },
   item: {
     display: "flex",
@@ -39,6 +35,7 @@ const FocusPage = (props) => {
     visible,
     overviewSelectInfo,
     setIsFocusUpdate,
+    setGeoLoading,
   } = props;
 
   const [xAxis, setXAxis] = useState({
@@ -57,11 +54,11 @@ const FocusPage = (props) => {
   const [topK, setTopK] = useState({
     name: "top-k",
     label: "Top K",
-    value: 50,
-    range: [1, 50],
+    value: 100,
+    range: [1, 100],
     marks: [
       { value: 1, label: "1" },
-      { value: 50, label: "50" },
+      { value: 100, label: "100" },
     ],
     disabled: false,
   });
@@ -87,7 +84,6 @@ const FocusPage = (props) => {
     disabled: true,
     optionsDisable: [],
   });
-  const [geoLoading, setGeoLoading] = useState(false);
 
   useEffect(() => {
     const years = [...new Set(data.map((ele) => ele["Release Year"]))].sort();
@@ -269,15 +265,6 @@ const FocusPage = (props) => {
 
   return visible ? (
     <React.Fragment>
-      {geoLoading ? (
-        <LinearProgress className={classes.progress} />
-      ) : (
-        <LinearProgress
-          className={classes.progress}
-          variant="determinate"
-          value={0}
-        />
-      )}
       <div className={classes.root} id="details-page">
         <Grid container spacing={2} alignItems="stretch">
           <Grid className={classes.item} container item xs={2} direction="row">

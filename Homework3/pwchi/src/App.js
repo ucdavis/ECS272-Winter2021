@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { csv } from "d3";
-import { IconButton } from "@material-ui/core";
+import { LinearProgress, IconButton } from "@material-ui/core";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import { makeStyles } from "@material-ui/core/styles";
 import "./css/App.css";
 
 import Drawer from "./components/Drawer";
+
 import FocusPage from "./components/FocusPage";
 import OverviewPage from "./components/OverviewPage";
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "5px",
     fontWeight: "lighter",
     fontFamily: "Roboto",
-    zIndex: 0,
+    zIndex: 10,
   },
   titleDummy: {
     width: "100%",
@@ -38,10 +39,16 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "5px",
     zIndex: -1,
   },
+  progress: {
+    position: "fixed",
+    top: "50px",
+    width: "100%",
+    zIndex: 11,
+  },
   iconBtn: {
     position: "fixed",
     right: "10px",
-    zIndex: 1,
+    zIndex: 11,
   },
   icon: {
     color: "white",
@@ -60,6 +67,7 @@ export default function App(props) {
     rows: [],
   });
   const [isFocusUpdate, setIsFocusUpdate] = useState(false);
+  const [geoLoading, setGeoLoading] = useState(false);
 
   useEffect(() => {
     csv(process.env.PUBLIC_URL + "/dataset/" + rawDataName)
@@ -68,15 +76,9 @@ export default function App(props) {
         csv = csv.filter((ele) => ele.Locations !== "");
         csv.forEach((ele, idx) => {
           csv[idx]["Release Year"] = +ele["Release Year"];
-          csv[idx]["Title"] = ele["Title"]
-            .replaceAll(" ", "_")
-            .replaceAll([",", ".", "\\", '"'], "");
-          csv[idx]["Locations"] = ele["Locations"]
-            .replaceAll(" ", "_")
-            .replaceAll([",", ".", "\\", '"'], "");
-          csv[idx]["Director"] = ele["Director"]
-            .replaceAll(" ", "_")
-            .replaceAll([",", ".", "\\", '"'], "");
+          csv[idx]["Title"] = ele["Title"].replaceAll([",", "."], "");
+          csv[idx]["Locations"] = ele["Locations"].replaceAll([",", "."], "");
+          csv[idx]["Director"] = ele["Director"].replaceAll([",", "."], "");
           delete ele["Fun Facts"];
         });
 
@@ -128,6 +130,15 @@ export default function App(props) {
       </IconButton>
       <h1 className={classes.title}>Film Locations in San Francisco</h1>
       <div className={classes.titleDummy} />
+      {geoLoading ? (
+        <LinearProgress className={classes.progress} />
+      ) : (
+        <LinearProgress
+          className={classes.progress}
+          variant="determinate"
+          value={0}
+        />
+      )}
       <Drawer
         anchor={"right"}
         drawerInfo={drawerInfo}
@@ -145,6 +156,7 @@ export default function App(props) {
           data={data}
           setData={setData}
           setIsFocusUpdate={setIsFocusUpdate}
+          setGeoLoading={setGeoLoading}
           overviewSelectInfo={overviewSelectInfo}
           visible={true}
         />
