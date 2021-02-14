@@ -108,7 +108,7 @@ export async function drawStreamFromCsvAsync(level, id){
             //   .text('You clicked on circle ' + i);
             console.log("!!!!!!Made a selection!");
 // test
-            drawCrimeTimeBarChart("ROBBERY","#bar1");
+            drawCrimeTimeBarChart(i.key,"#bar1");
             document.getElementById("change_chart").value = '3';
 
             drawSF(sfGeoData, i.key,"#bar2");
@@ -124,7 +124,7 @@ export async function drawStreamFromCsvAsync(level, id){
             d3.select(id).selectAll("path").style('fill', 'gray');
             d3.select(this)
             .style('fill', d3.interpolateBlues(total/20658));
-            // d3.select(id).selectAll("path").select('domain').style('fill', 'white');
+            d3.select(id).selectAll('.domain').style('fill', 'white');
         })
         .attr("d", d3.area().x(function(d, i) { return x(d.data.date); }).y0(function(d) { return y(d[0]); }).y1(function(d) { return y(d[1]); }))
         .attr("fill", function(d) { 
