@@ -30,13 +30,14 @@ export function drawScatterplot(data, id) {
     const yAxis = g => g
         .call(d3.axisLeft(y))
 
+    // Tooltip
     d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-    svg.append("defs").append("clipPath")
+    svg.append("defs").append("svg:clipPath")
         .attr("id", "clip")
-        .append("rect")
+        .append("svg:rect")
         .attr("id", "clip-rect")
         .attr("width", width)
         .attr("height", height)
@@ -54,7 +55,7 @@ export function drawScatterplot(data, id) {
         .attr("class", "dot")
         .attr("cx", d => x(d.popularity))
         .attr("cy", d => y(d.danceability))
-        .attr("r", 1.1)
+        .attr("r", 1)
         .attr("opacity", 0.7)
         .attr("fill", "#166d66")
 
@@ -72,6 +73,7 @@ export function drawScatterplot(data, id) {
         .style("font-size", "12px")
         .text("Does the measurement of track being danceable influence artist popularity? (Select area to zoom; Double-click to zoom out)");
 
+    // X axis
     svg.append("g")
         .attr("class", "x axis")
         .attr("id", "x_axis")
@@ -91,6 +93,7 @@ export function drawScatterplot(data, id) {
         .style("font-size", "11px")
         .text("Popularity Rating");
 
+    // Y axis
     svg.append("g")
         .attr("class", "y axis")
         .attr("id", "y_axis")
@@ -122,6 +125,7 @@ export function drawScatterplot(data, id) {
             x.domain(d3.extent(data, d => d.popularity )).nice();
             y.domain(d3.extent(data, d => d.danceability )).nice();
         } else {
+            
             x.domain([s[0][0], s[1][0]].map(x.invert, x));
             y.domain([s[1][1], s[0][1]].map(y.invert, y));
             scatter.select(".brush").call(brush.move, null);
@@ -134,8 +138,8 @@ export function drawScatterplot(data, id) {
     }
 
     function zoom() {
-        svg.select("x_axis").transition().duration(1000).call(xAxis);
-        svg.select("y_axis").transition().duration(1000).call(yAxis);
+        svg.select("#x_axis").transition().duration(1000).call(xAxis);
+        svg.select("#y_axis").transition().duration(1000).call(yAxis);
         scatter.selectAll(".dot").transition().duration(1000)
             .attr("cx", d => x(d.popularity) )
             .attr("cy", d => y(d.danceability) );
