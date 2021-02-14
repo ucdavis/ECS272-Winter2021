@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("b.png");
+    background-size: cover;
+}
+
+#pieChart {
+    position: absolute;
+    top: 100px;
+    left: 180px;
+    width: 360px;
+    height: 360px;
+}
+
+#barChart {
+    position: absolute;
+    top: 500px;
+    left: 50px;
+    height: 350px;
+    width: 600px;
+}
+
+p {
+    position: absolute;
+    left: 700px;
+    top: 10px;
+    font-size: 50px;
+    font-weight: 100;
+    color: black;
+    opacity: 1;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    font: 16px sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.parcoords>canvas {
+    font: 20px sans-serif;
+    position: absolute;
+}
+
+.parcoords>canvas {
+    pointer-events: none;
+}
+
+.parcoords text.label {
+    cursor: default;
+}
+
+.parcoords rect.background:hover {
+    fill: rgba(120, 120, 120, 0.2);
+}
+
+.parcoords canvas {
+    opacity: 1;
+    transition: opacity 0.3s;
+    -moz-transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+}
+
+.parcoords canvas.faded {
+    opacity: 0.25;
+}
+
+.parcoords {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    top: 100px;
+    left: 700px;
+    height: 800px;
+    width: 1200px;
+}
