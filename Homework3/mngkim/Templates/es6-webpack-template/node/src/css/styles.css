@@ -1,0 +1,20 @@
+h2 {
+    color: rgb(2, 2, 2);
+    background-color: rgb(219, 220, 221);
+    font-family: monospace;
+}
+.myclass{
+    color: rgb(64, 63, 68);
+    font-family: monospace;
+}
+body {
+    background-color:rgb(255, 255, 255);
+    color: rgb(85, 85, 87);
+
+}
+
+
+
+  ul.a {
+    list-style-position: inside;
+  }

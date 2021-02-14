@@ -29,7 +29,11 @@
   "dependencies": {
     "bootstrap": "^4.6.0",
     "d3": "^6.3.1",
+    "d3-brush": "^2.1.0",
+    "d3-collection": "^1.0.7",
+    "d3-drag": "^2.0.0",
     "d3-scale": "^3.2.3",
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "vis-network": "^9.0.2"
   }
 }

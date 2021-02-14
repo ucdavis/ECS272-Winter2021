@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homework 3</title>
+
+
+    <script
+    type="text/javascript"
+    src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
+  ></script>
+  <style type="text/css">
+    #mynetwork {
+      width: 600px;
+      height: 400px;
+      border: 1px solid lightgray;
+      background-color: rgb(240, 240, 240);
+      padding:20px
+    }
+  </style>
+
+
+  </head>
+
+
+  <body>ç
+
+    <div class="container-fluid bg-grey">
+      <h2> Analyzing Movie data </h2>
+      <h4 class="myclass"> MinSung Kim</h4>
+
+    
+      <div class="row">
+
+
+        <div class="col-sm-5 col-md-5 col-lg-5"  >
+
+          <div class=“row”> 
+            <div class=“col-xs-5” style="background-color:rgb(240, 240, 240);"> 
+              <p> Pan and Zoom </p>
+              <ul class="a">
+                <li>double-click or spin the wheel to zoom (scale) </li>
+                <li>click-and-drag to pan (translate)</li>
+
+
+              <div id="bar"></div> 
+            </div>
+        </div>
+
+          
+
+              
+        </div>
+
+        <div class="col-sm-7 col-md-7 col-lg-7">
+            <div class="row">
+
+              <div class=“col-xs-6” style="background-color:rgb(240, 240, 240);"> 
+                <p> Brush and Animation </p>
+
+              <ul class="a">
+                <li>Click and Drage </li>
+
+                <div id="do"></div> 
+
+              </div>
+
+              
+            </div>
+            <div class="row" style="background-color:rgb(255, 255, 255);">
+              <ul class="a">
+                <li>spin the wheel to zoom </li>
+                <li>drage a node to change the arrange of nodes</li>
+
+            </div>
+              <div class="row" style="background-color:rgb(255, 255, 255);">
+ 
+
+                <div id="mynetwork"></div>
+                <script type="text/javascript">
+                  // create an array with nodes
+                  //  vis-network : npm install vis-network 
+                  // reference  https://www.npmjs.com/package/vis-network 
+                  
+                  var nodes = new vis.DataSet([
+                    { id: 1, label: "Avatar", color:"#FF99FF"},
+                    { id: 2, label: "Spectre", color:"#FF99FF" },
+                    { id: 3, label: "Toy Story 3", color:"#FF99FF" },
+                    { id: 4, label: "Harry Potter", color:"#FF99FF" },
+                    { id: 5, label: "Batman", color:"#FF99FF" },
+                    { id: 6, label: "Troy", color:"#FF99FF"},
+                    { id: 7, label: "Titanic", color:"#FF99FF" },
+                    { id: 8, label: "World War Z", color:"#FF99FF"},
+                    { id: 21, label: "Action" },
+                    { id: 22, label: "Adventure" },
+                    { id: 23, label: "Fantasy" },
+                    { id: 24, label: "Animation" },
+                    { id: 25, label: "Science Fiction" },
+                    { id: 26, label: "Drama" },
+                    { id: 27, label: "Thriller" },
+                    { id: 28, label: "Family" },
+                    { id: 29, label: "Comedy" },
+                    { id: 30, label: "History" },
+                    { id: 31, label: "War" },
+                    { id: 32, label: "Western" },
+                    { id: 33, label: "Romance" },
+                    { id: 34, label: "Crime" },
+                    { id: 35, label: "Mystery" },
+                    { id: 36, label: "Horror" },
+                    { id: 37, label: "Documentary" },
+                    { id: 38, label: "Music" },
+                    { id: 39, label: "TV Movie" },
+                    { id: 40, label: "Foreign" },
+                    { id: 41, label: "Thor", color:"#FF99FF"},
+                    { id: 42, label: "Madagascar 3", color:"#FF99FF" },
+                    { id: 43, label: "Australia", color:"#FF99FF" },
+                    { id: 44, label: "Gulliver's Travels", color:"#FF99FF" },
+                    { id: 45, label: "The Relic", color:"#FF99FF" }
+                  ]);
+            
+                  // create an array with edges
+                  var edges = new vis.DataSet([
+                    { from: 1, to: 21 },
+                    { from: 1, to: 22 },
+                    { from: 1, to: 23 },
+                    { from: 1, to: 25 },
+                    { from: 2, to: 21 },
+                    { from: 2, to: 22 },
+                    { from: 2, to: 34 },
+                    { from: 3, to: 24},
+                    { from: 3, to: 28},
+                    { from: 3, to: 29},
+                    { from: 4, to: 22 },
+                    { from: 4, to: 23 },
+                    { from: 4, to: 28 },
+                    { from: 5, to: 21 },
+                    { from: 5, to: 22 },
+                    { from: 5, to: 23 },
+                    { from: 6, to: 22 },
+                    { from: 6, to: 26 },
+                    { from: 6, to: 31 },
+                    { from: 7, to: 26 },
+                    { from: 7, to: 33 },
+                    { from: 7, to: 27 },
+                    { from: 8, to: 21 },
+                    { from: 8, to: 26 },
+                    { from: 8, to: 36 },
+                    { from: 8, to: 25 },
+                    { from: 8, to: 27 },
+                    { from: 41, to: 21 },
+                    { from: 41, to: 22 },
+                    { from: 41, to: 23 },
+                    { from: 42, to: 24 },
+                    { from: 42, to: 28 },
+                    { from: 43, to: 26 },
+                    { from: 44, to: 29 },
+                    { from: 45, to: 27 },
+                    { from: 45, to: 35 },
+                    { from: 45, to: 36 }
+                    
+                  ]);
+            
+                  // create a network
+                  var container = document.getElementById("mynetwork");
+                  var data = {
+                    nodes: nodes,
+                    edges: edges,
+                  };
+                  var options = {};
+                  var network = new vis.Network(container, data, options);
+                </script>
+
+
+
+
+
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="./bundle.js"></script>
+  </body>
+</html>
