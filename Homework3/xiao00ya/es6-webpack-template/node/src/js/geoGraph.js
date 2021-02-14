@@ -57,7 +57,7 @@ export async function drawSF(data, crime_type, id) {
     //   }))
     // .attr("width", width)
     // .attr("height", height);
-    .attr("viewBox", [0, 0, width, height])
+    .attr("viewBox", [0, 0, width - margin.left - margin.right, height])
     .attr("width", width - margin.left - margin.right )
     .attr("height", height );
 
@@ -88,6 +88,7 @@ export async function drawSF(data, crime_type, id) {
 
     var circles = svg.append("svg:g")
     .attr("id", "circles");
+    
 
     // Map and projection
     
@@ -168,16 +169,14 @@ export async function drawSF(data, crime_type, id) {
            .style("fill", "black");
     // var color = d3.interpolateOranges;
     var color = d3.scaleSequential([0, max_value], d3.interpolateOranges);
-    svg.append("g")
-        .attr("transform", "rotate(-90)")
+    svg.append(() => legend({id: id, color, title: "Crime Counts", width: 260}))
+    .attr("transform", "translate(15,15)");
+        // .attr("transform", "rotate(-90)")
     //     .attr("class", "legend")
-        .attr("transform",function(d){
-            return "translate("+"0"+","+"0"+")";
-            // "translate(610,20)"
-        })
+        // .attr("transform", "translate(15,15)")
     //     .style("font-size", "12px")
     //     .call(d3.legend)
-        .append(() => legend({id: id, color, title: "Crime Counts", width: 260}));
+        
         
     // svg.append("g")
     //     .attr("transform", "translate(610,20)")
@@ -370,6 +369,7 @@ export async function drawSF(data, crime_type, id) {
 
 function legend({
     id,
+    // canvas,
     color,
     title,
     tickSize = 6,
@@ -383,12 +383,15 @@ function legend({
     tickFormat,
     tickValues
   } = {}) {
-    const svg = d3.select(id).select("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [0, 0, width, height])
-      .style("overflow", "visible")
-      .style("display", "block");
+    // svg = d3.select(id).append("svg:svg", "h2")
+    // let svg = d3.select(id).select("svg")
+    // select(id).append("svg:svg", "h2")
+    let svg = d3.select(id).select("svg").append("svg:svg", "h3");
+    //   .attr("width", width)
+    //   .attr("height", height)
+    //   .attr("viewBox", [0, 0, width, height])
+    //   .style("overflow", "visible")
+    //   .style("display", "block");
   
     let tickAdjust = g => g.selectAll(".tick line").attr("y1", marginTop + marginBottom - height);
     let x;
