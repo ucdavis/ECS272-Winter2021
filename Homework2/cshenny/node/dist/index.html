@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      /*Set up and style the page*/
+      font-family: 'Raleway', sans-serif;
+      overflow: hidden;
+      margin: 0;
+      background: linear-gradient(to right, #38ef7d, #11998e);
+      /* Applicable for Firefox 16+, Chrome 26+, Safari 7+ */
+      background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
+      /* Applicable for Chrome 10-25 & Safari 5.1-6 */
+    }
+
+    select {
+      font-family: 'raleway';
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      height: fit-content;
+      background-color: #F6F6F6;
+      border: None;
+      color: black;
+      padding: 10px;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      font-size: small;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -65px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .card {
+      margin: 10px;
+      border-radius: 15px;
+      /* background-color: #E8E8EA; */
+    }
+
+    .row1 {
+      display: flex;
+      margin-bottom: 10px;
+      justify-content: space-between;
+    }
+
+    .row1 .col1 {
+      width: 100px;
+      flex: 0.7;
+      border-radius: 20px;
+      padding: 15px;
+      background-color: #fff;
+      box-shadow: 0 0 20px 0 #aaaaaa80;
+    }
+
+    .row1 .col1:hover,
+    .row1 .col2:hover,
+    .row2:hover,
+    .row3:hover {
+      transition: all 0.5s ease;
+      box-shadow: 0 0 20px 0 #3A95EF80;
+
+    }
+
+    .row1 .col2 {
+      flex: 0.3;
+      margin-right: 10px;
+      width: 100px;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px 0 #aaaaaa80;
+    }
+
+    .row1 .col2 img {
+      width: 50%;
+    }
+
+    .row2 {
+      display: flex;
+    }
+
+    .inline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .row2 .col1 {
+      flex: 0.4;
+      border-radius: 20px;
+      padding: 15px;
+      height: auto;
+      background-color: #fff;
+      box-shadow: 0 0 20px 0 #aaaaaa80;
+    }
+
+    .charttitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .charttitle img {
+      width: 20px;
+    }
+
+    .row2 .col2 {
+      margin-right: 10px;
+      flex: 0.6;
+      border-radius: 20px;
+      height: 410px;
+      padding: 15px;
+      background-color: #fff;
+      box-shadow: 0 0 20px 0 #aaaaaa80;
+      background-color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="row1">
+      <div class="col2">
+        <img
+          src="https://www.bestdesigns.co/uploads/inspiration_images/7279/_inspiration_images_683_410__1516917372_817_spo1.png"
+          alt="">
+        <span>SPOTIFY DATA ANALYSIS</span>
+      </div>
+      <div class="col1">
+        <div class="inline">
+          <select id="mySelect_line" onchange="myFunction_line()">
+            <option value="1" selected>valence</option>
+            <option value="2">acousticness</option>
+            <option value="3">danceability</option>
+            <option value="5">energy</option>
+            <option value="6">instrumentalness</option>
+            <option value="7">liveness</option>
+            <option value="10">speechiness</option>
+          </select>
+          <span class="charttitle">Music Characteristics by Years </span>
+        </div>
+        <div id="line_chart_d3"></div>
+      </div>
+
+    </div>
+
+    <div class="row2">
+      <div class="col2">
+        <div class="charttitle">
+          <span style="text-align: center;">Top 20 Artists </span>
+          <div class="tooltip"><img class="img-tooltip"
+              src="https://www.marshall.edu/it/files/question-mark-circle-icon.png" alt="info">
+            <span class="tooltiptext">Top 20 Artists by Popularity By Mean</span>
+          </div>
+        </div>
+        <h3 style="text-align: center;"></h3>
+        <div class="plot">
+          <div id="bar_chart_d3">
+          </div>
+        </div>
+      </div>
+      <div class="col1">
+        <div class="inline">
+          <span style="text-align: center;">Characteristics of music by Decade </span>
+          <select id="mySelect_radar" onchange="myFunction_radar()">
+            <option value="radar_all">All</option>
+            <option value="0">1921-1930</option>
+            <option value="1">1931-1940</option>
+            <option value="2">1941-1950</option>
+            <option value="3">1951-1960</option>
+            <option value="4">1961-1970</option>
+            <option value="5">1971-1980</option>
+            <option value="6">1981-1990</option>
+            <option value="7">1991-2000</option>
+            <option value="8">2001-2010</option>
+            <option value="9">2011-2020</option>
+          </select>
+        </div>
+        <div id="radar_chart_d3"></div>
+      </div>
+
+    </div>
+  </div>
+  <script src="./bundle.js"></script>
+
+
+</body>
+
+</html>

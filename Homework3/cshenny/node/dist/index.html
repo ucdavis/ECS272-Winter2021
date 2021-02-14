@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      margin: 0;
+      color: #fff;
+      background: #11998e;
+      background: linear-gradient(to right, #38ef7d, #11998e);
+      /* Applicable for Firefox 16+, Chrome 26+, Safari 7+ */
+      background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
+      /* Applicable for Chrome 10-25 & Safari 5.1-6 */
+    }
+
+    .Bartooltip img {
+      width: 20px;
+      border: 2px solid white;
+      padding: 3px;
+      border-radius: 50%;
+    }
+
+    .Bartooltip {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+      border-bottom: 1px dotted black;
+    }
+
+    .Bartooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: white;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+      position: absolute;
+      top: -85px;
+      right: 5px;
+      z-index: 9999;
+      opacity: 0.9;
+    }
+
+    .Bartooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+
+    #tooltipTest {
+      position: absolute;
+      left: -9999px;
+      z-index: 999;
+      user-select: none;
+      background-color: black;
+      color: white;
+      font-size: 15px;
+      padding: 8px;
+      border-radius: 2px;
+      box-shadow: 0 0 5px 0 #5c5c5c;
+    }
+
+    #tooltipTest .toolTitle {
+      font-weight: bolder;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    #tooltipTest .expanded {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .points {
+      user-select: none;
+    }
+
+    .fixedTitle img {
+      width: 25px;
+      margin-right: 10px;
+    }
+
+    .fixedTitle {
+      position: absolute;
+      top: -2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 10px;
+      background: #38ef7d;
+      z-index: 999;
+      color: #111;
+      font-family: "Poppins";
+      font-weight: bold;
+      font-size: 15px;
+      border-radius: 0px 0px 0px 8px;
+      right: 0;
+      transform: translate(0%, 0);
+    }
+
+    .classRadar {
+      background: #121212;
+      padding: 0;
+      justify-content: space-around;
+      width: 70%;
+      margin: 3px 5px 3px 2px;
+      border-radius: 8px;
+      height: 300px;
+    }
+
+    .classBar {
+      margin: 3px 5px 3px 2px;
+      padding: 3% 0 0 0;
+      background: #121212;
+      border-radius: 8px;
+      width: 100%;
+      height: 300px;
+    }
+
+    .classLine {
+      margin: 8px 5px 3px 2px;
+      padding: 0px 10px;
+      border-radius: 8px;
+      position: relative;
+      background: #121212;
+      height: fit-content;
+    }
+
+    .switchForm {
+      position: absolute;
+      right: 250px;
+      top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      width: fit-content;
+      flex-direction: row;
+    }
+
+    .radioLabel {
+      display: flex;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.375em;
+      margin-left: 0.475em;
+    }
+
+    .radioLabel input {
+      position: absolute;
+      left: -9999px;
+    }
+
+    .radioLabel input:checked+span {
+      background-color: #d6d6e580;
+    }
+
+    .radioLabel input:checked+span:before {
+      box-shadow: inset 0 0 0 0.4375em #38ef7d;
+    }
+
+    .radioLabel span {
+      display: flex;
+      align-items: center;
+      padding: 0.375em 0.75em 0.375em 0.375em;
+      border-radius: 5px;
+      transition: 0.25s ease;
+    }
+
+    .radioLabel span:hover {
+      background-color: #d6d6e550;
+    }
+
+    .radioLabel span:before {
+      display: flex;
+      flex-shrink: 0;
+      content: "";
+      background-color: #fff;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      margin-right: 0.375em;
+      transition: 0.25s ease;
+      box-shadow: inset 0 0 0 0.125em #38ef7d;
+    }
+
+    .topRow {
+      position: relative;
+    }
+
+    .barTitle {
+      position: absolute;
+      top: 10px;
+      font-weight: bold;
+      font-size: large;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+
+    .barInfo {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    line,
+    text {
+      fill: #fff;
+    }
+
+    .textRadarLabel {
+      fill: #000;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .legend1 {
+      fill: #9c9c9c !important;
+    }
+
+    .baraxis line {
+      stroke: #fff;
+      fill: #fff;
+      stroke-width: 1px;
+    }
+
+    path {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 1px;
+    }
+
+    #mySelect_radar {
+      background-color: #121212;
+      color: white;
+      border-radius: 8px;
+      padding: 5px 20px;
+      margin-top: 0px;
+      border: None;
+      box-shadow: 0 0 6px 0#FFF;
+      font-weight: bold;
+      cursor: pointer;
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <span class="fixedTitle">
+    <img src="https://cdn1.iconfinder.com/data/icons/black-white-social-media/32/Spotify_social_media_logo-512.png"
+      alt="info">
+    SPOTIFY DATA ANALYSIS</span>
+  <div class="classLine shadow">
+    <div class="switchForm">
+      <label class="radioLabel">
+        <input type="radio" name="charttype" checked id="Hover" />
+        <span>Hover</span>
+      </label>
+      <label class="radioLabel">
+        <input type="radio" name="charttype" id="Brush" />
+        <span>Brush</span>
+      </label>
+    </div>
+
+    <!---scatter plot legend filtering--->
+    <div class="row">
+      <div class="col-10">
+        <div id="my_dataviz"></div>
+      </div>
+      <div class="col-2 d-flex justify-content-center" style="padding-top: 120px;">
+        <div id="scatter_legend">
+          <div class="form-check form-switch ">
+            <input class="form-check-input" type="checkbox" id="toggle_1" value="valence" checked
+              style="background-color: #00ff00ab;">
+            <label class="form-check-label" for="toggle_1" style="color:#00FF00 ">Valence</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle_2" value="acousticness" checked
+              style="background-color: #FF7F00;">
+            <label class="form-check-label" for="toggle_2" style="color: #FF7F00">Acousticness</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle_3" value="danceability" checked
+              style="background-color: rgba(255, 255, 255, 0.596);">
+            <label class="form-check-label" for="toggle_3"
+              style="color: rgba(255, 255, 255, 0.596)">Danceability</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle_4" value="energy" checked
+              style="background-color: #F00;">
+            <label class="form-check-label" for="toggle_4" style="color: #F00">Energy</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle_5" value="instrumentalness" checked
+              style="background-color: #00ffff8e;">
+            <label class="form-check-label" for="toggle_5" style="color: #00FFFF">Instrumentalness</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle_6" value="liveness" checked
+              style="background-color: #ffff009f;">
+            <label class="form-check-label" for="toggle_6" style="color: #FFFF00">Liveliness</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle_7" value="speechiness" checked
+              style="background-color: #8B00FF;">
+            <label class="form-check-label" for="toggle_7" style="color: #8B00FF">Speechiness</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!---radar chart legend filtering--->
+  <div id="tooltipTest"></div>
+  <div class="d-flex">
+    <div class="classRadar shadow">
+      <select id="mySelect_radar" class="form-select" data-style="btn-primary">
+        <option value="radar_all">All</option>
+        <option value="0">1921-1930</option>
+        <option value="1">1931-1940</option>
+        <option value="2">1941-1950</option>
+        <option value="3">1951-1960</option>
+        <option value="4">1961-1970</option>
+        <option value="5">1971-1980</option>
+        <option value="6">1981-1990</option>
+        <option value="7">1991-2000</option>
+        <option value="8">2001-2010</option>
+        <option value="9">2011-2020</option>
+      </select>
+      <div id="radar_chart_d3"></div>
+    </div>
+    <div id="bar_chart_d3" class="classBar shadow topRow">
+      <span class="barTitle">Top 15 Artists</span>
+      <div class="barInfo">
+        <div class="Bartooltip">
+          <img class="img-tooltip"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Question_mark_white-transparent.svg/1200px-Question_mark_white-transparent.svg.png"
+            alt="info">
+          <span class="tooltiptext">Top 15 Artists by Popularity By Mean</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./bundle.js"></script>
+</body>
+
+</html>
