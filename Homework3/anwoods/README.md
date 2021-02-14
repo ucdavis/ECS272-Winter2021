@@ -9,7 +9,7 @@ Additionally in the top bar chart you can select/deselect any bar anywhere in th
 When the Sort Values is checked, the bar charts will perform an animation that sorts the bars based on their y value.The sort value can be unchecked to see the bar chart in the original temporal order.
 
 ## Radar Chart Interactions
-You can hover over the individual area plots to bring that area plot to the front of the screen. Also, note that the radar chart shows only the 3 most popular artist of the year selection. If you change the year selection slightly and the radar chart appears to not change it means that those 3 arists are still the most popular for the new year selection.
+You can hover over the individual area plots to bring that area plot to the front of the screen. Also, note that the radar chart shows only the 3 most popular artist of the year selection. If you change the year selection slightly and the radar chart appears to not change it means that those 3 artists are still the most popular for the new year selection.
 
 ## Donut Chart Interactions
 After a year selection has been made the dropdown menu is filtered to only artists of those years. The donut chart will additionally only show songs from that year of the artist selected.
