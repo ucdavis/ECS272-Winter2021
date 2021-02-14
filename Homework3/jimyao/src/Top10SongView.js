@@ -82,7 +82,9 @@ class Top10SongView extends Component{
       .range([ 0, width ])
       .domain(top10.map(function(d) { return d.name; }))
       .padding(0.2);
-      svg.append("g")
+      
+      var x_g = svg.append("g")
+      .attr("class", "x-axis")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
       .selectAll("text")
@@ -105,7 +107,7 @@ class Top10SongView extends Component{
         .attr("y", function(d) { return y(d.acousticness); })
         .attr("width", x.bandwidth())
         .attr("height", function(d) { return height - y(d.acousticness); })
-        .attr("fill", "#ed0345")
+        .attr("fill", this.state.colors[0])
       
       svg.append('text')
         .attr('class', 'axis-label')
@@ -122,7 +124,9 @@ class Top10SongView extends Component{
         x: x,
         y: y,
         height:height,
-        width:width
+        width:width,
+        margin: margin,
+        x_g: x_g
       });
     });
 
@@ -130,6 +134,78 @@ class Top10SongView extends Component{
   }
 
   updateChart() {
+    var data = this.state.data;
+    var data_by_artist = this.state.data_by_artist;
+    var svg = this.state.svg;
+    var x = this.state.x;
+    var y = this.state.y;
+    var keys = this.state.keys;
+    var select = this.state.select;
+    var colors = this.state.colors;
+    var height = this.state.height;
+    var width = this.state.width;
+    var margin = this.state.margin;
+    var x_g = this.state.x_g;
+
+    var unsorted_array = [];
+    var i, j;
+
+    for(i=0; i<data.length; i++) {
+      if(parseInt(data[i]["year"]) == this.state.year)
+      {
+        unsorted_array.push(data[i]);
+      }
+    }
+
+    // Reverse
+    var top10 = unsorted_array.sort((a,b)=>{return b["popularity"] - a["popularity"]}).slice(0,10);
+
+    console.log(top10);
+    
+  
+    var x = d3.scaleBand()
+      .range([ 0, width ])
+      .domain(top10.map(function(d) { return d.name; }))
+      .padding(0.2);
+  
+    d3.select('.x-axis').remove();
+
+    this.state.x_g = svg.append("g")
+      .attr("class", "x-axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+    
+    svg.selectAll("mybar")
+    .data(top10)
+      .enter()
+      .selectAll("rect")
+      .data(top10)
+      .transition()
+      .duration(1000)
+      .attr("x", function(d) { return x(d.name); })
+      .attr("y", function(d) { return y(d[keys[select]]); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d[keys[select]]); })
+      .attr("fill", colors[select]);
+    
+
+    svg.selectAll(".axis-label").remove();
+
+    svg.append('text')
+      .attr('class', 'axis-label')
+      .text(keys[select])
+      .attr('font-weight', 500)
+      .attr('font-size', "0.8em")
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+      .attr('y', -50); // Relative to the y axis.
+
+  }
+
+  updateChart_old() {
     var data = this.state.data;
     var svg = this.state.svg;
     var x = this.state.x;

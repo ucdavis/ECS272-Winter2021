@@ -156,7 +156,7 @@ class YearDetailView extends Component{
         .y(function(d) { return y(d.acousticness); }) // set the y values for the line generator 
         .curve(d3.curveMonotoneX)
 
-      svg.append("path")
+      var line_path = svg.append("path")
         .datum(data_by_year) // 10. Binds data to the line 
         .attr("clip-path", "url(#clip)")
         .attr("class", "line") // Assign a class for styling 
@@ -178,7 +178,7 @@ class YearDetailView extends Component{
 
       var color = d3.scaleLinear()
         .domain([0, 1]) // Points per square pixel.
-        .range(["white", "#ed0345"])
+        .range(["white", this.state.colors[0]])
 
       var densityData = d3.contourDensity()
         .x(function(d) { return x(new Date(d.year, 1, 1)); })
@@ -190,6 +190,7 @@ class YearDetailView extends Component{
 
 
       svg.insert("g", "g")
+        .attr('id', 'graph')
         .selectAll("path")
         .data(densityData)
         .enter().append("path")
@@ -226,13 +227,87 @@ class YearDetailView extends Component{
         glow_filter:glow_filter,
         shadow_filter:shadow_filter,
         defs:defs,
-        margin: margin
+        margin: margin,
+        ling_path: line_path,
+        line: line
       });
      });
     });
   }
 
   updateChart() {
+    var data = this.state.data;
+    var x = this.state.x;
+    var y = this.state.y;
+    var keys = this.state.keys;
+    var select = this.state.select;
+    var height = this.state.height;
+    var width = this.state.width;
+    var svg = this.state.svg;
+    var colors = this.state.colors;
+    var line_path = this.state.line_path;
+    var data_by_year = this.state.data_by_year;
+    var line = this.state.line;
+    var margin = this.state.margin;
+
+
+    var densityData = d3.contourDensity()
+      .x(function(d) { return x(new Date(d.year, 1, 1)); })
+      .y(function(d) { return y(d[keys[select]]); })
+      .size([width, height])
+      .bandwidth(15)
+      (data)
+
+      var color = d3.scaleLinear()
+      .domain([0, 1]) // Points per square pixel.
+      .range(["white", colors[select]])
+
+      svg.selectAll("#graph")
+          .attr('opacity', 1)
+          .transition()
+          .duration(1000)
+          .attr('opacity', 0)
+          .remove();
+          
+
+      svg.insert("g", "g")
+      .attr('id', 'graph')
+      .selectAll("path")
+      .data(densityData)
+      .enter()
+      .append("path")
+        .attr("clip-path", "url(#clip)")
+        .attr("d", d3.geoPath())
+        .style("filter", "url(#glow)")
+        .attr("fill", function(d) { return color(d.value); })
+        .attr('opacity', 0)
+        .transition()
+        .duration(1000)
+        .attr('opacity', 1);
+
+      var line = d3.line()
+        .x(function(d, i) { return x(new Date(d.year, 1, 1)); }) // set the x values for the line generator
+        .y(function(d) { return y(d[keys[select]]); }) // set the y values for the line generator 
+        .curve(d3.curveMonotoneX)
+
+      svg.selectAll(".line")
+      .transition()
+      .duration(1000)
+        .attr("d", line);
+
+      svg.selectAll(".axis-label").remove();
+      
+      svg.append('text')
+        .attr('class', 'axis-label')
+        .text(keys[select])
+        .attr('font-weight', 500)
+        .attr('font-size', "0.8em")
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -(margin.top * 2 + (height - margin.top - margin.bottom) / 2) - keys[select].length * 2)
+        .attr('y', -32); // Relative to the y axis.
+  }
+
+  updateChart_old() {
     var svg = this.state.svg;
     var x = this.state.x;
     var y = this.state.y;

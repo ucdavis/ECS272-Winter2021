@@ -146,10 +146,14 @@ div {
 }
 
 .toggle-btn {
+  justify-content: space-between;
   cursor: pointer;
   font-weight: 500;
   font-size: 0.8em;
   user-select: none;
+  transition: 1s;
+  width: 40px;
+  margin-bottom: 5px;
 }
 
 #toggle-panel {
@@ -182,4 +186,22 @@ div {
 .hint {
   text-shadow: 0 0 5px white;
   fill: #222222;
+}
+
+.toggle-help {
+  display: block;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #4c4c4c;
+}
+
+.toggle-help-text {
+  display: block;
+  position: relative;
+  font-size: 0.6em;
+  font-weight: 500;
+  color: #2c2c2c;
 }

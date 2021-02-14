@@ -143,7 +143,9 @@ class YearView extends Component{
       svg.selectAll(".layer")
       .attr("opacity", 1)
       .on("mouseover", (event, d)=>{
-        var i = svg.selectAll(".layer").nodes().indexOf(event.path[0]);
+        console.log(event);
+        // var i = svg.selectAll(".layer").nodes().indexOf(event.path[0]);
+        var i = svg.selectAll(".layer").nodes().indexOf(event.target);
         // svg.selectAll(".layer").transition()
         //   .duration(50)
         //   .attr("opacity", function(d, j) {
@@ -158,7 +160,9 @@ class YearView extends Component{
         update_hover(-1);
       })
       .on("click", (event)=>{
-        var i = svg.selectAll(".layer").nodes().indexOf(event.path[0]);
+
+        // var i = svg.selectAll(".layer").nodes().indexOf(event.path[0]);
+        var i = svg.selectAll(".layer").nodes().indexOf(event.target);
         change_key(i);
       });
 
@@ -167,6 +171,7 @@ class YearView extends Component{
       var change_scale = this.props.change_scale;
       var update_cur_year = this.props.update_cur_year;
       var change_key = this.props.change_key;
+      var get_selected_year_data = this.props.get_selected_year_data;
 
       var g = svg.append("g");
 
@@ -217,6 +222,16 @@ class YearView extends Component{
               .attr("x", ()=>{return mouse[0] - 10;})
               .attr("y", ()=>{return mouse[1];})
               .text(()=>{return update_cur_year(mouse[0]);});
+            
+            var selected_year_data = get_selected_year_data(mouse[0]);
+            console.log(selected_year_data);
+            var btns = document.getElementsByClassName("toggle-btn");
+            for(let i=0; i<btns.length; i++) {
+              if(btns[i].getElementsByClassName("value")[0] != undefined) {
+                btns[i].getElementsByClassName("value")[0].text = parseFloat(selected_year_data[keys[i]]).toFixed(3);
+              }
+            }
+
             })
 
           .on('click', function(event) {
@@ -310,11 +325,16 @@ class YearView extends Component{
       svg.selectAll(".layer")
       .attr("opacity", function(d, j) {
         return j != hover ? 0.7 : 1;
-      });
+      })
+      .attr("stroke", function(d, j) {
+        return j != hover ? "none" : "#222222";
+      })
+      .attr("stroke-width", 1.5);
     } else 
     {
       svg.selectAll(".layer")
-      .attr("opacity", 1);
+      .attr("opacity", 1)
+      .attr("stroke", "none");
     }
 
 
@@ -363,14 +383,21 @@ class YearView extends Component{
           
           <div id="year-view-graph"></div>
           <div id="toggle-panel">
+            <div class="toggle-help-text">Toggle to Hide/Show Feature</div>
+            <div class="toggle-help-text">Scroll to Zoom In/Out View</div>
+            <div class="toggle-help-text">Click to Select Year and Feature</div>
+            <div class="toggle-help">Help</div>
             <div>&nbsp;</div>
-            <div class="toggle-btn" id="toggle-acousticness">Acousticness</div>
-            <div class="toggle-btn" id="toggle-danceability">Danceability</div>
-            <div class="toggle-btn" id="toggle-energy">Energy</div>
-            <div class="toggle-btn" id="toggle-instrumentalness">Instrumentalness</div>
-            <div class="toggle-btn" id="toggle-liveness">Liveness</div>
-            <div class="toggle-btn" id="toggle-valence">Valence</div>
+            <div class="toggle-btn" id="toggle-acousticness">Acousticness <a class="value">0.0</a></div>
+            <div class="toggle-btn" id="toggle-danceability">Danceability <a class="value">0.0</a></div>
+            <div class="toggle-btn" id="toggle-energy">Energy <a class="value">0.0</a></div>
+            <div class="toggle-btn" id="toggle-instrumentalness">Instrumentalness <a class="value">0.0</a></div>
+            <div class="toggle-btn" id="toggle-liveness">Liveness <a class="value">0.0</a></div>
+            <div class="toggle-btn" id="toggle-valence">Valence <a class="value">0.0</a></div>
             <div class="toggle-hint">Toggle Feature</div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
           </div>
         </div>
       </div>

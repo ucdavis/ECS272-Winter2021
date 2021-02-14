@@ -43,6 +43,12 @@ class App extends React.Component{
       update_cur_year: (posX)=> {
         return Math.round(posX / this.state.year_view.state.width * this.state.year_view.state.scale + this.state.year_view.state.curMinYear);
       },
+      get_selected_year_data: (posX) => {
+        var year = Math.round(posX / this.state.year_view.state.width * this.state.year_view.state.scale + this.state.year_view.state.curMinYear);
+        if(year < 1921) {year = 1921};
+        if(year > 2020) {year = 2020};
+        return this.state.year_view.state.data[year-1921];
+      },
       change_selected: (index)=>{
         console.log(index);
         this.state.top_10_song.changeSelected(index);
@@ -122,6 +128,7 @@ class App extends React.Component{
               update_cur_year={this.state.update_cur_year}
               change_key = {this.state.change_key}
               update_hover = {this.state.update_hover}
+              get_selected_year_data = {this.state.get_selected_year_data}
               size={{width: "850", height:"400", margin:{left:50, right:40, top:20, bottom:40}}} 
               data={this.state.data} 
               data_by_year={this.state.data_by_year} 
