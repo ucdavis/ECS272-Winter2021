@@ -2,7 +2,7 @@
 // import sfGeoData from "./assets/data/san-francisco.json"; /* Example of reading in data */
 // import sfGeoData from "./assets/data/san-francisco-test.json"; /* Example of reading in data */
 // import sfGeoData from "./assets/data/san-francisco-crime.json";
-import sfGeoData from "./assets/data/san-francisco-crime-updated.json";
+import sfGeoData from "./assets/data/san-francisco-crime-updated1.json";
 import detail_to_coarse_map from  "./assets/data/detail_to_coarse_category_map.json";
 import coarse_to_detail_map from  "./assets/data/coarse_to_detail_category_map.json";
 
@@ -18,29 +18,58 @@ import {drawCrimeTimeBarChart} from "./js/barchart";
 import {updateBar} from "./js/barchart";
 import {updateY} from "./js/barchart";
 import {revertY} from "./js/barchart";
-
+import {updateLocations} from "./js/geoGraph";
+import {earaseLocations} from "./js/geoGraph";
 // import {drawBarFromCsvAsync} from "./js/line_chart"; 
 import {drawStreamFromCsvAsync} from "./js/streamgraph"; 
 // import {drawGeo} from "./js/geoTest"
 import {drawSF} from "./js/geoGraph"
 
+
+// import index from "../src/"
+import index from "./util"
+
 var menu_history = document.getElementById("change_level");
 menu_history.addEventListener("change", changeLevel);
 
+var display = document.getElementById("showLocation");
+display.addEventListener("change", displayLocations);
+function displayLocations(event) {
+  if (this.checked) {
+    console.log("Checkbox is checked..");
+    updateLocations(sfGeoData, "#bar2");
+    // if (menu.value == '3') {
+    //   // alert(3);
+    //   // drawCrimeTimeBarChart("ROBBERY","#bar1");
+    //   updateLocations("ROBBERY", "#bar1");
+    // }
+
+  } else {
+    // if (menu.value == '3') {
+    //   eraseLocations("ROBBERY", "#bar1");
+    // }
+    earaseLocations(sfGeoData, "#bar2");
+    console.log("Checkbox is not checked..");
+  }
+}
 var adjust = document.getElementById("myCheck");
 adjust.addEventListener("change", adjustY);
 function adjustY(event) {
+  console.log("The global crime type is: ", index.global_crime_type);
   if (this.checked) {
     console.log("Checkbox is checked..");
-    if (menu.value == '3') {
-      // alert(3);
-      // drawCrimeTimeBarChart("ROBBERY","#bar1");
-      updateY("ROBBERY", "#bar1");
-    }
+    // if (menu.value == '3') {
+    //   // alert(3);
+    //   // drawCrimeTimeBarChart("ROBBERY","#bar1");
+    //   updateY("ROBBERY", "#bar1");
+    // }
+
+    updateY(index.global_crime_type, "#bar1");
   } else {
-    if (menu.value == '3') {
-      revertY("ROBBERY", "#bar1");
-    }
+    // if (menu.value == '3') {
+    //   revertY("ROBBERY", "#bar1");
+    // }
+    revertY(index.global_crime_type, "#bar1");
     console.log("Checkbox is not checked..");
   }
 }
@@ -63,22 +92,31 @@ menu.addEventListener("change", generateData);
 function generateData(event) {
   if (menu.value == '1') {
     // alert(1);
-    drawCrimeTimeBarChart("WEAPON LAWS","#bar1");
+    // drawCrimeTimeBarChart("WEAPON LAWS","#bar1");
+    updateBar("WEAPON LAWS","#bar1");
+    index.global_crime_type = "WEAPON LAWS";
   } else if (menu.value == '2') {
     // alert(2);
-    drawCrimeTimeBarChart("WARRANTS","#bar1");
+    // drawCrimeTimeBarChart("WARRANTS","#bar1");
+    updateBar("WARRANTS","#bar1");
+    index.global_crime_type = "WARRANTS";
   } else if (menu.value == '3') {
     // alert(3);
     // drawCrimeTimeBarChart("ROBBERY","#bar1");
     updateBar("ROBBERY","#bar1");
+    index.global_crime_type = "ROBBERY";
   }
   else if (menu.value == '4') {
     // alert(3);
-    drawCrimeTimeBarChart("VEHICLE THEFT","#bar1");
+    // drawCrimeTimeBarChart("VEHICLE THEFT","#bar1");
+    updateBar("VEHICLE THEFT","#bar1");
+    index.global_crime_type = "VEHICLE THEFT";
   }
   else if (menu.value == '5') {
     // alert(3);
-    drawCrimeTimeBarChart("NON-CRIMINAL","#bar1");
+    // drawCrimeTimeBarChart("NON-CRIMINAL","#bar1");
+    updateBar("NON-CRIMINAL","#bar1");
+    index.global_crime_type = "NON-CRIMINAL";
   }
 }
 

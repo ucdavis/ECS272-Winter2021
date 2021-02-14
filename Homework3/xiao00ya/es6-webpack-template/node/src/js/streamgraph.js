@@ -5,6 +5,7 @@ import streamCoarseCsvPath from '../assets/data/crime_history_coarse.csv';
 import {drawCrimeTimeBarChart} from "./barchart";
 import {drawSF} from "./geoGraph"
 import sfGeoData from "../assets/data/san-francisco-crime-updated.json";
+import index from "../../src/util"
 
 export async function drawStreamFromCsvAsync(level, id){
     d3.select(id).select("svg").remove();
@@ -109,10 +110,36 @@ export async function drawStreamFromCsvAsync(level, id){
             console.log("!!!!!!Made a selection!");
 // test
             drawCrimeTimeBarChart(i.key,"#bar1");
-            document.getElementById("change_chart").value = '3';
+            var chart_options = document.getElementById("change_chart");
+            var opts = chart_options.options.length;
+            for (var itr=0; itr<opts; itr++){
+                if (chart_options.options[itr].value == "6"){
+                    chart_options.options[itr].selected = true;
+                    break;
+                }
+            }
 
             drawSF(sfGeoData, i.key,"#bar2");
-            // document.getElementById("change_chart").value = '3';
+            var map_options = document.getElementById("change_map");
+            document.getElementById("myCheck").value = false;
+            opts = map_options.options.length;
+            for (var itr=0; itr<opts; itr++){
+                if (map_options.options[itr].value == "4"){
+                    map_options.options[itr].selected = true;
+                    break;
+                }
+            }
+
+            index.global_crime_type = i.key;
+            document.getElementById("showLocation").checked = true;
+            document.getElementById("myCheck").checked = false;
+
+
+
+
+
+            // index.global_crime_type = i.key;
+
 
             var itr;
             var total = 0;
@@ -138,6 +165,10 @@ export async function drawStreamFromCsvAsync(level, id){
             return d3.interpolateBlues(total/20658);})
         .append("title")
         .text(({key}) => key);
+        
+    var legend_color = d3.scaleSequential([0, 20658], d3.interpolateBlues);
+    svg.append(() => legend({id: id, color:legend_color, title: "Total Crime Counts", width: 260}))
+        .attr("transform", "translate(15,15)");
 
     svg.append("g")
         .call(xAxis);
@@ -153,3 +184,156 @@ export async function drawStreamFromCsvAsync(level, id){
 
 }
 
+function legend({
+    id,
+    // canvas,
+    color,
+    title,
+    tickSize = 2,
+    width = 320,
+    height = 40 + tickSize,
+    marginTop = 15,
+    marginRight = 0,
+    marginBottom = 16 + tickSize,
+    marginLeft = 150,
+    ticks = width / 64,
+    tickFormat,
+    tickValues
+  } = {}) {
+    // svg = d3.select(id).append("svg:svg", "h2")
+    // let svg = d3.select(id).select("svg")
+    // select(id).append("svg:svg", "h2")
+    let svg = d3.select(id).select("svg").append("svg:svg", "h3");
+    //   .attr("width", width)
+    //   .attr("height", height)
+    //   .attr("viewBox", [0, 0, width, height])
+    //   .style("overflow", "visible")
+    //   .style("display", "block");
+  
+    let tickAdjust = g => g.selectAll(".tick line").attr("y1", marginTop + marginBottom - height);
+    let x;
+  
+    // Continuous
+    if (color.interpolate) {
+      const n = Math.min(color.domain().length, color.range().length);
+  
+      x = color.copy().rangeRound(d3.quantize(d3.interpolate(marginLeft, width - marginRight), n));
+  
+      svg.append("image")
+        .attr("x", marginLeft)
+        .attr("y", marginTop)
+        .attr("width", width - marginLeft - marginRight)
+        .attr("height", height - marginTop - marginBottom)
+        .attr("preserveAspectRatio", "none")
+        .attr("xlink:href", ramp(color.copy().domain(d3.quantize(d3.interpolate(0, 1), n))).toDataURL());
+    }
+  
+    // Sequential
+    else if (color.interpolator) {
+      x = Object.assign(color.copy()
+        .interpolator(d3.interpolateRound(marginLeft+140, width+140 - marginRight)), {
+          range() {
+            return [marginLeft+140, width - marginRight+140];
+          }
+        });
+  
+      svg.append("image")
+        .attr("x", marginLeft+140)
+        .attr("y", marginTop)
+        .attr("width", width - marginLeft - marginRight)
+        .attr("height", height - marginTop - marginBottom)
+        .attr("preserveAspectRatio", "none")
+        .attr("xlink:href", ramp(color.interpolator()).toDataURL());
+  
+      // scaleSequentialQuantile doesn’t implement ticks or tickFormat.
+      if (!x.ticks) {
+        if (tickValues === undefined) {
+          const n = Math.round(ticks + 1);
+          tickValues = d3.range(n).map(i => d3.quantile(color.domain(), i / (n - 1)));
+        }
+        if (typeof tickFormat !== "function") {
+          tickFormat = d3.format(tickFormat === undefined ? ",f" : tickFormat);
+        }
+      }
+    }
+  
+    // Threshold
+    else if (color.invertExtent) {
+      const thresholds = color.thresholds ? color.thresholds() // scaleQuantize
+        :
+        color.quantiles ? color.quantiles() // scaleQuantile
+        :
+        color.domain(); // scaleThreshold
+  
+      const thresholdFormat = tickFormat === undefined ? d => d :
+        typeof tickFormat === "string" ? d3.format(tickFormat) :
+        tickFormat;
+  
+      x = d3.scaleLinear()
+        .domain([-1, color.range().length - 1])
+        .rangeRound([marginLeft, width - marginRight]);
+  
+      svg.append("g")
+        .selectAll("rect")
+        .data(color.range())
+        .join("rect")
+        .attr("x", (d, i) => x(i - 1))
+        .attr("y", marginTop)
+        .attr("width", (d, i) => x(i) - x(i - 1))
+        .attr("height", height - marginTop - marginBottom)
+        .attr("fill", d => d);
+  
+      tickValues = d3.range(thresholds.length);
+      tickFormat = i => thresholdFormat(thresholds[i], i);
+    }
+  
+    // Ordinal
+    else {
+      x = d3.scaleBand()
+        .domain(color.domain())
+        .rangeRound([marginLeft, width - marginRight]);
+  
+      svg.append("g")
+        .selectAll("rect")
+        .data(color.domain())
+        .join("rect")
+        .attr("x", x)
+        .attr("y", marginTop)
+        .attr("width", Math.max(0, x.bandwidth() - 1))
+        .attr("height", height - marginTop - marginBottom)
+        .attr("fill", color);
+  
+      tickAdjust = () => {};
+    }
+  
+    svg.append("g")
+      .attr("transform", `translate(0,${height - marginBottom})`)
+      .call(d3.axisBottom(x)
+        .ticks(ticks, typeof tickFormat === "string" ? tickFormat : undefined)
+        .tickFormat(typeof tickFormat === "function" ? tickFormat : undefined)
+        .tickSize(tickSize)
+        .tickValues(tickValues))
+      .call(tickAdjust)
+      .call(g => g.select(".domain").remove())
+      .call(g => g.append("text")
+        .attr("x", marginLeft+140)
+        .attr("y", marginTop + marginBottom - height - 6)
+        .attr("fill", "currentColor")
+        .attr("text-anchor", "start")
+        .attr("font-weight", "bold")
+        .text(title));
+  
+    return svg.node();
+  }
+  
+  function ramp(color, n = 256) {
+    var canvas = document.createElement('canvas');
+    canvas.width = n;
+    canvas.height = 1;
+    const context = canvas.getContext("2d");
+    for (let i = 0; i < n; ++i) {
+      context.fillStyle = color(i / (n - 1));
+      context.fillRect(i, 0, 1, 1);
+    }
+    return canvas;
+  }

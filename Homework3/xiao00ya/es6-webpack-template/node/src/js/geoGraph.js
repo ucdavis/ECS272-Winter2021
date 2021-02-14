@@ -2,8 +2,16 @@ import * as d3 from "d3";
 // for test
 import locations from '../assets/data/location_test.csv';
 
+// import locations from '../assets/data/Police_Department_Incidents_-_Previous_Year__2016_.csv';
+import detail_to_coarse_map from  "../assets/data/detail_to_coarse_category_map.json";
+import coarse_to_detail_map from  "../assets/data/coarse_to_detail_category_map.json";
+import index from "../../src/util"
+
 export async function drawSF(data, crime_type, id) {
     d3.select(id).select("svg").remove();
+    console.log("mapping: ", detail_to_coarse_map);
+    console.log("mapping: ", coarse_to_detail_map);
+
 // ref: http://bl.ocks.org/sudeepdas/5167276
 // https://gist.github.com/cdolek/d08cac2fa3f6338d84ea
 // https://observablehq.com/@floledermann/drawing-maps-from-geodata-in-d3
@@ -12,8 +20,19 @@ export async function drawSF(data, crime_type, id) {
 // https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
 // https://bl.ocks.org/d3noob/c056543aff74a0ac45bef099ee6f5ff4
 // legend https://observablehq.com/@d3/choropleth
-
+    
     var spots =  await d3.csv(locations);
+    if(Object.keys(detail_to_coarse_map).includes(crime_type)) {
+        spots = spots.filter(function(d){
+            console.log(d.Category); 
+            return d.Category==crime_type}) 
+    }
+    else {
+        var type_list = coarse_to_detail_map[crime_type];
+        spots = spots.filter(function(d){
+            console.log(d.Category); 
+            return type_list.includes(d.Category)}) 
+    }
 
     var i;
     var max_value = 0;
@@ -167,6 +186,7 @@ export async function drawSF(data, crime_type, id) {
            })
            .attr("r", 0.5)
            .style("fill", "black");
+    document.getElementById("showLocation").checked = true;
     // var color = d3.interpolateOranges;
     var color = d3.scaleSequential([0, max_value], d3.interpolateOranges);
     svg.append(() => legend({id: id, color, title: "Crime Counts", width: 260}))
@@ -200,11 +220,166 @@ export async function drawSF(data, crime_type, id) {
 
 }
 
+// todo: debug update function
+export async function updateLocations(data, id) {
+    console.log("data! ", data);
+    console.log("The global crime type is: ", index.global_crime_type);
+    var crime_type = index.global_crime_type;
+    // d3.select(id).select("svg").remove();
+    console.log("mapping: ", detail_to_coarse_map);
+    console.log("mapping: ", coarse_to_detail_map);
+
+// ref: http://bl.ocks.org/sudeepdas/5167276
+// https://gist.github.com/cdolek/d08cac2fa3f6338d84ea
+// https://observablehq.com/@floledermann/drawing-maps-from-geodata-in-d3
+// http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922
+// https://opencagedata.com/reverse-geocoding/tutorial-building-a-reverse-geocoder
+// https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
+// https://bl.ocks.org/d3noob/c056543aff74a0ac45bef099ee6f5ff4
+// legend https://observablehq.com/@d3/choropleth
+    
+    var spots =  await d3.csv(locations);
+    var type_list;
+    if(Object.keys(detail_to_coarse_map).includes(crime_type)) {
+        spots = spots.filter(function(d){
+            console.log(d.Category); 
+            return d.Category==crime_type}) 
+    }
+    else {
+        type_list = coarse_to_detail_map[crime_type];
+        console.log("list is !!! ", type_list);
+        spots = spots.filter(function(d){
+            console.log(d.Category); 
+            return type_list.includes(d.Category)}) 
+    }
+
+    // var i;
+    // var max_value = 0;
+    // for (i = 0; i < data.features.length; i++) {
+    //     if (data.features[i].properties[crime_type] >max_value) {
+    //         max_value = data.features[i].properties[crime_type];
+    //     }
+    // }
+
+    const height = 0.5 * window.innerHeight;
+    const width = 0.5 * window.innerWidth;
+    const margin = ({top: 20, right: 10, bottom: 30, left: 10});
+
+    // var width = 960,
+    // height = 600,
+    var scale = 170000,
+    // var scale = 135000,
+    latitude = 37.7750,
+    longitude = -122.4183;
+    
+
+    // svg.call(zoom);
+    var svg = d3.select(id);
+    var circles = svg.append("g").attr("id", "circles");
+    
+
+    // Map and projection
+    
+    var xym = d3.geoAlbers()
+    .scale(scale) 
+    .rotate([-longitude-0.03, 0]) 
+    .center([0, latitude-0.046])  
+    //.parallels([24.6, 43.6]);
+    // var xym = d3.geoMercator().fitExtent([[40, 40], [width - 40, height - 40]], data.features)
+    
+    var path = d3.geoPath().projection(xym);
+    
+
+    // todo: dynamic change domain
+    var color = d3.scaleLinear().domain([1,100]).range(["white", "blue"]);
+
+    // // Draw the map
+    // hoods.selectAll("path").data(data.features)
+    // .enter().append("svg:path")
+    // .attr("d", path)
+    // // .style("fill", function() { return "teal" })
+    // .style("fill", function(d) { 
+    //     // return color(d.properties.WEAPON_LAWS); })
+    //     return d3.interpolateOranges(d.properties[crime_type]/max_value);})
+    // .on("mouseover", function (d, i) {      
+    //         // d3.select(this).transition()        
+    //         //      .duration(50)      
+    //         //    .style("opacity", .9);  
+    //         div.transition()        
+    //   	        .duration(200)      
+    //             .style("opacity", .9);     
+    //         div.text("Crime Counts: " + i.properties[crime_type])
+    //         //    .style("background-color", 'black')
+    //            .style("left", (d.pageX) + "px")     
+    //            .style("top", (d.pageY - 28) + "px");    
+    //     })  
+    // .on("mouseout", function(d) { 
+    //         // d3.select(this).transition()
+    //         // .duration('50')
+    //         // .attr('opacity', '1');      
+    //         div.transition()        
+    //            .duration(50)      
+    //            .style("opacity", 0);   
+    //     })
+    // // .on("mouseover", function(e){d3.select(this).style("fill", "gray")})
+    // // .on("mouseout", function(e){d3.select(this).style("fill", "teal")})
+    // .attr("stroke","gray")
+    // .attr("stroke-width", 1)
+
+    // draw spots
+    circles.selectAll("circle")
+           .data(spots)
+           .enter()
+           .append("circle")
+           .attr("cx", function(d) {
+                   return xym([d.X, d.Y])[0];
+           })
+           .attr("cy", function(d) {
+                   return xym([d.X, d.Y])[1];
+           })
+           .attr("r", 5)
+           .style("fill", "black");
+    
+    // var color = d3.scaleSequential([0, max_value], d3.interpolateOranges);
+    // svg.append(() => legend({id: id, color, title: "Crime Counts", width: 260}))
+    // .attr("transform", "translate(15,15)");
+    
+    var xy = xym([longitude,latitude])
+    console.log(xy)
+    var xy1 = xym([-122.38573, 37.78354])
+    console.log("!!Projection: ", xy1)
+
+    // hoods.append('text')
+    //             .attr('x', 960)
+    //             .attr('y', 30)
+    //             .text('Movies and San Francisco')
+    //             .attr('fill','tomato')
+    //             .attr('font-family','sans-serif')
+    //             .attr('font-size',32)
+    //             .transition().duration(1000)
+    //             .attr('x',10);         
 
 
+}
 
 
+export async function earaseLocations(data, id) {
+    console.log("data! ", data);
+    console.log("The global crime type is: ", index.global_crime_type);
+    var crime_type = index.global_crime_type;
+    // d3.select(id).select("svg").remove();
+    console.log("mapping: ", detail_to_coarse_map);
+    console.log("mapping: ", coarse_to_detail_map);
 
+
+  
+
+    // svg.call(zoom);
+    d3.select(id).selectAll("circle").remove();
+         
+
+
+}
 
 
 
@@ -378,7 +553,7 @@ function legend({
     marginTop = 18,
     marginRight = 0,
     marginBottom = 16 + tickSize,
-    marginLeft = 0,
+    marginLeft = 20,
     ticks = width / 64,
     tickFormat,
     tickValues
