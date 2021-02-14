@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homework 2 Alicia Siu</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script> 
+  </head>
+
+  <body>
+    <div>
+      <h1>Analyzing Artists and Songs on Spotify</h1>
+      <div class="container1" id="bar">
+        <form>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="All" onclick="changeBar(this.value)" checked>All
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="0-10" onclick='changeBar(this.value)'>0-10
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="10-20" onclick='changeBar(this.value)'>10-20
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="20-30" onclick='changeBar(this.value)'>20-30
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="30-40" onclick='changeBar(this.value)'>30-40
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="40-50" onclick='changeBar(this.value)'>40-50
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="50-60" onclick='changeBar(this.value)'>50-60
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="60-70" onclick='changeBar(this.value)'>60-70
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="70-80" onclick='changeBar(this.value)'>70-80
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="80-90" onclick='changeBar(this.value)'>80-90
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="90-100" onclick='changeBar(this.value)'>90-100
+          </label>
+        </form>
+      </div>
+      <div class="container2" id="scatter">
+        <select name="dropdown" onchange="changeScatter(this.value);">
+          <option selected="selected">Choose Popularity Range</option>
+          <option value="All">All</option>
+          <option value="0-10">0-10</option> 
+          <option value="10-20">10-20</option> 
+          <option value="20-30">20-30</option> 
+          <option value="30-40">30-40</option> 
+          <option value="40-50">40-50</option> 
+          <option value="50-60">50-60</option> 
+          <option value="60-70">60-70</option> 
+          <option value="70-80">70-80</option> 
+          <option value="80-100">80-100</option>
+        </select>
+      </div>
+      <div class="container3" id="stream"></div>
+    </div>
+    <script src="./bundle.js"></script>
+  </body>
+</html>

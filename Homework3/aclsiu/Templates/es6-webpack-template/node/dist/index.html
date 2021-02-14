@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homework 3 Alicia Siu</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://d3js.org/d3.v2.js"></script> 
+  </head>
+
+  <body>
+    <div>
+      <h1>Analyzing Artists and Songs on Spotify</h1>
+      <div class="container1" id="bar">
+         <select name="dropdown" onchange="changeBar(this.value)">
+          <option selected="selected">Choose Popularity Range</option>
+          <option id="All" value="All">All</option>
+          <option id="0-10" value="0-10">0-10</option> 
+          <option id="10-20" value="10-20">10-20</option> 
+          <option id="20-30" value="20-30">20-30</option> 
+          <option id="30-40" value="30-40">30-40</option> 
+          <option id="40-50" value="40-50">40-50</option> 
+          <option id="50-60" value="50-60">50-60</option> 
+          <option id="60-70" value="60-70">60-70</option> 
+          <option id="70-80" value="70-80">70-80</option> 
+          <option id="80-90" value="80-90">80-90</option>
+          <option id="90-100" value="90-100">90-100</option>
+        </select>
+      </div>
+
+      <div class="container2" id="scatter">
+      </div>
+      <div class="container3" id="stream"></div>
+      <script>
+        /** Reference: https://www.d3-graph-gallery.com/graph/streamgraph_basic.html **/
+        /** http://bl.ocks.org/WillTurman/4631136 **/
+
+        d3.csv("key_data.csv", function(data) {
+
+          var datearray = [];
+          var numArtists = 0;
+
+          const margin = { top: 30, right: 80, bottom: 80, left: 65 };
+          const height = 280;
+          const width = 630;
+
+          var color = d3.scale.ordinal()
+            .range(["#ba1a62", "#9dc6d8", "#00b3ca", "#7dd0b6", "#1d4e89", "#d2b29b", "#e38690", "#f69256", "#ead98b","#965251","#2fa13c","#663a82"]);
+    
+          var x = d3.time.scale()
+            .range([0, width]);
+
+          var y = d3.scale.linear()
+            .range([height, 0]);
+
+          var stacked = d3.layout.stack()
+            .offset("wiggle")
+            .values(d => d.values)
+            .x(d => d.date)
+            .y(d => d.value);
+
+          var area = d3.svg.area()
+            .interpolate("cardinal")
+            .x(d => x(d.date))
+            .y0(d => y(d.y0))
+            .y1(d => y(d.y0 + d.y));
+
+          var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+
+          var yAxis = d3.svg.axis()
+            .scale(y);
+
+          var svg = d3.select("#stream").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          var tooltip = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "20")
+            .style("visibility", "hidden")
+            .style("top", "450px")
+            .style("left", "730px");
+
+          var parseTime = d3.time.format("%m/%d/%y");
+          data.forEach(function(d) {
+            d.value = +d.value;
+            d.date = parseTime.parse(d.date);
+          });
+
+          var stackedData = stacked(d3.nest().key(d => d.key).entries(data));
+
+          x.domain(d3.extent(data, d => d.date));
+          y.domain([0, d3.max(data, d => d.y0 + d.y)]);
+
+          svg.selectAll(".layer")
+            .data(stackedData)
+            .enter().append("path")
+            .attr("class", "layer")
+            .attr("d", d => area(d.values))
+            .style("fill", (d,i) => color(i))
+            .attr("opacity", 1)
+            .on("mouseover", function(d, i) {
+                svg.selectAll(".layer").transition()
+                .duration(275)
+                .attr("opacity", function(d, j) {
+                  if (j != i ){ return 0.1; } 
+                  else { return 1; }
+            })})
+
+            .on("mousemove", function(d, i) {
+                mousex = d3.mouse(this);
+                mousex = mousex[0];
+                var invertedx = x.invert(mousex);
+                invertedx = invertedx.getYear();
+                var selected = (d.values);
+                for (var k = 0; k < selected.length; k++) {
+                  datearray[k] = selected[k].date
+                  datearray[k] = datearray[k].getYear();
+                }
+
+                mousedate = datearray.indexOf(invertedx);
+                numArtists = d.values[mousedate].value;
+
+                d3.select(this)
+                  .classed("hover", true)
+                  .attr("stroke", color[0])
+                  .attr("stroke-width", "0.5px"), 
+                  tooltip.html( "<span style=font-weight:bold;>" + "Key: " + d.key + "<br>" + "Number of Artists: " + numArtists + "</span")
+                  .style("visibility", "visible");
+            })
+
+            .on("mouseout", function(d, i) {
+                svg.selectAll(".layer")
+                  .transition()
+                  .duration(275)
+                  .attr("opacity", "1");
+                  d3.select(this)
+                    .classed("hover", false)
+                    .attr("stroke-width", "0px"), 
+                    tooltip.html( "<p>" + d.key + "<br>" + numArtists + "</p>" )
+                    .style("visibility", "hidden");
+            })
+
+          // Chart title
+          svg.append("text")
+              .attr("x", (width / 2))             
+              .attr("y", (margin.top / 2)-30)
+              .attr("text-anchor", "middle")  
+              .style("font-size", "17px")
+              .text("Song Key Used Among Artists Each Year");
+          svg.append("text")
+              .attr("x", (width / 2))             
+              .attr("y", (margin.top / 2)-16)
+              .attr("text-anchor", "middle")  
+              .style("font-size", "11px")
+              .text("How many artists use a certain song key each year?");
+          svg.append("text")
+              .attr("x", (width / 2))             
+              .attr("y", (margin.top / 2)-4)
+              .attr("text-anchor", "middle")  
+              .style("font-size", "11px")
+              .style("opacity", 0.7)
+              .text("(Hover over to view details)");
+
+          // X axis tick labels
+          svg.append("g")
+              .attr("transform", `translate(0,` + height + `)`)
+              .call(xAxis)
+              .selectAll("text")
+                  .style("text-anchor", "end")
+                  .attr("dx", "-.8em")
+                  .attr("dy", ".15em")
+                  .attr("transform", "rotate(-65)")
+                  .attr("font-weight", "bold")
+              
+          // X axis title label
+          svg.append("text")
+              .attr("x", (width / 2))             
+              .attr("y", (margin.top / 2) + 310)
+              .attr("text-anchor", "middle")  
+              .attr("font-weight", "bold")
+              .style("font-size", "11px")
+              .text("Year");
+
+          // Y axis 
+          svg.append("g")
+              .call(yAxis.orient("left"))
+              .style({ 'stroke': 'black', 'fill': 'none', 'stroke-width': '1px'})
+
+          // Y axis title label
+          svg.append("text")
+              .attr("transform", `rotate(-90)`)
+              .attr("text-anchor", "middle")
+              .attr("x", -150)
+              .attr("y", (width - margin.top - margin.bottom - 570))
+              .attr("font-weight", "bold")
+              .text("Number of Artists Range")
+         
+
+          // Legend
+          svg.append("circle").attr("cx",660).attr("cy",30).attr("r", 4).style("fill", "#663a82")
+          svg.append("text").attr("x", 670).attr("y", 30).text("G#/Ab").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",50).attr("r", 4).style("fill", "#2fa13c")
+          svg.append("text").attr("x", 670).attr("y", 50).text("G").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+
+          svg.append("circle").attr("cx",660).attr("cy",70).attr("r", 4).style("fill", "#965251")
+          svg.append("text").attr("x", 670).attr("y", 70).text("F#/Gb").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+
+          svg.append("circle").attr("cx",660).attr("cy", 90).attr("r", 4).style("fill", "#ead98b")
+          svg.append("text").attr("x", 670).attr("y", 90).text("F").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+
+          svg.append("circle").attr("cx",660).attr("cy", 110).attr("r", 4).style("fill", "#f69256")
+          svg.append("text").attr("x", 670).attr("y", 110).text("E").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",130).attr("r", 4).style("fill", "#e38690")
+          svg.append("text").attr("x", 670).attr("y", 130).text("D#/Eb").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",150).attr("r", 4).style("fill", "#d2b29b")
+          svg.append("text").attr("x", 670).attr("y", 150).text("D").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",170).attr("r", 4).style("fill", "#1d4e89")
+          svg.append("text").attr("x", 670).attr("y", 170).text("C#/Db").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",190).attr("r", 4).style("fill", "#7dd0b6")
+          svg.append("text").attr("x", 670).attr("y", 190).text("C").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",210).attr("r", 4).style("fill", "#00b3ca")
+          svg.append("text").attr("x", 670).attr("y", 210).text("B").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+          svg.append("circle").attr("cx",660).attr("cy",230).attr("r", 4).style("fill", "#9dc6d8")
+          svg.append("text").attr("x", 670).attr("y", 230).text("A#/Bb").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+
+          svg.append("circle").attr("cx",660).attr("cy",250).attr("r", 4).style("fill", "#ba1a62")
+          svg.append("text").attr("x", 670).attr("y", 250).text("A").style("font-size", "11px").style("font-family", "sans-serif").attr("alignment-baseline","middle")
+          
+        })
+      </script>
+    </div>
+    <script src="./bundle.js"></script>
+  </body>
+</html>
