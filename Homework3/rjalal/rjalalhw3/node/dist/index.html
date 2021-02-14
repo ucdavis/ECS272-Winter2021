@@ -42,35 +42,62 @@
 
   <div class="container-fluid">
     <div class="row">
-      <p style="padding-left: 33%;"><h2>COVID-19 TRACKER FOR UNITED STATES</h2></p>
+      <p style="padding-left: 33%;">
+      <h2>COVID-19 TRACKER FOR THE UNITED STATES</h2>
+      </p>
     </div>
+    <br>
     <div class="row">
       <div class="col-sm">
-        <p style="padding-left: 15%;">
-          <h4>COVID-19 Growth in the country from March to December</h4>
+        <span>
+          <h4>COVID-19 Growth in the Country from March to December</h4>
+        </span>
+        <p style="font-style: italic;">
+          You can zoom in the chart below and pan across the x-axis to view every day growth
         </p>
         <div>
           <div id="parent"></div>
+          <p style="font-weight: bold;padding-left: 35%;font-size: 12px;">Date/Month→</p>
         </div>
 
         <br>
         <br>
         <br>
         <div>
-
-          <select id="selectStates"></select><select id="selectMonth"></select>
-          <br><br><br>
+          <h4>Beeswarm chart for monthly COVID-19 cases for each county in the selected state</h4>
+          <span style="padding-left: 25%;font-weight:bold ;">Select State</span> <span style="padding-left: 1%;"><select
+              id="selectStates"></select></span><br>
+          <span style="padding-left: 25%;font-weight:bold ;">Select Month</span> <span
+            style="padding-left: 0.2%;"><select id="selectMonth"></select></span><br>
+          <span style="font-style: italic;">Each circle in the below beeswarm chart represents a county in the selected
+            state that is positioned as per the number of covid cases there in the selected month</span><br>
+          <span style="font-style: italic;">You can brush on the chart to see the covid count for each county below the
+            x-axis</span>
+          <br><br>
           <div id="parentBees"></div>
-          <p id="selectedCounties"></p>
+          <p style="font-weight: bold;padding-left: 35%;font-size: 12px;">Number of Covid Cases→</p>
+          <span>
+            <span style="font-weight: bold;text-decoration: underline;">Selected Counties: </span>
+            <span id="selectedCounties"></span>
+          </span>
         </div>
       </div>
       <div class="col-sm">
         <h4>COVID-19 Growth for every state from March to December</h4>
         <div>
-          <select id="selectMonthBar"></select>
+          <span style="padding-left: 30%;"><span style="font-weight:bold ;">Select Month</span> &nbsp;&nbsp; <select
+              id="selectMonthBar"></select></span><br><br>
         </div>
-        <div style="padding-left: 10px;">
-          <div id="barChart"></div>
+        <p style="font-style: italic;">
+          Upon selecting the month, the bars will rearrange in descending order with each bar displaying the total covid cases for its corresponding state 
+        </p>
+        <div>
+          <span style="font-weight: bold;font-size: 12px;">States↓</span><span style="padding-left: 30%;font-weight: bold;font-size: 12px">Number of
+            Covid Cases→<span>
+              <!-- 
+          <p style="padding-left: 40%;">Number of Covid Cases -></p>
+          -->
+              <div id="barChart"></div>
         </div>
       </div>
     </div>

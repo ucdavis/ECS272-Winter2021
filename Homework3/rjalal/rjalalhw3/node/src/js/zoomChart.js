@@ -63,7 +63,12 @@ export async function displayZoomChart(id) {
         .style("position", "absolute")
         .style("pointer-events", "none")
         .style("z-index", 1)
-        .call(svg => svg.append("g").call(yAxis, y));
+        .call(svg => svg.append("g").call(yAxis, y).call(g => g.select(".tick:last-of-type text").clone()
+            .attr("x", 3)
+            .attr("text-anchor", "start")
+            .attr("font-weight", "bold")
+            .attr("font-size", "12px")
+            .text("Number of Covid Cases in Millions")));
 
 
     const body = parent.append("div")

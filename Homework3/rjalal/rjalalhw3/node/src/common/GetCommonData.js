@@ -27,47 +27,53 @@ export async function getData(visualizationType) {
     let totalCovidArray = [];
 
     //console.log("Alabama Counties: " + JSON.stringify(covidMap.get("Alabama")));
-    if(stateCovidMap != null && stateCovidMap.size == 0){
+    if (stateCovidMap != null && stateCovidMap.size == 0) {
         stateKeys.forEach(key => {
-            let covidArrPerDate = covidMap.get(key);
-            let covidCount = 0;
-            let countyMap = new Map();
-            covidArrPerDate.forEach(county => {
-                let countyDateArr = [];
-                columns.forEach(column => {
-                    let countyObj = {
-                        key: column,
-                        covidCases: +county[column],
-                        countyNm: county["Admin2"],
-                        stateNm: key
-                    };
-                    countyDateArr.push(countyObj);
+            if (key != "American Samoa" && key != "Northern Mariana Islands" && key != "Virgin Islands" && key != "Diamond Princess" && key != "Guam"
+                && key != "Grand Princess") {
+                let covidArrPerDate = covidMap.get(key);
+                let covidCount = 0;
+                let countyMap = new Map();
+                covidArrPerDate.forEach(county => {
+                    let countyDateArr = [];
+                    columns.forEach(column => {
+                        let countyObj = {
+                            key: column,
+                            covidCases: +county[column],
+                            countyNm: county["Admin2"],
+                            stateNm: key
+                        };
+                        countyDateArr.push(countyObj);
+                    })
+                    countyMap.set(county["Admin2"], countyDateArr);
                 })
-                countyMap.set(county["Admin2"], countyDateArr);
-            })
-            stateCovidMap.set(key, countyMap);
+                stateCovidMap.set(key, countyMap);
+            }
         })
     }
-    
-    //console.log("Alabama Counties: " + JSON.stringify(stateCovidMap.get("Alabama")));
-  
+
+    console.log("Alabama Counties: " + JSON.stringify(stateCovidMap.get("Alabama")));
+
     columns.forEach(column => {
         let covidPerDay = {
             date: column,
             value: 0
         }
         stateKeys.forEach(stateKey => {
-            let countyMap = stateCovidMap.get(stateKey);
-            let countyKeys = Array.from(countyMap.keys());
-            countyKeys.forEach(county => {
-                let countyArray = [];
-                countyArray = countyMap.get(county);
-                countyArray.forEach(county => {
-                    if (county.key == column) {
-                        covidPerDay.value = covidPerDay.value + county.covidCases;
-                    }
+            if (stateKey != "American Samoa" && stateKey != "Northern Mariana Islands" && stateKey != "Virgin Islands" && stateKey != "Diamond Princess" && stateKey != "Guam"
+                && stateKey != "Grand Princess") {
+                let countyMap = stateCovidMap.get(stateKey);
+                let countyKeys = Array.from(countyMap.keys());
+                countyKeys.forEach(county => {
+                    let countyArray = [];
+                    countyArray = countyMap.get(county);
+                    countyArray.forEach(county => {
+                        if (county.key == column) {
+                            covidPerDay.value = covidPerDay.value + county.covidCases;
+                        }
+                    })
                 })
-            })
+            }
         })
         totalCovidArray.push(covidPerDay);
     })
@@ -84,10 +90,10 @@ export async function getData(visualizationType) {
     })
     console.log("Covid Date: " + JSON.stringify(totalCovidArray[150]));
 
-    if(visualizationType == "zoomChart"){
+    if (visualizationType == "zoomChart") {
         return totalCovidArray;
-    }else{
+    } else {
         return stateCovidMap;
     }
-    
+
 }

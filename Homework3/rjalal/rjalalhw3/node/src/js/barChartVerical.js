@@ -1,8 +1,9 @@
 import * as d3 from "d3";
+import { text } from "d3";
 import { getData } from '../common/GetCommonData';
 
 let data, x, svg, bar, gx, xAxis, y, yAxis, gy;
-let margin = ({ top: 30, right: 0, bottom: 10, left: 90 })
+let margin = ({ top: 30, right: 10, bottom: 10, left: 90 })
 let barHeight = 25;
 let height;
 let width = 1100;
@@ -45,6 +46,8 @@ export async function getBarChartVertical(id) {
 
     xAxis = g => g
         .attr("transform", `translate(0,${margin.top})`)
+        .style("font-size", "11px")
+        .style("font-weight", "bold")
         .call(d3.axisTop(x).ticks(width / 80, data.format))
         .call(g => g.select(".domain").remove());
 
@@ -82,6 +85,7 @@ export async function getBarChartVertical(id) {
 
     gx = svg.append("g")
         .call(xAxis);
+
 
     gy = svg.append("g")
         .call(yAxis);
@@ -179,7 +183,7 @@ async function updateBarChart(month) {
             .attr("text-anchor", "start"));
 
     gx.transition(t)
-        .call(xAxis)
+        .call(xAxis);
 
 
     gy.transition(t)
@@ -225,7 +229,7 @@ function processData(data) {
                 })
             })
             let monthlyStateObj = {
-                name: stateName,
+                name: stateName == "District of Columbia" ? "DC" : stateName,
                 value: stateCovidCount
             }
             stateCovidArr.push(monthlyStateObj);

@@ -12,7 +12,7 @@ let monthMap = new Map();
 let selectedMonth = "March";
 let selectedState = "Alabama";
 let xAxis, brush;
-let text, bodySvg;
+let text, bodySvg, brushSvg;
 let overflowHeight = 500;
 export async function displayBeeswarm(id) {
 
@@ -41,7 +41,9 @@ export async function displayBeeswarm(id) {
 
     xAxis = g => g
         .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).tickSizeOuter(0).tickSize(7));
+        .call(d3.axisBottom(x).tickSizeOuter(0).tickSize(7))
+        .style("font-size", "11px")
+        .style("font-weight", "bold");
 
 
     //const minX = x(d3.min(data, d => d.value));
@@ -84,7 +86,7 @@ export async function displayBeeswarm(id) {
         .append("title")
         .text(d => d.data.name);
 
-    bodySvg.append("g").call(brush);
+    brushSvg = bodySvg.append("g").call(brush);
 
 }
 
@@ -234,9 +236,10 @@ function populateDropDowns(data) {
     //console.log("Initial State Selected: " + d3.select(this).property("value"));
     d3.select("#selectStates").on("change", function (d) {
         console.log("State Selected: " + d3.select(this).property("value"));
+        brushSvg.call(d3.brush().clear);
         selectedState = d3.select(this).property("value");
         d3.select("#selectedCounties").text("");
-        console.log(JSON.stringify(processData(data, selectedMonth, selectedState)));
+        //console.log(JSON.stringify(processData(data, selectedMonth, selectedState)));
 
         if(selectedState == "Texas"){
             height = 1500;
@@ -294,6 +297,7 @@ function populateDropDowns(data) {
 
     d3.select("#selectMonth").on("change", function (d) {
         console.log("Month Selected: " + d3.select(this).property("value"));
+        brushSvg.call(d3.brush().clear);
         selectedMonth = d3.select(this).property("value");
         d3.select("#selectedCounties").text("");
         updateBeeswarmDropDown(processData(data, selectedMonth, selectedState));
