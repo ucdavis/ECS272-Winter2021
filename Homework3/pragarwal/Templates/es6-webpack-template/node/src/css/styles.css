@@ -3,6 +3,10 @@ h1 {
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+body {
+    margin-left: 50px;
+}
+
 
 #myClass1 {
     color: white;
@@ -11,17 +15,30 @@ h1 {
 
 #myClass2 {
     color: white;
-    float: left;
+    /* float: left; */
+    text-align: center;
 }
 
 #myClass3 {
     color: white;
+    /* float: left; */
+    /* text-align: justify; */
+}
+
+#myClassopt {
+    color:rgb(75, 75, 75);
+    /* text-align: center; */
     float: left;
+
+    font-size: x-small;
+    position: relative;
+        top: 10px;
 }
 
 #myClass5 {
     color: white;
-    float: left;
+    /* float: center; */
+    text-align: center;
 }
 
 body{
@@ -31,11 +48,14 @@ body{
 }
 
 .header {
-    font-weight : bold;
+    /* font-weight : bold; */
     font-size: xx-large;
     font-family: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 150px;
+    width: 100%;
     color: white;
     text-align: center;
+    float: left;
 
     /* padding-left: 50px; */
     /* background-color: black; */
@@ -97,10 +117,15 @@ body{
     margin-bottom: 50px;
 }
 
-.selectButton {
-    float: right;
+#selectButton {
+    float: left;
+    margin-bottom: 5px;
+    color:white;
+    background-color: #e8249a;
+    stroke: black;
+    stroke-width: 3.5px;
+    text-shadow: 0.5px 0.5px #03dac5;
 }
-
 
 .container1 {
     width: 40%;
@@ -201,7 +226,7 @@ body{
     /* position: relative; */
     margin-bottom: 60px;
     /* margin-right: 40px; */
-    margin-top: 50px;
+    margin-top: 10px;
     margin-left: 20px;
 }
 
@@ -221,4 +246,12 @@ body{
     cursor: move;
     fill: none;
     pointer-events: all;
+  }
+
+
+  .header-img {
+    width: 100%;
+    height: 150px;
+    /* background: url('/Users/pratibhaagarwal/Documents/projects/ecs272/ECS272-Winter2021/Homework3/pragarwal/Templates/es6-webpack-template/node/src/assets/images/SpotifyDash.png'); */
+    /* background-size: cover; */
   }

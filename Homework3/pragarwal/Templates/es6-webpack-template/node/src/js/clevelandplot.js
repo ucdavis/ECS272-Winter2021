@@ -67,7 +67,7 @@ export async function drawClevelandPlot(){
         .attr("r", "5")
         .style("fill", "#1DB954")
         .style("stroke", "black")
-        .style("stroke-width", "1.5")
+        .style("stroke-width", "2")
         
 
     // Circles of variable 2
@@ -80,14 +80,14 @@ export async function drawClevelandPlot(){
         .attr("cx", function(d) { return x(d.TikTok); })
         .attr("cy", function(d) { return y(d.artists); })
         .attr("r", "8")
-        .style("fill", "#EE1D52")
+        .style("fill", "#03dac5")
         .style("stroke", "black")
         .style("stroke-width", "3")
 
 
-    var colors = [ '#1DB954','#EE1D52']
+    var colors = [ '#1DB954','#03dac5']
     var attr = ['Spotify', 'TikTok']
-        
+    var r = [5, 8]    
         
         
         var n = 2;
@@ -110,7 +110,7 @@ export async function drawClevelandPlot(){
             .attr("class","legend");
             
         var circles = legend.append('circle')
-            .attr("r",6)
+            .attr("r", function(d, i) { return r[i]; })
             .attr("stroke", "black")
             .attr("stroke-width", "2")
             .attr("fill", function(d,i) { return colors[i]; });

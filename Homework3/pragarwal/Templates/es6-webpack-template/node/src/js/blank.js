@@ -307,4 +307,3 @@ export async function drawLineChart(){
                 .attr('alignment-baseline', 'hanging');
 
 }
-  
