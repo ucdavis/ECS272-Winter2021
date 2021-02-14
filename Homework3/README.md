@@ -1,5 +1,17 @@
 # Homework 3:  Visualization Dashboard Pt 2 (Interactivty)
-For Homework 3, you will be extending your Homework 2 dashboard to include interactions and animated transitions. You are encouraged to select a new dataset You will use JavaScript with [D3.js](https://d3js.org/)
+
+## Assignment Checklist
+
+- Three visualizations.
+- One overview visualization.
+- One advanced visualization.
+- Two interaction techniques:
+  - Brushing for the parallel coordicates.
+  - Zooming for the pie chare.
+- One transition technique:
+  - Ordering for the bar chart.
+
+<!-- For Homework 3, you will be extending your Homework 2 dashboard to include interactions and animated transitions. You are encouraged to select a new dataset You will use JavaScript with [D3.js](https://d3js.org/)
 
 ## Resources
 You may select a dataset from the list below or use any other dataset that you want:
@@ -87,4 +99,4 @@ git add <your-filename>
 git commit -m "Homework3" 
 git push
 ```
-After you pushed your code to your repository, follow the instruction [here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to create a pull request for this repository. Finally, submit the hyperlink of the pull request to UCD Canvas. The hyperlink should look like - "https://github.com/ucdavis/ECS272-Winter2021/pull/{your-pull-request-id}".
+After you pushed your code to your repository, follow the instruction [here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to create a pull request for this repository. Finally, submit the hyperlink of the pull request to UCD Canvas. The hyperlink should look like - "https://github.com/ucdavis/ECS272-Winter2021/pull/{your-pull-request-id}". -->
