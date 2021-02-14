@@ -39,6 +39,33 @@ function ParallelCoordChart({data}){
               }
           })
 
+
+          filterdata.sort(function(a,b){
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return (new Date(a.cDate) - new Date(b.cDate));
+          });
+          console.log(filterdata);
+    
+          var sortedata = GroupBy(filterdata,"District");
+    
+          
+        //   var plotdata = Object.values(sortedata).map((row,index) => {
+        //     return {
+        //         District: Object.keys(sortedata)[index],
+        //         TotCrime: row.length
+        //     }
+        //   })
+        //   plotdata.splice(-1,1) // get rid of outlier data point  (last array entry)
+        //   console.log(plotdata);
+    
+          sortedata = Object.keys(sortedata).map((key) => [(key), sortedata[key]]);//convert from object array to array
+          sortedata.splice(-1,1) //get rid of outlier data point with no district name attached. returns array from (starting index, ending index)
+          
+          console.log(sortedata)
+
+
+
           //use dimensions otherwise fallback to boundingClientRect dom element
           const{width, height} = 
             dimensions || wrapperRef.current.getBoundingClientRect();
@@ -59,11 +86,11 @@ function ParallelCoordChart({data}){
             //("Category" || "Resolution" || "DayOfWeek" || "Time" || "PdDistrict")
         //hard coded axis values since not all scale linear with number
         var dimensionsN = [
-            {
-                item: "District",
-                scale: d3.scalePoint().range([0,height]),
-                type: "string"
-            },
+            // {
+            //     item: "District",
+            //     scale: d3.scalePoint().range([0,height]),
+            //     type: "string"
+            // },
             {
                 item: "Month",
                 scale: d3.scaleLinear().range([height,0]),
@@ -166,23 +193,31 @@ function ParallelCoordChart({data}){
             .attr("class", "gdimension")
             .attr("transform", function(d) { return "translate(" + x(d.item) +    ")"; });
             
+        // dimensionsN.forEach(function(dimension) {
+        //     dimension.scale.domain(dimension.type === "number"
+        //         ? d3.extent(filterdata, function(d) { return +d[dimension.item]; })
+        //         : filterdata.map(function(d) { return d[dimension.item]; }).sort());
+        //     });
+
+        //console.log(sortedata[0][1]); //sortedata[DISTRICT_NUM][1]
+
         dimensionsN.forEach(function(dimension) {
             dimension.scale.domain(dimension.type === "number"
-                ? d3.extent(filterdata, function(d) { return +d[dimension.item]; })
-                : filterdata.map(function(d) { return d[dimension.item]; }).sort());
+                ? d3.extent(sortedata[3][1], function(d) { return +d[dimension.item]; })
+                : sortedata[3][1].map(function(d) { return d[dimension.item]; }).sort());
             });
 
-        svg.append("g")
-            .attr("class", "background")
-            .selectAll("path")
-            .data(filterdata)
-            .enter().append("path")
-            .attr("d", draw);
+        // svg.append("g")
+        //     .attr("class", "background")
+        //     .selectAll("path")
+        //     .data(filterdata)
+        //     .enter().append("path")
+        //     .attr("d", draw);
       
         svg.append("g")
             .attr("class", "foreground")
             .selectAll("path")
-            .data(filterdata)
+            .data(sortedata[3][1])
             .enter().append("path")
             .attr("d", draw);
 
