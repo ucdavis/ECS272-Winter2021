@@ -353,7 +353,7 @@ function drawBarChart(yearData, yearCount, radarData){
     	})
     	.on("click", function(event, d){
     		//If previously clicked or selected
-    		if(d3.select(this).classed("selectedBar") || d3.select(this).classed("clicked")){
+    		if(d3.select(this).classed("selectedBar") || d3.select(this).classed("bar clicked")){
     			d3.select(this).attr("stroke", "none")
     				.attr("class", "bar");
 
@@ -815,7 +815,7 @@ function drawBarChart(yearData, yearCount, radarData){
 					//console.log("value d = ", d);
 					if(d.year <= x11 &&  d.year >= x00){
 						return "black";
-					}else if(d3.select(this).classed("clicked")){
+					}else if(d3.select(this).classed("bar clicked")){
 						return "black";
 					}
 					return "none";
@@ -828,6 +828,7 @@ function drawBarChart(yearData, yearCount, radarData){
 				})
 			}else{
 				var [tx,ty] = selection;
+				//console.log("here");
 
 				//make array
 				var inverter = scaleBandInvert(scaler);
@@ -839,6 +840,19 @@ function drawBarChart(yearData, yearCount, radarData){
 					}
 				}
 
+				focus.selectAll("rect").classed("selectedBar", function(d,i){
+					if(rangeArray.includes(d.year)){
+						return true;
+					}
+					return false;
+				})
+
+
+
+				focus.selectAll(".clicked").data().forEach(function(d,i){
+					rangeArray.push(d.year);
+				})
+
 				focus.selectAll("rect").
 				attr("stroke", function(d,i){
 					//console.log("value d = ", d);
@@ -846,12 +860,6 @@ function drawBarChart(yearData, yearCount, radarData){
 						return "black";
 					}
 					return "none";
-				})
-				.classed("selectedBar", function(d,i){
-					if(rangeArray.includes(d.year)){
-						return true;
-					}
-					return false;
 				})
 			}
 		}else{
