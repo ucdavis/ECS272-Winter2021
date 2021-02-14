@@ -5,7 +5,7 @@ import legend from "d3-svg-legend";
 import csvPath from '../assets/data/spotify_data/data_by_year_updated.csv';
 
 
-export async function drawLineddFromCsvAsync(){
+export async function drawLineddFromCsvAsync(draw){
     const data = await d3.csv(csvPath);
     
     let id = "#linedd"
@@ -17,19 +17,16 @@ export async function drawLineddFromCsvAsync(){
     const params = {
         "text1":"",
         "text2":"",
-        "draw": "0",
-        // "sec_click": "0"
     }
-
     // draw chart    
-    drawLineddChart(data, params, svg_id); 
+    drawLineddChart(data, params, svg_id, draw); 
 
 }
 
 function initLineddChart(id){
     const margin = {top: 10, right: 100, bottom: 50, left: 100};
     const parentDiv = document.getElementById(id.substring(1));
-    const width = parentDiv.clientWidth; 
+    const width = 570 //parentDiv.clientWidth; 
     const height = 460 - margin.top - margin.bottom;
     
     let sid = id.substring(1)+ "-svg"
@@ -37,7 +34,7 @@ function initLineddChart(id){
 
     let svg = d3.select(id).append("svg")
         .attr("viewBox", [0, 0, width, height])
-        .attr("width", width + margin.left + margin.right)
+        .attr("width", width + margin.left)// + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .attr("id", sid);
 
@@ -79,32 +76,21 @@ function transition(path) {
         .x(function(d) { return x(+d.year) })
         .y(function(d) { return y(+d.value) })
         )
-        // .attr("stroke", function(d){ return myColor(selectedGroup) })
         .attr('stroke', 'gray')
         .call(transition);
-    
 }
 
-export function drawLineddChart(data, params, id) {
+export function drawLineddChart(data, params, id, draw) {
   
     // -------------------------------------------------------------- //
     // --------------------- Initializing the svg ------------------- //
     // -------------------------------------------------------------- //
-    console.log('iiiiiiiiid, params', id, params)
-
     const margin = {top: 10, right: 100, bottom: 50, left: 100};
     const parentDiv = document.getElementById(id.substring(1));
     const width = parentDiv.clientWidth; //600 - margin.left - margin.right;
     const height = 460 - margin.top - margin.bottom;
     
     let svg = d3.select(id)
-
-    var allGroup = ['danceability', 'energy','speechiness','liveness', 'acousticness', 'valence', 'normalized_tempo','instrumentalness','normalized_duration_ms']
-    
-    // A color scale: one color for each group
-    var myColor = d3.scaleOrdinal()
-      .domain(allGroup)
-      .range(d3.schemeSet2);
 
     // -------------------------------------------------------------- //
     // ------------------- Creating scales and axis ----------------- //
@@ -114,21 +100,12 @@ export function drawLineddChart(data, params, id) {
         .padding(0.2);
 
     const y = d3.scaleLinear()
-        // .domain([0, d3.max(data, d => d.value), d3.max(data, d => d.value2)])
-        .domain([0, 1]).nice()
+        .domain([0, 100]).nice()
         .rangeRound([height - margin.bottom, margin.top]);
 
     // -------------------------------------------------------------- //
-    // ----------------------- Creating tooltips -------------------- //
+    // ----------------------- Helper functions -------------------- //
     // -------------------------------------------------------------- //
-    let tooltip = d3.select("body")
-        .append("div")
-        .style("position", "absolute")
-        .style("font-family", "'Open Sans', sans-serif")
-        .style("font-size", "12px")
-        .style("z-index", "10")
-        .style("visibility", "hidden"); 
-
     function tweenDash() {
         const l = this.getTotalLength(),
             i = d3.interpolateString("0," + l, l + "," + l);
@@ -147,92 +124,42 @@ export function drawLineddChart(data, params, id) {
     // -------------------------------------------------------------- //
     svg.selectAll('path').remove();
     svg.selectAll(".legendOrdinal").remove(); 
-    // svg.select("mydots").selectAll("circle").remove();
-    // svg.select("mylabels").selectAll("text").remove();
-    // handmade-legends
     
     // -------------------------------------------------------------- //
     // --------------------- Creating the lines/path ---------------- //
     // -------------------------------------------------------------- //
-    let myColors = ['red', 'blue']
-
-    // let legend = svg.append("g")
-    //     .attr("class","legend")
-    //     .attr("transform","translate(50,30)")
-    //     .style("font-size","12px")
-    //     .call(d3.legend)
-    // console.log('legends', legend)
-
-    var line = svg
-      .datum(data)
-      .append("path")
-    //   .join(
-    //     enter => enter.select("path"),
-    //     update => update,
-    //     exit => exit.remove()
-
-    // )
-      
-      .attr("d", d3.line()
-        .x(function(d) { return x(+d.year) })
-        .y(function(d) { return y(+d.value) })
-      )
-      // .attr("stroke", function(d){ return myColor("danceability") })
-      .attr('stroke', myColors[0])
-      .style("stroke-width", 3)
-      .style("fill", "none")
-    //   .attr("data-legend",function(d) { return d.text1})
-      .call(transition)
-
-
-    var line = svg
+    let myColors = ["#6680B3", '#762712']
+   if (draw == 1){
+        var line = svg
         .datum(data)
         .append("path")
-    //     .join(
-    //       enter => enter.select("path"),
-    //       update => update,
-    //       exit => exit.remove()
-  
-    //   )
         .attr("d", d3.line()
-          .x(function(d) { return x(+d.year) })
-          .y(function(d) { return y(+d.value2) })
+            .x(function(d) { return x(+d.year) })
+            .y(function(d) { return y(+d.value) })
         )
-        // .attr("stroke", function(d){ return myColor("danceability") })
-        .attr('stroke', myColors[1])
+        .attr('stroke', myColors[0])
         .style("stroke-width", 3)
         .style("fill", "none")
-        // .attr("data-legend",function(d) { return d.text2})
         .call(transition)
-  
+
+        var line = svg
+            .datum(data)
+            .append("path")
+            .attr("d", d3.line()
+            .x(function(d) { return x(+d.year) })
+            .y(function(d) { return y(+d.value2) })
+            )
+            .attr('stroke', myColors[1])
+            .style("stroke-width", 3)
+            .style("fill", "none")
+            .call(transition)
+    }
     // -------------------------------------------------------------- //
-    // ---------------------- Creating the legend  -------------------- //
+    // ---------------------- Creating the legend  ------------------ //
     // -------------------------------------------------------------- //    
-    // Build color scale
-    // var myColor = d3.scaleSequential()
-    //             .interpolator(d3.interpolateInferno)
-    //             .domain([-1,1])
-
-    // var sequentialScale = d3.scaleSequential()
-    //                 .interpolator(d3.interpolateInferno)
-    //                 .domain([-1,1]);
-    
-
-    // svg.append("g")
-    //     .attr("class", "legendSequential")
-    //     .attr("transform", "translate(500, 8)");
-  
-    // var legendSequential = legend.legendColor()
-    //     .shapeWidth(30)
-    //     .cells(10)
-    //     .orient('verical')
-    //     .scale(sequentialScale);
-  
-    // svg.select(".legendSequential")
-    //     .call(legendSequential);
     var ordinal = d3.scaleOrdinal()
         .domain([params.text1, params.text2])
-        .range([ "red", "blue"]);
+        .range([ myColors[0], myColors[1]]);
 
     svg.append("g")
         .attr("class", "legendOrdinal")
@@ -241,129 +168,14 @@ export function drawLineddChart(data, params, id) {
     var legendOrdinal = legend.legendColor()
             .shapeWidth(30)
             .cells(2)
-            // .shape("path", d3.symbol().type(d3.symbolTriangle).size(150)())
+            .shape("path", d3.symbol().type(d3.symbolSquare).size(150)())
             .shapePadding(10)
-            //use cellFilter to hide the "e" cell
-            // .cellFilter(function(d){ return d.label !== "e" })
             .scale(ordinal);
 
     svg.select(".legendOrdinal")
+        .attr("font-size", "10")
+        .attr("font-weight", "bold")
         .call(legendOrdinal);
-
-    // // svg.select("handmade-legends").selectAll("text").remove()
-    // // let textV1 = [].concat(function(d) {console.log('value 2 text', d.text2); return d.text2})
-    // // data.map(function(d){console.log('teeeeext1',d.text1); return d.text1 })
-    // // if (){}z
-    // // console.log('-----textV1', textV1)
-    // // console.log('-------data val 2', data.value2)
-    // // Handmade legend
-    // svg
-    //     .append("g")
-    //     .attr("class", "handmade-legends")
-    //     .attr("transform", "translate(500, 8)");
-    
-    // // const circles = svg
-    // //     .append("g")
-    // //     .selectAll("circle")
-    // //     .data(data)
-    // //     .join(
-    // //         (enter) => enter.append("circle").attr("r", 6),
-    // //         update => update,
-    // //         exit => exit.remove()
-    //     // );
-
-    // // circles 
-    // //     .attr("cx", 140)
-    // //     .attr("cy",10)
-    // //     .style("fill", myColors[0]);
-
-    // // circles
-    // //     .attr("cx", 200)
-    // //     .attr("cy",10)
-    // //     .style("fill", myColors[1]);
-
-
-    // console.log('-----text1-------', params.text1)
-    // if (params.text1 != params.text2){
-    //     svg
-    //         .selectAll("mydots")
-    //         .data(data) // datum and check .append("g")
-    //         .join(
-    //             enter => enter.append("circle"),
-    //             update => update,
-    //             // exit => exit.remove()
-    //         )
-    //             .attr("cx", 140)
-    //             .attr("cy",10)
-    //             .attr("r", 6)
-    //             .style("fill", myColors[0]);
-    
-    //     svg
-    //         .attr("class", "mydots")
-    //         .selectAll("mydots")
-    //         .data(data)
-    //         .join(
-    //             enter => enter.append("circle"),
-    //             update => update,
-    //             exit => exit.remove()
-    //         )
-    //         // .enter()
-    //         // .append("circle")
-    //             .attr("cx", 250)
-    //             .attr("cy",10)
-    //             .attr("r", 6)
-    //             .style("fill", myColors[1])
-        
-    //     svg
-    //         .selectAll("mylabels")
-    //         .data(data)
-    //         .enter()
-    //         .append("text")
-            
-    //             .attr("x",160 )
-    //             .attr("y", 10)
-    //             .text(params.text1)//function(d) {console.log('value 1 text', d.text1); return d.text1})
-    //             .style("font-size", "15px")
-    //             .attr("alignment-baseline","middle")
-    //     svg
-    //         .selectAll("mylabels")
-    //         .data(data)
-    //         .enter()
-    //         .append("text")
-    //             .attr("x", 270)
-    //             .attr("y", 10)
-    //             .text(params.text2) //function(d) {console.log('value 2 text', d.text2); return d.text2})
-    //             .style("font-size", "15px")
-    //             .attr("alignment-baseline","middle")
-    //     }
-    // if (params.text1 == params.text2){
-    //     svg
-    //         .attr("class", "mydots")
-    //         .selectAll("mydots")
-    //         .data(data)
-    //         .join(
-    //             enter => enter.append("circle"),
-    //             update => update,
-    //             exit => exit.remove()
-    //         )
-    //         // .enter()
-    //         // .append("circle")
-    //             .attr("cx", 140)
-    //             .attr("cy",10)
-    //             .attr("r", 6)
-    //             .style("fill", myColors[0])
-
-    //     svg
-    //         .selectAll("mylabels")
-    //         .data(data)
-    //         .enter()
-    //         .append("text")
-    //             .attr("x", 160)
-    //             .attr("y", 10)
-    //             .text(params.text1) //function(d) {console.log('value 2 text', d.text2); return d.text2})
-    //             .style("font-size", "15px")
-    //             .attr("alignment-baseline","middle")
-    // }
     
     // -------------------------------------------------------------- //
     // ------------------ Creating scale and axis  ------------------ //
@@ -371,7 +183,7 @@ export function drawLineddChart(data, params, id) {
     const xAxis = g => g
         .attr("transform", `translate(0,${height - margin.bottom})`)
         .call(d3.axisBottom(x).tickFormat((x,i) => {
-          if ((i%10)==0){
+          if ((i%5)==0){
             return x;
           }
         }))
@@ -379,10 +191,10 @@ export function drawLineddChart(data, params, id) {
     svg.append("text")             
           .attr("transform",
                 "translate(" + (width/2) + " ," + 
-                                (height - margin.top) + ")")
+                                (height - margin.top + 10) + ")")
           .style("text-anchor", "middle")
           .attr("font-weight", "bold")
-          .attr("font-size", 13)
+          .attr("font-size", 19)
           .text("Year");
 
     const yAxis = g => g
@@ -391,19 +203,22 @@ export function drawLineddChart(data, params, id) {
 
     svg.select(".x.axis")
         .call(xAxis)
+        // .selectAll("line")
+        //     .attr("fill", "red")
         .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-65)")
-        .attr("font-weight", "bold")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)")
+            .attr("font-weight", "bold")
+            .attr("font-size", "8px")
 
     svg.select(".y.axis")
         .call(yAxis)
         .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("font-weight", "bold")
-        .attr("font-size", "10px")
+            .style("text-anchor", "end")
+            .attr("font-weight", "bold")
+            .attr("font-size", "10px")
 }
 
 
