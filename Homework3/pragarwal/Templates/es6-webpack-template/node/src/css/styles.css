@@ -17,6 +17,7 @@ body {
     color: white;
     /* float: left; */
     text-align: center;
+    margin-bottom: 30px;
 }
 
 #myClass3 {
@@ -113,15 +114,17 @@ body{
     height: 300px;
     float: left;
     /* position: relative; */
-    margin: 20px;
+    margin-top: 10px;
     margin-bottom: 50px;
+    margin-left: 20px;
 }
 
 #selectButton {
     float: left;
     margin-bottom: 5px;
+    margin-top: 2px;
     color:white;
-    background-color: #e8249a;
+    background-color: #03DAC5;
     stroke: black;
     stroke-width: 3.5px;
     text-shadow: 0.5px 0.5px #03dac5;
@@ -156,7 +159,7 @@ body{
     /* position: relative; */
     margin-bottom: 60px;
     /* margin-left: 10px; */
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: 10px;
 }
 
@@ -190,9 +193,9 @@ body{
     height: 300px;
     float: right;
     /* position: relative; */
-    margin-bottom: 60px;
+    margin-bottom: 50px;
     /* margin-right: 40px; */
-    margin-top: 20px;
+    margin-top: 33px;
     margin-left: 10px;
 }
 

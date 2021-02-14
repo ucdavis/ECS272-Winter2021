@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import csvPath from '../assets/data/TopArtistbyCent.csv';
 import newcsv from '../assets/data/TopArtistsDecadeNew.csv';
 
 export async function drawStackedBarChartTopArtist(selectedOption){
@@ -8,13 +7,14 @@ export async function drawStackedBarChartTopArtist(selectedOption){
     var myElement = document.getElementById("stackedbarcharttopartist");
 
     if(myElement){
+        
         //#myElementID element DOES exists
         d3.select("#remove_svg").remove();
     }
     
     
     // set the dimensions and margins of the graph
-    var margin = {top: 40, right: 20, bottom: 30, left: 30},
+    var margin = {top: 20, right: 20, bottom: 30, left: 30},
     width = 600 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
@@ -73,7 +73,8 @@ export async function drawStackedBarChartTopArtist(selectedOption){
 
     var color = d3.scaleOrdinal()
                 .domain(subgroups)
-                .range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7'])
+                //.range(['#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7'])
+                .range(['#7E7E7E', '#5F9590', '#41ACA2', '#22C3B3', '#03DAC5'])
 
       
 
@@ -146,7 +147,8 @@ export async function drawStackedBarChartTopArtist(selectedOption){
       
         
     
-    var colors = [ '#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7']
+    //var colors = [ '#fcd471','#fbafa1','#fb84ce', '#ef54f1', '#c4fa7']
+    var colors = ['#7E7E7E', '#5F9590', '#41ACA2', '#22C3B3', '#03DAC5']
     var attr = ['artist1','artist2','artist3','artist4','artist5']
     
     

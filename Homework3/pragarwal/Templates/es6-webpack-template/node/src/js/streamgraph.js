@@ -54,7 +54,8 @@ export async function drawStreamGraph(){
     // color palette
     var color = d3.scaleOrdinal()
                     .domain(keys)
-                    .range(["#03dac5", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]);
+                    //.range(["#01fe01", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]);
+                    .range(['#7E7E7E', '#5F9590', '#41ACA2', '#22C3B3', '#03DAC5']);
 
     //stack the data
     var stackedData = d3.stack()
@@ -114,7 +115,8 @@ export async function drawStreamGraph(){
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
 
-        var colors = [ "#03dac5", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]
+        //var colors = [ "#01fe01", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]
+        var colors = ["#7E7E7E", '#5F9590', '#41ACA2', '#22C3B3', '#03DAC5'];
         var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
         var padding = 400;
     
