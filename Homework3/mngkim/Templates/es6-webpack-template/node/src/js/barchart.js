@@ -3,7 +3,7 @@ import * as d3 from "d3";
 export function drawBarChart(data, id) {
 
     const margin = { top: 50, right: 40, bottom: 90, left: 60 };
-    const height = 630;
+    const height = 610;
     const width = 500;
 
     let svg = d3.select(id).append("svg") // 선택은 말그대로 선택 
