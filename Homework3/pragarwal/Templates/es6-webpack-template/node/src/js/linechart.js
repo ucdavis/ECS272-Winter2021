@@ -70,7 +70,7 @@ export async function drawLineChart(){
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
+                    "translate(" + margin.left-100 + "," + margin.top-100 + ")");
 
     // Get the data
     const data = await d3.csv(csvPath);

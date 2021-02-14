@@ -116,8 +116,10 @@ export async function drawStreamGraph(){
         .on("mouseleave", mouseleave)
 
         //var colors = [ "#01fe01", "#e8249a", "#fb84ce", "#eeff01", "#bb86fc"]
-        var colors = ["#7E7E7E", '#5F9590', '#41ACA2', '#22C3B3', '#03DAC5'];
-        var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
+        // var colors = ["#7E7E7E", '#5F9590', '#41ACA2', '#22C3B3', '#03DAC5'];
+        // var attr = ["danceability", "energy", "liveness", "acousticness", "valence"]
+        var colors = ["#03DAC5", "#22C3B3", "#41ACA2", "#5F9590", "#7E7E7E"]
+        var attr = ["valence", "acousticness", "liveness", "energy", "danceability"]
         var padding = 400;
     
         var legend = svg.append('g')
