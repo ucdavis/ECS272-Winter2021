@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+   <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+
+
+<body style="background-color: #ececec;">
+ <!--  <h1 style="background-color: #ececec;">A heading here</h1> -->
+<div class="container-fluid" style="background-color: #ececec;">
+  <div class="row h-100">
+    <div class="col-4 col-sm-4 col-md-4 col-lg-4" id="test1" style="background-color:white;">
+     <!--  <div id ="test11" style="background-color:white;border-style: solid;
+  border-color: black;"> -->
+      <div id ="test11" style="background-color:white;">
+        <form name="myform" id="yearOption" style="text-align:center;">
+            <label class="radio-inline" id="detailChartsTextUpdate" style="opacity:0;font-weight:bold; text-decoration:underline">
+      Updated Detail Charts to Years Selection
+    </label>
+            <!-- <input type="number" min="1921" max="2020" step="1" value="1921" id="nValue"> -->
+        </form>
+      </div>
+      <div id ="test12" style="background-color:white;text-align:center;">
+                    <label class="radio-inline" id="artistLabel">
+      Artist:
+    </label>
+        <select id="selectButton"></select>
+      </div>
+    </div>
+    <div class="col-8 col-sm-8 col-md-8 col-lg-8" id="test2">
+
+      <div id="my_barChart" style="background-color:white;text-align:center;" >
+        <form id="dimensionY">
+          <label class="radio-inline">
+            Y Axis Options:
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="count" checked>Count
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="popularity" >Popularity
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" value="duration">Duration
+          </label>
+
+        </form>
+
+        <label><input id='sort' type="checkbox" align='right'> Sort values</label>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src='./scripts/donutChart.js'></script>
+<script src='./scripts/radarChart.js'></script>
+<script src='./scripts/barChart.js'></script>
+<script src='./scripts/main.js'></script>
+
+
+</body>
+
+
+</html>

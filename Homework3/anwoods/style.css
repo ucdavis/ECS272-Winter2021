@@ -1,0 +1,53 @@
+html,body,.container-fluid {
+  height: 100%;
+}
+
+.fill { 
+    min-height: 100%;
+    height: 100%;
+    background-color: #CDCDCD;
+}
+
+.row {
+    height: 100%;
+}
+
+.tooltip {
+  font: 10px sans-serif;
+  position: absolute;
+  border-radius: 10px;
+  padding: 10px;
+  overflow-x: visible;
+  overflow-y: visible;
+  background-color: black;
+  color: white;
+  text-align: center;
+  opacity: 0.8;
+}
+
+
+#test1{
+  height: 100%;
+}
+
+#test2{
+  height: 100%;
+}
+
+.graph-svg-component {
+    background-color: white;
+}
+
+svg{
+    display: block;
+    margin: 0 auto;
+}
+
+.subBar { 
+  fill: gray;
+  opacity: 0.5;
+}
+
+.animating { 
+  opacity:0.5
+}
