@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { zoomTransform } from "d3";
 import csvPath from '../assets/data/data.csv';
 
 /*
@@ -32,7 +33,7 @@ export function dsPieChart(){
             data.date = +data.date;
         });
         
-        const length = csvData.length;
+        let length = csvData.length;
         
         // creating dataset for pie chart
         let totalSum = 0;
@@ -62,7 +63,7 @@ export function dsPieChart(){
         }
     
 
-        const width = 400,
+        var width = 400,
             height = 400,
             outerRadius = Math.min(width, height) / 2,
             innerRadius = outerRadius * .999,   
@@ -71,7 +72,7 @@ export function dsPieChart(){
             color = d3.scaleOrdinal(d3.schemePaired)
         ;    //builtin range of colors
             
-        const vis = d3.select("#pieChart")
+        var vis = d3.select("#pieChart")
                 .append("svg:svg")              //create the SVG element inside the <body>
                 .data([dataset])                //associate our data with the document
                 .attr("width", width)           //set the width and height of our visualization (these will be attributes of the <svg> tag
@@ -80,17 +81,17 @@ export function dsPieChart(){
                 .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")")    //move the center of the pie chart from 0, 0 to radius, radius
         ;
                     
-        const arc = d3.arc()              //this will create <path> elements for us using arc data
+        var arc = d3.arc()              //this will create <path> elements for us using arc data
                 .outerRadius(outerRadius).innerRadius(innerRadius);
 
         // for animation
-        const arcFinal = d3.arc().innerRadius(innerRadiusFinal).outerRadius(outerRadius-20);
-        const arcFinal3 = d3.arc().innerRadius(innerRadiusFinal).outerRadius(outerRadius);
+        var arcFinal = d3.arc().innerRadius(innerRadiusFinal).outerRadius(outerRadius-20);
+        var arcFinal3 = d3.arc().innerRadius(innerRadiusFinal).outerRadius(outerRadius);
 
-        const pie = d3.pie()           //this will create arc data for us given a list of values
+        var pie = d3.pie()           //this will create arc data for us given a list of values
             .value(function(d) { return d.sum; });    //we must tell it out to access the value of each element in our data array
 
-        const arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
+        var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
             .data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
             .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
             .append("svg:g")                //create a cause to hold each slice (we will have a <path> and a <text> element associated with each slice)
@@ -165,19 +166,19 @@ export function dsPieChart(){
 function dsBarChart(cause, dataset) {
 
     let firstDatasetBarChart = [];
-    dataset.forEach(x => {
-        if(x.cause==cause){
-            // console.log(x);
-            firstDatasetBarChart.push(x);
+    for(let x in dataset) {
+        if(dataset[x].cause==cause){
+            //console.log(x);
+            firstDatasetBarChart.push(dataset[x]);
         }
-    });
+    };
     
-    const margin = {top: 30, right: 5, bottom: 20, left: 50},
+    var margin = {top: 30, right: 5, bottom: 20, left: 50},
         width = 1080 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom,
         barPadding = 1
                     
-    const xScale = d3.scaleLinear()
+    var xScale = d3.scaleLinear()
             .domain([0, firstDatasetBarChart.length])
             .range([0, width])
     ;
@@ -185,7 +186,7 @@ function dsBarChart(cause, dataset) {
     // Create linear y scale 
     // Purpose: No matter what the data is, the bar should fit into the svg area; bars should not
     // get higher than the svg height. Hence incoming data needs to be scaled to fit into the svg area.  
-    const yScale = d3.scaleLinear()
+    var yScale = d3.scaleLinear()
             // use the max funtion to derive end point of the domain (max value of the dataset)
             // do not use the min value of the dataset as min of the domain as otherwise you will not see the first bar
         .domain([0, d3.max(firstDatasetBarChart, function(d) { return d.count; })])
@@ -197,14 +198,14 @@ function dsBarChart(cause, dataset) {
     
     //Create SVG element
     
-    const svg = d3.select("#barChart")
+    var svg = d3.select("#barChart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .attr("id","barChartPlot")
     ;
     
-    const plot = svg
+    var plot = svg
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     ;
@@ -236,7 +237,7 @@ function dsBarChart(cause, dataset) {
     
     // Add x labels to chart	
     
-    const xLabels = svg
+    var xLabels = svg
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + (margin.top + height)  + ")")
     ;
@@ -260,7 +261,7 @@ function dsBarChart(cause, dataset) {
     
     svg.append("text")
         .attr("x", (width + margin.left + margin.right)/2 + 40 )
-        .attr("y", 15)
+        .attr("y", 24)
         .attr("class","title")				
         .attr("text-anchor", "middle")
         .text("Overall Wildfire Breakdown 1992 - 2015")
@@ -273,31 +274,31 @@ function dsBarChart(cause, dataset) {
 function updateBarChart(cause, colorChosen, dataset) {
     
     let currentDatasetBarChart = [];
-    dataset.forEach(x => {
-        if(x.cause==cause){
-            currentDatasetBarChart.push(x);
+    for(let x in datasest) {
+        if(dataset[x].cause==cause){
+            currentDatasetBarChart.push(dataset[x]);
         }
-    });
+    };
         
-    const margin = {top: 30, right: 5, bottom: 20, left: 50},
+    var margin = {top: 30, right: 5, bottom: 20, left: 50},
         width = 1080 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom,
         barPadding = 1
     ;
-    const xScale = d3.scaleLinear()
+    var xScale = d3.scaleLinear()
         .domain([0, currentDatasetBarChart.length])
         .range([0, width])
     ;
         
             
-    const yScale = d3.scaleLinear()
+    var yScale = d3.scaleLinear()
         .domain([0, d3.max(currentDatasetBarChart, function(d) { return d.count; })])
         .range([height,0])
     ;
         
-    const svg = d3.select("#barChart svg");
+    var svg = d3.select("#barChart svg");
         
-    const plot = d3.select("#barChartPlot")
+    var plot = d3.select("#barChartPlot")
         .datum(currentDatasetBarChart)
     ;
     
@@ -344,61 +345,61 @@ function updateBarChart(cause, colorChosen, dataset) {
 function dsLineChart(cause,dataset) {
 
     let firstDatasetLineChart = [];    
-    dataset.forEach(x => {
-        if(x.cause==cause){
-            firstDatasetLineChart.push(x);
+    for(let x in dataset) {
+        if(dataset[x].cause==cause){
+            firstDatasetLineChart.push(dataset[x]);
         }
-    });
+    };
 
-    const margin = {top: 100, right: 20, bottom: 20, left: 100},
+    var margin = {top: 100, right: 20, bottom: 20, left: 100},
         width = 700 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom
     ;
 
     
-    const xScale = d3.scaleLinear()
+    var xScale = d3.scaleLinear()
         .domain([0, firstDatasetLineChart.length-1])
         .range([0, width])
     ;
 
-    const yScale = d3.scaleLinear()
+    var yScale = d3.scaleLinear()
         .domain([0, d3.max(firstDatasetLineChart, function(d) { return d.count; })])
         .range([height, 0])
     ;
 
-    const bottomAxis = d3.axisBottom(xScale);
-    const leftAxis = d3.axisLeft(yScale);
+    var bottomAxis = d3.axisBottom(xScale);
+    var leftAxis = d3.axisLeft(yScale);
 
-    const line = d3.line()
+    var line = d3.line()
         // .x(function(d) { return xScale(d.year); })
         .x(function(d,i) { return xScale(i); })
         .y(function(d) { return yScale(d.count); })
         ;
     
-    const svg = d3.select("#lineChart").append("svg")
+    var svg = d3.select("#lineChart").append("svg")
         .datum(firstDatasetLineChart)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         // create cause and move it so that margins are respected (space for axis and title)
         
-    const plot = svg
+    var plot = svg
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .attr("id", "lineChartPlot")
     ;
 
-    // // append x axis
-    // plot.append("g")
-    //     .classed("x-axis", true)
-    //     .attr("transform", `translate(0, ${height})`)
-    //     .call(bottomAxis)
-    // ;
+    // append x axis
+    plot.append("g")
+        .classed("x-axis", true)
+        .attr("transform", `translate(0, ${height})`)
+        .call(bottomAxis)
+    ;
 
-    // // append y axis
-    // plot.append("g")
-    //     .classed("y-axis", true)
-    //     .call(leftAxis)
-    // ;
+    // append y axis
+    plot.append("g")
+        .classed("y-axis", true)
+        .call(leftAxis)
+    ;
 
 
     // creating sum of count by cause
@@ -445,36 +446,36 @@ function dsLineChart(cause,dataset) {
 function updateLineChart(cause, colorChosen, dataset) {
 
     let currentDatasetLineChart = [];   
-    dataset.forEach(x => {
-        if(x.cause==cause){
-            currentDatasetLineChart.push(x);
+    for(let x in dataset) {
+        if(dataset[x].cause==cause){
+            currentDatasetLineChart.push(dataset[x]);
         }
-    });
+    };
 
-    const margin = {top: 100, right: 20, bottom: 20, left: 100},
+    var margin = {top: 100, right: 20, bottom: 20, left: 100},
         width = 700 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom
     ;
 
-    const xScale = d3.scaleLinear()
+    var xScale = d3.scaleLinear()
         .domain([0, currentDatasetLineChart.length-1])
         .range([0, width])
     ;
 
-    const yScale = d3.scaleLinear()
+    var yScale = d3.scaleLinear()
         .domain([0, d3.max(currentDatasetLineChart, function(d) { return d.count; })])
         .range([height, 0])
     ;
     
-    const bottomAxis = d3.axisBottom(xScale);
-    const leftAxis = d3.axisLeft(yScale);
+    var bottomAxis = d3.axisBottom(xScale);
+    var leftAxis = d3.axisLeft(yScale);
 
-    const line = d3.line()
+    var line = d3.line()
         .x(function(d, i) { return xScale(i); })
         .y(function(d) { return yScale(d.count); })
     ;
 
-    const plot = d3.select("#lineChartPlot")
+    var plot = d3.select("#lineChartPlot")
         .datum(currentDatasetLineChart)
     ;
     
@@ -500,21 +501,21 @@ function updateLineChart(cause, colorChosen, dataset) {
         .attr("stroke", colorChosen)
     ;
     
-    // // append x axis
-    // plot.append("g")
-    //     .classed("x-axis", true)
-    //     .attr("transform", `translate(0, ${height})`)
-    //     .call(bottomAxis)
-    // ;
+    // append x axis
+    plot.append("g")
+        .classed("x-axis", true)
+        .attr("transform", `translate(0, ${height})`)
+        .call(bottomAxis)
+    ;
 
-    // // append y axis
-    // plot.append("g")
-    //     .classed("y-axis", true)
-    //     .call(leftAxis)
-    // ;
+    // append y axis
+    plot.append("g")
+        .classed("y-axis", true)
+        .call(leftAxis)
+    ;
 
     
-    const path = plot
+    var path = plot
         .selectAll(".dot")
         .data(currentDatasetLineChart)
         .transition()
@@ -553,7 +554,7 @@ d3.csv(csvPath).then(function(csvData){
         return res;
     }, {});
 
-    const dataset = csvData.concat(result);
+    var dataset = csvData.concat(result);
     
     // set initial cause value for barchart 
     let cause = "All";
@@ -572,8 +573,9 @@ d3.csv(csvPath).then(function(csvData){
 
     d3.select("#pieChart").selectAll("g.slice")
         .on("click", function(d) {
-        
-            let color = d3.select(d3.event.target).attr('fill') // SELECT FILL VALUE
+            //console.log("here", d)
+            var color = d3.select(d3.event.target).attr('fill') // SELECT FILL VALUE
+            //console.log("color", color)
             updateBarChart(d.data.cause, color, dataset);
             updateLineChart(d.data.cause, color, dataset);
   
