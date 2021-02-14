@@ -2,6 +2,7 @@ import React from 'react';
 import BarChart from './BarChart';
 import GeoChart from './GeoChart';
 import LineChart from './LineChart';
+import BrushChart from './BrushChart';
 import StackedAreaChart from './StackedAreaChart';
 import ParallelCoordChart from './ParallelCoordChart';
 import data from  './datasets/SF_Historical_Ballot_Measures.csv';
@@ -37,6 +38,7 @@ class App extends React.Component{
         }
       })
 
+      //console.log(filterdata);
       var sortedata = GroupBy(filterdata,"cMonth");
       //console.log(sortedata);
       //console.log(Object.values(sortedata));
@@ -128,8 +130,8 @@ class App extends React.Component{
         <LineChart data={this.state.pdData}/>
         <div class="info">Parallel Coord Chart of Crime Incidents in SanFrancisco </div>
         <ParallelCoordChart data={this.state.pdData}/>
-        {/* <div class="info">Stacked Area Chart of Crime Incidents in SanFrancisco </div>
-        {/* <StackedAreaChart data={this.state.pdData}/>  //NOT IMPLEMENTED   */}
+        <div class="info">ScatterPlot Chart of Lat/Longitude Crime Incidents in SanFrancisco </div>
+        <BrushChart data={this.state.pdData}/>
         {/* <BarChart data={this.state.data} width={this.state.width} height={this.state.height} />   */}
       </div>
     );

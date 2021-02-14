@@ -79,6 +79,7 @@ function LineChart({data}){
             //  .attr("stroke-linecap", "round")
             //  .attr("d", myLine); // 11. Calls the line generator             
 
+            console.log(plotdata);
             //attach d attribute to each path element, need to wrap data array in [] because want 1 path for whole array
             svg.selectAll(".myLine") //synch with all data elements
              .data([plotdata]) //whole thing
