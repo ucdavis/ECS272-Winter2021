@@ -3,7 +3,8 @@
 // import sfGeoData from "./assets/data/san-francisco-test.json"; /* Example of reading in data */
 // import sfGeoData from "./assets/data/san-francisco-crime.json";
 import sfGeoData from "./assets/data/san-francisco-crime-updated.json";
-
+import detail_to_coarse_map from  "./assets/data/detail_to_coarse_category_map.json";
+import coarse_to_detail_map from  "./assets/data/coarse_to_detail_category_map.json";
 
 // import sfGeoData from "./assets/data/world.json"; /* Example of reading in data */
 // import sfGeoData from "./assets/data/sf_test.json"; /* Example of reading in data */

@@ -3,6 +3,8 @@ import * as d3 from "d3";
 import streamCsvPath from '../assets/data/crime_history.csv';
 import streamCoarseCsvPath from '../assets/data/crime_history_coarse.csv';
 import {drawCrimeTimeBarChart} from "./barchart";
+import {drawSF} from "./geoGraph"
+import sfGeoData from "../assets/data/san-francisco-crime-updated.json";
 
 export async function drawStreamFromCsvAsync(level, id){
     d3.select(id).select("svg").remove();
@@ -108,6 +110,9 @@ export async function drawStreamFromCsvAsync(level, id){
 // test
             drawCrimeTimeBarChart("ROBBERY","#bar1");
             document.getElementById("change_chart").value = '3';
+
+            drawSF(sfGeoData, i.key,"#bar2");
+            // document.getElementById("change_chart").value = '3';
 
             var itr;
             var total = 0;
