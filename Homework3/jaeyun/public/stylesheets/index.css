@@ -1,5 +1,6 @@
 html,
 body {
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	width: 100%;
 	height: 100%;
 	min-height: 800px;
@@ -12,6 +13,21 @@ body {
 	user-select: none;
 }
 
+#loading {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	z-index: 10000;
+}
+#loading > .spinning_loader {
+	position: absolute;
+	top: calc(50% - 20px);
+	width: 100%;
+	z-index: 10000;
+}
 .spinner {
 	background-color: var(--spinner_background_color);
 	width: 40px;
@@ -20,7 +36,8 @@ body {
 	-webkit-animation: sk-rotateplane 3.0s infinite ease-in-out;
 	animation: sk-rotateplane 3.0s infinite ease-in-out;
 	border-radius: 5px;
-	box-shadow: 0 0 8px 2px var(--spinner_shadow_color);
+	/*box-shadow: 0 0 8px 2px var(--spinner_shadow_color);*/
+	box-shadow: 0 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 @-webkit-keyframes sk-rotateplane {
 	0% {
@@ -64,7 +81,7 @@ body {
 
 /*
 Scrollbar
- */
+*/
 ::-webkit-scrollbar {
 	-webkit-appearance: none;
 }
@@ -87,8 +104,37 @@ Scrollbar
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-.spinner {
-	box-shadow: 0 0 1px 2px rgba(255, 255, 255, 0.8);
+.page_container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+.page_body {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	width: 100%;
+	height: 100%;
+}
+.hidden {
+	display: none !important;
+}
+.blurred {
+	filter: blur(2px);
+	transition: filter 800ms;
+}
+.shaded_overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.75);
+	transition: background-color 800ms;
+	z-index: 2;
 }
 
 .page {
@@ -100,12 +146,8 @@ Scrollbar
 }
 
 .title {
-	/*display: flex;*/
-	/*flex-direction: row;*/
 	background-color: #2EE770;
-	/*color: rgba(255, 255, 255, 0.8);*/
 	color: #fff;
-	/*color: #2D46B9;*/
 	padding: 8px 16px;
 	font-weight: bold;
 	font-size: 0.9em;
@@ -160,22 +202,69 @@ Scrollbar
 	flex-grow: 1;
 }
 
-.play_pane {
+/*
+Tutorial
+*/
+.tutorial_step {
+	position: relative;
+}
+.tutorial_message_container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.tutorial_message {
+	position: absolute;
+	display: none;
+	margin: 0;
+	padding: 16px;
+	color: #fff;
+	font-size: 1.4em;
+	border-radius: 8px;
+	background-color: rgba(0, 0, 0, 0.8);
+	box-shadow: 4px 2px 2px 2px rgba(0, 0, 0, 0.9);
+	z-index: 3;
+	transition: all 1000ms;
+}
+.message {
+	width: 210px;
+	height: 170px;
+}
+.message .paragraph {
+	margin-bottom: 8px;
+}
+.tutorial_button_container {
+	text-align: right;
+	margin-top: 16px;
+}
+.tutorial_button_container > input {
+	margin-left: 8px;
+}
+
+label.input-group-text {
+	width: 110px;
+}
+
+/*
+Music player
+*/
+#play_pane {
 	flex-grow: 1;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 }
-.play_pane > .left_pane {
+#play_pane > .left_pane {
 	flex-grow: 1;
 	flex-shrink: 0;
 	max-width: 250px;
 	height: 100%;
 	border-right: 2px solid #222;
 }
-.play_pane > .right_pane {
+#play_pane > .right_pane {
 	flex-grow: 1;
-	/*border-top: 2px solid #222;*/
 }
 
 #scatter_plot_buttons {
@@ -189,14 +278,11 @@ Scrollbar
 	text-align: center;
 }
 
-label.input-group-text {
-	width: 110px;
-}
 
 #table {
 	background-color: #343A40;
 	height: 250px;
-	padding: 4px 16px;
+	padding: 4px;
 	overflow: auto;
 	white-space: nowrap;
 }
@@ -205,16 +291,40 @@ label.input-group-text {
 	text-overflow: ellipsis;
 	overflow: hidden;
 }
+#table td:hover {
+	cursor: pointer;
+}
 #table .table_row_highlight {
 	background-color: #777;
 	transition: 200ms all;
 }
 #table .table_row {
-	max-width: 200px;
+	max-width: 180px;
 }
-#table .table_row:hover {
-	color: #40abff;
+#table .popularity_col {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: block;
+	width: 100%;
+	min-width: 1px;
+	font-size: 11px;
+	color: #aaa;
+	text-align: center;
+}
+#table .highlightable:hover {
+	color: #40ABFF;
 	transition: all 100ms;
+	font-weight: bold;
+}
+.spotify_button {
+	color: #2EE770;
+	font-weight: bold;
+	font-size: 14px;
+}
+.spotify_button:hover {
+	color: #2EFF70;
+	text-decoration: none;
 }
 
 #pcoord_plot {
