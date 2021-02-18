@@ -6,3 +6,5 @@ The Global terrorism dataset is too big to push into Github (158MB>=100MB). And 
 2. `npm install`
 3. `npm start`
 
+# Expected Screenshot
+![](./screenshot.png)
