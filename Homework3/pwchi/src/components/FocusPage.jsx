@@ -115,7 +115,12 @@ const FocusPage = (props) => {
   useEffect(() => {
     if (overviewSelectInfo.column) {
       handleXAxisChange({ target: { value: overviewSelectInfo.column } });
-      handleFineSelectChange({ target: { value: overviewSelectInfo.rows } });
+      handleFineSelectChange({
+        target: {
+          value: overviewSelectInfo.rows,
+          curXAxisValue: overviewSelectInfo.column,
+        },
+      });
       setIsFocusUpdate((isFocusUpdate) => false);
     }
   }, [overviewSelectInfo]);
@@ -152,10 +157,10 @@ const FocusPage = (props) => {
     }));
   };
   const handleFineSelectChange = async (event) => {
-    const { value } = event.target;
+    const { value, curXAxisValue } = event.target;
 
     // get Geocode if "Latitude" or "Longitude" of the selected data is null
-    const newData = await updateGeocode(value);
+    const newData = await updateGeocode(value, curXAxisValue);
     setData(newData);
 
     setFineSelect((fineSelect) => ({
@@ -215,11 +220,13 @@ const FocusPage = (props) => {
         range[0] <= ele["Release Year"] && ele["Release Year"] <= range[1]
     );
   };
-  const updateGeocode = async (fineSelectValue) => {
+  const updateGeocode = async (fineSelectValue, xAxisValue = null) => {
     setGeoLoading(true);
+
+    xAxisValue = xAxis.value || xAxisValue;
     const filteredData = data.filter(
       (ele) =>
-        fineSelectValue.includes(ele[xAxis.value]) &&
+        fineSelectValue.includes(ele[xAxisValue]) &&
         (ele.Longitude === null || ele.Latitude === null)
     );
     const promises = filteredData.map((ele, idx) =>
