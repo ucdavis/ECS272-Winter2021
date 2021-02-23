@@ -139,11 +139,16 @@ const App: React.FC = () => {
                   setSelectedEvents({});
                 }}
                 onSelectEvent={(id, select) => {
-                  console.log(selectedEvents);
                   if (select) {
-                    setSelectedEvents({ ...selectedEvents, [id]: true });
+                    setSelectedEvents((selectedEvents) => ({
+                      ...selectedEvents,
+                      [id]: true,
+                    }));
                   } else {
-                    setSelectedEvents({ ...selectedEvents, [id]: false });
+                    setSelectedEvents((selectedEvents) => ({
+                      ...selectedEvents,
+                      [id]: false,
+                    }));
                   }
                 }}
                 type="country"
@@ -164,7 +169,7 @@ const App: React.FC = () => {
                 dataByGeoCountryInPeriod[country as string].length ? (
                   <SidePanel
                     data={dataByGeoCountryInPeriod[country as string]}
-                    selectedEvents = {selectedEvents}
+                    selectedEvents={selectedEvents}
                   />
                 ) : (
                   "No terrorism record in this period for this country"
