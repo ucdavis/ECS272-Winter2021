@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
 import * as topojson from "topojson";
 // import world from "../../datasets/countries-110m.json";
@@ -6,6 +6,9 @@ import "./WorldMap.scss";
 import { GeometryCollection, Objects, Topology } from "topojson-specification";
 import { GeoJsonProperties } from "geojson";
 import { DataEntry } from "../../data";
+import React from "react";
+import { generalVictimType, victimTypeColor } from "../side_panel/side_panel";
+import { showEvent } from "../../utils/showevent";
 
 let world: Topology = require("../../datasets/countries-110m.json");
 
@@ -22,12 +25,15 @@ const WorldMap = (props: {
   limit: number;
   data: { [country: string]: DataEntry[] };
   onSelectCountry: (country?: string) => void;
+  onSelectEvent?: (eventId: number, select: boolean) => void;
   type: "country" | "region";
 }) => {
   const ref = useRef(null);
   let width = 938;
   let height = 500;
   let country = useRef<string | undefined>(undefined);
+
+  const [xyz, setXyz] = useState<number[]>([width / 2, height / 1.5, 1]);
 
   useEffect(() => {
     const data = topojson.feature(
@@ -117,19 +123,33 @@ const WorldMap = (props: {
           )
           .style("top", d3.pointer(event, svg)[1] + "px")
           .style("left", d3.pointer(event, svg)[0] + 10 + "px")
-          // .attr("transform", `translate(${d3.pointer(event, this)})`)
           .raise();
-        // console.log(d.properties!.events.map((ev: any) =>  ev.nwound));
       })
       .on("mouseout", function () {
         tooltip.html(null).lower();
       });
+    const ge = g.append("g").attr("id", "events");
 
+    if (xyz) {
+      g.attr(
+        "transform",
+        "translate(" +
+          projection.translate() +
+          ")scale(" +
+          xyz[2] +
+          ")translate(-" +
+          xyz[0] +
+          ",-" +
+          xyz[1] +
+          ")"
+      );
+    }
     if (country.current) {
       g.select("[id='" + country.current + "']")
         .raise()
         .attr("class", "active");
       // console.log(country.current);
+      showEvents(xyz);
     }
 
     const pl = 50;
@@ -201,29 +221,118 @@ const WorldMap = (props: {
       let xyz = [width / 2, height / 1.5, 1];
       if (country.current) {
         g.selectAll("[id='" + country.current + "']").classed("active", false);
+        ge.selectAll("circle").remove();
       }
       let newCountry = (d?.properties as any)?.name;
       // console.log(newCountry);
       if (newCountry && country.current !== newCountry) {
-        // var xyz = get_xyz(d);
+        xyz = get_xyz(d);
         country.current = newCountry;
         // g.selectAll("#" + country)
       } else {
         country.current = undefined;
       }
+      setXyz(xyz);
       props.onSelectCountry(country.current);
       if (country.current) {
-        g.selectAll("[id='" + country.current + "']").attr("class", "active");
+        g.selectAll("[id='" + country.current + "']")
+        .attr("class", "active")
+        .raise();
+        
+        showEvents(xyz);
       }
-      // zoom(xyz);
+      zoom(xyz);
+    }
+
+    function get_xyz(d: Country | undefined) {
+      var bounds = path.bounds(d as any);
+      var w_scale = (bounds[1][0] - bounds[0][0]) / width;
+      var h_scale = (bounds[1][1] - bounds[0][1]) / height;
+      var z = 0.96 / Math.max(w_scale, h_scale);
+      var x = (bounds[1][0] + bounds[0][0]) / 2;
+      var y = (bounds[1][1] + bounds[0][1]) / 2 + height / z / 6;
+      return [x, y, z];
+    }
+
+    function zoom(xyz: number[]) {
+      g.transition()
+        .duration(750)
+        .attr(
+          "transform",
+          "translate(" +
+            projection.translate() +
+            ")scale(" +
+            xyz[2] +
+            ")translate(-" +
+            xyz[0] +
+            ",-" +
+            xyz[1] +
+            ")"
+        )
+        .selectAll("#countries")
+        .style("stroke-width", 1.0 / xyz[2] + "px")
+        .selectAll(".city")
+        .attr("d", path.pointRadius(20.0 / xyz[2]) as any);
+    }
+
+    function showEvents(xyz: number[]) {
+      let countryEvents = (data.find(
+        (feature) => feature.properties!.name == country.current
+      )?.properties?.events ?? []) as DataEntry[];
+
+      ge.selectAll("circle")
+        .data(countryEvents)
+        // .enter()
+        .join("circle")
+        .sort((a: any, b: any) => -a.nkill - a.nwound + b.nkill + b.nwound)
+        .attr("id", (d) => d.eventid)
+        .attr("cx", (d) => (projection([d.longitude, d.latitude]) ?? [0])[0])
+        .attr("cy", (d) => (projection([d.longitude, d.latitude]) ?? [0, 0])[1])
+        .attr("r", (d) => {
+          return (Math.sqrt(Math.max(1, Math.min(d.nkill + d.nwound, 100))) * 5  ) /
+            xyz![2];
+        })
+        .style(
+          "fill",
+          (d) => victimTypeColor(generalVictimType(d.targtype1 as any)) as any
+        )
+        .style("stroke-width", (0.1 / xyz![2]) * 10 + "px")
+        .on("mouseover", function (event, d) {
+          tooltip
+            .html("Attack Information: \n" + showEvent(d))
+            .style("top", d3.pointer(event, svg)[1] - 100 + "px")
+            .style("left", d3.pointer(event, svg)[0] + 10 + "px")
+            .raise();
+          ge.selectAll("[id='" + d.eventid + "']").classed("active", true);
+        })
+        .on("mouseout", function (event, d) {
+          tooltip.html(null).lower();
+          ge.selectAll("[id='" + d.eventid + "']").classed("active", false);
+
+          // ge.selectAll("circle").sort(
+          //   (a: any, b: any) => -a.nkill - a.nwound + b.nkill + b.nwound
+          // );
+        })
+        .on("click", (event, d) => {
+          const elem = ge.selectAll("[id='" + d.eventid + "']");
+          const selected = elem.classed("selected");
+          elem.classed("selected", !selected);
+
+          if (props.onSelectEvent) {
+            props.onSelectEvent(d.eventid, !selected);
+          }
+        });
     }
     return function cleanup() {
       svg.remove();
       tooltip.remove();
     };
-  });
+  }, [props.data, props.limit]);
 
-  return <div ref={ref} />;
+  const div = useMemo(() => <div ref={ref} />, []);
+
+  return div;
 };
 
+// const WorldMap = React.memo(_WorldMap);
 export default WorldMap;

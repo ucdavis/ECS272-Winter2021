@@ -3,9 +3,12 @@ import { DataEntry } from "../../data";
 import * as d3 from "d3";
 import * as d3Sankey from "d3-sankey";
 import { SankeyLayout } from "d3-sankey";
-import { generalVictimType } from "../side_panel/side_panel";
+import { generalVictimType, victimTypeColor } from "../side_panel/side_panel";
 
-export const ParaCoord = (props: { data: DataEntry[] }) => {
+export const ParaCoord = (props: {
+  data: DataEntry[];
+  selectedEvents: { [id: number]: boolean };
+}) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -29,7 +32,6 @@ export const ParaCoord = (props: { data: DataEntry[] }) => {
       .attr("viewBox", "0 0 " + width + " " + height);
     // console.log(props.data);
 
-    
     const graph = generateGraph(
       [...props.data].sort((entry) => entry["targtype1"]),
       [
@@ -59,10 +61,7 @@ export const ParaCoord = (props: { data: DataEntry[] }) => {
       .append("title")
       .text((d: any) => `${d.name}\n${d.value.toLocaleString()}`);
 
-    var color = d3
-      .scaleOrdinal()
-      .domain(["Goverment", "Civillian", "Military", "Terrorist", "Other"])
-      .range(d3.schemeDark2);
+    var color = victimTypeColor;
 
     svg
       .append("g")
@@ -71,7 +70,9 @@ export const ParaCoord = (props: { data: DataEntry[] }) => {
       .data(links)
       .join("path")
       .attr("d", d3Sankey.sankeyLinkHorizontal() as any)
-      .attr("stroke", (d: any) => color(d.names[0]) as string)
+      .attr("stroke", (d: any) => {
+        return color(d.names[0]) as string;
+      })
       .attr("stroke-width", (d: any) => d.width)
       .style("mix-blend-mode", "multiply")
       .append("title")
@@ -164,6 +165,106 @@ function generateGraph<T>(
       links.push(link);
       linkByKey.set(key, link);
     }
+  }
+  return { nodes, links };
+}
+
+function generateGraph2<T>(
+  data: T[],
+  properties: Array<[keyof T, (key: string) => string]>,
+  value: (entry: T) => number
+) {
+  let index = 0;
+  const nodes = [];
+  const links = [];
+  const indexByKey = new Map();
+  const nodeByKey = new Map();
+  const nodeByIndex = new Map<number, { name: string }[]>();
+
+  function getPropertyValue(
+    entry: T,
+    property: [keyof T, (key: string) => string]
+  ): string {
+    const propertyName = property[0];
+    const propertyTransform = property[1];
+    return propertyTransform(entry[propertyName] as any);
+  }
+
+  const markedData: {
+    entry: T;
+    priority: { [id: number]: number | undefined };
+  }[] = data.map((entry) => ({
+    entry: entry,
+    priority: {},
+  }));
+  for (let i = 0; i < properties.length; i++) {
+    const property = properties[i];
+    for (const markedEntry of markedData) {
+      const propertyValue: string = getPropertyValue(
+        markedEntry.entry,
+        property
+      );
+      const key = JSON.stringify([property[0], propertyValue]);
+      if (!nodeByKey.has(key)) {
+        const node = { name: propertyValue };
+        nodes.push(node);
+        nodeByKey.set(key, node);
+        indexByKey.set(key, index);
+        index++;
+      }
+
+      markedEntry.priority[i - 1] = markedEntry.priority[i - 1] ?? 0;
+      markedEntry.priority[i - 1]! += index;
+      markedEntry.priority[i + 1] = markedEntry.priority[i + 1] ?? 0;
+      markedEntry.priority[i + 1]! += index;
+    }
+  }
+
+  data.map((entry) => {});
+
+  for (let i = 1; i < properties.length; i++) {
+    const curProperty = properties[i - 1];
+    const nextProperty = properties[i];
+    const prefix = properties.slice(0, i + 1);
+    const linkByKey = new Map();
+    const linksInStage = [];
+    for (const markedEntry of markedData) {
+      const entry = markedEntry.entry;
+      const names = properties.map((property) =>
+        property[1](entry[property[0]] as any)
+      );
+      const key = JSON.stringify(names);
+      let link = {
+        source: indexByKey.get(
+          JSON.stringify([curProperty[0], getPropertyValue(entry, curProperty)])
+        ),
+        target: indexByKey.get(
+          JSON.stringify([
+            nextProperty[0],
+            getPropertyValue(entry, nextProperty),
+          ])
+        ),
+        names,
+        entry,
+        sourcePriority: markedEntry.priority[i - 1] ?? 0,
+        targetPriority: markedEntry.priority[i] ?? 0,
+        value: value(entry),
+      };
+      linksInStage.push(link);
+      linkByKey.set(key, link);
+    }
+    linksInStage.sort(
+      (a, b) =>
+        a.source - b.source ||
+        a.sourcePriority - b.sourcePriority ||
+        a.targetPriority - b.targetPriority ||
+        getNodeIndex(properties[0][0], a.names[0]) -
+          getNodeIndex(properties[0][0], b.names[0])
+    );
+    links.push(...linksInStage);
+  }
+  function getNodeIndex(property: keyof T, value: string): number {
+    return indexByKey.get(JSON.stringify([property, value]));
   }
   return { nodes, links };
 }

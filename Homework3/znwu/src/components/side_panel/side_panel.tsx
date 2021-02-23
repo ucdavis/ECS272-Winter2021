@@ -21,6 +21,14 @@ type VictimType =
   | "Military"
   | "Terrorist"
   | "Other";
+
+export const victimTypes = [
+  "Goverment",
+  "Civillian",
+  "Military",
+  "Terrorist",
+  "Other",
+];
 type AttackType =
   | "Hijacking"
   | "Bombing/Explosion"
@@ -43,21 +51,36 @@ export const generalVictimType = (key: string) => {
   return "Other";
 };
 
-export const SidePanel = (props: { data: DataEntry[] }) => {
+export const victimTypeColor = d3
+  .scaleOrdinal()
+  .domain(["Goverment", "Civillian", "Military", "Terrorist", "Other"])
+  .range(d3.schemeDark2);
+
+export const SidePanel = (props: {
+  data: DataEntry[];
+  selectedEvents: { [id: number]: boolean };
+}) => {
   const [category, setCategory] = useState<Category>("victim");
 
   const [measure, setMeasure] = useState<Measure>("casualties");
+
+  const data = useMemo(() => {
+    const isSelected = Object.values(props.selectedEvents).indexOf(true) != -1;
+    if (isSelected) {
+      return props.data.filter((entry) => props.selectedEvents[entry.eventid]);
+    } else return props.data;
+  }, [props.data, props.selectedEvents]);
 
   const chartData = useMemo(() => {
     let groupedData: { [key: string]: DataEntry[] } = {};
     if (category === "attack") {
       groupedData = groupBy(
-        props.data,
+        data,
         "attacktype1",
         (key) => attackTypeCode[key] ?? "Unknown"
       );
     } else {
-      groupedData = groupBy(props.data, "targtype1", generalVictimType);
+      groupedData = groupBy(data, "targtype1", generalVictimType);
     }
 
     if (measure === "cases") {
@@ -72,9 +95,7 @@ export const SidePanel = (props: { data: DataEntry[] }) => {
         ])
       );
     }
-  }, [props.data, category, measure]);
-
-  console.log(props.data);
+  }, [data, category, measure]);
 
   return (
     <div>
@@ -89,7 +110,6 @@ export const SidePanel = (props: { data: DataEntry[] }) => {
           justifyContent: "center",
         }}
       >
-        
         <table style={{ marginTop: "20px" }}>
           <tr>
             <td>Category: </td>
@@ -125,7 +145,7 @@ export const SidePanel = (props: { data: DataEntry[] }) => {
         </div>
       </div>
       <Text className="subtitle">Case Composition</Text>
-      <ParaCoord data={props.data} />
+      <ParaCoord data={data} selectedEvents={props.selectedEvents} />
     </div>
   );
 };

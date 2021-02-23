@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { schemeGnBu } from "d3";
 import { useEffect, useRef } from "react";
+import { victimTypeColor, victimTypes } from "../side_panel/side_panel";
 
 export const DonutChart = (props: { data: { [key: string]: number } }) => {
   const ref = useRef(null);
@@ -16,7 +17,7 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
       .select(ref.current)
       .append("svg")
       .attr("preserveAspectRatio", "xMidYMid")
-      .attr("viewBox", "-100 0 " + (width + 200) + " " + height)
+      .attr("viewBox", "-100 0 " + (width + 200) + " " + height);
     //   .attr("width", width)
     //   .attr("height", height);
 
@@ -28,6 +29,12 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
       .scaleOrdinal()
       .domain(Object.keys(props.data))
       .range(d3.schemeDark2);
+
+    if (
+      Object.keys(props.data).every((key) => victimTypes.indexOf(key) !== -1)
+    ) {
+      color = victimTypeColor;
+    }
 
     var pie = d3
       .pie()
@@ -89,7 +96,7 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
       .enter()
       .append("text")
       .text(function (d: any) {
-        return d.data.key + ' ' + d.data.value;
+        return d.data.key + " " + d.data.value;
       })
       .attr("transform", function (d: any) {
         var pos = outerArc.centroid(d);

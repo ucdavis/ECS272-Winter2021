@@ -30,6 +30,10 @@ const App: React.FC = () => {
   const [end, setEnd] = useState(monthSpan);
   const [country, setCountry] = useState<string | undefined>(undefined);
 
+  const [selectedEvents, setSelectedEvents] = useState<{
+    [id: number]: boolean;
+  }>({});
+
   const [dataByGeoCountry] = usePromise(
     () =>
       data.then((entries) => {
@@ -60,6 +64,18 @@ const App: React.FC = () => {
     return processedData;
   }, [span, end, dataByGeoCountry]);
 
+  const worldMap = useMemo(
+    () => (
+      <WorldMap
+        data={dataByGeoCountryInPeriod}
+        limit={100 * span}
+        onSelectCountry={setCountry}
+        onSelectEvent={() => {}}
+        type="country"
+      />
+    ),
+    []
+  );
   return (
     <div className="App">
       {/* <h2>ECS 272 Assignment 3 D3 Template</h2>
@@ -99,7 +115,7 @@ const App: React.FC = () => {
               min={1}
               max={monthSpan}
               size="small"
-              style={{width:"40px", display: "inline-block" }}
+              style={{ width: "40px", display: "inline-block" }}
               onChange={(value) => {
                 if (typeof value == "number" && Number.isInteger(value)) {
                   setSpan(Math.max(1, Math.min(end, value)));
@@ -118,7 +134,18 @@ const App: React.FC = () => {
               <WorldMap
                 data={dataByGeoCountryInPeriod}
                 limit={100 * span}
-                onSelectCountry={setCountry}
+                onSelectCountry={(country) => {
+                  setCountry(country);
+                  setSelectedEvents({});
+                }}
+                onSelectEvent={(id, select) => {
+                  console.log(selectedEvents);
+                  if (select) {
+                    setSelectedEvents({ ...selectedEvents, [id]: true });
+                  } else {
+                    setSelectedEvents({ ...selectedEvents, [id]: false });
+                  }
+                }}
                 type="country"
               />
             </div>
@@ -137,6 +164,7 @@ const App: React.FC = () => {
                 dataByGeoCountryInPeriod[country as string].length ? (
                   <SidePanel
                     data={dataByGeoCountryInPeriod[country as string]}
+                    selectedEvents = {selectedEvents}
                   />
                 ) : (
                   "No terrorism record in this period for this country"

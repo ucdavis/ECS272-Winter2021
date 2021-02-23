@@ -183,7 +183,7 @@ export interface DataEntry {
   // hostkidoutcome
   // hostkidoutcome_txt
   // nreleased
-  // addnotes
+  addnotes: string;
   // scite1
   // scite2
   // scite3
