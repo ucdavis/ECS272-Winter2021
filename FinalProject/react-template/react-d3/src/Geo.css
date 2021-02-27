@@ -1,0 +1,34 @@
+.pageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.pageLayout .header{
+    flex-basis: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #038cfc;
+    font-weight: bold;
+    display: flex;
+}
+
+.pageLayout .GMcontainer{
+    flex-basis: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    background-color: #038cfc;
+    display: flex;
+    flex-direction: column;
+}
+.pageLayout .GMcontainer .map{
+    display: flex;
+    flex-basis: 95%;
+    width: 95%;
+    background-color: white;
+}
+

@@ -1,0 +1,38 @@
+.pageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+    background-color: black;
+}
+
+.pageLayout .header{
+    flex-basis: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    display: flex;
+}
+
+.pageLayout .PCcontainer{
+    flex-basis: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.pageLayout .PCcontainer .PC{
+    display: flex;
+    flex-basis: 95%;
+    width: 95%;
+    background-color: white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
+}
+
