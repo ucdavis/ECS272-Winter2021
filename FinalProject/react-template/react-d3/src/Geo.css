@@ -1,11 +1,11 @@
-.pageLayout{
+.geoPageLayout{
     display: flex;
     height: 100vh;
     width: 100vw;
     flex-direction: column;
 }
 
-.pageLayout .header{
+.geoPageLayout .header{
     flex-basis: 10%;
     width: 100%;
     align-items: center;
@@ -16,7 +16,7 @@
     display: flex;
 }
 
-.pageLayout .GMcontainer{
+.geoPageLayout .GMcontainer{
     flex-basis: 90%;
     width: 100%;
     align-items: center;
@@ -25,7 +25,7 @@
     display: flex;
     flex-direction: column;
 }
-.pageLayout .GMcontainer .map{
+.geoPageLayout .GMcontainer .map{
     display: flex;
     flex-basis: 95%;
     width: 95%;

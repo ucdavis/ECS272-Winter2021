@@ -1,4 +1,4 @@
-.pageLayout{
+.PCpageLayout{
     display: flex;
     height: 100vh;
     width: 100vw;
@@ -6,7 +6,7 @@
     background-color: black;
 }
 
-.pageLayout .header{
+.PCpageLayout .header{
     flex-basis: 10%;
     width: 100%;
     align-items: center;
@@ -17,7 +17,7 @@
     display: flex;
 }
 
-.pageLayout .PCcontainer{
+.PCpageLayout .PCcontainer{
     flex-basis: 90%;
     width: 100%;
     align-items: center;
@@ -26,7 +26,7 @@
     display: flex;
     flex-direction: column;
 }
-.pageLayout .PCcontainer .PC{
+.PCpageLayout .PCcontainer .PC{
     display: flex;
     flex-basis: 95%;
     width: 95%;

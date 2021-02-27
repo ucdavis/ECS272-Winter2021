@@ -14,7 +14,7 @@ class Geo extends React.Component{
   render(){
     
     return (
-    <div className="pageLayout">
+    <div className="geoPageLayout">
       <h1 className="header">GeoOvervew</h1>
       <div className="GMcontainer">
         <div className="map">

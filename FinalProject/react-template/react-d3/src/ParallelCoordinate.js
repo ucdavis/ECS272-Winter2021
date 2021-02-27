@@ -14,7 +14,7 @@ class ParallelCoordinate extends React.Component{
   render(){
     
     return (
-    <div className="pageLayout">
+    <div className="PCpageLayout">
       <h1 className="header">Parallel Coordinate</h1>
       <div className="PCcontainer">
         <div className="PC">
