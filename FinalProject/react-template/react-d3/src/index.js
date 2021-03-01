@@ -5,7 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import Home from "./Home";
 import Geo from './Geo';
-import ParallelCoordinate from "./ParallelCoordinate"
+import ParallelCoordinate from "./ParallelCoordinate";
+import ImageSKY from "./ImageSKY";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.render(
         <Route path = "/" exact component={Home}/>
         <Route path = "/geoOverview" component={Geo}/>
         <Route path = "/parallelCoordinate" component={ParallelCoordinate}/>
+        <Route path = "/imageSky" component={ImageSKY}/>
       </Switch>
     </Router>
 
