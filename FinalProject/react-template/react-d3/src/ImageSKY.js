@@ -98,8 +98,8 @@ class ImageSKY extends React.Component{
         .text("vaccination_count")
         .attr("width",5)
         .attr("height",5)       
-        .attr("x","-40%")
-        .attr("y","2%")
+        .attr("x","-25%")
+        .attr("y","3%")
         .style("font-size","1.5em")
         .attr("transform","rotate(-90)");
 
