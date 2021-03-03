@@ -1,6 +1,7 @@
 import React from 'react';
 import "./ImageSKY.css";
 import * as d3 from "d3";
+import { index } from 'd3';
 
 
 class ImageSKY extends React.Component{
@@ -43,6 +44,7 @@ class ImageSKY extends React.Component{
                 .attr('width', "100%")
                 .attr('height', "100%")
                 .style("background","white");
+
     let node = svg.selectAll("g.node")
                     .data(myData,(data)=>data.name);
     let g = node.enter()
@@ -53,17 +55,58 @@ class ImageSKY extends React.Component{
     
     let x_scale = d3.scaleLinear()
                     .domain([d3.min(myData,data=>data.day),d3.max(myData,data=>data.day)])
-                    .range([20,99]);
+                    .range([5,99]);
     
     let y_scale = d3.scaleLinear()
-                    .domain([0, d3.sum(myData,data=>data.vaccination_count)*2])
-                    .range([20,99]);
+                    .domain([0, d3.sum(myData,data=>data.vaccination_count)])
+                    .range([5,95]);
     
     let r_scale = d3.scaleLinear()
                     .domain([d3.min(myData,data=>data.vaccination_count), d3.sum(myData,data=>data.vaccination_count)*2])
                     .range([20,100]);
 
-    let track_x = "0%", track_y="99%";
+    svg.append("line")
+        .attr("id",'y_axis')
+        .style("stroke-width","2px")
+        .style("stroke","black")
+        .attr("x1","2%")
+        .attr("y1","100%")
+        .attr("x2","3%")
+        .attr("y2","0%"); 
+
+
+    svg.append("line")
+        .attr("id",'x_axis')
+        .style("stroke-width","2px")
+        .style("stroke","black")
+        .attr("x1","0%")
+        .attr("y1","95%")
+        .attr("x2","100%")
+        .attr("y2","95%"); 
+    
+    svg.append("text")
+        .attr("id","x_axis_title")
+        .text("day")
+        .attr("width",5)
+        .attr("height",5)       
+        .attr("x","50%")
+        .attr("y","98%")
+        .style("font-size","1.5em");
+
+    svg.append("text")
+        .attr("id","y_axis_title")
+        .text("vaccination_count")
+        .attr("width",5)
+        .attr("height",5)       
+        .attr("x","-40%")
+        .attr("y","2%")
+        .style("font-size","1.5em")
+        .attr("transform","rotate(-90)");
+
+
+    let track_x = "2%", track_y="95%";
+
+
 
     defs.append('pattern')
         .attr("id",(data)=>data.name)
@@ -79,7 +122,7 @@ class ImageSKY extends React.Component{
         .text("Total Vaccinated: 0")
         .attr("width",5)
         .attr("height",5)       
-        .attr("x","80%")
+        .attr("x","5%")
         .attr("y","5%")
         .style("font-size","2em");
 
@@ -87,16 +130,16 @@ class ImageSKY extends React.Component{
     g.append("circle")
       .attr("class","customized_circles")
       .attr("cx",data=>x_scale(data.day)+"%")
-      .attr("cy",data=>(99 - y_scale(data.vaccination_count))+"%")
+      .attr("cy",data=>(95 - y_scale(data.vaccination_count))+"%")
       .attr("fill",data=>"url(#"+data.name+")")
-      .attr("r",data=>r_scale(data.vaccination_count))
+      .attr("r", data=>r_scale(data.vaccination_count))
       .transition()
-      .delay(data=>y_scale(data.vaccination_count)*1000)
+      .delay(data=>data.day*1000)
       .duration(2000)
       .attr("cx",data=>x_scale(data.day)+"%")
       .attr("cy",(data,idx)=>{
 
-        let result = (99 - y_scale(d3.sum(myData,(data,index)=>{
+        let result = (95 - y_scale(d3.sum(myData,(data,index)=>{
           if(index<=idx){
             return data.vaccination_count;
           }
@@ -111,7 +154,7 @@ class ImageSKY extends React.Component{
         //     .attr("y1",y_scale(data.vaccination_count)+"%")
         //     .attr("x2","0%")
         //     .attr("y2","0%");
-        let result = (99 - y_scale(d3.sum(myData,(data,index)=>{
+        let result = (95 - y_scale(d3.sum(myData,(data,index)=>{
           if(index<=idx){
             return data.vaccination_count;
           }
@@ -128,10 +171,10 @@ class ImageSKY extends React.Component{
         track_y = result;
         
         svg.append("circle")
-            .attr("fill","yellow")
+            .attr("fill","orange")
             .attr("r",5)      
             .attr("cx",x_scale(data.day)+"%")
-            .attr("cy",(99 - y_scale(data.vaccination_count))+"%")
+            .attr("cy",(95 - y_scale(data.vaccination_count))+"%")
             .append('title')
             .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_total_vaccination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
 
