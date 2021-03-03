@@ -63,7 +63,7 @@ class ImageSKY extends React.Component{
                     .domain([d3.min(myData,data=>data.vaccination_count), d3.sum(myData,data=>data.vaccination_count)*2])
                     .range([20,100]);
 
-    let track_x = "0%", track_y="0%";
+    let track_x = "0%", track_y="99%";
 
     defs.append('pattern')
         .attr("id",(data)=>data.name)
@@ -87,7 +87,7 @@ class ImageSKY extends React.Component{
     g.append("circle")
       .attr("class","customized_circles")
       .attr("cx",data=>x_scale(data.day)+"%")
-      .attr("cy",data=>y_scale(data.vaccination_count)+"%")
+      .attr("cy",data=>(99 - y_scale(data.vaccination_count))+"%")
       .attr("fill",data=>"url(#"+data.name+")")
       .attr("r",data=>r_scale(data.vaccination_count))
       .transition()
@@ -96,11 +96,11 @@ class ImageSKY extends React.Component{
       .attr("cx",data=>x_scale(data.day)+"%")
       .attr("cy",(data,idx)=>{
 
-        let result = y_scale(d3.sum(myData,(data,index)=>{
+        let result = (99 - y_scale(d3.sum(myData,(data,index)=>{
           if(index<=idx){
             return data.vaccination_count;
           }
-        }))+"%";
+        })))+"%";
         return result;
       })
       .on("end",(data,idx)=>{
@@ -111,11 +111,11 @@ class ImageSKY extends React.Component{
         //     .attr("y1",y_scale(data.vaccination_count)+"%")
         //     .attr("x2","0%")
         //     .attr("y2","0%");
-        let result = y_scale(d3.sum(myData,(data,index)=>{
+        let result = (99 - y_scale(d3.sum(myData,(data,index)=>{
           if(index<=idx){
             return data.vaccination_count;
           }
-        }))+"%";
+        })))+"%";
 
         svg.append("line")
         .style("stroke-width","2px")
@@ -131,7 +131,7 @@ class ImageSKY extends React.Component{
             .attr("fill","yellow")
             .attr("r",5)      
             .attr("cx",x_scale(data.day)+"%")
-            .attr("cy",y_scale(data.vaccination_count)+"%")
+            .attr("cy",(99 - y_scale(data.vaccination_count))+"%")
             .append('title')
             .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_total_vaccination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
 
