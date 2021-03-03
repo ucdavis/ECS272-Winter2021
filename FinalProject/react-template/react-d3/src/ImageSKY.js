@@ -52,17 +52,18 @@ class ImageSKY extends React.Component{
     let defs = g.append("defs");
     
     let x_scale = d3.scaleLinear()
-                    .domain([0, d3.max(myData,data=>data.day)])
+                    .domain([d3.min(myData,data=>data.day),d3.max(myData,data=>data.day)])
                     .range([20,99]);
     
     let y_scale = d3.scaleLinear()
-                    .domain([0, d3.max(myData,data=>data.vaccination_count)])
+                    .domain([0, d3.sum(myData,data=>data.vaccination_count)*2])
                     .range([20,99]);
     
     let r_scale = d3.scaleLinear()
-                    .domain([d3.min(myData,data=>data.vaccination_count), d3.sum(myData,data=>data.vaccination_count)])
-                    .range([15,150]);
+                    .domain([d3.min(myData,data=>data.vaccination_count), d3.sum(myData,data=>data.vaccination_count)*2])
+                    .range([20,100]);
 
+    let track_x = "0%", track_y="0%";
 
     defs.append('pattern')
         .attr("id",(data)=>data.name)
@@ -78,29 +79,53 @@ class ImageSKY extends React.Component{
         .text("Total Vaccinated: 0")
         .attr("width",5)
         .attr("height",5)       
-        .attr("x","1%")
+        .attr("x","80%")
         .attr("y","5%")
         .style("font-size","2em");
 
     
     g.append("circle")
+      .attr("class","customized_circles")
       .attr("cx",data=>x_scale(data.day)+"%")
       .attr("cy",data=>y_scale(data.vaccination_count)+"%")
       .attr("fill",data=>"url(#"+data.name+")")
       .attr("r",data=>r_scale(data.vaccination_count))
       .transition()
-      .delay(data=>data.day*1000)
+      .delay(data=>y_scale(data.vaccination_count)*1000)
       .duration(2000)
-      .attr("cx","5%")
-      .attr("cy","5%")
+      .attr("cx",data=>x_scale(data.day)+"%")
+      .attr("cy",(data,idx)=>{
+
+        let result = y_scale(d3.sum(myData,(data,index)=>{
+          if(index<=idx){
+            return data.vaccination_count;
+          }
+        }))+"%";
+        return result;
+      })
       .on("end",(data,idx)=>{
+        // svg.append("line")
+        //     .style("stroke-width","1px")
+        //     .style("stroke","black")
+        //     .attr("x1",x_scale(data.day)+"%")
+        //     .attr("y1",y_scale(data.vaccination_count)+"%")
+        //     .attr("x2","0%")
+        //     .attr("y2","0%");
+        let result = y_scale(d3.sum(myData,(data,index)=>{
+          if(index<=idx){
+            return data.vaccination_count;
+          }
+        }))+"%";
+
         svg.append("line")
-            .style("stroke-width","1px")
-            .style("stroke","black")
-            .attr("x1",x_scale(data.day)+"%")
-            .attr("y1",y_scale(data.vaccination_count)+"%")
-            .attr("x2","6%")
-            .attr("y2","6%");
+        .style("stroke-width","2px")
+        .style("stroke","black")
+        .attr("x1",x_scale(data.day)+"%")
+        .attr("y1",result)
+        .attr("x2",track_x)
+        .attr("y2",track_y); 
+        track_x = x_scale(data.day)+"%";
+        track_y = result;
         
         svg.append("circle")
             .attr("fill","yellow")
@@ -108,15 +133,17 @@ class ImageSKY extends React.Component{
             .attr("cx",x_scale(data.day)+"%")
             .attr("cy",y_scale(data.vaccination_count)+"%")
             .append('title')
-            .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_total_vaccination:"+(data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)).toFixed(3));
+            .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_total_vaccination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
 
         console = d3.select("#vaccination_console");
         let console_text_arr = console.text().split(":");
         console.text(console_text_arr[0]+":"+(Number(console_text_arr[1])+data.vaccination_count));
 
       })
+      .delay(data=>data.day*200)
       .remove();
 
+      
     
   }
 
