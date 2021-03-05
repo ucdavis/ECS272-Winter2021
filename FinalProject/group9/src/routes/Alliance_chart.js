@@ -189,7 +189,7 @@ class Alliance_chart extends Component{
                   // get ccodes of hostile countries
                   var threats = new Set()
                   disputes.forEach(disp =>{
-                    if (disp.dispnum in sel_disp & disp.ccode != ccode){
+                    if (sel_disp.includes(disp.dispnum) & disp.ccode != ccode){
                       threats.add(disp.ccode)
                     }
                   })
@@ -258,14 +258,23 @@ class Alliance_chart extends Component{
                         });
 
                         function filter_effective(array) {
-                          var effectives = array.filter(alliance => alliance.endyear != "")
+                          var effectives = array.filter(alliance => alliance.endyear == "")
                           var mutual_defense = effectives.filter(alliance => alliance.type == "Type I: Defense Pact" || alliance.type == "Type III: Entente")
                           return mutual_defense;
                           }
                         
                         // filter still effective and about mutual defense alliances
-                        var allianceDB = filter_effective(allianceDB_raw);
+                        var allianceDB_dup = filter_effective(allianceDB_raw);
                         
+                        // remove duplicate data
+                        var allianceDB = allianceDB_dup.reduce((unique, o) => {
+                          if(!unique.some(obj => obj.allyID === o.allyID && obj.ccode === o.ccode)) {
+                            unique.push(o);
+                          }
+                          return unique;
+                        },[]);
+
+                        console.log(allianceDB)
                         
                         // get alliances of selected country
                         var sel_alli = [];
@@ -276,13 +285,17 @@ class Alliance_chart extends Component{
                           }
                         })
 
+                        console.log(sel_alli)
+
                         // get ccode of allied countries
                         var alliances = new Set();
                         allianceDB.forEach(alli => {
-                          if (alli.allyID in sel_alli){
+                          if (sel_alli.includes(alli.allyID) && alli.ccode != ccode){
                             alliances.add(alli.ccode)
                           }  
                         })
+
+                        console.log(alliances)
 
                         // for each allied country
                         alliances.forEach(country =>{

@@ -1,5 +1,5 @@
 import React from 'react';
-import Threat_chart from './Alliance_chart';
+import Alliance_chart from './Alliance_chart';
 import './Alliance.css';
 
 class Alliance extends React.Component{
@@ -15,7 +15,7 @@ class Alliance extends React.Component{
       <div className="App">
         <h2>Alliances vs Threats</h2>
           <div id="container"> </div>
-        <Threat_chart/>
+        <Alliance_chart/>
       </div>
     );
   }

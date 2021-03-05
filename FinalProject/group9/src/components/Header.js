@@ -8,6 +8,7 @@ const Header = () => {
             <Link to="/" className="item">Home</Link>
             <Link to="/threat" className="item">Threat</Link>
             <Link to="/alliance" className="item">Threat vs Alliances</Link>
+            <Link to="/total_alliance" className="item">Global Cooperations</Link>
         </div>
     );
 };

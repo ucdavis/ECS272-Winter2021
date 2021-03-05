@@ -188,7 +188,7 @@ class Threat_chart extends Component{
                   // get ccodes of hostile countries
                   var threats = new Set()
                   disputes.forEach(disp =>{
-                    if (disp.dispnum in sel_disp & disp.ccode != ccode){
+                    if (sel_disp.includes(disp.dispnum) & disp.ccode != ccode){
                       threats.add(disp.ccode)
                     }
                   })
