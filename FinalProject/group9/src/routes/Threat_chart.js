@@ -180,7 +180,7 @@ class Threat_chart extends Component{
                   var sel_disp = []                  
 
                   disputes.forEach(disp => {
-                    if (disp.ccode == ccode & disp.styear > 1990){   // filter disputes after 1990
+                    if (disp.ccode == ccode && disp.styear > 1990){   // filter disputes after 1990
                       sel_disp.push(disp.dispnum)
                     }
                   })
@@ -188,7 +188,7 @@ class Threat_chart extends Component{
                   // get ccodes of hostile countries
                   var threats = new Set()
                   disputes.forEach(disp =>{
-                    if (sel_disp.includes(disp.dispnum) & disp.ccode != ccode){
+                    if (sel_disp.includes(disp.dispnum) && disp.ccode != ccode){
                       threats.add(disp.ccode)
                     }
                   })
