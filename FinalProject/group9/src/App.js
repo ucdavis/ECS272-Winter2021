@@ -1,6 +1,14 @@
 import React from 'react';
-import Threats from './Threats';
+import {
+  BrowserRouter as Router,
+  Route,
+} from "react-router-dom";
 import './App.css';
+import Home from './routes/Home';
+import Alliance from './routes/Alliance';
+import Threat from './routes/Threat';
+
+import Header from './components/Header';
 
 class App extends React.Component{
   constructor(props){
@@ -13,12 +21,14 @@ class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <h2>ECS 272 Assignment 3 D3 Template</h2>
-        <div id = "vis">
-          <div id="container"> </div>
-          <div id="focus"></div>
-        </div>
-        <Threats/>
+        <Router>
+          <div>
+            <Header />
+            <Route path="/alliance" component={Alliance}/>
+            <Route path="/threat" component={Threat}/>
+            <Route path="/" exact component={Home}/>
+          </div>
+        </Router>
       </div>
     );
   }

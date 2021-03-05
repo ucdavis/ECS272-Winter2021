@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import ccodes from  './datasets/COW country codes.csv';
-import MIDB from './datasets/MIDB 5.0.csv';
-import mil from  './datasets/Military_expenditure.csv';
+import ccodes from  '../datasets/COW country codes.csv';
+import MIDB from '../datasets/MIDB 5.0.csv';
+import mil from  '../datasets/Military_expenditure.csv';
 import * as d3 from "d3";
 
-class Threats extends Component{
+class Threat_chart extends Component{
 
     componentDidMount(){
         this.drawChart();
@@ -12,7 +12,7 @@ class Threats extends Component{
 
     drawChart(){
       // load json file for the map
-      const topojson_countries = require('./datasets/countries-110m.json');
+      const topojson_countries = require('../datasets/countries-110m.json');
       
       const topojson = require("topojson");
       const countries_objects = topojson.feature(topojson_countries, topojson_countries.objects.countries);
@@ -188,7 +188,7 @@ class Threats extends Component{
                   // get ccodes of hostile countries
                   var threats = new Set()
                   disputes.forEach(disp =>{
-                    if (disp.dispnum in sel_disp){
+                    if (disp.dispnum in sel_disp & disp.ccode != ccode){
                       threats.add(disp.ccode)
                     }
                   })
@@ -259,24 +259,18 @@ class Threats extends Component{
                         .padding(1)
                       (d3.hierarchy(chartData)
                         .sum(d => d.value))
-                      
-                      // append viewbox
-                      var svg2 = d3.select("#focus")
-                        .append("svg")
-                        .attr("id", "packed")
-                          .attr("viewBox", [0, 0, size.width, size.height])
-                      
+                                           
                       // draw background circles
-                      svg2.append("g")
-                          .attr("fill", "none")
+                      svg.append("g")
                           .attr("stroke", "#ccc")
                         .selectAll("circle")
                         .data(root.descendants().filter(d => d.height === 1))
                         .join("circle")
                           .attr("cx", d => d.x)
                           .attr("cy", d => d.y)
-                          .attr("r", d => d.r);
-                      
+                          .attr("r", d => d.r)
+                          .attr("fill", d => cc_colors[d.data.children[0].threat+2]);
+
                       // put packed circles
                       svg.append("g")
                         .selectAll("circle")
@@ -286,7 +280,6 @@ class Threats extends Component{
                           .attr("cy", d => d.y)
                           .attr("r", d => d.r)
                           .attr("fill", d => cc_colors[d.data.threat]);
-
 
                       console.log(chartData)
                     })
@@ -303,6 +296,9 @@ class Threats extends Component{
           d3.zoomIdentity,
           d3.zoomTransform(svg.node()).invert([dimensions.width / 2, dimensions.height / 2])
         );
+        
+        //remove previous circles
+        d3.selectAll("circle").remove();
       }
       
       function zoomed(event) {
@@ -317,4 +313,4 @@ class Threats extends Component{
     }
 }
 
-export default Threats;
+export default Threat_chart;

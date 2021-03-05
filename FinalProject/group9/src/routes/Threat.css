@@ -36,3 +36,36 @@
     transform: rotate(360deg);
   }
 }
+
+#explorer{
+  float: left;
+  padding: 5px;
+  margin: 0 5px;
+  color: #222;
+}
+
+
+#vis {
+  width: 2000;
+  height: 3000;
+  float:inherit;
+}
+
+#container {
+  max-width: 1000;
+  max-height: 700;
+}
+
+div.tooltip{
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+  padding: 10px;
+  background-color: rgba(237, 244, 255, 0.7);
+  box-shadow: rgb(0 0 0 / 20%) 2px 2px 5px;
+  backdrop-filter: blur(2px);
+  color: rgb(33, 51, 79);
+  font-family: sans-serif;
+  top: 791px;
+  left: 572px;
+}
