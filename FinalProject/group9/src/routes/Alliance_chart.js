@@ -354,7 +354,12 @@ class Alliance_chart extends Component{
                             .attr("cx", d => d.x)
                             .attr("cy", d => d.y)
                             .attr("r", d => d.r)
-                            .attr("fill", d => cc_colors[d.data.threat]);
+                            .attr("fill", d => cc_colors[d.data.threat])
+                          .append("title")
+                            .text(d => `${d.data.name} \n${d.data.value.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })}`) 
 
                         console.log(chartData)                      
                       });

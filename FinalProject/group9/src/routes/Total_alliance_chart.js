@@ -109,8 +109,11 @@ class Total_alliance_chart extends Component{
                   })
                 }
               })
-              // add item to chart data
-              chartData.children.push({name: "", children: associated_countries}) 
+              // if each alliance has information of at least two associated countries
+              if (associated_countries.length > 1){
+                // add item to chart data
+                chartData.children.push({name: "", children: associated_countries}) 
+              }
             })
 
             // End of preprocessing

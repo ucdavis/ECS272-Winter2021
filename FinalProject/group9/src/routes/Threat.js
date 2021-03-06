@@ -13,7 +13,7 @@ class Threat extends React.Component{
   render(){
     return (
       <div className="App">
-        <h2>Theat map</h2>
+        <h2>Disputes map</h2>
         <div id = "vis">
           <div id="container"> </div>
         </div>
