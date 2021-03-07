@@ -38,6 +38,7 @@ export function worldmap(){
       g = svg.append("g");
     
     }
+    console.log(1)
     console.log(worldtopo)
     var countries = topojson.feature(worldtopo, worldtopo.objects.countries).features;
     topo = countries;
@@ -66,7 +67,8 @@ export function worldmap(){
      .attr("class", "equator")
      .attr("d", path);
   
-  
+    console.log(2)
+    console.log(topo)
     var country = g.selectAll(".country").data(topo);
     //g.append("g").attr("class", "gpoint")
     var label = g.append("g")
@@ -78,7 +80,8 @@ export function worldmap(){
                                  .attr("height", 20)
     var labelText = label.append("text")
 
-    country.enter().insert("path")
+    country.enter()
+        .insert("path")
         .attr("class", "country")
         .attr("d", path)
         .attr("id", function(d,i) { return d.id; })
@@ -90,12 +93,13 @@ export function worldmap(){
             label.attr("display", null)
             labelText.attr("x", mouse[0]+25)
                      .attr("y", mouse[1]+5)
-                     .text("")
+                     .text("countryHere")
         })
         .on("mouseout", function(d, i){
             label.attr("display", "none")
         });
-  
+    console.log(3)
+    console.log(country)
     //offsets for tooltips
     var offsetL = document.getElementById('container').offsetLeft+20;
     var offsetT = document.getElementById('container').offsetTop+10;
