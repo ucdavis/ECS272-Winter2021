@@ -1,2 +1,12 @@
-python>=3.8.0
+# Anime Dashboard
+
+## Requirements
+
+```
+nodejs
+python
+```
+
+```
 pandas>=1.2.3
+```
