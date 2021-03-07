@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import * as topojson from "topojson"
 import worldtopo from "../assets/data/world-topo-min.json"
 import capitals from "../assets/data/country-capitals.csv"
+
 export function worldmap(){
     d3.select(window).on("resize", throttle);
     var zoom = d3.zoom()
@@ -72,28 +73,29 @@ export function worldmap(){
     var country = g.selectAll(".country").data(topo);
     //g.append("g").attr("class", "gpoint")
     var label = g.append("g")
-                 .attr("class", "tooltip-wrapper")
+                 .attr("class", "labeltooltip")
                  .attr("display", "none");
+    /*
     var tooltipBackground = label.append("rect")
                                  .attr("fill", "#e8e8e8")
                                  .attr("width", 30)
                                  .attr("height", 20)
-    var labelText = label.append("text")
+    */
+    var labelText = label.append("text").attr("class", "labeltext")
 
     country.enter()
         .insert("path")
         .attr("class", "country")
         .attr("d", path)
-        .attr("id", function(d,i) { return d.id; })
-        .attr("title", function(d,i) { return d.properties.name; })
+        .attr("id", function(d,i) { return d.properties.name; })
+        .attr("title", function(d,i) { return d.id; })
         .style("fill", function(d, i) { return d.properties.color; })
-        .on("mouseover", function(d, i){ 
+        .on("mouseover", function(d, i){
             var mouse = d3.pointer(event, this).map( function(d) { return parseInt(d); } );
-            console.log(d)
             label.attr("display", null)
             labelText.attr("x", mouse[0]+25)
                      .attr("y", mouse[1]+5)
-                     .text("countryHere")
+                     .text(this.id)
         })
         .on("mouseout", function(d, i){
             label.attr("display", "none")
