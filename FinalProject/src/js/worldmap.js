@@ -17,7 +17,7 @@ export function worldmap(){
     
     var graticule = d3.geoGraticule();
 
-    var tooltip = td3.selec("#container").append("div").attr("class", "tooltip hidden");
+    var tooltip = d3.select("#container").append("div").attr("class", "tooltip hidden");
 
     setup(width,height);
 
@@ -39,7 +39,7 @@ export function worldmap(){
     
     }
     console.log(worldtopo)
-    var countries = stopojon.feature(worldtopo, worldtopo.objects.countries).features;
+    var countries = topojson.feature(worldtopo, worldtopo.objects.countries).features;
     topo = countries;
     draw(topo);
     /*
