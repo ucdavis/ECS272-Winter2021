@@ -79,4 +79,18 @@ if __name__ == '__main__':
     data = pd.concat(
         [data.drop('genre', axis=1), df_genre_binary],
         axis=1)
+
     data.to_csv(PATH_DATA_DIR + '/processed_genre.csv', index=False)
+
+    # Generate year-genre dataset.
+    data_year_genre_list = []
+    data = data.sort_values('year_from')
+    year_set = set(data['year_from'].tolist())
+    for year in year_set:
+        se_genre = data.loc[data['year_from'] == year,
+                            'Action':'Yuri'].sum(axis=0)
+        se_year_genre = pd.concat([pd.Series({'year': year}), se_genre])
+        data_year_genre_list.append(se_year_genre)
+    data_year_genre = pd.concat(data_year_genre_list, axis=1).T
+    data_year_genre.to_csv(
+        PATH_DATA_DIR + '/processed_year_genre.csv', index=False)

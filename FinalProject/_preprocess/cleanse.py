@@ -80,6 +80,9 @@ if __name__ == '__main__':
     # Remove garbage rows.
     data = data[data['name'] != '404']
 
+    # Reassign data types.
+    data = data.astype({'rank': str, 'popularity': str, 'members': str})
+
     # Remove rows with missing values.
     data = data[(~pd.isnull(data['genre'])) & (data['genre'] != '[]')]
     data = data[data['rating'] != 'None']
@@ -90,14 +93,15 @@ if __name__ == '__main__':
 
     # Parse aired time for simplicity.
     data_aired_parsed = data['aired'].apply(literal_eval)
-    data_year_from = data_aired_parsed.apply(lambda x: x['from'].split('-')[0])
+    data_year_from = data_aired_parsed.apply(
+        lambda x: x['from'].split('-')[0]).astype(str)
 
     def helper_parse_aired_to(x):
         try:
             return x['to'].split('-')[0]
         except AttributeError:
             return ''
-    data_year_to = data_aired_parsed.apply(helper_parse_aired_to)
+    data_year_to = data_aired_parsed.apply(helper_parse_aired_to).astype(str)
     data_year_from.name = 'year_from'
     data_year_to.name = 'year_to'
 
