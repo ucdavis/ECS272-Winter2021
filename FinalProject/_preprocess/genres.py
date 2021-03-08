@@ -62,35 +62,15 @@ if __name__ == '__main__':
             'genre':
                 lambda x: x.strip("[]").replace("'", '').split(", ")})
 
-    # Generate genre csv data.
-    genre_list = []
-    data['genre'].apply(lambda row: genre_list.extend(row))
-    genre_set = sorted(set(genre_list))
-
-    def helper_generate_genre_vector(genres):
-        genre_vec = np.zeros(len(genre_set), dtype=int)
-        for i, genre in enumerate(genre_set):
-            if genre in genres:
-                genre_vec[i] = 1
-        return pd.Series(genre_vec)
-    df_genre_binary = data['genre'].apply(helper_generate_genre_vector)
-    df_genre_binary.columns = genre_set
-
-    data = pd.concat(
-        [data.drop('genre', axis=1), df_genre_binary],
-        axis=1)
-
-    data.to_csv(PATH_DATA_DIR + '/processed_genre.csv', index=False)
-
-    # Generate year-genre dataset.
-    data_year_genre_list = []
-    data = data.sort_values('year_from')
-    year_set = set(data['year_from'].tolist())
-    for year in year_set:
-        se_genre = data.loc[data['year_from'] == year,
-                            'Action':'Yuri'].sum(axis=0)
-        se_year_genre = pd.concat([pd.Series({'year': year}), se_genre])
-        data_year_genre_list.append(se_year_genre)
-    data_year_genre = pd.concat(data_year_genre_list, axis=1).T
-    data_year_genre.to_csv(
-        PATH_DATA_DIR + '/processed_year_genre.csv', index=False)
+    # # Generate year-genre dataset.
+    # data_year_genre_list = []
+    # data = data.sort_values('year_from')
+    # year_set = set(data['year_from'].tolist())
+    # for year in year_set:
+    #     se_genre = data.loc[data['year_from'] == year,
+    #                         'Action':'Yuri'].sum(axis=0)
+    #     se_year_genre = pd.concat([pd.Series({'year': year}), se_genre])
+    #     data_year_genre_list.append(se_year_genre)
+    # data_year_genre = pd.concat(data_year_genre_list, axis=1).T
+    # data_year_genre.to_csv(
+    #     PATH_DATA_DIR + '/processed_year_genre.csv', index=False)

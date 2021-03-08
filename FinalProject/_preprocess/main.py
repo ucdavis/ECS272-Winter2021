@@ -16,6 +16,8 @@ Authors:
 
 from os import path
 from ast import literal_eval
+
+import numpy as np
 import pandas as pd
 
 PATH_DATA_DIR = path.abspath(path.dirname(__file__)) + '/../data'
@@ -107,4 +109,24 @@ if __name__ == '__main__':
 
     data = pd.concat([data, data_year_from, data_year_to], axis=1)
     data = data.reindex(cols, axis=1)
+
+    # Expand genre column.
+    genre_list = []
+    data['genre'] = data['genre'].apply(
+        lambda x: x.strip("[]").replace("'", '').split(", "))
+    data['genre'].apply(lambda row: genre_list.extend(row))
+    genre_set = sorted(set(genre_list))
+
+    def helper_generate_genre_vector(genres):
+        genre_vec = np.zeros(len(genre_set), dtype=int)
+        for i, genre in enumerate(genre_set):
+            if genre in genres:
+                genre_vec[i] = 1
+        return pd.Series(genre_vec)
+    df_genre_binary = data['genre'].apply(helper_generate_genre_vector)
+    df_genre_binary.columns = genre_set
+    data = pd.concat(
+        [data.drop('genre', axis=1), df_genre_binary],
+        axis=1).sort_values(by='year_from')
+
     data.to_csv(PATH_DATA_DIR + '/processed.csv', index=False)
