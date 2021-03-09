@@ -1,14 +1,11 @@
 import React from 'react';
-import ScatterChart from './ScatterChart';
-//import data from  './datasets/SF_Historical_Ballot_Measures.csv';
-import data from './datasets/merge_df.csv';
-import './App.css';
+import GDP_chart from './GDP_chart';
+import './GDP.css';
 
-class App extends React.Component {
+class GDP extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: data,
       id: "chart-1"
     }
   }
@@ -28,11 +25,11 @@ class App extends React.Component {
           <div id="tooltip"></div>
         </div>
         <div id="box"></div>
-        <ScatterChart data={this.state.data} width={this.state.width} height={this.state.height} />
+        <GDP_chart data={this.state.data} width={this.state.width} height={this.state.height} />
       </div>
     );
   }
 
 }
 
-export default App;
+export default GDP;

@@ -6,9 +6,6 @@ import {drawBarChart} from "./js/barchart"; /* Example of importing one function
 import {drawplot} from "./js/scatterplot";
 
 
-
-
-let x = 2;
 console.log(testData5);
 drawBarChart(testData5["data"], "#bar"); // ID 
 drawplot(testData2["data"], "#do"); // ID 

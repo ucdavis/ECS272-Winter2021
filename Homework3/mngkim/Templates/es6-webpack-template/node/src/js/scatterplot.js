@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { format } from "d3";
 
 export function drawplot(data, id) {
 
@@ -20,22 +21,19 @@ export function drawplot(data, id) {
        .on("start brush", ({selection}) => brushed(selection))
        .on("end", brushended);
 
-   // data = Array.from({length: 2000}, () => [Math.random() * width, Math.random() * height])
-
-
+    // data = Array.from({length: 2000}, () => [Math.random() * width, Math.random() * height])
     //data = Array.from({length: 2}, () => [data, d => d.dayofweek, data, d => d.incidents])
 
-    let svg = d3.select(id)
+    let svg = d3.select(id)    // let  블록안에서만 쓸 수 있는 변수. ES6에서는 var  보다 let 
         .append("svg")
         .attr("viewBox", [0, 0, width, height])
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom);
         //.append("g")
        // .attr("transform",   // make small ? 
-
  
    const point = svg.append("g")
-       .attr("fill", "#ccc")
+       //.attr("fill", "#ccc")
        .attr("fill", "blue")
        .attr("stroke", "#777")
      .selectAll("circle")
@@ -43,31 +41,35 @@ export function drawplot(data, id) {
      .join("circle")
    //    .attr("cx", d=>x(d[0])) 
    //    .attr("cy", d=>y(d[1]))
-      // .attr("cx", d => d[0])  // issue
-       //.attr("cy", d => d[1])    // issue
        //      .attr("transform", d => `translate(${x(d.x)},${y(d.y)})`)
         .attr("cx", function(d) {return x(d[0]);})  
         .attr("cy", function(d) {return y(d[1]);}) 
-      // .attr("cx", function(d) {return d[0];})  
-      // .attr("cy", function(d) {return d[1];}) 
-       .attr("r", 3.5);
+        //.text(function(d){return x(d[0]);})  왜 라벨이 안 나오지..
+        .attr("r", 3.5);
 
 
-  
- 
+      // 라벨링 하기 
+       // svg.selectAll("text")
+       // .data(data).enter()
+       // .append("text")
+       // .attr("x", function(d) {return x(d[0])+4})
+       // .attr("y", function(d) {return y(d[1])+4})
+       // .text(function(d) {return x(d[0]) + ", " + y(d[1])})
+       // .attr("font-size", "9px");
+
    // svg.append("g")
    //   .attr("class", "brush")
    //   .call(brush)
      // .call(brush.move, [[100, 100], [200, 200]])
       //.call(g => g.select(".overlay").style("cursor", "default"));
 
-
       svg.append("g")
       .call(brush)
       .call(brush.move, defaultExtent);
  
    function brushed(selection) {
-     point.attr("fill", selection && (d => contains(selection, d) ? "red" : null));
+     point.attr("fill", selection && (d => contains(selection, d) ? "red" : null));// 조건연산자 ? true 일때,  : flase 일떄 
+     ////point.text(function(d){return d[0];})
    }
 
    //function contains([[x0, y0], [x1, y1]], [x, y]) {
@@ -75,25 +77,22 @@ export function drawplot(data, id) {
     //return x >= x0 && x < x1 &&    y < y0 && y >= y1 ;
 //}
 
-
-function contains([[x0, y0], [x1, y1]], [X, Y]) {
-  return Number(x(X)) >= x0 && Number(x(X)) < x1 && Number(y(Y)) > y0 && Number(y(Y)) <= y1;
-}
-
+    function contains([[x0, y0], [x1, y1]], [X, Y]) {
+      return Number(x(X)) >= x0 && Number(x(X)) < x1 && Number(y(Y)) > y0 && Number(y(Y)) <= y1;
+    }
  
    function brushended({sourceEvent, selection}) {
      if (!sourceEvent) return; // Only transition after interaction.
      d3.select(this).transition()
-         .delay(100)
-         .duration(selection ? 750 : 0)
+         .delay(100) // 애니메이션의 시작시간의 지정
+         .duration(selection ? 750 : 0) // 실행 시간, 단위는 초 
          .call(brush.move, defaultExtent);
    }
 
 
-
   const xAxis = g => g
  // .attr("transform", `translate(0,${height - margin.bottom})`)
-   .attr("transform", `translate(0,${height - margin.bottom})`)
+   .attr("transform", `translate(0,${height - margin.bottom})`) // 지정한 크기만큼 x축, y축 이동
   .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
 
 
