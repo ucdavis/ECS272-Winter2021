@@ -6,8 +6,8 @@ const Header = () => {
     return (
         <div className="header">
             <Link to="/" className="item">Home</Link>
-            <Link to="/threat" className="item">Threat</Link>
-            <Link to="/alliance" className="item">Threat vs Alliances</Link>
+            <Link to="/threat" className="item">Disputes map</Link>
+            <Link to="/alliance" className="item">Alliances vs Possible threats</Link>
             <Link to="/total_alliance" className="item">Global Cooperations</Link>
         </div>
     );

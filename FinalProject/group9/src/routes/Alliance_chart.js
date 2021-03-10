@@ -223,26 +223,6 @@ class Alliance_chart extends Component{
                         }
                       })
 
-                      // for each threat country
-                      threats.forEach(country =>{
-                        // map ccode to name
-                        codemap.forEach(cd => {
-                          if (country == cd.code){
-                            // get military expenditure
-                            entire_mil_exp.forEach(dat =>{
-                              if (dat.name == cd.name) {
-                                // add item to formatted data
-                                formattedData.push({
-                                  threat: 1,
-                                  value: dat.mil,
-                                  name: cd.name
-                                })  
-                              }
-                            })
-                          }
-                        })
-                      })
-
                       // search alliance dataset
                       d3.csv(allyDB)
                       .then(csv =>{
@@ -317,6 +297,33 @@ class Alliance_chart extends Component{
                           })
                         })  
 
+                        // for each threat country
+                        threats.forEach(country =>{                        
+                          // map ccode to name
+                          codemap.forEach(cd => {
+                            if (country == cd.code){
+                              // get military expenditure
+                              entire_mil_exp.forEach(dat =>{
+                                var hostile = true 
+                                formattedData.forEach(friendly => {
+                                  // don't add friendly countries to threats
+                                  if (Object.values(friendly).includes(dat.name)){ 
+                                    hostile = false
+                                  }
+                                })
+                                if (dat.name == cd.name && hostile) {
+                                  // add item to formatted data
+                                  formattedData.push({
+                                    threat: 1,
+                                    value: dat.mil,
+                                    name: cd.name
+                                  })  
+                                }
+                              })
+                            }
+                          })
+                        })
+
                         // convert to chart data format
                         var chartData = ({
                           children: Array.from(
@@ -359,6 +366,8 @@ class Alliance_chart extends Component{
                             .text(d => `${d.data.name} \n${d.data.value.toLocaleString('en-US', {
                               style: 'currency',
                               currency: 'USD',
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0
                             })}`) 
 
                         console.log(chartData)                      
