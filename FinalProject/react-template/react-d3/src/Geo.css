@@ -23,12 +23,28 @@
     justify-content:center;
     background-color: #038cfc;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 .geoPageLayout .GMcontainer .map{
     display: flex;
-    flex-basis: 95%;
-    width: 95%;
+    flex-basis: 80%;
+    height: 95%;
     background-color: white;
 }
+
+.geoPageLayout .GMcontainer .controlPanel{
+    display:flex;
+    flex-basis: 15%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.geoPageLayout .GMcontainer .controlPanel select{
+    width: 90%;
+}
+
+
 

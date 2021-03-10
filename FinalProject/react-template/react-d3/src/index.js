@@ -7,6 +7,7 @@ import Home from "./Home";
 import Geo from './Geo';
 import ParallelCoordinate from "./ParallelCoordinate";
 import ImageSKY from "./ImageSKY";
+import key from "./api_key.json";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,6 +31,7 @@ ReactDOM.render(
         <Route path = "/imageSky" component={ImageSKY}/>
       </Switch>
     </Router>
+
 
   </React.StrictMode>,
   document.getElementById('root')
