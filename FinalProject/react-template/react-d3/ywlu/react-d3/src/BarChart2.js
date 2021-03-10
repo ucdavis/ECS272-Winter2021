@@ -11,8 +11,9 @@ class BarChart2 extends Component {
 
         Promise.all([
             d3.csv(this.props.data),
-            d3.csv(this.props.data2)
-        ]).then(([csv1, csv2]) => {
+            d3.csv(this.props.data2),
+            d3.csv(this.props.data3)
+        ]).then(([csv1, csv2, csvgeo]) => {
 
                 var data = csv1.map(row => {
                     return {
@@ -32,27 +33,42 @@ class BarChart2 extends Component {
                         people_fully_vaccinated: Number(row['people_fully_vaccinated'])
                     }
                 })
+                var datag = csvgeo.map(row => {
+                    return {
+                        iso: row['Alpha-3 code'].substring(2,5),
+                        lat: Date.parse(row['Latitude (average)']),
+                        long: Date.parse(row['Longitude (average)'])
+                    }
+                })
+            console.log(datag)
 
                 data2.forEach(function(rv) {
                     var result = data.filter(function(rc) {
-                        return rc.iso === rv.iso && rc.date === rv.date;
+                        return rc
+                            .iso === rv.iso && rc.date === rv.date;
                     });
 
                     rv.total_cases = (result[0] !== undefined) ? result[0].total_cases : null;
                     rv.total_deaths = (result[0] !== undefined) ? result[0].total_deaths : null;
                     rv.new_cases = (result[0] !== undefined) ? result[0].new_cases : null;
                     rv.new_deaths = (result[0] !== undefined) ? result[0].new_deaths : null;
+
+                    var result = datag.filter(function(rc) {
+                        return rc.iso === rv.iso;
+                    });
+                    rv.long = (result[0] !== undefined) ? result[0].long : null;
+                    rv.lat = (result[0] !== undefined) ? result[0].lat : null;
                 });
                 data2 = data2.filter(function(data) {
                     return data.total_cases !== null;
                 });
                 console.log(data2);
-            console.log(data)
-/**
-                var filtered = data.filter(function (el) {
+                console.log(data)
+                /**
+                 var filtered = data.filter(function (el) {
                     return (el.gname != "Unknown");
                 });
- */
+                 */
 
                 var holderV = {};
                 var holderC = {};
@@ -70,17 +86,18 @@ class BarChart2 extends Component {
                     }
                 });
 
-                /**
-                var filtered2 = [];
 
-                for (var i in holderk) {
-                    filtered2.push({iyear: i, nkill: holderk[i], nwound: holderw[i]});
+
+                 var filteredC = [];
+
+                 for (var i in holderC) {
+                     filteredC.push({iso: i, total_case: holderC[i], total_vac: holderV[i]});
                 }
 
-                //console.log(filtered2);
+                 console.log(filteredC);
 
-                data = filtered2
- */
+                 //data = filtered2
+
 
                 /*********************************
                  * Visualization codes start here
