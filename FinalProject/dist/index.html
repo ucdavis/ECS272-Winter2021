@@ -4,6 +4,9 @@
   <body>
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script src="https://unpkg.com/d3-delaunay@4"></script>
+    <script src="https://unpkg.com/d3-geo-voronoi@1"></script>
     <!-- Create a div where the graph will take place -->
     <div class = "container my-4 text-center" >
       <h1>Visualization of Air Traffic during Pandemic </h1>
@@ -42,9 +45,9 @@
     </div>    <!-- Color Scale -->
 
     <div id="container"></div>
-
-    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
+    <!-- must be 960x600 to match topojson us atlas files -->
+    <div id="case"></div>
+    <div id="testmove"></div>
     <script src="./bundle.js"></script>
   </body>
 </html>

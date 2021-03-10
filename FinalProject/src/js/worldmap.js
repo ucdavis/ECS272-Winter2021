@@ -3,6 +3,7 @@ import * as topojson from "topojson"
 import worldtopo from "../assets/data/world-topo-min.json"
 import capitals from "../assets/data/country-capitals.csv"
 
+
 export function worldmap(){
     d3.select(window).on("resize", throttle);
     var zoom = d3.zoom()
@@ -18,13 +19,13 @@ export function worldmap(){
     
     var graticule = d3.geoGraticule();
 
-    var tooltip = d3.select("#container").append("div").attr("class", "tooltip hidden");
+    //var tooltip = d3.select("#container").append("div").attr("class", "tooltip hidden");
 
     setup(width,height);
 
     function setup(width,height){
       projection = d3.geoMercator()
-        .translate([(width/2), (height/2)])
+        .translate([(width/2), (height/2)]) // 
         .scale( width / 2 / Math.PI);
     
       path = d3.geoPath().projection(projection);
@@ -33,7 +34,6 @@ export function worldmap(){
           .attr("width", width)
           .attr("height", height)
           .call(zoom)
-          .on("click", click)
           .append("g");
     
       g = svg.append("g");
@@ -72,17 +72,31 @@ export function worldmap(){
     console.log(topo)
     var country = g.selectAll(".country").data(topo);
     //g.append("g").attr("class", "gpoint")
+    var label = d3.select("#container").append("div")
+                .attr('class', 'd3-tooltip')
+                .style('position', 'absolute')
+                .style('z-index', '10')
+                .style('visibility', 'hidden')
+                .style('padding', '10px')
+                .style('background', 'rgba(0,0,0,0.6)')
+                .style('border-radius', '4px')
+                .style('color', '#fff')
+                .text('a simple tooltip');
+    /*
     var label = g.append("g")
                  .attr("class", "labeltooltip")
                  .attr("display", "none");
+    */
     /*
     var tooltipBackground = label.append("rect")
                                  .attr("fill", "#e8e8e8")
                                  .attr("width", 30)
                                  .attr("height", 20)
     */
-    var labelText = label.append("text").attr("class", "labeltext")
-
+    //var labelText = label.append("text").attr("class", "labeltext")
+    //offsets for tooltips
+    var offsetL = document.getElementById('container').offsetLeft+20;
+    var offsetT = document.getElementById('container').offsetTop+10;
     country.enter()
         .insert("path")
         .attr("class", "country")
@@ -92,19 +106,23 @@ export function worldmap(){
         .style("fill", function(d, i) { return d.properties.color; })
         .on("mouseover", function(d, i){
             var mouse = d3.pointer(event, this).map( function(d) { return parseInt(d); } );
+            /*
             label.attr("display", null)
             labelText.attr("x", mouse[0]+25)
                      .attr("y", mouse[1]+5)
                      .text(this.id)
+            */
+           label.attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
+                .style('visibility', 'visible')
+                .html(this.id)
         })
         .on("mouseout", function(d, i){
-            label.attr("display", "none")
-        });
-    console.log(3)
-    console.log(country)
-    //offsets for tooltips
-    var offsetL = document.getElementById('container').offsetLeft+20;
-    var offsetT = document.getElementById('container').offsetTop+10;
+            //label.attr("display", "none")
+            label.style('visibility', 'hidden')
+        })
+        .on("click", click);
+
+    
   
     //tooltips
     /*
@@ -221,9 +239,11 @@ export function worldmap(){
   
   
   //geo translation on mouse click in map
-  function click() {
-    var latlon = projection.invert(d3.pointer(event, this));
-    console.log(latlon);
+  function click(event,d) {
+    console.log(event)
+    console.log(d)
+    console.log(d.properties.name)
+    
   }
   
   
