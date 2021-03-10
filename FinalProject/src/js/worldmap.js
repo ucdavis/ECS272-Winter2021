@@ -2,9 +2,10 @@ import * as d3 from "d3";
 import * as topojson from "topojson"
 import worldtopo from "../assets/data/world-topo-min.json"
 import capitals from "../assets/data/country-capitals.csv"
-
+import {casestudy} from "./casestudy"
 
 export function worldmap(){
+    
     d3.select(window).on("resize", throttle);
     var zoom = d3.zoom()
         .scaleExtent([1, 9])
@@ -243,7 +244,7 @@ export function worldmap(){
     console.log(event)
     console.log(d)
     console.log(d.properties.name)
-    
+    casestudy(d.properties.name)
   }
   
   

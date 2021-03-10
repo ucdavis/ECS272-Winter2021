@@ -29,6 +29,7 @@ export function casestudy(target_cty = "United States"){
         //filter out the specific country
         central = central.filter(d => d.name_country == target_cty)[0]
         //const svg  = d3.select("svg");
+        d3.select("#case").selectAll("*").remove()
         var svg = d3.select("#case")
             .append("svg")
             .attr("width", 960)
@@ -42,7 +43,7 @@ export function casestudy(target_cty = "United States"){
         // must be hard-coded to match our topojson projection
         // source: https://github.com/topojson/us-atlas
         //const projection = d3.geoAlbers().scale(100).translate([480,300]); //1280 480 300
-        const projection = d3.geoMercator().scale(900).center([central.longitude,central.latitude])
+        const projection = d3.geoMercator().scale(800).center([central.longitude,central.latitude])
         const scales = {
         // used to scale airport bubbles
         airports: d3.scaleSqrt()
