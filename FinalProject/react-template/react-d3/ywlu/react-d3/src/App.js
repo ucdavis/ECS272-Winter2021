@@ -4,6 +4,8 @@ import BarChart3 from './BarChart3';
 import BarChart2 from './BarChart2';
 import data from './datasets/owid-covid-data.csv';
 import data2 from './datasets/country_vaccinations.csv';
+import data3 from './datasets/countries_codes_and_coordinates.csv';
+
 import './App.css';
 
 class App extends React.Component {
@@ -12,6 +14,7 @@ class App extends React.Component {
         this.state = {
             data: data,
             data2: data2,
+            data3: data3,
             id: "chart-1"
         }
     }
@@ -41,7 +44,7 @@ class App extends React.Component {
                 </div>
                 <div padding-top="50px">
                     <div id="container1b">
-                        <BarChart2 data={this.state.data}  data2={this.state.data2} width={this.state.width} height={this.state.height}/>
+                        <BarChart2 data={this.state.data}  data2={this.state.data2} data3={this.state.data3} width={this.state.width} height={this.state.height}/>
 
 
 
@@ -62,9 +65,9 @@ class App extends React.Component {
                             <strong>Select number of terro-groups to display:</strong>
 
                             <div>
-                            <button type="button" id="button1">Top5</button>
-                            <button type="button" id="button2">Top10</button>
-                            <button type="button" id="button3">Top15</button>
+                                <button type="button" id="button1">Top5</button>
+                                <button type="button" id="button2">Top10</button>
+                                <button type="button" id="button3">Top15</button>
 
                             </div>
                         </div>
