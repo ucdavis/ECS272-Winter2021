@@ -1,6 +1,6 @@
 import React from 'react';
 import "./Geo.css";
-
+import MapContainer from "./ggmap";
 
 class Geo extends React.Component{
   constructor(props){
@@ -8,8 +8,9 @@ class Geo extends React.Component{
     // this.state ={
     //   data: csv
     // };
-
+    
   }
+
 
   render(){
     
@@ -18,7 +19,7 @@ class Geo extends React.Component{
       <h1 className="header">GeoOvervew</h1>
       <div className="GMcontainer">
         <div className="map">
-
+          <MapContainer/>
         </div>
       </div>
     </div>
