@@ -1,7 +1,23 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
-import disputedb from '../datasets/MIDB 5.0_sort.csv';
+import disputedb from '../datasets/MIDB_disp.csv';
 import './Area.css';
+
+/******************************************************/
+/* Data was prepocessed using SQL below
+/* SELECT year, count(dispnum) as disp
+FROM
+  (SELECT
+    styear as year, dispnum, COUNT(dispnum) as counts
+  FROM
+    incidents.dispute
+  GROUP BY
+    year, dispnum
+  ORDER BY
+    year ASC )
+GROUP BY year
+ORDER BY year ASC  */
+/*******************************************************/
 
 class AreaChart extends Component{
 
@@ -20,20 +36,20 @@ class AreaChart extends Component{
         // create data by selecting two columns from csv 
         var data = csv.map(row => {
           return {
-            yes: Number(row['styear']),
-            no:  Number(row['dispnum']),
-            yCumulative : accumulator = accumulator + Number(row['dispnum'])
+            year: Number(row['year']),
+            disp:  Number(row['disp']),
+            yCumulative : accumulator = accumulator + Number(row['disp'])
           }
         })
 
          /********************************* 
         * Visualization codes start here
         * ********************************/
-       var width = 700;
+       var width = 600;
        var height = 400;
-       var margin = {left: 90, right: 20, top: 20, bottom: 60};
-       var areaColor = "#fff3d6";
-       var lineColor = "#fdc032";
+       var margin = {left: 120, right: 20, top: 20, bottom: 60};
+       var areaColor = "#F6D1D9";
+       var lineColor = "#ff6663";
        var lineCurve = "curveMonotoneX"  
        //other option for Curve :   curveBasis  
 
@@ -41,59 +57,60 @@ class AreaChart extends Component{
          .append('svg')
            .attr('width', width + margin.left + margin.right)
            .attr('height', height + margin.top + margin.bottom) 
+
+           d3.select('#emptybox')
+           .append('svg')
+             .attr('width', 70)
+             .attr('height', 400) 
  
        var view = svg.append("g")
          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
  
        //scale functions
        var x = d3.scaleLinear()
-         .domain([d3.min(data, d => d.yes), d3.max(data, d => d.yes)])
+         .domain([d3.min(data, d => d.year), d3.max(data, d => d.year)])
          .range([0, width]);
          
        var y = d3.scaleLinear()
          .domain([0, d3.max(data, d => d.yCumulative)]).nice()
          .range([height, 0]);
 
-        var svg_l = d3.select("#imgs")
-         .append("svg")
-         .attr("viewBox", [0, 8, 100, 100]); 
+        var line = d3.line()
+              .defined(d => !isNaN(d.year))
+              .x(d => x(d.year))
+              .y(d => y(d.yCumulative))
+            .curve(d3[lineCurve]); 
 
-  var line = d3.line()
-      .defined(d => !isNaN(d.yes))
-      .x(d => x(d.yes))
-      .y(d => y(d.yCumulative))
-      .curve(d3[lineCurve]); 
+        var area = d3.area()
+          .curve(d3[lineCurve]) 
+          .x(d => x(d.year))
+          .y1(d => y(d.yCumulative))
+          .y0(d => y(0));
 
-  var area = d3.area()
-    .curve(d3[lineCurve]) 
-    .x(d => x(d.yes))
-    .y1(d => y(d.yCumulative))
-    .y0(d => y(0));
+        // Draw an area plot
+        view.append("path")
+                .datum(data)
+                .attr("fill", areaColor)
+                .attr("d", area);
 
-// Draw an area plot
-view.append("path")
-           .datum(data)
-           .attr("fill", areaColor)
-           .attr("d", area);
+        //Draw a line on top of the area plot
+        view.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", lineColor)
+                .attr("stroke-width", 2)
+                //.attr("stroke-linejoin", "round")
+                //.attr("stroke-linecap", "round")
+                .attr("d", line);
 
-//Draw a line on top of the area plot
-view.append("path")
-           .datum(data)
-           .attr("fill", "none")
-           .attr("stroke", lineColor)
-           .attr("stroke-width", 1.5)
-           //.attr("stroke-linejoin", "round")
-           //.attr("stroke-linecap", "round")
-           .attr("d", line);
-
-  // Plot a circle marking the final point
-  view.append("circle")
-    .attr("cx", x(data.length))
-    .attr("cy", y(data.yCumulative))
-    //.attr('opacity', 0.5)
-    .attr("fill", lineColor)
-    .attr("r", 6);      
-   
+/*         // Plot a circle marking the final point
+        view.append("circle")
+          .attr("cx", x(d3.max(data, d => d.year)))
+          .attr("cy", y(data.yCumulative))
+          //.attr('opacity', 0.5)
+          .attr("fill", lineColor)
+          .attr("r", 6);    */   
+        
        // x axis
        view.append("g")	
          .attr("transform", "translate(0," + height + ")")
@@ -113,10 +130,10 @@ view.append("path")
            .attr("fill", "#000")
            .attr("transform", "rotate(-90)")
            .attr("x", - height / 2)
-           .attr("y", - margin.left)
+           .attr("y", - margin.left+20)
            .attr("dy", "0.71em")
            .attr("text-anchor", "end")
-           .text("Number of Dispute");
+           .text("Number of Disputes");
  
      });
 

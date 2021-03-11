@@ -60,6 +60,10 @@ h2 {
   color: rgb(49, 54, 59); /* text color */
 }
 
+h4 {
+  color: rgb(97, 99, 100); /* text color */
+  font-family:Arial, Helvetica, sans-serif;
+}
 
 body {
   background-color: rgba(228,233,239,255);

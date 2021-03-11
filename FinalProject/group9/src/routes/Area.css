@@ -37,16 +37,26 @@
   }
 }
 
-#imgs {
-      justify-content:space-around;
+h4 {
+  color: rgb(97, 99, 100); /* text color */
+  font-family:Arial, Helvetica, sans-serif;
 }
 
+
 #container2{
-  margin-left: 200px;
-  margin-right: 200px;
-  justify-content:space-around;
   background-color:rgb(156,172,188);
 }
 
+#imgs {
+  justify-content:space-around;
+  display: flex;
+  flex-direction: column;
+}
 
+#rows{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
 

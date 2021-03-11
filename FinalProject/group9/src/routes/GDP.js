@@ -14,6 +14,10 @@ class GDP extends React.Component {
     return (
       <div className="App">
         <h2> Military Expenditure and GDP By Year </h2>
+        <h4> <li>Press 'start' button to play the animation. Press 'stop' to stop at a certain year.</li>
+        <li>Double-click or spin the wheel to zoom, then 
+          click-and-drag to pan (translate).</li>
+        <li>Hover your mouse over a circle for info. ( GDP/ Military Expenditure/ country )</li></h4>
         <div id="slider">
           <label for="nyears"> Year = <span id="nyears-value">...</span> </label>
           <input id="nyears" type="range" name="years" min="1960" max="2018"></input>

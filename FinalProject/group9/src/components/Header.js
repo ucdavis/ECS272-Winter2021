@@ -6,7 +6,7 @@ const Header = () => {
     return (
         <div className="header">
             <Link to="/" className="item">Home</Link>
-            <Link to="/gdp" className="item">GDP Military Expenditure</Link>
+            <Link to="/gdp" className="item">GDP / Military Expenditure</Link>
             <Link to="/area" className="item"> Number of Disputes</Link>
             <Link to="/threat" className="item">Threat</Link>
             <Link to="/area2" className="item"> Number of Alliances</Link>

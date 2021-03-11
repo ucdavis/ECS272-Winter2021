@@ -15,31 +15,37 @@ class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <h2>Number of Dispute</h2>
-        <div id="container2">           </div>    
-        <div id="tooltip"></div>
+        <h2>Global dispute continues to rise</h2>
+        <h4>The cumulative area chart shows the increasing number of global disputes over time. </h4>
+
+    <div id ="rows">
+ 
+        <div id="container2"></div>   
+        <div id="emptybox"></div> 
+
         <div id="imgs">
+        <h4>Examples of Global Conflict</h4>
         <img
           src={ azer }
-          width='300'
-          height='200'
-          alt='testA'/>
+          width='400'
+          height='180'
+          alt='azer'/>
 
-<img
+        <img
           src={ iraq }
-          width='300'
-          height='200'
-          alt='testA'/>
+          width='400'
+          height='180'
+          alt='iraq'/>
 
-<img
+        <img
           src={ isis }
-          width='300'
-          height='200'
-          alt='testA'/>
+          width='400'
+          height='180'
+          alt='isis'/>
 
 
         </div>
-
+    </div>
         <AreaChart data={this.state.data} width={this.state.width} height={this.state.height} />
       </div>
 
