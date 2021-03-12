@@ -3,7 +3,7 @@ import * as topojson from "topojson"
 import worldtopo from "../assets/data/world-topo-min.json"
 import capitals from "../assets/data/country-capitals.csv"
 import {casestudy} from "./casestudy"
-
+import {linePlot, LinePlot} from "./linePlot"
 export function worldmap(){
     
     d3.select(window).on("resize", throttle);
@@ -245,6 +245,7 @@ export function worldmap(){
     console.log(d)
     console.log(d.properties.name)
     casestudy(d.properties.name)
+    linePlot(d.properties.name)
   }
   
   

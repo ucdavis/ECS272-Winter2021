@@ -6,10 +6,12 @@ import './css/styles.css'; /* Example of connecting a style-sheet */
 import {worldmap} from "./js/worldmap"
 import {casestudy} from "./js/casestudy"
 import {test} from "./js/test"
+import { linePlot } from './js/linePlot';
 //drawLine("#main")
 //flightCountryLine("#country")
 //chord("#chord")
 //connection("#fig2")
 worldmap()
-//asestudy()
+//casestudy()
 //test()
+//linePlot()

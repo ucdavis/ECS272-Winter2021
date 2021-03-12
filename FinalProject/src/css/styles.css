@@ -180,6 +180,12 @@ g#voronoi {
   stroke-width: 1.25px;
 }
 
-
+/* linechart */
+.y-axis line {
+	opacity:.2;
+}
+.y-axis path {
+	display:none;
+}
 
 

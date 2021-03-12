@@ -26,8 +26,8 @@ export function casestudy(target_cty = "United States"){
         flights: new_flight
         };
 
-        var margin = {top:50, right:50, bottom:100, left:50},
-                width = 960 - margin.left - margin.right,
+        var margin = {top:50, right:50, bottom:100, left:20},
+                width = 800 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
 
         d3.csv(average_lat_lon).then(function(central){
@@ -80,10 +80,10 @@ export function casestudy(target_cty = "United States"){
 
                 // have these already created for easier drawing
                 const g = {
-                    basemap:  svg.append("g").attr("id", "basemap").attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-                    flights:  svg.append("g").attr("id", "flights").attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-                    airports: svg.append("g").attr("id", "airports").attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-                    voronoi:  svg.append("g").attr("id", "voronoi").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                    basemap:  svg.append("g").attr("id", "basemap").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
+                    flights:  svg.append("g").attr("id", "flights").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
+                    airports: svg.append("g").attr("id", "airports").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
+                    voronoi:  svg.append("g").attr("id", "voronoi").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")")
                 };
 
                 const tooltip = svg.append("text").attr("id", "tooltip").style("display", "none").attr("transform", "translate(" + margin.left * 2 + "," + 1.2 * height + ")");
@@ -108,7 +108,7 @@ export function casestudy(target_cty = "United States"){
                 
                 var slider = svg.append("g")
                     .attr("class", "slider")
-                    .attr("transform", "translate(" + margin.left + "," + height/5 + ")");
+                    .attr("transform", "translate(" + (margin.left + width / 5) + "," + height/5 + ")");
                 
                 slider.append("line")
                     .attr("class", "track")
