@@ -35,15 +35,16 @@ class BarChart2 extends Component {
                 })
                 var datag = csvgeo.map(row => {
                     return {
-                        iso: row['Alpha-3 code'].substring(2,5),
-                        lat: Date.parse(row['Latitude (average)']),
-                        long: Date.parse(row['Longitude (average)'])
+                        name: row['Country'],
+                        iso: row['Alpha-3 code'].substring(2, 5),
+                        lat: Number(row['Latitude (average)'].substring(2, row['Latitude (average)'].length-1)),
+                        long: Number(row['Longitude (average)'].substring(2, row['Longitude (average)'].length-1))
                     }
                 })
-            console.log(datag)
+               // console.log(datag)
 
-                data2.forEach(function(rv) {
-                    var result = data.filter(function(rc) {
+                data2.forEach(function (rv) {
+                    var result = data.filter(function (rc) {
                         return rc
                             .iso === rv.iso && rc.date === rv.date;
                     });
@@ -53,17 +54,15 @@ class BarChart2 extends Component {
                     rv.new_cases = (result[0] !== undefined) ? result[0].new_cases : null;
                     rv.new_deaths = (result[0] !== undefined) ? result[0].new_deaths : null;
 
-                    var result = datag.filter(function(rc) {
+                    var result = datag.filter(function (rc) {
                         return rc.iso === rv.iso;
                     });
                     rv.long = (result[0] !== undefined) ? result[0].long : null;
                     rv.lat = (result[0] !== undefined) ? result[0].lat : null;
                 });
-                data2 = data2.filter(function(data) {
-                    return data.total_cases !== null;
-                });
-                console.log(data2);
-                console.log(data)
+
+                //console.log(data2);
+               // console.log(data)
                 /**
                  var filtered = data.filter(function (el) {
                     return (el.gname != "Unknown");
@@ -86,19 +85,44 @@ class BarChart2 extends Component {
                     }
                 });
 
+                var holderLat = {};
+                var holderLong = {};
+                datag.forEach(function (d) {
+
+                    holderLat[d.iso] = d.lat;
+                    holderLong[d.iso] = d.long;
+
+                });
 
 
-                 var filteredC = [];
 
-                 for (var i in holderC) {
-                     filteredC.push({iso: i, total_case: holderC[i], total_vac: holderV[i]});
+                var filteredC = [];
+
+                for (var i in holderC) {
+                    filteredC.push({iso: i, total_case: holderC[i], total_vac: holderV[i], lat: holderLat[i], long:holderLong[i]});
                 }
 
-                 console.log(filteredC);
+                //console.log(filteredC);
 
-                 //data = filtered2
+                //data = filtered2
+
+            data2 = data2.filter(function (data) {
+                return data.date !== null;
+            });
+            var c = datag[Math.floor(Math.random() * Math.floor(datag.length))].iso
+            while (filteredC.find(x => x.iso === c ) === undefined || filteredC.find(x => x.iso === c ).total_case === 0){
+                c = datag[Math.floor(Math.random() * Math.floor(datag.length))].iso;
+            }
 
 
+
+            data = data2.filter(function (data) {
+
+                return data.iso === c;
+            });
+
+            console.log(data)
+            data.sort((a, b) => (a.date > b.date) ? 1 : -1)
                 /*********************************
                  * Visualization codes start here
                  * ********************************/
@@ -125,7 +149,7 @@ class BarChart2 extends Component {
 
                 var tooltip = document.getElementById('tooltip')
                 // create a scatter plot
-                tooltip.innerHTML = ('brush dots to show accumulative data');
+                tooltip.innerHTML = ('Currently displaying country is:'+datag.find(x => x.iso === c).name);
 
                 var scatterPlot2 = view.append("g")
                     .selectAll("dot")
@@ -156,10 +180,6 @@ class BarChart2 extends Component {
                     .attr("r", 8)
                     .attr("fill", "red")
                     .attr('opacity', 0.8)
-
-
-
-
 
 
                 // Function that is triggered when brushing is performed
@@ -264,11 +284,9 @@ class BarChart2 extends Component {
                     .text("Number of Cases");
                 var brush = view
                     .call(d3.brush()
-                        .extent([[-10, -10], [610, 410]])
+                        .extent([[-10, -10], [1610, 610]])
                         .on("end", updateChart)
                     )
-
-
 
 
             }
