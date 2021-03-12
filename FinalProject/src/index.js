@@ -11,5 +11,5 @@ import {test} from "./js/test"
 //chord("#chord")
 //connection("#fig2")
 worldmap()
-//casestudy()
-test()
+//asestudy()
+//test()

@@ -8,45 +8,11 @@
     <script src="https://unpkg.com/d3-delaunay@4"></script>
     <script src="https://unpkg.com/d3-geo-voronoi@1"></script>
     <!-- Create a div where the graph will take place -->
-    <div class = "container my-4 text-center" >
-      <h1>Visualization of Air Traffic during Pandemic </h1>
-      <div class="row">
-        <div class="col-md-6 col-md-offset-1"  >
-          <!-- Initialize a select button -->
-          <button id="start">Start</button>
-          <button id="reset">Reset</button>
-          <div id = "main"></div>
-        </div>
-        <div class="col-md-6 col-md-offset-1">
-          <div id = "country"></div>
-        </div>
-      </div>
-      <div class = "row">
-        <div class = "col-md-6">Click on the start and reset button above to see the total flight change </div>
-        <div class = "col-md-6">We then focus on country-wise flight percentage change </div>
-      </div>
-      <div class="row" >
-          <div class = "col-md-6" id = "chord" style = "width: 12cm; "></div> 
-          <div class = "col-md-6  align-self-center">
-            <p>Chord diagram shows the flight flow between countries on January 02 2020. Plan to do more about the dynamic flight flow between countries for final project
-            </p>
-            <p>Data source: <a href="https://zenodo.org/record/3974209#.YCizwS2z1TZ" style = "color: red">OpenSky dataset</a></p>
-          </div>
-      </div>
-    </div>
-    <div class = "container my-4 text-center" >
-      <h1>Visualization of Air Traffic during Pandemic </h1>
-      <div class="row">
-        <div class="col-md-6 col-md-offset-1"  >
-          <!-- Initialize a select button -->
-          <div id = "fig2"></div>
-        </div>
-      </div>
-    </div>    <!-- Color Scale -->
 
     <div id="container"></div>
     <!-- must be 960x600 to match topojson us atlas files -->
-    <div id="case"></div>
+    <div id="case">
+    </div>
     <div id="testmove"></div>
     <script src="./bundle.js"></script>
   </body>
