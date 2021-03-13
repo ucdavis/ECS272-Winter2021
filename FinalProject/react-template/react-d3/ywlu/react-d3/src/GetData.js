@@ -2,8 +2,8 @@ import * as d3 from "d3";
 import data from './datasets/owid-covid-data.csv';
 import data2 from './datasets/country_vaccinations.csv';
 import data3 from './datasets/countries_codes_and_coordinates.csv';
-
-export async function getData() {
+export var pack = {};
+export async function getData(_callback) {
     Promise.all([
         d3.csv(data),
         d3.csv(data2),
@@ -130,9 +130,9 @@ export async function getData() {
 
         //console.log(data)
         data.sort((a, b) => (a.date > b.date) ? 1 : -1)
-        var pack = {data: data, CList: filteredC, selectedC: c}
+        pack = {data: data, CList: filteredC, selectedC: c}
         console.log(pack);
-        return pack;
+        _callback();
     })
 
 }
