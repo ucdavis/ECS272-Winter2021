@@ -94,6 +94,6 @@
 
 input[type="range"]{
     transform: rotate(270deg);
-    width: 400%;
+    width: 100%;
 }
 
