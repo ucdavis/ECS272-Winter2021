@@ -93,7 +93,7 @@ class Ggmap extends React.Component{
                   }
                 )}
               </select>
-              <div>
+              <div className="info_window">
                 <h6> population:{this.state.array[this.state.selected_index].population}</h6>
                 <h6> lat: {this.state.array[this.state.selected_index].lat} </h6>
                 <h6> lng: {this.state.array[this.state.selected_index].lng} </h6>
