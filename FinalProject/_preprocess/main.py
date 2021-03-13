@@ -9,6 +9,8 @@ Example:
 Attributes:
     PATH_DATA_DIR (str): The absolute path to the data folder.
     PATH_APP_DATA_DIR (str): The absolute path to the app data folder.
+    FILTER_YEAR_MAX (int): Filtering data after 2018.
+    FILTER_YEAR_MIN (int): Filtering data before 1990.
 
 Authors:
     Fangzhou Li - https://github.com/fangzhouli
@@ -55,21 +57,11 @@ def refine_genres(data):
                 genre_list.append(x)
         if not genre_list:
             row['genre_list'] = ['Other']
+            row['genre'].append('Other')
         else:
             row['genre_list'] = genre_list
         row['element_list'] = element_list
         return row
-        # sub_exists = False
-        # for sub in sub_genres:
-        #     try:
-        #         genres.remove(sub)
-        #         sub_exists = True
-        #     except ValueError:
-        #         pass
-
-        # if sub_exists and main_genre not in genres:
-        #     genres += [main_genre]
-        # return genres
 
     # Separate genre and elements.
     data = data.apply(helper_separate_genres, axis=1)
@@ -135,12 +127,11 @@ def print_analysis_results(data):
     data = data[(data_year >= FILTER_YEAR_MIN) & (
         data_year <= FILTER_YEAR_MAX)]
 
-    print("Animes aired between 1980 and 2018")
+    print("Animes aired between {} and {}".format(
+        FILTER_YEAR_MIN, FILTER_YEAR_MAX))
     print(' ' * 4 + "The number of animes: {}".format(len(data)))
     print(' ' * 4 + "The summary of genre:\n{}".format(
         data.loc[:, 'Action':].sum(axis=0)))
-    print(' ' * 4 + "The number of animes without major genres: {}".format(
-        len(data[data['genre_list'].apply(lambda x: len(x) == 0)])))
 
 
 if __name__ == '__main__':
