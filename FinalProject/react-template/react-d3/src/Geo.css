@@ -38,7 +38,7 @@
     height: 95%;
     background-color: white;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
 }
@@ -59,6 +59,19 @@
 .geoPageLayout .GMcontainer .controlPanel select{
     width: 90%;
 }
+
+.home {
+    background-color:#038cfc;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+  }
 
 
 

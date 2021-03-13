@@ -5,6 +5,7 @@ import key from "./api_key.json";
 import React from 'react';
 
 
+
 const mapStyles = {
     height:"100%",
     width: "100%"
@@ -21,13 +22,19 @@ class Ggmap extends React.Component{
                     population:2,
                     lat:38.546720,
                     lng:-121.744340,
-                    name:"Sacramento"
+                    name:"United States",
+                    m_width:20,
+                    m_height:20,
+                    url:"/vaccination_emoji.png"
                 },
                 {
                     population:102334403,
                     lat:27,
                     lng:30,
-                    name:"Egypt"
+                    name:"Egypt",
+                    m_width:20,
+                    m_height:20,
+                    url:"/death_emoji.png"
                 }
             ],
             selected_index: 0
@@ -36,6 +43,7 @@ class Ggmap extends React.Component{
           };
         this.handle_change = this.handle_change.bind(this);
         // this.handle_click = this.handle_click.bind(this);
+        // console.log("google",window.google);
 
     }
     handle_click(data){
@@ -62,7 +70,7 @@ class Ggmap extends React.Component{
                             lat:this.state.array[this.state.selected_index].lat,
                             lng:this.state.array[this.state.selected_index].lng
                         }}
-                        zoom = {8}
+                        zoom = {2}
                         // ref={(ref) => {
                         //     this.mapRef = ref;
                         // }}
@@ -74,8 +82,9 @@ class Ggmap extends React.Component{
                                             position={{lat:data.lat,lng:data.lng}} 
                                             name={data.name}
                                             icon={{
-                                                url:"https://www.clipartmax.com/png/middle/433-4338193_sick-temperature-iphoneemoji-emoji-transparent-background-wink-emoji.png",
-                                            }}
+                                                url:data.url,
+                                                scaledSize:{width: data.m_width, height: data.m_height, i: undefined, g: undefined}
+                                        }}
                                         />
                             })
                         }
@@ -85,6 +94,8 @@ class Ggmap extends React.Component{
 
             </div>
             <div className="controlPanel">
+              <a className="home" href="/">Home</a>
+              
               <select onChange={this.handle_change}>
                 {this.state.array.map(
                   (data,index)=>{
@@ -99,6 +110,7 @@ class Ggmap extends React.Component{
                 <h6> lng: {this.state.array[this.state.selected_index].lng} </h6>
               </div>
 
+            
             </div>
           </div>
           

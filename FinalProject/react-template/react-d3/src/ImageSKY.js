@@ -22,11 +22,11 @@ class ImageSKY extends React.Component{
   }
 
   componentDidMount(){
-    this.draw_ImageSky();
+    // this.draw_ImageSky();
   }
 
   componentDidUpdate(){
-    this.draw_ImageSky();
+    // this.draw_ImageSky();
   }
 
   draw_ImageSky(){
