@@ -9,14 +9,16 @@ class ImageSKY extends React.Component{
     super(props);
     this.state ={
       data:[
-        {date:1, death:20,confirmation:80, vaccination:0},
-        {date:2, death:50,confirmation:0, vaccination:50},
-        {date:3, death:40,confirmation:30, vaccination:30},
+        {date:1, real_date:"1-1-2021", death:20,death_case:20,confirmation:80,confirmation_case:80, vaccination:0,vaccination_case:0},
+        {date:2, real_date:"1-2-2021", death:50,death_case:50,confirmation:0, confirmation_case:0,vaccination:50,vaccination_case:50},
+        {date:3, real_date:"1-3-2021", death:40,death_case:40,confirmation:30,confirmation_case:30, vaccination:30,vaccination_case:30},
       ],
-      at:0
+      at:1,
+      index_array:[]
 
     };
     this.handle_slider = this.handle_slider.bind(this);
+    this.handle_click = this.handle_click.bind(this);
 
   }
 
@@ -42,6 +44,26 @@ class ImageSKY extends React.Component{
     this.draw_sk_tetris();
   }
 
+  handle_click(event, data){
+      let index = this.state.data.indexOf(data);
+      let temp_array = this.state.index_array.slice();
+      console.log("before:",temp_array);
+
+      if(temp_array.includes(index)){
+       temp_array.splice(temp_array.indexOf(index),1);
+      }else{
+       temp_array.push(index);
+      }
+
+      if(temp_array.length>2){
+        temp_array.splice(0,1);
+       }
+
+      console.log("after:",index,temp_array);
+       this.setState({
+         index_array:temp_array});
+  }
+
   draw_sk_tetris(){
     d3.select(".SKY").selectAll("*").remove();
     let data = this.state.data.slice(0,this.state.at);
@@ -62,31 +84,66 @@ class ImageSKY extends React.Component{
        .attr("width",data=>data.death+"%")
        .attr("height",height+"%")
        .attr("stroke","black")
-       .attr("stroke-width","0.3");
+       .attr("stroke-width","0.3")
+       .style("opacity",(data,index)=>{
+        //  console.log("state",this.state.index_array.includes(index),index);
+        if(this.state.index_array.includes(index)){
+          return "0.5";
+        }
+        return "1";
+      })
+       .on("click",this.handle_click)
+       .append("title")
+       .text(data=>{
+         return "date: "+data.real_date+"\n death case: "+data.death_case;
+       });
 
     svg.selectAll("confirmation")
        .data(data)
        .enter()
        .append("rect")
-       .style("fill","blue")
+       .style("fill","yellow")
        .attr("x",data=>data.death+"%")
        .attr("y",(data,index)=>(100-(index+1)*height)+"%")
        .attr("width",data=>data.confirmation+"%")
        .attr("height",height+"%")
        .attr("stroke","black")
-       .attr("stroke-width","0.3");
+       .attr("stroke-width","0.3")
+       .style("opacity",(data,index)=>{
+        if(this.state.index_array.includes(index)){
+          return "0.5";
+        }
+        return "1";
+      })
+      .on("click",this.handle_click)
+       .append("title")
+       .text(data=>{
+         return "date: "+data.real_date+"\n confirmation case: "+data.confirmation_case;
+       });
 
+    
     svg.selectAll("vaccination")
        .data(data)
        .enter()
        .append("rect")
-       .style("fill","yellow")
+       .style("fill","blue")
        .attr("x",data=>data.death+data.confirmation+"%")
        .attr("y",(data,index)=>(100-(index+1)*height)+"%")
        .attr("width",data=>data.vaccination+"%")
        .attr("height",height+"%")
        .attr("stroke","black")
-       .attr("stroke-width","0.3");
+       .attr("stroke-width","0.3")
+       .style("opacity",(data,index)=>{
+         if(this.state.index_array.includes(index)){
+           return "0.5";
+         }
+         return "1";
+       })
+       .on("click",this.handle_click)
+       .append("title")
+       .text(data=>{
+         return "date: "+data.real_date+"\n vaccination case: "+data.vaccination_case;
+       });
 
   }
 
@@ -276,8 +333,24 @@ class ImageSKY extends React.Component{
         
                 </div>
                 <div className="controlPanel">
-                  <input type="range" min="0" max={this.state.data.length} step="1" value={this.state.at} onChange={this.handle_slider} />
+                  <div className="info_window">
+                      <h6>From date: {this.state.data[0].real_date}</h6>
+                      <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
+                      <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.confirmation_case)}</h6>
+                      <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.death_case)}</h6>
+                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.vaccination_case)}</h6>
+
+                    </div>
+                    <input type="range" min="1" max={this.state.data.length} step="1" value={this.state.at} onChange={this.handle_slider} />
+                    <div className="info_window">
+                      <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
+                      <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
+                      <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].confirmation_case-this.state.data[this.state.index_array[0]].confirmation_case:"N/A"}</h6>
+                      <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].death_case-this.state.data[this.state.index_array[0]].death_case:"N/A"}</h6>
+                      <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].vaccination_case-this.state.data[this.state.index_array[0]].vaccination_case:"N/A"}</h6>
+                    </div>
                 </div>
+
               </div>
             </div>
             );        
