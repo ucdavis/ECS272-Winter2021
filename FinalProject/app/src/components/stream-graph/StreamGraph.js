@@ -14,17 +14,107 @@ export default class StreamGraph extends React.Component {
 
   drawChart() {
 
-    // Constants.
+    // Constant visualization parameters.
     const width = 1000,
           height = 500,
           margin = {top: 100, right: 100, bottom: 100, left: 100};
     const FILTER_YEAR_MIN = 1990,
           FILTER_YEAR_MAX = 2018;
 
+    // Define visualization elements.
+    const svg = d3.select('#container')
+      .append('svg')
+        .attr('id', 'stream-graph')
+        .attr('width', width)
+        .attr('height', height);
+    const x = d3.scaleLinear()
+      .domain([FILTER_YEAR_MIN, FILTER_YEAR_MAX])
+      .range([margin.left, width - margin.right]);
+    const y = d3.scaleLinear()
+      .range([height - margin.bottom, margin.top]);
+    const area = d3.area()
+      .x(d => x(d.data.year))
+      .y0(d => y(d[0]))
+      .y1(d => y(d[1]));
+
+    // TODO:
+    //   Temporary.
+    const toolTip = svg
+      .append('text')
+        .attr('x', margin.left + 10)
+        .attr('y', margin.top + 10)
+        .attr('opacity', 0)
+        .attr('font-size', 17);
+
+    // Visualize basic component of elements.
+    svg  // Visualize x-axis.
+      .append('g')
+        .call(d3.axisBottom(x)
+          .ticks(FILTER_YEAR_MAX - FILTER_YEAR_MIN + 1)
+          .tickFormat(x => x % 2 ? "" : x))
+        .attr('id', 'x-axis')
+        .attr('transform', 'translate(0,' + (height - margin.bottom) + ')');
+    svg  // Initialize y-axis for visualizing during the update.
+      .append('g')
+        .attr('id', 'y-axis')
+        .attr('transform', 'translate(' + (margin.left) + ',0)');
+    svg  // A vertical line to select a year.
+      .append('line')
+        .attr('id', 'selectYear')
+        .attr('x1', x(2000))
+        .attr('y1', margin.top)
+        .attr('x2', x(2000))
+        .attr('y2', y(0))
+        .attr('stroke', 'black')
+        .attr('stroke-width', '5px')
+        .attr('cursor', 'pointer')
+        .call(
+          d3.drag()
+            .on('start', function(e) {
+            })
+            .on('drag', function(e) {
+              const x = e.x + e.dx;
+
+              d3.select(this)  // Specify the range of dragging.
+                .attr('x1', function() {
+                  if (x < margin.left) {
+                    return margin.left;
+                  } else if (x > width - margin.right) {
+                    return width - margin.right;
+                  } else {
+                    return x;
+                  }
+                })
+                .attr('x2', function() {
+                  if (x < margin.left) {
+                    return margin.left;
+                  } else if (x > width - margin.right) {
+                    return width - margin.right;
+                  } else {
+                    return x;
+                  }
+                });
+            })
+            .on('end', function (e) {  // Drop the vertical line to the nearest tick.
+              const x = d3.scaleLinear()  // TODO: duplicated with x.
+                .domain([FILTER_YEAR_MIN, FILTER_YEAR_MAX])
+                .range([margin.left, width - margin.right]);
+              const xInverse = d3.scaleLinear()
+                .domain([margin.left, width - margin.right])
+                .range([FILTER_YEAR_MIN, FILTER_YEAR_MAX]);
+
+              const yearSelected = Math.round(xInverse(e.x));
+
+              d3.select(this)
+                .attr('x1', x(yearSelected))
+                .attr('x2', x(yearSelected));
+            })
+          );
+
+    // Load data and visualization that depends on the data.
     d3.csv(csv)
       .then(data => {
-
-        // Filter animes that are before 1960.
+        // Filter animes that are not between FILTER_YEAR_MIN and FILTER_YEAR_MAX.
         const dataFiltered = [];
         data.forEach(d => {
           if (d['year_from'] >= FILTER_YEAR_MIN & d['year_from'] <= FILTER_YEAR_MAX) {
@@ -32,38 +122,10 @@ export default class StreamGraph extends React.Component {
           }
         })
 
-        const svg = d3.select('#container')
-          .append('svg')
-            .attr('width', width)
-            .attr('height', height);
-        const x = d3.scaleLinear()
-          .domain([FILTER_YEAR_MIN, FILTER_YEAR_MAX])
-          .range([margin.left, width - margin.right]);
-        const y = d3.scaleLinear()
-          .range([height - margin.bottom, margin.top]);
-        const area = d3.area()
-          .x(d => x(d.data.year))
-          .y0(d => y(d[0]))
-          .y1(d => y(d[1]));
-        const toolTip = svg
-          .append('text')
-            .attr('x', margin.left + 10)
-            .attr('y', margin.top + 10)
-            .attr('opacity', 0)
-            .attr('font-size', 17);
-
-        svg
-          .append('g')
-            .call(d3.axisBottom(x))
-            .attr('transform', 'translate(0,' + (height - margin.bottom) + ')');
-
-        svg
-          .append('g')
-            .attr('id', 'y-axis')
-            .attr('transform', 'translate(' + (margin.left) + ',0)');
-
         updateGraph('rating', loadYearToRatingData(dataFiltered));
 
+        /* Use `mode` to specify the loaded data structure.
+         */
         function updateGraph(mode, data) {
           const stackedData = d3.stack()
             .keys(Object.keys(data[0]).slice(1))
