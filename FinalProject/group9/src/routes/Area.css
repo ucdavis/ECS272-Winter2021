@@ -37,13 +37,20 @@
   }
 }
 
-#vis {
-  width: 2000;
-  height: 3000;
-  float:inherit;
+#container2{
+  background-color:rgb(156,172,188);
 }
 
-#container {
-  max-width: 1000;
-  max-height: 700;
+#imgs {
+  justify-content:space-around;
+  display: flex;
+  flex-direction: column;
 }
+
+#rows{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+

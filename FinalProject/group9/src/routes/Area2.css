@@ -37,13 +37,27 @@
   }
 }
 
-#vis {
-  width: 2000;
-  height: 3000;
-  float:inherit;
+h4 {
+  color: rgb(97, 99, 100); /* text color */
+  font-family:Arial, Helvetica, sans-serif;
 }
 
-#container {
-  max-width: 1000;
-  max-height: 700;
+#container2{
+  background-color:rgb(156,172,188);
 }
+
+#imgs {
+      justify-content:space-around;
+      display: flex;
+      flex-direction: column;
+}
+
+
+#rows{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
