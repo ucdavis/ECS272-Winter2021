@@ -4,8 +4,7 @@ import * as d3 from 'd3';
 
 import './StreamGraph.css';
 import csv from '../../data/processed.csv';
-import csvYearGenre from '../../data/processed_year_genre.csv';
-import csvYearRating from '../../data/processed_year_rating.csv';
+import color from '../../utils/color';
 
 export default class StreamGraph extends React.Component {
 
@@ -19,7 +18,7 @@ export default class StreamGraph extends React.Component {
     const width = 1000,
           height = 500,
           margin = {top: 100, right: 100, bottom: 100, left: 100};
-    const FILTER_YEAR_MIN = 1980,
+    const FILTER_YEAR_MIN = 1990,
           FILTER_YEAR_MAX = 2018;
 
     d3.csv(csv)
@@ -42,7 +41,6 @@ export default class StreamGraph extends React.Component {
           .range([margin.left, width - margin.right]);
         const y = d3.scaleLinear()
           .range([height - margin.bottom, margin.top]);
-        const color = d3.scaleOrdinal(d3.schemeCategory10);
         const area = d3.area()
           .x(d => x(d.data.year))
           .y0(d => y(d[0]))
@@ -171,10 +169,11 @@ export default class StreamGraph extends React.Component {
           //   "Shoujo", "Shoujo Ai", "Shounen", "Shounen Ai", "Slice of Life",
           //   "Space", "Sports", "Super Power", "Supernatural", "Thriller",
           //   "Vampire", "Yaoi", "Yuri"];
-          const genres = ['Action', 'Adventure', 'Comedy', 'Drama',
-            'Slice of Life', 'Fantasy', 'Magic', 'Supernatural', 'Horror',
-            'Mystery', 'Psychological', 'Romance', 'Sci-Fi'];
-          const elements = [];
+          const genres = ['Action', 'Adult', 'Adventure', 'Comedy', 'Drama',
+                          'Fantasy', 'Kids', 'Romance', 'School', 'Sci-Fi',
+                          'Seinen', 'Shounen', 'Slice of Life',
+                          'Supernatural', 'Other'];
+          // const elements = [];
           const dataYearToGenreByRating = [];
 
           dataByRating.forEach(d => {
