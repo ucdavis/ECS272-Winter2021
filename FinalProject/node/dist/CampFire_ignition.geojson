@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "latitude": 39.82, "longitude": -121.44, "acres": 153336.0, "gacc": "ONCC", "hotlink": "http:\/\/www.nifc.gov\/fireInfo\/nfn.htm", "state": "CA", "status": "F", "firecause": "Unknown", "reportdate": "2018-11-26", "percentcon": 100, "uniquefire": "2018-CABTU-016737", "firediscov": "2018-11-08", "complexpar": null, "poorespons": "CABTU", "incidentna": "CAMP", "irwinid": "{75E64DB8-9B75-4A68-BEDD-67CC62658E38}", "fireoutdat": null, "datecurren": "2018-12-15", "fireyear": 2018, "poolandown": "USFS", "pooownerun": "CAPNF", "incidentty": "WF", "mergeid": null, "containmen": "2018-11-25", "pooprotect": "CDF", "complexnam": null, "perimexist": "Y", "irwinmodif": "2018-12-14", "invalid": null }, "geometry": { "type": "Point", "coordinates": [ -121.44, 39.81999999907184 ] } }
+]
+}
