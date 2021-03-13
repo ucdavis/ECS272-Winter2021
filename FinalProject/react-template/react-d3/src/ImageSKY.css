@@ -17,12 +17,12 @@
 }
 
 .GeoSKYPageLayout .SKYcontainer{
+    display: flex;
     flex-basis: 90%;
     width: 100%;
     align-items: center;
     justify-content:center;
     background-color: #038cfc;
-    display: flex;
     flex-direction: row;
 }
 .GeoSKYPageLayout .SKYcontainer .SKY{
@@ -30,6 +30,9 @@
     flex-basis: 70%;
     height: 95%;
     background-color: white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
 }
 
 .PCSKYPageLayout{
@@ -37,6 +40,7 @@
     height: 100vh;
     width: 100vw;
     flex-direction: column;
+    background-color: black;
 }
 
 
@@ -45,8 +49,8 @@
     width: 100%;
     align-items: center;
     justify-content: center;
-    color: white;
-    background-color: black;
+    color: black;
+    background-color: white;
     font-weight: bold;
     display: flex;
 }
@@ -56,7 +60,7 @@
     width: 100%;
     align-items: center;
     justify-content:center;
-    background-color:black;
+    background-color:white;
     display: flex;
     flex-direction: row;
 }
@@ -70,7 +74,7 @@
     border-style: solid;
 }
 
-.geoPageLayout .SKYcontainer .controlPanel{
+.GeoSKYPageLayout .SKYcontainer .controlPanel{
     display:flex;
     flex-basis: 25%;
     height: 95%;
@@ -91,6 +95,7 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
+    border: 1px solid black;
 }
 
 .controlPanel .info_window{

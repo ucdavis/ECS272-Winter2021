@@ -312,17 +312,34 @@ class ImageSKY extends React.Component{
     let start = this.get_url_param()["start"];
     if(start == "Geo"){
         return (
-            <div className="GeoSKYPageLayout">
-              <h1 className="header">Tetris Sky</h1>
-              <div className="SKYcontainer">
-                <div className="SKY">
-        
-                </div>
-                <div className="controlPanel">
-                  <input type="range" min="0" max={this.state.data.length} step="1" value={this.state.at} onChange={this.handle_slider}/>
-                </div>
-              </div>
+          <div className="GeoSKYPageLayout">
+          <h1 className="header">Tetris Sky</h1>
+          <div className="SKYcontainer">
+            <div className="SKY">
+    
             </div>
+            <div className="controlPanel">
+              <div className="info_window">
+                  <h6>From date: {this.state.data[0].real_date}</h6>
+                  <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
+                  <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.confirmation_case)}</h6>
+                  <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.death_case)}</h6>
+                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.vaccination_case)}</h6>
+
+                </div>
+                <input type="range" min="1" max={this.state.data.length} step="1" value={this.state.at} onChange={this.handle_slider} />
+                <div className="info_window">
+                  <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
+                  <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
+                  <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].confirmation_case-this.state.data[this.state.index_array[0]].confirmation_case:"N/A"}</h6>
+                  <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].death_case-this.state.data[this.state.index_array[0]].death_case:"N/A"}</h6>
+                  <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].vaccination_case-this.state.data[this.state.index_array[0]].vaccination_case:"N/A"}</h6>
+                </div>
+            </div>
+
+          </div>
+        </div>
+
             );
     }else{
         return (
