@@ -7,6 +7,7 @@ import Home from "./Home";
 import Geo from './Geo';
 import ParallelCoordinate from "./ParallelCoordinate";
 import ImageSKY from "./ImageSKY";
+import Stat_view from "./Stat_view";
 import key from "./api_key.json";
 
 ReactDOM.render(
@@ -29,6 +30,7 @@ ReactDOM.render(
         <Route path = "/geoOverview" component={Geo}/>
         <Route path = "/parallelCoordinate" component={ParallelCoordinate}/>
         <Route path = "/imageSky" component={ImageSKY}/>
+        <Route path = "/Stat_view" component={Stat_view}/>
       </Switch>
     </Router>
 
