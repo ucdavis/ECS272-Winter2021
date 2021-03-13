@@ -173,7 +173,7 @@ class GDP_chart extends Component {
           clearInterval(myTimer);
         });
 
-        var tooltip = document.getElementById('tooltip')
+        var tooltip = document.getElementById('tooltip2')
         scatterPlot
           .on('mouseenter', function (d) {
             d3.select(this).style('fill', 'pink')

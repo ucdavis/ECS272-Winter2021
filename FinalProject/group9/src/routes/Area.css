@@ -37,6 +37,12 @@
   }
 }
 
+h4 {
+  color: rgb(97, 99, 100); /* text color */
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+
 #container2{
   background-color:rgb(156,172,188);
 }
@@ -48,9 +54,13 @@
 }
 
 #rows{
+  margin-top: -55px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
+#areachart_label{
+  margin-left: 60px;
+}

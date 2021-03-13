@@ -1,5 +1,5 @@
 .header {
-    background: #5c7cfa;
+    background: #585858;
     display: table;
     table-layout: fixed;
     width: 100%;
@@ -16,10 +16,10 @@
 }
 
 .item:hover {
-    background: #748ffc;
+    background: #b8b8b8;
 }
 
 .item:active{
     background: white;
-    color: #5c7cfa;
+    color: #383838;
 }

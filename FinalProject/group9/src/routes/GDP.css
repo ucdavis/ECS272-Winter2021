@@ -62,9 +62,10 @@ body {
   background-color: rgba(228,233,239,255);
 }
 
-#tooltip{
+#tooltip2{
   background-color: rgba(228,233,239,255);
   color:rgb(46, 44, 54); /* text color */
+  margin-bottom: 10px;
 }
 
 #container{
@@ -74,4 +75,5 @@ body {
 
 #slider{
   color:rgb(28, 69, 97); /* text color */
+  margin-bottom: 10px;
 }

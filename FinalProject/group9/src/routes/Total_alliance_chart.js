@@ -131,7 +131,7 @@ class Total_alliance_chart extends Component{
 
             const color = d3.scaleLinear()
             .domain([0, 3])
-            .range(["hsl(220,90%,90%)", "hsl(230,50%,40%)"])
+            .range(["#e4e9ef", "hsl(230,50%,40%)"]) // hsl(220,90%,90%)
             .interpolate(d3.interpolateHcl)
 
             // pack data
