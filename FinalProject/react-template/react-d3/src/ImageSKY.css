@@ -23,12 +23,12 @@
     justify-content:center;
     background-color: #038cfc;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 .GeoSKYPageLayout .SKYcontainer .SKY{
     display: flex;
     flex-basis: 95%;
-    width: 95%;
+    height: 95%;
     background-color: white;
 }
 
@@ -58,15 +58,42 @@
     justify-content:center;
     background-color:black;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 .PCSKYPageLayout .SKYcontainer .SKY{
     display: flex;
-    flex-basis: 95%;
-    width: 95%;
+    flex-basis: 80%;
+    height: 95%;
     background-color: white;
     border: black;
     border-radius: 1px;
     border-style: solid;
+}
+
+.geoPageLayout .SKYcontainer .controlPanel{
+    display:flex;
+    flex-basis: 15%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+.PCSKYPageLayout .SKYcontainer .controlPanel{
+    display:flex;
+    flex-basis: 15%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+input[type="range"]{
+    transform: rotate(270deg);
+    width: 400%;
 }
 
