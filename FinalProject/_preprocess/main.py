@@ -4,10 +4,11 @@
 This script removes unwanted columns and rows with missing values.
 
 Example:
-    $ python cleanse.py
+    $ python main.py
 
 Attributes:
     PATH_DATA_DIR (str): The absolute path to the data folder.
+    PATH_APP_DATA_DIR (str): The absolute path to the app data folder.
 
 Authors:
     Fangzhou Li - https://github.com/fangzhouli
@@ -19,54 +20,127 @@ from ast import literal_eval
 
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 PATH_DATA_DIR = path.abspath(path.dirname(__file__)) + '/../data'
+PATH_APP_DATA_DIR = path.abspath(path.dirname(__file__)) + '/../app/src/data'
+FILTER_YEAR_MAX = 2018
+FILTER_YEAR_MIN = 1990
 
 
-# def refine_genres(df):
-#     """
-#     """
-#     def merge_genres(genres, main_genre, sub_genres):
-#         """
-#         """
-#         sub_exists = False
-#         for sub in sub_genres:
-#             try:
-#                 genres.remove(sub)
-#                 sub_exists = True
-#             except ValueError:
-#                 pass
+def refine_genres(data):
+    """Merge highly-correlated genres into one and remove the duplicated genres
+    from the dataset.
 
-#         if sub_exists and main_genre not in genres:
-#             genres += [main_genre]
-#         return genres
+    Args:
+        data (pd.DataFrame): The raw data.
 
-#     # Merge highly correlated genres.
-#     se_genre_refined = df['genre']
+    Returns:
+        (pd.DataFrame): The raw data with refined genres.
 
-#     # Action <- Martial Arts
-#     se_genre_refined = se_genre_refined.apply(
-#         lambda row: merge_genres(row, 'Action', ['Martial Arts']))
+    """
+    genres_major = ['Action', 'Adult', 'Adventure', 'Comedy', 'Drama',
+                    'Fantasy', 'Kids', 'Romance', 'School', 'Sci-Fi',
+                    'Seinen', 'Shounen', 'Slice of Life',
+                    'Supernatural']
 
-#     # Sci-Fi <- Mecha, Space
-#     se_genre_refined = se_genre_refined.apply(
-#         lambda row: merge_genres(row, 'Sci-Fi', ['Mecha', 'Space']))
+    def helper_separate_genres(row):
+        genre_list = []
+        element_list = []
+        for x in row['genre']:
+            if x not in genres_major:
+                element_list.append(x)
+            else:
+                genre_list.append(x)
+        if not genre_list:
+            row['genre_list'] = ['Other']
+        else:
+            row['genre_list'] = genre_list
+        row['element_list'] = element_list
+        return row
+        # sub_exists = False
+        # for sub in sub_genres:
+        #     try:
+        #         genres.remove(sub)
+        #         sub_exists = True
+        #     except ValueError:
+        #         pass
 
-#     # Romance <- Harem
-#     se_genre_refined = se_genre_refined.apply(
-#         lambda row: merge_genres(row, 'Romance', ['Harem']))
+        # if sub_exists and main_genre not in genres:
+        #     genres += [main_genre]
+        # return genres
 
-#     # Supernatural <- Demons, Vampire
-#     se_genre_refined = se_genre_refined.apply(
-#         lambda row: merge_genres(row, 'Supernatural', ['Demons', 'Vampire']))
+    # Separate genre and elements.
+    data = data.apply(helper_separate_genres, axis=1)
 
-#     # Fantasy <- Magic
-#     se_genre_refined = se_genre_refined.apply(
-#         lambda row: merge_genres(row, 'Fantasy', ['Magic']))
+    # Sci-Fi
+    # se_genre_refined = se_genre_refined.apply(
+    #     lambda row: helper_merge_genres(
+    #         row,
+    #         'Sci-Fi',
+    #         ['Mecha', 'Space']))
 
-#     se_genre_refined.name = 'genre_refined'
-#     df = pd.concat([df, se_genre_refined], axis=1)
-#     return df
+    # Romance
+    # se_genre_refined = se_genre_refined.apply(
+    #     lambda row: helper_merge_genres(
+    #         row,
+    #         'Romance',
+    #         ['Ecchi', 'Harem', 'Shoujo Ai', 'Shounen Ai', 'Yaoi', 'Yuri']))
+
+    # Supernatural
+    # se_genre_refined = se_genre_refined.apply(
+    #     lambda row: helper_merge_genres(
+    #         row,
+    #         'Supernatural',
+    #         ['Demons', 'Vampire']))
+
+    # Fantasy <- Magic
+    # se_genre_refined = se_genre_refined.apply(
+    #     lambda row: helper_merge_genres(
+    #         row, 'Fantasy', ['Magic']))
+
+    # data['genre'] = se_genre_refined
+    # se_genre_refined_copy = se_genre_refined.copy()
+    # se_genre_refined_copy.name = 'genre_list'
+    # data = pd.concat([data, se_genre_refined_copy], axis=1)
+    return data
+
+
+def plot_correlation_matrix(data):
+    """Plot the correlation matrix for genres to help observe the correlation
+    between major and minor genres.
+
+    Args:
+        data (pd.DataFrame): The processed data.
+
+    Plots:
+        A Seaborn correlation matrix figure.
+
+    """
+    data_year = data['year_from'].astype(int)
+    data = data[(data_year >= FILTER_YEAR_MIN) & (
+        data_year <= FILTER_YEAR_MAX)]
+
+    data_genre = data.loc[:, 'Action':]
+    corr_mat = data_genre.corr()
+    sns.heatmap(corr_mat, annot=True, xticklabels=True, yticklabels=True)
+    plt.show()
+
+
+def print_analysis_results(data):
+    """
+    """
+    data_year = data['year_from'].astype(int)
+    data = data[(data_year >= FILTER_YEAR_MIN) & (
+        data_year <= FILTER_YEAR_MAX)]
+
+    print("Animes aired between 1980 and 2018")
+    print(' ' * 4 + "The number of animes: {}".format(len(data)))
+    print(' ' * 4 + "The summary of genre:\n{}".format(
+        data.loc[:, 'Action':].sum(axis=0)))
+    print(' ' * 4 + "The number of animes without major genres: {}".format(
+        len(data[data['genre_list'].apply(lambda x: len(x) == 0)])))
 
 
 if __name__ == '__main__':
@@ -113,7 +187,9 @@ if __name__ == '__main__':
     # Expand genre column.
     genre_list = []
     data['genre'] = data['genre'].apply(
-        lambda x: x.strip("[]").replace("'", '').split(", "))
+        lambda x: x.strip("[]").replace(
+            'Hentai', 'Adult').replace("'", '').split(", "))
+    data = refine_genres(data)
     data['genre'].apply(lambda row: genre_list.extend(row))
     genre_set = sorted(set(genre_list))
 
@@ -129,4 +205,6 @@ if __name__ == '__main__':
         [data.drop('genre', axis=1), df_genre_binary],
         axis=1).sort_values(by='year_from')
 
-    data.to_csv(PATH_DATA_DIR + '/processed.csv', index=False)
+    data.to_csv(PATH_APP_DATA_DIR + '/processed.csv', index=False)
+    print_analysis_results(data)
+    # plot_correlation_matrix(data)
