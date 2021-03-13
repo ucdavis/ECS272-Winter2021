@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
 import {getData}  from "./GetData.js"
-
+import {getData1}  from "./GetData1.js"
 class BarChart2 extends Component {
 
     componentDidMount() {
@@ -9,8 +9,14 @@ class BarChart2 extends Component {
     }
 
 
-    drawChart() {
-        var datapack = getData()
+     drawChart() {
+        //getData1();
+        while (datapack === undefined){
+        var datapack =  getData()
+            setTimeout(() => { console.log("waiting!"); }, 2000);
+        }
+        console.log(datapack)
+
         var data = datapack.data
         var CList = datapack.CList
         var c = datapack.selectedC

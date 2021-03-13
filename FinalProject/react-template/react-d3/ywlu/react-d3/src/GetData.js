@@ -2,7 +2,8 @@ import * as d3 from "d3";
 import data from './datasets/owid-covid-data.csv';
 import data2 from './datasets/country_vaccinations.csv';
 import data3 from './datasets/countries_codes_and_coordinates.csv';
-export function getData() {
+
+export async function getData() {
     Promise.all([
         d3.csv(data),
         d3.csv(data2),
@@ -109,9 +110,10 @@ export function getData() {
             d.close = l
         })
 
-        console.log(filteredC);
+        //console.log(filteredC);
 
         //data = filtered2
+        console.log("good");
 
         data2 = data2.filter(function (data) {
             return data.date !== null;
@@ -126,10 +128,11 @@ export function getData() {
             return data.iso === c;
         });
 
-        console.log(data)
+        //console.log(data)
         data.sort((a, b) => (a.date > b.date) ? 1 : -1)
-
-        return {data: data, CList: filteredC, selectedC: c};
+        var pack = {data: data, CList: filteredC, selectedC: c}
+        console.log(pack);
+        return pack;
     })
 
 }
