@@ -250,7 +250,7 @@ export default class StreamGraph extends React.Component {
                   const yToolTipMax = d3.max(dataElement.map(d => {
                     return d.value.length;
                   }));
-                  console.log(yToolTipMax)
+
                   toolTip.raise()
                     .attr('opacity', 1);
                   toolTip.select('#tool-tip-title')
