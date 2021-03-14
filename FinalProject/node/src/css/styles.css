@@ -21,6 +21,7 @@ h1 {
 #map__container{
     width: 900px;
     height: 350px;
+    left: 0px
 }
 
 #sliderContainer {
@@ -31,12 +32,69 @@ h1 {
     left: 0px;
   }
 
-
-#selectButton_Scatter{
+#map__text {
+    margin: 20px 0 10px 20px;
+    width: 800px;
     position:absolute;
-    top: 360px;
-    left:50px;
-}
+    top: 0px;
+    left: 100px;
+    font-size:1.5em;
+    color: red;
+  }
+
+  #temp_text {
+    margin: 20px 0 10px 20px;
+    width: 800px;
+    position:absolute;
+    top: 30px;
+    left: 100px;
+    font-size:1.5em;
+    color: red;
+  }
+
+  #fuel_text {
+    margin: 20px 0 10px 20px;
+    width: 800px;
+    position:absolute;
+    top: 60px;
+    left: 100px;
+    font-size:1.5em;
+    color: red;
+  }
+
+  #wind_text {
+    margin: 20px 0 10px 20px;
+    width: 800px;
+    position:absolute;
+    top: 90px;
+    left: 100px;
+    font-size:1.5em;
+    color: red;
+  }
+
+  #degree_text {
+    margin: 20px 0 10px 20px;
+    width: 800px;
+    position:absolute;
+    top: 120px;
+    left: 100px;
+    font-size:1.5em;
+    color: red;
+  }
+
+  #scatter{
+    background-color: #C0C6C6;
+    position:relative;
+    top: 400px;
+  }
+
+  #radar{
+    background-color: #C0C6C6;
+    position:relative;
+    top: 400px;
+  }
+
+
 
 .help-tip{
     position: absolute;
