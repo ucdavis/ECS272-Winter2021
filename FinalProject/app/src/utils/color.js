@@ -1,5 +1,9 @@
 import * as d3 from 'd3';
 
+/*
+ * Input: Int between 0 and 19.
+ * Output: A color, e.g. `attr('fill', color[0])``
+ */
 const color = d3.scaleOrdinal()
   .range(['#1f77b4',
           '#aec7e8',
