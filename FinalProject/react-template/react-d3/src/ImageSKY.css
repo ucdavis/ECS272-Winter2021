@@ -27,7 +27,7 @@
 }
 .GeoSKYPageLayout .SKYcontainer .SKY{
     display: flex;
-    flex-basis: 70%;
+    flex-basis: 60%;
     height: 95%;
     background-color: white;
     border: black;
@@ -66,7 +66,7 @@
 }
 .PCSKYPageLayout .SKYcontainer .SKY{
     display: flex;
-    flex-basis: 70%;
+    flex-basis: 60%;
     height: 95%;
     background-color: white;
     border: black;
@@ -110,11 +110,37 @@
     flex-basis: 20%;
 }
 
+
 input[type="range"]{
     transform: rotate(270deg);
-    width: 30vh;
-    flex-basis: 40%;
-
-
+    background-color: white;
+    flex-basis: 20%;
 }
 
+.death_proportion {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: red;
+  }
+
+  .confirmation_proportion {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: yellow;
+  }
+
+  .vaccination_proportion {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: blue;
+  }
+
+  .zero_proportion {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: grey;
+  }

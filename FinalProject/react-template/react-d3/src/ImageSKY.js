@@ -371,7 +371,7 @@ class ImageSKY extends React.Component{
                   <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
                   <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
                   <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
-                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.daily_vaccinated)}</h6>
+                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.total_vaccinated)}</h6>
 
                 </div>
                 <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
@@ -382,6 +382,17 @@ class ImageSKY extends React.Component{
                   <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
                   <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
                 </div>
+                <div className="info_window">
+                  <h6>death proportion:</h6>
+                  <div className="death_proportion"></div>
+                  <h6>confirmation proportion:</h6>
+                  <div className="confirmation_proportion"></div>
+                  <h6>vaccination proportion:</h6>
+                  <div className="vaccination_proportion"></div>
+                  <h6>Zero confirm, zero vaccination, zero death:</h6>
+                  <div className="zero_proportion"></div>
+                </div>
+                
             </div>
 
           </div>
@@ -402,10 +413,9 @@ class ImageSKY extends React.Component{
                       <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
                       <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
                       <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
-                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.daily_vaccinated)}</h6>
-
+                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.total_vaccinated)}</h6>
                     </div>
-                    <input type="range" min="1" max={this.state.data.length} value={this.state.at} onChange={this.handle_slider} />
+                    <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
                     <div className="info_window">
                       <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
                       <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
@@ -413,7 +423,7 @@ class ImageSKY extends React.Component{
                       <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
                       <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
                     </div>
-
+                    <div className="rectangle"></div>
 
                 </div>
 
