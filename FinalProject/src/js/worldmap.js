@@ -5,6 +5,7 @@ import worldtopo from "../assets/data/world-topo-min.json"
 import capitals from "../assets/data/country-capitals.csv"
 import totalflight from "../assets/data/final_line.csv"
 import {casestudy} from "./casestudy"
+import {linePlot} from "./linePlot"
 
 export function worldmap(){
     
