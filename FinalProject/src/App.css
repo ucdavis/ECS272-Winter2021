@@ -1,0 +1,151 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.tooltip {
+  font: 10px sans-serif;
+  position: absolute;
+  border-radius: 10px;
+  padding: 10px;
+  overflow-x: visible;
+  overflow-y: visible;
+  background-color: black;
+  color: white;
+  text-align: center;
+  opacity: 0.8;
+  
+}
+
+.ticks {
+  font-size: 10px;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+.track-inset {
+  stroke: #dcdcdc;
+  stroke-width: 8px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  stroke: transparent;
+}
+
+.handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: 0.5;
+  stroke-width: 1.25px;
+}
+
+.header{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  background: #1abc9c;
+  opacity: 1;
+
+}
+
+.containerTotal{
+  height: 100px;
+  width: 50%;
+}
+
+.annotationText{
+  width: 25%;
+  height: 100%;
+  background: #D3D3D3;
+    float: left;
+  border: 2px solid black;
+  text-align: justify;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+.drawingArea{
+  width: 5%;
+  height:10%;
+  float: left;
+}
+
+#toolBar{
+  flewGrow: 1;
+}
+
+/*.waterTankCaption{
+  background: #D3D3D3;
+  display: inline-block;
+   border: 2px solid black;
+   position: fixed;
+   top: 50%;
+  transform: translate(-50%, +50%);
+}
+
+.wrapper{
+  text-align: center;
+}*/
+
+.waterTankCaption{
+  background: #D3D3D3;
+  display: inline-block;
+   border: 2px solid black;
+   position: absolute;
+   top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wrapper{
+  position: relative;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

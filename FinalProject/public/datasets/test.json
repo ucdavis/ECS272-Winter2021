@@ -1,0 +1,386 @@
+[
+	{
+		"id": 13366, 
+		"source": "Breitbart",
+		"time": "2020-02-01T00:14:08",
+		"headline": "Thailand Prosecutes Two People for 'Disinformation' About Coronavirus",
+		"url": "https://www.breitbart.com/national-security/2020/01/31/thailand-prosecutes-two-people-sharing-disinformation-about-coronavirus/?",
+		"tags": [
+			{
+				"event": "root",
+				"children": [
+					{
+						"event": "Containment and Closure Policies",
+						"percentage": 10,
+						"children": [
+							{
+								"event": "School Closing",
+								"percentage": 90
+							},
+							{
+								"event": "Workplace Closing",
+								"percentage": 10
+							},
+							{
+								"event": "Cancel Public Events",
+								"percentage": 5
+							},
+							{
+								"event": "Restrictions on Gatherings",
+								"percentage": 5
+							},
+							{
+								"event": "Close Public Transport",
+								"percentage": 0
+							},
+							{
+								"event": "Stay at Home Requirements",
+								"percentage": 0
+							}
+						]
+					},
+					{					
+						"event": "Economic Policies",
+						"percentage": 80,
+						"children": [
+							{
+								"event": "Income Support",
+								"percentage": 40
+							},
+							{
+								"event": "Debt/Contract Relief",
+								"percentage": 10
+							},
+							{
+								"event": "Fiscal Measures",
+								"percentage": 30
+							},
+							{
+								"event": "International Suport",
+								"percentage": 20
+							}
+						]
+					},
+					{					
+						"event": "Health System Policies",
+						"percentage": 5,
+						"children": [
+							{
+								"event": "Public Info Campaigns",
+								"percentage": 30
+							},
+							{
+								"event": "Testing Policy",
+								"percentage": 20
+							},
+							{
+								"event": "Contract Tracing",
+								"percentage": 0
+							},
+							{
+								"event": "Emergency Investment",
+								"percentage": 20
+							},
+							{
+								"event": "Vaccine Investment",
+								"percentage": 30
+							}
+						]
+					},
+					{					
+						"event": "Misc Policies",
+						"percentage": 5
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 14387, 
+		"source": "New York Times",
+		"time": "2020-02-01T00:18:34",
+		"headline": "3 Major U.S. Airlines Suspend China Flights Over Coronavirus",
+		"url": "https://www.nytimes.com/2020/01/31/travel/travel-coronavirus-airlines.html?",
+		"tags": [
+			{
+				"event": "root",
+				"children": [
+					{
+						"event": "Containment and Closure Policies",
+						"percentage": 70,
+						"children": [
+							{
+								"event": "School Closing",
+								"percentage": 0
+							},
+							{
+								"event": "Workplace Closing",
+								"percentage": 10
+							},
+							{
+								"event": "Cancel Public Events",
+								"percentage": 20
+							},
+							{
+								"event": "Restrictions on Gatherings",
+								"percentage": 30
+							},
+							{
+								"event": "Close Public Transport",
+								"percentage": 40
+							},
+							{
+								"event": "Stay at Home Requirements",
+								"percentage": 0
+							}
+						]
+					},
+					{					
+						"event": "Economic Policies",
+						"percentage": 20,
+						"children": [
+							{
+								"event": "Income Support",
+								"percentage": 30
+							},
+							{
+								"event": "Debt/Contract Relief",
+								"percentage": 10
+							},
+							{
+								"event": "Fiscal Measures",
+								"percentage": 40
+							},
+							{
+								"event": "International Suport",
+								"percentage": 20
+							}
+						]
+					},
+					{					
+						"event": "Health System Policies",
+						"percentage": 5,
+						"children": [
+							{
+								"event": "Public Info Campaigns",
+								"percentage": 30
+							},
+							{
+								"event": "Testing Policy",
+								"percentage": 20
+							},
+							{
+								"event": "Contract Tracing",
+								"percentage": 0
+							},
+							{
+								"event": "Emergency Investment",
+								"percentage": 20
+							},
+							{
+								"event": "Vaccine Investment",
+								"percentage": 30
+							}
+						]
+					},
+					{					
+						"event": "Misc Policies",
+						"percentage": 5
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 13367, 
+		"source": "Breitbart",
+		"time": "2020-02-02T00:14:08",
+		"headline": "Thailand Prosecutes Two People for 'Disinformation' About Coronavirus",
+		"url": "https://www.breitbart.com/national-security/2020/01/31/thailand-prosecutes-two-people-sharing-disinformation-about-coronavirus/?",
+		"tags": [
+			{
+				"event": "root",
+				"children": [
+					{
+						"event": "Containment and Closure Policies",
+						"percentage": 10,
+						"children": [
+							{
+								"event": "School Closing",
+								"percentage": 90
+							},
+							{
+								"event": "Workplace Closing",
+								"percentage": 10
+							},
+							{
+								"event": "Cancel Public Events",
+								"percentage": 5
+							},
+							{
+								"event": "Restrictions on Gatherings",
+								"percentage": 5
+							},
+							{
+								"event": "Close Public Transport",
+								"percentage": 0
+							},
+							{
+								"event": "Stay at Home Requirements",
+								"percentage": 0
+							}
+						]
+					},
+					{					
+						"event": "Economic Policies",
+						"percentage": 5,
+						"children": [
+							{
+								"event": "Income Support",
+								"percentage": 40
+							},
+							{
+								"event": "Debt/Contract Relief",
+								"percentage": 10
+							},
+							{
+								"event": "Fiscal Measures",
+								"percentage": 30
+							},
+							{
+								"event": "International Suport",
+								"percentage": 20
+							}
+						]
+					},
+					{					
+						"event": "Health System Policies",
+						"percentage": 80,
+						"children": [
+							{
+								"event": "Public Info Campaigns",
+								"percentage": 30
+							},
+							{
+								"event": "Testing Policy",
+								"percentage": 20
+							},
+							{
+								"event": "Contract Tracing",
+								"percentage": 0
+							},
+							{
+								"event": "Emergency Investment",
+								"percentage": 20
+							},
+							{
+								"event": "Vaccine Investment",
+								"percentage": 30
+							}
+						]
+					},
+					{					
+						"event": "Misc Policies",
+						"percentage": 5
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 13369, 
+		"source": "Breitbart",
+		"time": "2020-02-02T00:16:08",
+		"headline": "Thailand Prosecutes Two People for 'Disinformation' About Coronavirus",
+		"url": "https://www.breitbart.com/national-security/2020/01/31/thailand-prosecutes-two-people-sharing-disinformation-about-coronavirus/?",
+		"tags": [
+			{
+				"event": "root",
+				"children": [
+					{
+						"event": "Containment and Closure Policies",
+						"percentage": 10,
+						"children": [
+							{
+								"event": "School Closing",
+								"percentage": 90
+							},
+							{
+								"event": "Workplace Closing",
+								"percentage": 10
+							},
+							{
+								"event": "Cancel Public Events",
+								"percentage": 5
+							},
+							{
+								"event": "Restrictions on Gatherings",
+								"percentage": 5
+							},
+							{
+								"event": "Close Public Transport",
+								"percentage": 0
+							},
+							{
+								"event": "Stay at Home Requirements",
+								"percentage": 0
+							}
+						]
+					},
+					{					
+						"event": "Economic Policies",
+						"percentage": 5,
+						"children": [
+							{
+								"event": "Income Support",
+								"percentage": 40
+							},
+							{
+								"event": "Debt/Contract Relief",
+								"percentage": 10
+							},
+							{
+								"event": "Fiscal Measures",
+								"percentage": 30
+							},
+							{
+								"event": "International Suport",
+								"percentage": 20
+							}
+						]
+					},
+					{					
+						"event": "Health System Policies",
+						"percentage": 5,
+						"children": [
+							{
+								"event": "Public Info Campaigns",
+								"percentage": 30
+							},
+							{
+								"event": "Testing Policy",
+								"percentage": 20
+							},
+							{
+								"event": "Contract Tracing",
+								"percentage": 0
+							},
+							{
+								"event": "Emergency Investment",
+								"percentage": 20
+							},
+							{
+								"event": "Vaccine Investment",
+								"percentage": 30
+							}
+						]
+					},
+					{					
+						"event": "Misc Policies",
+						"percentage": 80
+					}
+				]
+			}
+		]
+	}
+]
