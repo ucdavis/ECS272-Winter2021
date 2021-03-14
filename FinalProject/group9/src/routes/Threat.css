@@ -37,13 +37,6 @@
   }
 }
 
-#manual{
-  text-align: left;
-  margin-left: 120pt;
-  margin-right: 120pt;
-  margin-bottom: 15pt;
-}
-
 #vis {
   width: 2000;
   height: 3000;
@@ -76,4 +69,11 @@ h2{
 
 p{
   font-family: sans-serif;
+}
+
+#manual{
+  text-align: left;
+  margin-left: 120pt;
+  margin-right: 120pt;
+  margin-bottom: 15pt;
 }
