@@ -13,7 +13,8 @@ class ImageSKY extends React.Component{
       name = "United States";
     }
     let origin_data = demodata.data;
-    let data = origin_data.filter(data=>data.name);
+    let data = origin_data.filter(data=>(data.name==name));
+    console.log(data[0]);
     for(let i=0; i< data.length;i++){
       data[i].real_date = String(new Date(data[i].date));
       let sum = data[i].new_cases+data[i].new_deaths+data[i].daily_vaccinated;
@@ -395,7 +396,7 @@ class ImageSKY extends React.Component{
                   <h6>Zero confirm, zero vaccination, zero death:</h6>
                   <div className="zero_proportion"></div>
                 </div>
-                <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[0].iso}>Next</a>
+                <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[this.state.at].iso}>Next</a>
             </div>
 
           </div>
@@ -439,7 +440,7 @@ class ImageSKY extends React.Component{
                       <h6>Zero confirm, zero vaccination, zero death:</h6>
                       <div className="zero_proportion"></div>
                     </div>
-                    <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[0].iso}>Next</a>
+                    <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[this.state.at].iso}>Next</a>
                 </div>
 
               </div>
