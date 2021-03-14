@@ -104,11 +104,12 @@ export const ParCoord = (props: {
         tooltip
           .html(translateFactor[d])
           .style("top", d3.pointer(event, svg)[1] - 27 + "px")
-          .style("left", d3.pointer(event, svg)[0] -80 + "px")
-          .raise();
+          .style("left", d3.pointer(event, svg)[0] - 80 + "px")
+          .raise()
+          .style("display", "block");
       })
       .on("mouseout", (event, d) => {
-        tooltip?.html(null).lower();
+        tooltip?.html(null).lower().style("display", "none");
       });
 
     g.selectAll("myPath")

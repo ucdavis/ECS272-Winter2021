@@ -27,7 +27,7 @@ export const Overview = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-      <div style={{ width: "70%", paddingTop: "10px" }}>
+      <div style={{ width: "71%", paddingTop: "10px" }}>
         <Title style={{ textAlign: "center" }} level={5}>
           Global Pandemic Overview
         </Title>
@@ -39,7 +39,7 @@ export const Overview = () => {
           />
         </div>
       </div>
-      <div style={{ width: "30%", padding: "10px" }}>
+      <div style={{ width: "29%", padding: "15px" }}>
         {!detailData || detailData.length == 0 ? (
           "Please select a country to view details"
         ) : (

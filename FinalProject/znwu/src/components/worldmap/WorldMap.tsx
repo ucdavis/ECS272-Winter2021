@@ -481,10 +481,11 @@ const WorldMap = (props: {
           )
           .style("top", d3.pointer(event, svg)[1] + "px")
           .style("left", d3.pointer(event, svg)[0] + 10 + "px")
-          .raise();
+          .raise()
+          .style("display", "block");
       })
       .on("mouseout", function () {
-        tooltip?.html(null).lower();
+        tooltip?.html(null).lower().style("display", "none");
       });
   }, [props.data, gBub]);
 
