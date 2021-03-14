@@ -4,7 +4,6 @@ import data2 from './datasets/country_vaccinations.csv';
 import data3 from './datasets/countries_codes_and_coordinates.csv';
 export var pack = {};
 
-var fs = require('browserify-fs');
 export function getData_for_country(dpack, iso) {
 
     var outp = dpack.filter(function (data) {
@@ -23,14 +22,18 @@ export async function getData( _callback) {
         d3.csv(data3)
     ]).then(([csv1, csv2, csvgeo]) => {
 
+        function getnum(x) {
+            var t = Number(x)
+            return (t<=0 || t===null) ? 0 : t
+        }
         var data = csv1.map(row => {
             return {
                 iso: row['iso_code'],
                 date: Date.parse(row['date']),
-                total_cases: Number(row['total_cases']),
+                total_case: Number(row['total_cases']),
                 total_deaths: Number(row['total_deaths']),
-                new_cases: Number(row['new_cases']),
-                new_deaths: Number(row['new_deaths']),
+                new_cases: getnum(Number(row['new_cases'])),
+                new_deaths: getnum(Number(row['new_deaths'])),
                 population: Number(row['population'])
 
             }
@@ -57,7 +60,7 @@ export async function getData( _callback) {
                 return rc.iso === rv.iso && rc.date === rv.date;
             });
 
-            rv.total_cases = (result[0] !== undefined) ? result[0].total_cases : null;
+            rv.total_case = (result[0] !== undefined) ? result[0].total_case : null;
             rv.total_deaths = (result[0] !== undefined) ? result[0].total_deaths : null;
             rv.new_cases = (result[0] !== undefined) ? result[0].new_cases : null;
             rv.new_deaths = (result[0] !== undefined) ? result[0].new_deaths : null;
@@ -78,7 +81,21 @@ export async function getData( _callback) {
                     return (el.gname != "Unknown");
                 });
          */
+        var holderC = {};
+        var holderD = {};
 
+        data.forEach(function (d) {
+            if (holderC.hasOwnProperty(d.iso)) {
+                holderC[d.iso] = holderC[d.iso] + d.new_cases;
+            } else {
+                holderC[d.iso] = d.new_cases;
+            }
+            if (holderD.hasOwnProperty(d.gname)) {
+                holderD[d.iso] = holderD[d.iso] + d.new_deaths;
+            } else {
+                holderD[d.iso] = d.new_deaths;
+            }
+        });
 
         var filteredC = [];
 
@@ -87,8 +104,8 @@ export async function getData( _callback) {
                 name: d.name,
                 iso: d.iso,
                 population:(data.find(x => x.iso === d.iso) !== undefined) ? data.find(x => x.iso === d.iso).population : 0,
-                total_deaths:(data.find(x => x.iso === d.iso) !== undefined) ? data.reverse().find(x => x.iso === d.iso).total_deaths : 0,
-                total_cases: (data.find(x => x.iso === d.iso) !== undefined) ? data.find(x => x.iso === d.iso).total_cases : 0,
+                total_deaths:holderD[d.iso],
+                total_case: holderC[d.iso],
                 total_vac: (data2.find(x => x.iso === d.iso) !== undefined) ? data2.reverse().find(x => x.iso === d.iso).total_vaccinated : 0,
                 lat: d.lat,
                 lng: d.lng
@@ -97,7 +114,7 @@ export async function getData( _callback) {
         data.reverse()
         data2.reverse()
         filteredC = filteredC.filter(function (rc) {
-            return rc.total_cases !== undefined && rc.population !== 0;
+            return rc.total_case !== undefined && rc.population !== 0;
         });
         //console.log(filteredC)
         filteredC.forEach(function (d) {
@@ -141,15 +158,7 @@ export async function getData( _callback) {
         data.sort((a, b) => a.date - b.date || a.iso - b.iso)
         pack = {data: data, CList: filteredC}
         console.log(pack);
-        let out = JSON.stringify(pack);
 
-        fs.writeFile("./datao.json", out, (err) => {
-            if (err) {
-                console.error(err);
-                return;
-            };
-            console.log("File has been created");
-        });
         _callback();
     })
 

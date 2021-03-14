@@ -41,7 +41,7 @@ class BarChart2 extends Component {
                 .range([0, width]);
 
             var y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.total_cases)])
+                .domain([0, d3.max(data, d => d.total_case)])
                 .range([height, 0]);
 
             var tooltip = document.getElementById('tooltip')
@@ -57,7 +57,7 @@ class BarChart2 extends Component {
                     return x(d.date)
                 })
                 .attr("cy", function (d) {
-                    return y(d.total_cases)
+                    return y(d.total_case)
                 })
                 .attr("r", 8)
                 .attr("fill", "orange")
@@ -80,6 +80,7 @@ class BarChart2 extends Component {
 
             var scatterPlot3 = view.append("g")
                 .selectAll("dot")
+
                 .data(data)
                 .enter()
                 .append("circle")
@@ -183,7 +184,7 @@ class BarChart2 extends Component {
                         return x(d.date)
                     })
                     .y(function (d) {
-                        return y(d.total_cases)
+                        return y(d.total_case)
                     })
                 )
             var l3 = view.append("path")
