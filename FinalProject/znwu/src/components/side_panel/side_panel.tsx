@@ -1,13 +1,13 @@
 import { Button, Dropdown, Menu, Select } from "antd";
 import * as d3 from "d3";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { attackTypeCode, DataEntry } from "../../data";
+import { DataEntry } from "../../data";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { DonutChart } from "../donut_chart/donut_chart";
 import { groupBy } from "../../utils/groupBy";
 import "./side_panel.scss";
-import { ParaCoord } from "../paracoord/paracoord";
 import { Typography, Space } from "antd";
+import { ParCoord } from "../par_coord/par_coord";
 
 const { Text, Link } = Typography;
 const { Option } = Select;
@@ -51,51 +51,65 @@ export const generalVictimType = (key: string) => {
   return "Other";
 };
 
-export const victimTypeColor = d3
+export const foodTypeColor = d3
   .scaleOrdinal()
-  .domain(["Goverment", "Civillian", "Military", "Terrorist", "Other"])
+  .domain([
+    "Alcohol",
+    "Animal",
+    "Vegetables",
+    "Fruits",
+    "Nuts",
+    "FishSeafood",
+    "Cereals",
+    "Milk",
+    "StarchyRoots",
+    "Sugar",
+    "Eggs",
+    "Oil",
+    "Others",
+  ])
   .range(d3.schemeDark2);
 
 export const SidePanel = (props: {
   data: DataEntry[];
-  selectedEvents: { [id: number]: boolean };
 }) => {
-  const [category, setCategory] = useState<Category>("victim");
+  // const [category, setCategory] = useState<Category>("victim");
 
-  const [measure, setMeasure] = useState<Measure>("casualties");
+  // const [measure, setMeasure] = useState<Measure>("casualties");
 
-  const data = useMemo(() => {
-    const isSelected = Object.values(props.selectedEvents).indexOf(true) != -1;
-    if (isSelected) {
-      return props.data.filter((entry) => props.selectedEvents[entry.eventid]);
-    } else return props.data;
-  }, [props.data, props.selectedEvents]);
+  // const data = props.data;
 
   const chartData = useMemo(() => {
-    let groupedData: { [key: string]: DataEntry[] } = {};
-    if (category === "attack") {
-      groupedData = groupBy(
-        data,
-        "attacktype1",
-        (key) => attackTypeCode[key] ?? "Unknown"
-      );
-    } else {
-      groupedData = groupBy(data, "targtype1", generalVictimType);
-    }
-
-    if (measure === "cases") {
-      return Object.fromEntries(
-        Object.entries(groupedData).map((entry) => [entry[0], entry[1].length])
-      );
-    } else {
-      return Object.fromEntries(
-        Object.entries(groupedData).map((entry) => [
-          entry[0],
-          entry[1].reduce((acc, ev) => acc + ev.nkill + ev.nwound, 0),
-        ])
-      );
-    }
-  }, [data, category, measure]);
+    const data = props.data[0];
+    return {
+      Alcohol: data.Alcohol,
+      Animal: data.Animal,
+      Vegetables: data.Vegetables,
+      Fruits: data.Fruits,
+      Nuts: data.Nuts,
+      FishSeafood: data.FishSeafood,
+      Cereals: data.Cereals,
+      Milk: data.Milk,
+      StarchyRoots: data.StarchyRoots,
+      Sugar: data.Sugar,
+      Eggs: data.Eggs,
+      Oil: data.Oil,
+      Others:
+        1 -
+        data.Alcohol -
+        data.Animal -
+        data.Vegetables -
+        data.Fruits -
+        data.Nuts -
+        data.FishSeafood -
+        data.Cereals -
+        data.Milk -
+        data.StarchyRoots -
+        data.Sugar -
+        data.Eggs -
+        data.Oil,
+    };
+  }, [props.data]);
 
   return (
     <div>
@@ -110,7 +124,7 @@ export const SidePanel = (props: {
           justifyContent: "center",
         }}
       >
-        <table style={{ marginTop: "20px" }}>
+        {/* <table style={{ marginTop: "20px" }}>
           <tr>
             <td>Category: </td>
             <td>
@@ -139,13 +153,13 @@ export const SidePanel = (props: {
               </Select>
             </td>
           </tr>
-        </table>
+        </table> */}
         <div style={{ flexGrow: 1 }}>
           <DonutChart data={chartData}></DonutChart>
         </div>
       </div>
       <Text className="subtitle">Case Composition</Text>
-      <ParaCoord data={data} selectedEvents={props.selectedEvents} />
+      <ParCoord data={props.data} />
     </div>
   );
 };

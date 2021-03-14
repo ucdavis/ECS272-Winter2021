@@ -7,14 +7,11 @@ import { GeometryCollection, Objects, Topology } from "topojson-specification";
 import { GeoJsonProperties } from "geojson";
 import { DataEntry } from "../../data";
 import React from "react";
-import { generalVictimType, victimTypeColor } from "../side_panel/side_panel";
-import { showEvent } from "../../utils/showevent";
+import { generalVictimType, foodTypeColor } from "../side_panel/side_panel";
 
 let world: Topology = require("../../datasets/countries-110m.json");
 
 type Country = GeometryCollection<GeoJsonProperties>;
-
-let allCountries = world.objects.countries as Country;
 
 type TimeSpan = {
   start: Date;
@@ -22,37 +19,33 @@ type TimeSpan = {
 };
 
 const WorldMap = (props: {
-  limit: number;
-  data: { [country: string]: DataEntry[] };
-  onSelectCountry: (country?: string) => void;
-  onSelectEvent?: (eventId: number, select: boolean) => void;
-  type: "country" | "region";
+  // limit: number;
+  data: DataEntry[];
+  onSelectionChanged: (countries: string[]) => void;
+  type: "map" | string;
 }) => {
   const ref = useRef(null);
   let width = 938;
   let height = 500;
-  let country = useRef<string | undefined>(undefined);
+  let countries = useRef<string[]>([]);
 
-  const [xyz, setXyz] = useState<number[]>([width / 2, height / 1.5, 1]);
+  const xyz = [width / 2, height / 1.5, 1];
 
   useEffect(() => {
-    const data = topojson.feature(
+    console.log("drawing")
+    const countryData = topojson.feature(
       world,
       world.objects.countries as GeometryCollection<GeoJsonProperties>
     ).features;
 
-    for (const countryName in props.data) {
-      let match = data.find(
-        (geoCountry) => geoCountry.properties!.name === countryName
+    for (const country of props.data) {
+      let match = countryData.find(
+        (geoCountry) => geoCountry.properties!.name === country.Country
       );
       if (!match) {
-        // console.log(countryName);
+        console.log(country.Country);
       } else {
-        match.properties!.events = props.data[countryName];
-        match.properties!.ncasualties = props.data[countryName].reduce(
-          (value, entry) => value + entry.nkill + entry.nwound,
-          0
-        );
+        match.properties!.stat = country;
       }
     }
 
@@ -69,7 +62,7 @@ const WorldMap = (props: {
     // }) as [number, number];
     // domain[0] = 0;
     // domain[1] = Math.max(domain[1] ?? 0, props.limit);
-    const domain = [0, props.limit];
+    const domain = [0, 10];
 
     var color = d3
       .scaleLinear()
@@ -102,32 +95,33 @@ const WorldMap = (props: {
     g.append("g")
       .attr("id", "countries")
       .selectAll("path")
-      .data(data)
+      .data(countryData)
       .enter()
       .append("path")
       .attr("id", (d) => d.properties!.name)
       .attr("d", path as any)
       .attr("fill", (d) => {
-        if (d.properties!.events && d.properties!.events.length) {
-          return color(d.properties!.ncasualties);
+        let stat = d.properties!.stat as DataEntry | undefined;
+        if (stat) {
+          return color(stat.Confirmed);
         }
         return null;
       })
       .on("click", country_clicked as any)
-      .on("mousemove", function (event, d) {
-        tooltip
-          .html(
-            d.properties!.name +
-              " casualties: <br/>" +
-              (d.properties!.ncasualties ?? 0)
-          )
-          .style("top", d3.pointer(event, svg)[1] + "px")
-          .style("left", d3.pointer(event, svg)[0] + 10 + "px")
-          .raise();
-      })
-      .on("mouseout", function () {
-        tooltip.html(null).lower();
-      });
+      // .on("mousemove", function (event, d) {
+      //   tooltip
+      //     .html(
+      //       d.properties!.name +
+      //         " casualties: <br/>" +
+      //         (d.properties!.ncasualties ?? 0)
+      //     )
+      //     .style("top", d3.pointer(event, svg)[1] + "px")
+      //     .style("left", d3.pointer(event, svg)[0] + 10 + "px")
+      //     .raise();
+      // })
+      // .on("mouseout", function () {
+      //   tooltip.html(null).lower();
+      // });
     const ge = g.append("g").attr("id", "events");
 
     if (xyz) {
@@ -144,12 +138,11 @@ const WorldMap = (props: {
           ")"
       );
     }
-    if (country.current) {
-      g.select("[id='" + country.current + "']")
+    for (const country of countries.current) {
+      g.select("[id='" + country + "']")
         .raise()
         .attr("class", "active");
       // console.log(country.current);
-      showEvents(xyz);
     }
 
     const pl = 50;
@@ -219,29 +212,20 @@ const WorldMap = (props: {
 
     function country_clicked(event: any, d: Country) {
       let xyz = [width / 2, height / 1.5, 1];
-      if (country.current) {
-        g.selectAll("[id='" + country.current + "']").classed("active", false);
-        ge.selectAll("circle").remove();
-      }
       let newCountry = (d?.properties as any)?.name;
-      // console.log(newCountry);
-      if (newCountry && country.current !== newCountry) {
-        xyz = get_xyz(d);
-        country.current = newCountry;
-        // g.selectAll("#" + country)
+      if (countries.current.indexOf(newCountry) !== -1) {
+        g.selectAll("[id='" + newCountry + "']").classed("active", false);
+        countries.current = countries.current.filter(
+          (country) => country != newCountry
+        );
+        props.onSelectionChanged(countries.current);
       } else {
-        country.current = undefined;
+        g.selectAll("[id='" + newCountry + "']")
+          .attr("class", "active")
+          .raise();
+        countries.current = [...countries.current, newCountry];
+        props.onSelectionChanged(countries.current);
       }
-      setXyz(xyz);
-      props.onSelectCountry(country.current);
-      if (country.current) {
-        g.selectAll("[id='" + country.current + "']")
-        .attr("class", "active")
-        .raise();
-        
-        showEvents(xyz);
-      }
-      zoom(xyz);
     }
 
     function get_xyz(d: Country | undefined) {
@@ -254,80 +238,11 @@ const WorldMap = (props: {
       return [x, y, z];
     }
 
-    function zoom(xyz: number[]) {
-      g.transition()
-        .duration(750)
-        .attr(
-          "transform",
-          "translate(" +
-            projection.translate() +
-            ")scale(" +
-            xyz[2] +
-            ")translate(-" +
-            xyz[0] +
-            ",-" +
-            xyz[1] +
-            ")"
-        )
-        .selectAll("#countries")
-        .style("stroke-width", 1.0 / xyz[2] + "px")
-        .selectAll(".city")
-        .attr("d", path.pointRadius(20.0 / xyz[2]) as any);
-    }
-
-    function showEvents(xyz: number[]) {
-      let countryEvents = (data.find(
-        (feature) => feature.properties!.name == country.current
-      )?.properties?.events ?? []) as DataEntry[];
-
-      ge.selectAll("circle")
-        .data(countryEvents)
-        // .enter()
-        .join("circle")
-        .sort((a: any, b: any) => -a.nkill - a.nwound + b.nkill + b.nwound)
-        .attr("id", (d) => d.eventid)
-        .attr("cx", (d) => (projection([d.longitude, d.latitude]) ?? [0])[0])
-        .attr("cy", (d) => (projection([d.longitude, d.latitude]) ?? [0, 0])[1])
-        .attr("r", (d) => {
-          return (Math.sqrt(Math.max(1, Math.min(d.nkill + d.nwound, 100))) * 5  ) /
-            xyz![2];
-        })
-        .style(
-          "fill",
-          (d) => victimTypeColor(generalVictimType(d.targtype1 as any)) as any
-        )
-        .style("stroke-width", (0.1 / xyz![2]) * 10 + "px")
-        .on("mouseover", function (event, d) {
-          tooltip
-            .html("Attack Information: \n" + showEvent(d))
-            .style("top", d3.pointer(event, svg)[1] - 100 + "px")
-            .style("left", d3.pointer(event, svg)[0] + 10 + "px")
-            .raise();
-          ge.selectAll("[id='" + d.eventid + "']").classed("active", true);
-        })
-        .on("mouseout", function (event, d) {
-          tooltip.html(null).lower();
-          ge.selectAll("[id='" + d.eventid + "']").classed("active", false);
-
-          // ge.selectAll("circle").sort(
-          //   (a: any, b: any) => -a.nkill - a.nwound + b.nkill + b.nwound
-          // );
-        })
-        .on("click", (event, d) => {
-          const elem = ge.selectAll("[id='" + d.eventid + "']");
-          const selected = elem.classed("selected");
-          elem.classed("selected", !selected);
-
-          if (props.onSelectEvent) {
-            props.onSelectEvent(d.eventid, !selected);
-          }
-        });
-    }
     return function cleanup() {
       svg.remove();
       tooltip.remove();
     };
-  }, [props.data, props.limit]);
+  }, [props.data]);
 
   const div = useMemo(() => <div ref={ref} />, []);
 

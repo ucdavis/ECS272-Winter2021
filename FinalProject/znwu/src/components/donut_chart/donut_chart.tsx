@@ -1,7 +1,13 @@
 import * as d3 from "d3";
 import { schemeGnBu } from "d3";
 import { useEffect, useRef } from "react";
-import { victimTypeColor, victimTypes } from "../side_panel/side_panel";
+import { foodTypeColor, victimTypes } from "../side_panel/side_panel";
+
+const replacementName: any = {
+  Animal: "Meat & Animal Product",
+  FishSeafood: "Fish & Seafood",
+  StarchyRoots: "Starchy Roots",
+};
 
 export const DonutChart = (props: { data: { [key: string]: number } }) => {
   const ref = useRef(null);
@@ -33,12 +39,12 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
     if (
       Object.keys(props.data).every((key) => victimTypes.indexOf(key) !== -1)
     ) {
-      color = victimTypeColor;
+      color = foodTypeColor;
     }
 
     var pie = d3
       .pie()
-      //   .sort((a: any, b: any) => a.key.localCompare(b.key))
+      .sort((a: any, b: any) => a.key.localeCompare(b.key))
       .value(function (d) {
         return (d as any).value;
       });
@@ -96,7 +102,7 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
       .enter()
       .append("text")
       .text(function (d: any) {
-        return d.data.key + " " + d.data.value;
+        return replacementName[d.data.key] || d.data.key;
       })
       .attr("transform", function (d: any) {
         var pos = outerArc.centroid(d);
