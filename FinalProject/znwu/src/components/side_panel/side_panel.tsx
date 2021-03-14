@@ -86,7 +86,7 @@ export const SidePanel = (props: {
         // margin: "0 auto",
         display: "flex",
         flexDirection: "column",
-        height: '100%',
+        height: "100%",
         // flexFlow: "row",
         width: "100%",
         // justifyContent: "center",
@@ -144,6 +144,7 @@ export const SidePanel = (props: {
                       style={{
                         height: "20px",
                         width: "20px",
+                        marginRight: "10px",
                         backgroundColor: countryColor(datum.Country) as string,
                       }}
                     />
@@ -155,7 +156,7 @@ export const SidePanel = (props: {
           </div>
         )}
       </div>
-      <div style={{ height: "50%", marginTop: 'auto' }}>
+      <div style={{ height: "50%", marginTop: "auto" }}>
         <Text className="subtitle">Details</Text>
         <ParCoord
           data={props.data}

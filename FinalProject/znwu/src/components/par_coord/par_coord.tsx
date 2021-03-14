@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 import { DataEntry } from "../../data";
 import { icons } from "../../icons/icons";
+import { translateFactor } from "../../utils/translate_factor";
 
 export const ParCoord = (props: {
   data: DataEntry[];
@@ -35,7 +36,6 @@ export const ParCoord = (props: {
 
   useEffect(() => {
     const y: any = {};
-    console.log(props.data);
     for (let i in dimensions) {
       const name = dimensions[i];
       const extent = d3.extent(props.data, function (d) {
@@ -64,6 +64,10 @@ export const ParCoord = (props: {
         }) as [number, number][]
       );
     }
+    const tooltip = d3
+      .select(ref.current)
+      .append("div")
+      .attr("class", "tooltip");
 
     const ga = g
       .selectAll("myAxis")
@@ -77,9 +81,12 @@ export const ParCoord = (props: {
 
     ga.append("rect")
       .attr("width", (d) => 30)
-      .attr("transform", "translate(-20, -30)")
-      .attr("height", height + 50)
-      .attr("fill", (d) => (d === props.factor ? "blue" : "none"))
+      .attr("transform", "translate(-22, -30)")
+      .attr("height", height + 38)
+      .attr("stroke", (d) => "blue")
+      .attr("stroke-width", "2px")
+      .attr("rx", 5)
+      .attr("opacity", (d) => (d === props.factor ? 1 : 0))
       .attr("id", (d) => d);
 
     ga.each(function (d) {
@@ -90,9 +97,19 @@ export const ParCoord = (props: {
       .attr("height", 30)
       .attr("width", 30)
       .attr("transform", function (d: any) {
-        return "translate(-15, -30)";
+        return "translate(-20, -30)";
       })
-      .on("click", factor_clicked);
+      .on("click", factor_clicked)
+      .on("mouseover", (event, d) => {
+        tooltip
+          .html(translateFactor[d])
+          .style("top", d3.pointer(event, svg)[1] - 27 + "px")
+          .style("left", d3.pointer(event, svg)[0] -80 + "px")
+          .raise();
+      })
+      .on("mouseout", (event, d) => {
+        tooltip?.html(null).lower();
+      });
 
     g.selectAll("myPath")
       .data(props.data)
@@ -108,17 +125,27 @@ export const ParCoord = (props: {
       const factor = props.factor;
       console.log("clicked " + d + " with " + factor);
       if (factor !== d) {
-        d3.select("#" + factor).attr("fill", null);
-        d3.select("#" + d).attr("fill", "blue");
+        d3.select("#" + factor)
+          .transition()
+          .duration(1000)
+          .attr("opacity", 0);
+        d3.select("#" + d)
+          .transition()
+          .duration(1000)
+          .attr("opacity", 1);
         props.onFactorChanged(d);
       } else {
-        d3.select("#" + d).attr("fill", null);
+        d3.select("#" + d)
+          .transition()
+          .duration(1000)
+          .attr("opacity", 0);
         props.onFactorChanged(undefined);
       }
     }
 
     return function () {
       svg.remove();
+      tooltip.remove();
     };
   }, [props.data, props.factor]);
 

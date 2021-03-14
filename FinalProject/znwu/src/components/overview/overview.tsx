@@ -29,7 +29,7 @@ export const Overview = () => {
     <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
       <div style={{ width: "70%", paddingTop: "10px" }}>
         <Title style={{ textAlign: "center" }} level={5}>
-          Global Terrorism Map
+          Global Pandemic Overview
         </Title>
         <div style={{ margin: "auto 0" }}>
           <WorldMap

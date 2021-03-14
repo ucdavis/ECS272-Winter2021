@@ -7,13 +7,14 @@ import { GeometryCollection, Objects, Topology } from "topojson-specification";
 import { GeoJsonProperties } from "geojson";
 import { DataEntry } from "../../data";
 import React from "react";
+import { translateFactor } from "../../utils/translate_factor";
 
 let world: Topology = require("../../datasets/countries-110m.json");
 
 type Country = GeometryCollection<GeoJsonProperties>;
 
 const width = 938;
-const height = 500;
+const height = 600;
 const xyz = [width / 2, height / 1.5, 1];
 const projection = d3
   .geoMercator()
@@ -184,19 +185,40 @@ const WorldMap = (props: {
     };
   }, [svg, props.type]);
 
+  let [tooltip, setTooltip] = useState<d3.Selection<
+    HTMLDivElement,
+    any,
+    any,
+    any
+  > | null>(null);
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const tooltip = d3
+      .select(ref.current)
+      .append("div")
+      .attr("class", "tooltip");
+    setTooltip(tooltip);
+    return () => {
+      tooltip.remove();
+    };
+  }, [ref.current]);
+
   function country_clicked(event: any, d: Country) {
     if (!gMap || !svg) return;
     let xyz = [width / 2, height / 1.5, 1];
     let newCountry = (d?.properties as any)?.name;
+    console.log("clicked " + newCountry);
     if (countries.current.indexOf(newCountry) !== -1) {
-      gMap.selectAll("[id='" + newCountry + "']").classed("active", false);
+      d3.selectAll(
+        "[id='" + newCountry + "'],[id='circ" + newCountry + "']"
+      ).classed("active", false);
       countries.current = countries.current.filter(
         (country) => country != newCountry
       );
       props.onSelectionChanged(countries.current);
     } else {
-      gMap
-        .selectAll("[id='" + newCountry + "']")
+      d3.selectAll("[id='" + newCountry + "'],[id='circ" + newCountry + "']")
         .attr("class", "active")
         .raise();
       countries.current = [...countries.current, newCountry];
@@ -234,6 +256,23 @@ const WorldMap = (props: {
       })
       .attr("fill", function (d: any) {
         return continentColor[d] as any;
+      })
+      .on("mouseover", function (event, d: any) {
+        d3.selectAll(
+          continents
+            .filter((continent) => continent != d)
+            .map((continent) => "." + continent)
+            .join(",")
+        )
+          .transition()
+          .duration(1000)
+          .attr("opacity", 0);
+      })
+      .on("mouseout", function (event, d: any) {
+        d3.selectAll(continents.map((continent) => "." + continent).join(","))
+          .transition()
+          .duration(1000)
+          .attr("opacity", 1);
       });
 
     d3.selectAll("g.continent-key-element")
@@ -245,7 +284,8 @@ const WorldMap = (props: {
       .text(function (d: any) {
         return (continentNames as any)[d] || continentNames;
       })
-      .attr("fill", "white");
+      .attr("fill", "white")
+      .attr("pointer-events", "none");
 
     // The text BBox has non-zero values only after rendering
     d3.selectAll("g.continent-key-element text").attr("y", function (d) {
@@ -353,8 +393,9 @@ const WorldMap = (props: {
     }
   }, [gMap, countries.current]);
 
+  // Drawing axis
   useEffect(() => {
-    console.log([gCor, props.type])
+    console.log([gCor, props.type]);
     if (!gCor || props.type === "map") return;
     const xExtent = d3.extent(props.data, function (d) {
       return (d as any)[props.type === "map" ? "Obesity" : props.type];
@@ -371,10 +412,27 @@ const WorldMap = (props: {
       .range([height - ymargin, ymargin]);
     gCor
       .append("g")
-      .attr("transform", "translate(0," + (height-ymargin) + ")")
+      .attr("transform", "translate(0," + (height - ymargin) + ")")
       .call(d3.axisBottom(x));
-    gCor.append("g").attr("transform", "translate(" + (xmargin) + ", 0)").call(d3.axisLeft(y));
+    gCor
+      .append("g")
+      .attr("transform", "translate(" + xmargin + ", 0)")
+      .call(d3.axisLeft(y));
 
+    gCor
+      .append("text")
+      .text(translateFactor[props.type])
+      .attr("text-anchor", "middle")
+      .attr("transform", "translate(" + width / 2 + "," + (height - 10) + ")");
+
+    gCor
+      .append("text")
+      .text("Death rate (%)")
+      .attr("text-anchor", "middle")
+      .attr(
+        "transform",
+        "translate(" + 20 + "," + height / 2 + ") rotate(-90)"
+      );
   }, [gCor, props.data, props.type]);
 
   // Hide/show map
@@ -395,10 +453,11 @@ const WorldMap = (props: {
       .enter()
       .append("circle")
       .attr("id", (d) => "circ" + d.properties!.name)
+      .attr("class", (d) => d.properties!.stat.Continent)
       .attr("r", (d) => Math.sqrt(d.properties!.stat.Confirmed_abs) / 2000 + 1)
       // .attr("cx", (d) => d.properties!.geo[0])
       // .attr("cy", (d) => d.properties!.geo[1])
-      .attr("pointer-events", "none")
+      // .attr("pointer-events", "none")
       .attr("fill", (d) => {
         // let stat = d.properties!.stat as DataEntry | undefined;
         // if (stat) {
@@ -407,7 +466,26 @@ const WorldMap = (props: {
         // return null;
         return continentColor[d.properties!.stat.Continent] as any;
       })
-      .on("click", country_clicked as any);
+      .on("click", country_clicked as any)
+      .on("mousemove", function (event, d: any) {
+        if (!tooltip) return;
+        const datum = d.properties!.stat as DataEntry;
+        tooltip
+          .html(
+            datum.Country +
+              "<br/>Confirmed cases: " +
+              datum.Confirmed_abs +
+              "<br/> Death rate: " +
+              datum.DeathRate.toFixed(2) +
+              "%"
+          )
+          .style("top", d3.pointer(event, svg)[1] + "px")
+          .style("left", d3.pointer(event, svg)[0] + 10 + "px")
+          .raise();
+      })
+      .on("mouseout", function () {
+        tooltip?.html(null).lower();
+      });
   }, [props.data, gBub]);
 
   useEffect(() => {
@@ -444,47 +522,6 @@ const WorldMap = (props: {
           : y(d.properties!.stat.DeathRate)
       );
   }, [props.data, gBub, props.type]);
-
-  // useEffect(() => {
-  //   // .on("click", country_clicked);
-
-  //   var tooltip = d3.select(ref.current).append("div").attr("class", "tooltip");
-
-  //   // .on("mousemove", function (event, d) {
-  //   //   tooltip
-  //   //     .html(
-  //   //       d.properties!.name +
-  //   //         " casualties: <br/>" +
-  //   //         (d.properties!.ncasualties ?? 0)
-  //   //     )
-  //   //     .style("top", d3.pointer(event, svg)[1] + "px")
-  //   //     .style("left", d3.pointer(event, svg)[0] + 10 + "px")
-  //   //     .raise();
-  //   // })
-  //   // .on("mouseout", function () {
-  //   //   tooltip.html(null).lower();
-  //   // });
-
-  //   // if (xyz) {
-  //   //   g.attr(
-  //   //     "transform",
-  //   //     "translate(" +
-  //   //       projection.translate() +
-  //   //       ")scale(" +
-  //   //       xyz[2] +
-  //   //       ")translate(-" +
-  //   //       xyz[0] +
-  //   //       ",-" +
-  //   //       xyz[1] +
-  //   //       ")"
-  //   //   );
-  //   // }
-
-  //   return function cleanup() {
-  //     svg.remove();
-  //     tooltip.remove();
-  //   };
-  // }, [props.data]);
 
   return div;
 };

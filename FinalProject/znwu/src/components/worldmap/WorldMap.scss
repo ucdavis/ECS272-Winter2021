@@ -36,17 +36,13 @@ body {
 }
 
 
-#events {
-  stroke: white;
-  // stroke-width: 0.2px;
-}
+// circle {
+//   stroke: white;
+//   // stroke-width: 0.2px;
+// }
 
-#events .active {
+circle.active {
   stroke: navy;
   // stroke-width: 0.2px;
 }
 
-#events .selected {
-  stroke: navy;
-  // stroke-width: 0.2px;
-}
