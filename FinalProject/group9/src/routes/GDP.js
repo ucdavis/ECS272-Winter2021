@@ -30,6 +30,11 @@ class GDP extends React.Component {
           <div id="tooltip2"></div>
         </div>
         <div id="box"></div>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
         <GDP_chart data={this.state.data} width={this.state.width} height={this.state.height} />
       </div>
     );

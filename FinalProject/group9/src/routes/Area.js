@@ -16,6 +16,8 @@ class App extends React.Component{
     return (
       <div className="App">
         <h2>Global dispute continues to rise</h2>
+        <br></br>
+        <br></br>
         <div id="manual">
           <p id="areachart_label">The cumulative area chart shows the increasing number of global disputes over time. </p>
         </div>
@@ -48,6 +50,14 @@ class App extends React.Component{
 
         </div>
     </div>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
         <AreaChart data={this.state.data} width={this.state.width} height={this.state.height} />
       </div>
 
