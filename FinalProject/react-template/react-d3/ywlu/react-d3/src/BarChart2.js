@@ -116,27 +116,39 @@ class BarChart2 extends Component {
                 var extent = event.selection
                 var t1 = 0;
                 var t2 = 0;
-
+                var t3 = 0;
+                var t4 = 0;
 
                 if (brush.empty()) {
                     t1 = 0;
                     t2 = 0;
+                    t3 = 0;
+                    t4 = 0;
                     tooltip.innerHTML = ('brush dots to show accumulative data');
                 } else {
 
                     data.forEach(function (d) {
                         if (isBrushed(extent, x(d.date), y(d.total_deaths)))
                             t1 += d.total_deaths;
-                        if (isBrushed(extent, x(d.date), y(d.total_cases)))
-                            t2 += d.total_cases;
+                        if (isBrushed(extent, x(d.date), y(d.total_case)))
+                            t2 += d.total_case;
+                        if (isBrushed(extent, x(d.date), y(d.daily_vaccinated)))
+                            t3 += d.daily_vaccinated;
                     });
-                    tooltip.innerHTML = ("In the selected region, the number of killed victim is " + t1 + ", the number of wounded victim is " + t2 + "<br />The ratio is " + (t1 / t2).toFixed(2) + " to 1");
+                    tooltip.innerHTML = ("In the selected dots, the number of confirmed case is " + t1 + ", the number of dead cases is " + t2 + "<br />The ratio is " + (t1 / t2).toFixed(2) + " to 1" +"<br />" +
+                        "newely vaccinated " + t3 + " people");
                     //console.log(t)
                     scatterPlot.classed("selected", function (d) {
                         return isBrushed(extent, x(d.date), y(d.total_deaths))
                     })
                     scatterPlot2.classed("selected", function (d) {
-                        return isBrushed(extent, x(d.date), y(d.total_cases))
+                        return isBrushed(extent, x(d.date), y(d.total_case))
+                    })
+                    scatterPlot3.classed("selected", function (d) {
+                        return isBrushed(extent, x(d.date), y(d.total_case))
+                    })
+                    scatterPlot4.classed("selected", function (d) {
+                        return isBrushed(extent, x(d.date), y(d.total_case))
                     })
                 }
 

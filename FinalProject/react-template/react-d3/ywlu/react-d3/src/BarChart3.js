@@ -56,7 +56,7 @@ class BarChart3 extends Component {
 
 
             var tooltip2 = document.getElementById('tooltip2')
-            var tooltip3 = document.getElementById('tooltip3')
+
 
             update();
 
@@ -64,7 +64,7 @@ class BarChart3 extends Component {
             function update() {
                 console.log('good')
                 tooltip2.innerHTML = ('Hover over histogram to show accurate data');
-                tooltip3.innerHTML = ('Select histograms to show accumulative data');
+
                 var kn = 0;
                 var wn = 0;
                 view.selectAll("rect").remove()
@@ -123,7 +123,7 @@ class BarChart3 extends Component {
                             .transition()
                             .duration(500)
                             .style('fill', 'black')
-                        tooltip2.innerHTML = ('In total, by terro-group ' + d.name + ',  ' + d.total_case + ' victims are killed');
+                        tooltip2.innerHTML = ('In ' + d.name + ',  ' + d.total_case + ' cases are confirmed');
                     })
                     .on("mouseout", function (d) {
                         d3.select(this)
@@ -164,7 +164,7 @@ class BarChart3 extends Component {
                             .transition()
                             .duration(500)
                             .style('fill', 'black')
-                        tooltip2.innerHTML = ('In total, by terro-group ' + d.name + ', ' + d.total_vac + ' victims are wounded');
+                        tooltip2.innerHTML = ('In ' + d.name + ', ' + d.total_vac + ' people are vaccinated');
                     })
                     .on("mouseout", function (d) {
                         d3.select(this)
