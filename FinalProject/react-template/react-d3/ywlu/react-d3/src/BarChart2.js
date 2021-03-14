@@ -78,6 +78,36 @@ class BarChart2 extends Component {
                 .attr("fill", "red")
                 .attr('opacity', 0.8)
 
+            var scatterPlot3 = view.append("g")
+                .selectAll("dot")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d) {
+                    return x(d.date)
+                })
+                .attr("cy", function (d) {
+                    return y(d.people_vaccinated)
+                })
+                .attr("r", 8)
+                .attr("fill", "blue")
+                .attr('opacity', 0.8)
+
+            var scatterPlot3 = view.append("g")
+                .selectAll("dot")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d) {
+                    return x(d.date)
+                })
+                .attr("cy", function (d) {
+                    return y(d.people_fully_vaccinated)
+                })
+                .attr("r", 8)
+                .attr("fill", "green")
+                .attr('opacity', 0.8)
+
 
             // Function that is triggered when brushing is performed
             function updateChart(event) {
@@ -154,6 +184,38 @@ class BarChart2 extends Component {
                     })
                     .y(function (d) {
                         return y(d.total_cases)
+                    })
+                )
+            var l2 = view.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "gray")
+                .attr("stroke-width", 2)
+                .attr("stroke-dasharray", "5,3")
+                .attr("stroke-linecap", "round")
+                .attr('opacity', 0.8)
+                .attr("d", d3.line()
+                    .x(function (d) {
+                        return x(d.date)
+                    })
+                    .y(function (d) {
+                        return y(d.people_vaccinated)
+                    })
+                )
+            var l2 = view.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "gray")
+                .attr("stroke-width", 2)
+                .attr("stroke-dasharray", "5,3")
+                .attr("stroke-linecap", "round")
+                .attr('opacity', 0.8)
+                .attr("d", d3.line()
+                    .x(function (d) {
+                        return x(d.date)
+                    })
+                    .y(function (d) {
+                        return y(d.people_fully_vaccinated)
                     })
                 )
             // x axis

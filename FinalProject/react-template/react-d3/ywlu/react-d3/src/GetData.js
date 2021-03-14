@@ -51,6 +51,7 @@ export async function getData(_callback) {
             var result = datag.filter(function (rc) {
                 return rc.iso === rv.iso;
             });
+            rv.name = (result[0] !== undefined) ? result[0].name : null;
             rv.long = (result[0] !== undefined) ? result[0].long : null;
             rv.lat = (result[0] !== undefined) ? result[0].lat : null;
         });
@@ -85,6 +86,7 @@ export async function getData(_callback) {
 
         datag.forEach(function (d) {
             filteredC.push({
+                name: d.name,
                 iso: d.iso,
                 total_case: holderC[d.iso],
                 total_vac: holderV[d.iso],
