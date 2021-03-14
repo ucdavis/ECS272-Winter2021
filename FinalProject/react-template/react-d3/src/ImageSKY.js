@@ -16,10 +16,10 @@ class ImageSKY extends React.Component{
     let data = origin_data.filter(data=>data.name);
     for(let i=0; i< data.length;i++){
       data[i].real_date = String(new Date(data[i].date));
-      let sum = data[i].new_cases+data[i].new_deaths+data[i].people_vaccinated;
+      let sum = data[i].new_cases+data[i].new_deaths+data[i].daily_vaccinated;
       data[i].death = 100*(data[i].new_deaths/sum);
       data[i].confirmation = 100*(data[i].new_cases/sum);
-      data[i].vaccination = 100*(data[i].people_vaccinated/sum);
+      data[i].vaccination = 100*(data[i].daily_vaccinated/sum);
     }
     this.state ={
       data:data,
@@ -84,7 +84,7 @@ class ImageSKY extends React.Component{
                 .attr('height', "100%")
                 .style("background","white");
     
-    svg.selectAll("death")
+    svg.selectAll("death") 
        .data(data)
        .enter()
        .append("rect")
@@ -189,7 +189,7 @@ class ImageSKY extends React.Component{
        .on("click",this.handle_click)
        .append("title")
        .text(data=>{
-         return "date: "+data.real_date+"\n vaccination case: "+data.people_vaccinated;
+         return "date: "+data.real_date+"\n vaccination case: "+data.daily_vaccinated;
        });
 
   }
@@ -341,7 +341,7 @@ class ImageSKY extends React.Component{
   //           .attr("cx",x_scale(data.day)+"%")
   //           .attr("cy",(95 - y_scale(data.vaccination_count))+"%")
   //           .append('title')
-  //           .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_people_vaccinatedcination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
+  //           .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_daily_vaccinatedcination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
 
   //       console = d3.select("#vaccination_console");
   //       let console_text_arr = console.text().split(":");
@@ -371,7 +371,7 @@ class ImageSKY extends React.Component{
                   <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
                   <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
                   <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
-                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.people_vaccinated)}</h6>
+                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.daily_vaccinated)}</h6>
 
                 </div>
                 <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
@@ -380,7 +380,7 @@ class ImageSKY extends React.Component{
                   <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
                   <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
                   <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
-                  <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].people_vaccinated-this.state.data[this.state.index_array[0]].people_vaccinated:"N/A"}</h6>
+                  <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
                 </div>
             </div>
 
@@ -402,7 +402,7 @@ class ImageSKY extends React.Component{
                       <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
                       <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
                       <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
-                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.people_vaccinated)}</h6>
+                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.daily_vaccinated)}</h6>
 
                     </div>
                     <input type="range" min="1" max={this.state.data.length} value={this.state.at} onChange={this.handle_slider} />
@@ -411,8 +411,10 @@ class ImageSKY extends React.Component{
                       <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
                       <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
                       <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
-                      <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].people_vaccinated-this.state.data[this.state.index_array[0]].people_vaccinated:"N/A"}</h6>
+                      <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
                     </div>
+
+
                 </div>
 
               </div>

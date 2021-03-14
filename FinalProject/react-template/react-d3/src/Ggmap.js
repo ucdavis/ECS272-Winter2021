@@ -6,6 +6,7 @@ import React from 'react';
 import {getData, getData_for_country,pack} from "./GetData.js";
 import * as d3 from "d3";
 import demodata from "./datasets/demodata.json";
+import legend from "./Legend.png";
 
 const mapStyles = {
     height:"100%",
@@ -52,7 +53,7 @@ class Ggmap extends React.Component{
 
     }
     handle_click(data){
-        window.location.replace("/Stat_view?country="+data.name);
+        window.location.replace("/ImageSKY?country="+data.name);
     }
 
     handle_change(event){
@@ -71,11 +72,13 @@ class Ggmap extends React.Component{
                 <LoadScript googleMapsApiKey = {key["key"]}>
                     <GoogleMap
                         mapContainerStyle= {mapStyles}
+                        // options={function (maps) { return { mapTypeId: "satellite" }}}
                         center = {{
                             lat:this.state.array[this.state.selected_index].lat,
                             lng:this.state.array[this.state.selected_index].lng
                         }}
-                        zoom = {5}
+                        zoom = {8}
+                        
                         // ref={(ref) => {
                         //     this.mapRef = ref;
                         // }}
@@ -113,9 +116,15 @@ class Ggmap extends React.Component{
                 <h6> population:{this.state.array[this.state.selected_index].population}</h6>
                 <h6> lat: {this.state.array[this.state.selected_index].lat} </h6>
                 <h6> lng: {this.state.array[this.state.selected_index].lng} </h6>
+                <h6> iso: {this.state.array[this.state.selected_index].iso}</h6>
+                <h6> total_deaths: {this.state.array[this.state.selected_index].total_deaths}</h6>
+                <h6> total_case: {this.state.array[this.state.selected_index].total_case}</h6>
+                <h6> total_vac: {this.state.array[this.state.selected_index].total_vac}</h6>
               </div>
-
-            
+              <div className="legend_container">
+                <div className="legend" style={{ background: `url(${legend}) no-repeat`}}/>
+              </div>
+              <a className="home" href={"ImageSKY/?start=Geo&country="+this.state.array[this.state.selected_index].name}>Next</a>
             </div>
           </div>
           
