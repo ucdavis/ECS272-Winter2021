@@ -6,19 +6,19 @@ import {getData, getData_for_country, pack} from "./GetData.js"
 class BarChart2 extends Component {
 
     componentDidMount() {
-        this.drawChart();
+        this.drawChart("USA");
     }
 
 
-    drawChart() {
+    drawChart(iso) {
         //getData1();
 
         getData(function () {
             console.log('loading finished');
             var datapack = pack
-            var data = getData_for_country(pack.data,"USA");
+            var data = getData_for_country(pack.data,iso);
             var CList = datapack.CList
-            var c = "USA"
+            var c = iso
             //console.log(d3.max(pack.CList, d => d.total_vac/d.population))
             /*********************************
              * Visualization codes start here
@@ -41,7 +41,7 @@ class BarChart2 extends Component {
                 .range([0, width]);
 
             var y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.total_case)])
+                .domain([0,  Math.max(d3.max(data,d => d.total_case),d3.max(data,d => d.total_vaccinated),d3.max(data,d => d.daily_vaccinated))])
                 .range([height, 0]);
 
             var tooltip = document.getElementById('tooltip')
@@ -95,6 +95,7 @@ class BarChart2 extends Component {
                 .attr('opacity', 0.8)
 
             var scatterPlot4 = view.append("g")
+
                 .selectAll("dot")
                 .data(data)
                 .enter()
@@ -164,6 +165,7 @@ class BarChart2 extends Component {
                 .attr("stroke-linecap", "round")
                 .attr('opacity', 0.8)
                 .attr("d", d3.line()
+                    .defined(function (d) { return d.total_deaths !== 0; })
                     .x(function (d) {
                         return x(d.date)
                     })
@@ -180,6 +182,7 @@ class BarChart2 extends Component {
                 .attr("stroke-linecap", "round")
                 .attr('opacity', 0.8)
                 .attr("d", d3.line()
+                    .defined(function (d) { return d.total_case !== 0; })
                     .x(function (d) {
                         return x(d.date)
                     })
@@ -196,6 +199,7 @@ class BarChart2 extends Component {
                 .attr("stroke-linecap", "round")
                 .attr('opacity', 0.8)
                 .attr("d", d3.line()
+                    .defined(function (d) { return d.daily_vaccinated !== 0; })
                     .x(function (d) {
                         return x(d.date)
                     })
@@ -204,6 +208,7 @@ class BarChart2 extends Component {
                     })
                 )
             var l4 = view.append("path")
+
                 .datum(data)
                 .attr("fill", "none")
                 .attr("stroke", "gray")
@@ -212,6 +217,7 @@ class BarChart2 extends Component {
                 .attr("stroke-linecap", "round")
                 .attr('opacity', 0.8)
                 .attr("d", d3.line()
+                    .defined(function (d) { return d.total_vaccinated !== 0; })
                     .x(function (d) {
                         return x(d.date)
                     })
