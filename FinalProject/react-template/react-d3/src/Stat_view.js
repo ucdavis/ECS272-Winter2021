@@ -3,6 +3,8 @@ import "./Stat_view.css";
 import * as d3 from "d3";
 import { index } from 'd3';
 
+import BarChart2 from './BarChart2';
+
 
 class ImageSKY extends React.Component{
   constructor(props){
@@ -38,7 +40,7 @@ class ImageSKY extends React.Component{
           <h1 className="header">Tetris Sky</h1>
           <div className="SKYcontainer">
             <div className="SKY">
-    
+                <BarChart2 width={this.state.width} height={this.state.height}/>
             </div>
 
 

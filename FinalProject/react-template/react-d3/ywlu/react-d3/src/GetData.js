@@ -15,6 +15,14 @@ export function getData_for_country(dpack, iso) {
 
 }
 
+export function getData_old(_callback) {
+
+    pack = require('./datasets/demodata.json');
+
+    _callback()
+
+}
+
 export async function getData( _callback) {
     Promise.all([
         d3.csv(data),

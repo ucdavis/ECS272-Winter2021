@@ -38,14 +38,18 @@ class App extends React.Component {
                     </div>
 
                     <div className="container2c">
+                        <div className="container2c">
+                            <div id="tooltip2" opacity="0.5"></div>
 
+                        </div>
 
                     </div>
                 </div>
                 <div padding-top="50px">
                     <div id="container1b">
-                        <BarChart2 data={this.state.data}  data2={this.state.data2} data3={this.state.data3} width={this.state.width} height={this.state.height}/>
+                        <BarChart2 width={this.state.width} height={this.state.height}/>
 
+                        <BarChart3 width={this.state.width} height={this.state.height}/>
 
 
 

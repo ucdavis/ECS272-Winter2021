@@ -27,7 +27,7 @@ class BarChart2 extends Component {
             var height = 600;
             var margin = {left: 80, right: 80, top: 60, bottom: 50}
 
-            var svg = d3.select('#container1b')
+            var svg = d3.select('.SKY')
                 .append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
