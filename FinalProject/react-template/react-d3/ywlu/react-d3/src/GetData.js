@@ -7,13 +7,12 @@ export var pack = {};
 var fs = require('browserify-fs');
 export function getData_for_country(dpack, iso) {
 
-    var output = dpack
-    output.data = output.data.filter(function (data) {
+    var outp = dpack.filter(function (data) {
 
         return data.iso === iso;
     });
 
-    return output
+    return outp
 
 }
 
@@ -155,12 +154,12 @@ export async function getData( _callback) {
         data = data2
 
         //console.log(data)
-        data.sort((a, b) => (a.date > b.date) ? 1 : -1)
+        data.sort((a, b) => a.date - b.date || a.iso - b.iso)
         pack = {data: data, CList: filteredC}
         console.log(pack);
         let out = JSON.stringify(pack);
 
-        fs.writeFile("./data.json", out, (err) => {
+        fs.writeFile("./datao.json", out, (err) => {
             if (err) {
                 console.error(err);
                 return;
