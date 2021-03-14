@@ -68,8 +68,8 @@ export async function getData( _callback) {
                 return rc.iso === rv.iso;
             });
             rv.name = (result[0] !== undefined) ? result[0].name : null;
-            rv.lng = (result[0] !== undefined) ? result[0].long : null;
-            rv.lat = (result[0] !== undefined) ? result[0].lng : null;
+            rv.lng = (result[0] !== undefined) ? result[0].lng : null;
+            rv.lat = (result[0] !== undefined) ? result[0].lat : null;
         });
 
         //console.log(data2);
