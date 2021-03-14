@@ -49,7 +49,7 @@ export async function getData( _callback) {
                 name: row['Country'],
                 iso: row['Alpha-3 code'].substring(2, 5),
                 lat: Number(row['Latitude (average)'].substring(2, row['Latitude (average)'].length - 1)),
-                long: Number(row['Longitude (average)'].substring(2, row['Longitude (average)'].length - 1))
+                lng: Number(row['Longitude (average)'].substring(2, row['Longitude (average)'].length - 1))
             }
         })
 
@@ -70,7 +70,7 @@ export async function getData( _callback) {
             });
             rv.name = (result[0] !== undefined) ? result[0].name : null;
             rv.lng = (result[0] !== undefined) ? result[0].long : null;
-            rv.lat = (result[0] !== undefined) ? result[0].lat : null;
+            rv.lat = (result[0] !== undefined) ? result[0].lng : null;
         });
 
         //console.log(data2);
