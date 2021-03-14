@@ -54,9 +54,13 @@ h4 {
 }
 
 #rows{
+  margin-top: -55px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
+#areachart_label{
+  margin-left: 60px;
+}

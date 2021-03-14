@@ -37,14 +37,6 @@
   }
 }
 
-#explorer{
-  float: left;
-  padding: 5px;
-  margin: 0 5px;
-  color: #222;
-}
-
-
 #vis {
   width: 2000;
   height: 3000;
@@ -68,4 +60,20 @@ div.tooltip{
   font-family: sans-serif;
   top: 791px;
   left: 572px;
+}
+
+h2{
+  font-family: sans-serif;
+  margin-bottom: 30px;
+}
+
+p{
+  font-family: sans-serif;
+}
+
+#manual{
+  text-align: left;
+  margin-left: 120pt;
+  margin-right: 120pt;
+  margin-bottom: 15pt;
 }

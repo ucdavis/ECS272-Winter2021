@@ -16,7 +16,11 @@ class App extends React.Component{
     return (
       <div className="App">
         <h2>Global dispute continues to rise</h2>
-        <h4>The cumulative area chart shows the increasing number of global disputes over time. </h4>
+        <br></br>
+        <br></br>
+        <div id="manual">
+          <p id="areachart_label">The cumulative area chart shows the increasing number of global disputes over time. </p>
+        </div>
 
     <div id ="rows">
  
@@ -24,7 +28,7 @@ class App extends React.Component{
         <div id="emptybox"></div> 
 
         <div id="imgs">
-        <h4>Examples of Global Conflict</h4>
+        <p>Examples of Global Conflict</p>
         <img
           src={ azer }
           width='400'
@@ -46,6 +50,14 @@ class App extends React.Component{
 
         </div>
     </div>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
         <AreaChart data={this.state.data} width={this.state.width} height={this.state.height} />
       </div>
 
