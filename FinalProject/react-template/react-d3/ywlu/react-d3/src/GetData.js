@@ -4,6 +4,7 @@ import data2 from './datasets/country_vaccinations.csv';
 import data3 from './datasets/countries_codes_and_coordinates.csv';
 export var pack = {};
 
+var fs = require('browserify-fs');
 export function getData_for_country(dpack, iso) {
 
     var output = dpack
@@ -68,7 +69,7 @@ export async function getData( _callback) {
                 return rc.iso === rv.iso;
             });
             rv.name = (result[0] !== undefined) ? result[0].name : null;
-            rv.long = (result[0] !== undefined) ? result[0].long : null;
+            rv.lng = (result[0] !== undefined) ? result[0].long : null;
             rv.lat = (result[0] !== undefined) ? result[0].lat : null;
         });
 
@@ -109,7 +110,7 @@ export async function getData( _callback) {
                 total_case: holderC[d.iso],
                 total_vac: holderV[d.iso],
                 lat: d.lat,
-                long: d.long
+                lng: d.lng
             });
         })
         filteredC = filteredC.filter(function (rc) {
@@ -121,7 +122,7 @@ export async function getData( _callback) {
 
             filteredC.forEach(function (d1) {
 
-                l.push({iso: d1.iso, dis: Math.sqrt(Math.pow(d1.lat - d.lat, 2) + Math.pow(d1.long - d.long, 2))})
+                l.push({iso: d1.iso, dis: Math.sqrt(Math.pow(d1.lat - d.lat, 2) + Math.pow(d1.lng - d.lng, 2))})
             })
             l = l.sort(function (a, b) {
                 return a.dis - b.dis
@@ -157,6 +158,15 @@ export async function getData( _callback) {
         data.sort((a, b) => (a.date > b.date) ? 1 : -1)
         pack = {data: data, CList: filteredC}
         console.log(pack);
+        let out = JSON.stringify(pack);
+
+        fs.writeFile("./data.json", out, (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            };
+            console.log("File has been created");
+        });
         _callback();
     })
 
