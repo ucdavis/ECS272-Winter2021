@@ -362,9 +362,11 @@ class ImageSKY extends React.Component{
           <div className="GeoSKYPageLayout">
           <h1 className="header">Customized Design View: Tetris Sky</h1>
           <div className="SKYcontainer">
+          <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
             <div className="SKY">
     
             </div>
+            
             <div className="controlPanel">
               <div className="info_window">
                   <h6>From date: {this.state.data[0].real_date}</h6>
@@ -372,15 +374,16 @@ class ImageSKY extends React.Component{
                   <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
                   <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
                   <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.total_vaccinated)}</h6>
-
                 </div>
-                <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
                 <div className="info_window">
                   <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
                   <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
-                  <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
-                  <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
-                  <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
+                  <h6>Daily confirmation case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
+                  <h6>Daily death case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
+                  <h6>Daily vaccination case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
+                  <h6>Total confirmation case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].total_case-this.state.data[this.state.index_array[0]].total_case:"N/A"}</h6>
+                  <h6>Total death case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].total_deaths-this.state.data[this.state.index_array[0]].total_deaths:"N/A"}</h6>
+                  <h6>Total vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].total_vaccinated-this.state.data[this.state.index_array[0]].total_vaccinated:"N/A"}</h6>
                 </div>
                 <div className="info_window">
                   <h6>death proportion:</h6>
@@ -404,6 +407,7 @@ class ImageSKY extends React.Component{
             <div className="PCSKYPageLayout">
               <h1 className="header">Customized Design View: Tetris Sky</h1>
               <div className="SKYcontainer">
+              <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
                 <div className="SKY">
         
                 </div>
@@ -415,13 +419,15 @@ class ImageSKY extends React.Component{
                       <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
                       <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.total_vaccinated)}</h6>
                     </div>
-                    <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
                     <div className="info_window">
                       <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
                       <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
-                      <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
-                      <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
-                      <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
+                      <h6>Daily confirmation case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
+                      <h6>Daily death case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
+                      <h6>Daily vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
+                      <h6>Total confirmation case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].total_case-this.state.data[this.state.index_array[0]].total_case:"N/A"}</h6>
+                      <h6>Total death case comparison: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].total_deaths-this.state.data[this.state.index_array[0]].total_deaths:"N/A"}</h6>
+                      <h6>Total vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].total_vaccinated-this.state.data[this.state.index_array[0]].total_vaccinated:"N/A"}</h6>
                     </div>
                     <div className="info_window">
                       <h6>death proportion:</h6>
