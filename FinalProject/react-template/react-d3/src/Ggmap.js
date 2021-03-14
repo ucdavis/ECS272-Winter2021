@@ -3,7 +3,7 @@ import {GoogleMap,LoadScript, Marker} from "@react-google-maps/api";
 import {withScriptjs} from "react-google-maps";
 import key from "./api_key.json";
 import React from 'react';
-
+import {getData, getData_for_country,pack} from "./GetData.js";
 
 
 const mapStyles = {
@@ -16,28 +16,32 @@ const mapStyles = {
 class Ggmap extends React.Component{
     constructor(props){
         super(props);
+        // let url = new URL(window.location.href);
+        // let iso = url.searchParams.get("iso");
+        getData(()=>console.log("hi"));
+        let max_confirm = d3.max(pack.CList,data=>data.total_case);
+        let max_vaccination_rate = d3.max(pack.CList,data=>data.total_vac/data.population);
+        let max_death_rate = d3.max(pack.CList,data=>data.total_deaths/data.total_case);
+        let data_array = pack.CList;
+        let size_scale = d3.scaleLinear()
+                            .domain([d3.min(data_array,data=>data.total_case),d3.max(data_array,data=>data.total_case)])
+                            .range([0,50])
+        for(let i = 0; i<data_array;i++){
+            if(data_array[i].total_deaths/data_array[i].total_case == max_vaccination_rate){
+                data_array[i].url = "./death_emoji.png";
+            }else if(data_array.total_vac/data.population == max_vaccination_rate){
+                data_array[i].url = "./vaccination_emoji.png";
+            }else{
+                data_array[i].url = "./sick_emoji.png";
+            }
+            data_array[i].m_width = size_scale(data_array[i].total_case);
+            data_array[i].m_height = size_scale(data_array[i].total_case);
+
+        }
+        
         this.state = {
-            array:[
-                {
-                    population:2,
-                    lat:38.546720,
-                    lng:-121.744340,
-                    name:"United States",
-                    m_width:20,
-                    m_height:20,
-                    url:"/vaccination_emoji.png"
-                },
-                {
-                    population:102334403,
-                    lat:27,
-                    lng:30,
-                    name:"Egypt",
-                    m_width:20,
-                    m_height:20,
-                    url:"/death_emoji.png"
-                }
-            ],
-            selected_index: 0
+            array:data_array,
+            selected_index: 0,
             // selected_lat:38.546720,
             // selected_lng:-121.744340
           };
@@ -47,7 +51,7 @@ class Ggmap extends React.Component{
 
     }
     handle_click(data){
-        window.location.replace("/detail_view_1?country="+data.name);
+        window.location.replace("/Stat_view?iso="+data.name);
     }
 
     handle_change(event){

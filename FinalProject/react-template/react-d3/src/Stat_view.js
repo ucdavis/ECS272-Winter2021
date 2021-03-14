@@ -1,5 +1,5 @@
 import React from 'react';
-import "./ImageSKY.css";
+import "./Stat_view.css";
 import * as d3 from "d3";
 import { index } from 'd3';
 

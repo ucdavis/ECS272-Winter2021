@@ -2,6 +2,7 @@ import React from 'react';
 import "./Geo.css";
 import Ggmap from "./Ggmap";
 
+
 class Geo extends React.Component{
   constructor(props){
     super(props);
@@ -9,7 +10,6 @@ class Geo extends React.Component{
     //   data: csv
     // };
 
-    
   }
 
 
