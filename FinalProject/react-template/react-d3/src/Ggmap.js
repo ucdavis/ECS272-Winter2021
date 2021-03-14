@@ -4,7 +4,7 @@ import {withScriptjs} from "react-google-maps";
 import key from "./api_key.json";
 import React from 'react';
 import {getData, getData_for_country,pack} from "./GetData.js";
-
+import * as d3 from "d3";
 
 const mapStyles = {
     height:"100%",
@@ -19,17 +19,18 @@ class Ggmap extends React.Component{
         // let url = new URL(window.location.href);
         // let iso = url.searchParams.get("iso");
         getData(()=>console.log("hi"));
-        let max_confirm = d3.max(pack.CList,data=>data.total_case);
-        let max_vaccination_rate = d3.max(pack.CList,data=>data.total_vac/data.population);
-        let max_death_rate = d3.max(pack.CList,data=>data.total_deaths/data.total_case);
         let data_array = pack.CList;
+        // console.log(data_array);
+        let max_vaccination_rate = d3.max(data_array,data=>data.total_vac/data.population);
+        let max_death_rate = d3.max(data_array,data=>data.total_deaths/data.total_case);
+        
         let size_scale = d3.scaleLinear()
                             .domain([d3.min(data_array,data=>data.total_case),d3.max(data_array,data=>data.total_case)])
                             .range([0,50])
         for(let i = 0; i<data_array;i++){
-            if(data_array[i].total_deaths/data_array[i].total_case == max_vaccination_rate){
+            if(data_array[i].total_deaths/data_array[i].total_case == max_death_rate){
                 data_array[i].url = "./death_emoji.png";
-            }else if(data_array.total_vac/data.population == max_vaccination_rate){
+            }else if(data_array[i].total_vac/data_array[i].population == max_vaccination_rate){
                 data_array[i].url = "./vaccination_emoji.png";
             }else{
                 data_array[i].url = "./sick_emoji.png";
