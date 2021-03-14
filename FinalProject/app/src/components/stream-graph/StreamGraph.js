@@ -5,6 +5,10 @@ import * as d3 from 'd3';
 import './StreamGraph.css';
 import csv from '../../data/processed.csv';
 import { colorByRating, colorByGenre } from '../../utils/color';
+import {
+  loadYearToRatingData,
+  loadYearToGenreByRatingData,
+  loadElementByGenreData } from '../../utils/load';
 
 export default class StreamGraph extends React.Component {
 
@@ -13,7 +17,6 @@ export default class StreamGraph extends React.Component {
   }
 
   drawChart() {
-
     // Constant visualization parameters.
     const width = 1000,
           height = 500,
@@ -114,21 +117,17 @@ export default class StreamGraph extends React.Component {
         .attr('id', 'tool-tip')
         .attr('opacity', 0.0);
     const xToolTip = d3.scaleBand()
-      .domain(["Cars", "Dementia",
-        "Demons", "Ecchi", "Game", "Harem",
-        "Historical", "Horror", "Josei", "Magic", "Martial Arts",
-        "Mecha", "Military", "Music", "Mystery", "Parody", "Police",
-        "Psychological", "Samurai",
-        "Shoujo", "Shoujo Ai", "Shounen Ai",
-        "Space", "Sports", "Super Power", "Thriller",
-        "Vampire", "Yaoi", "Yuri"])
+      .domain(["Cars", "Dementia", "Demons", "Ecchi", "Game", "Harem",
+               "Historical", "Horror", "Josei", "Magic", "Martial Arts",
+               "Mecha", "Military", "Music", "Mystery", "Parody", "Police",
+               "Psychological", "Samurai", "Shoujo", "Shoujo Ai", "Shounen Ai",
+               "Space", "Sports", "Super Power", "Thriller", "Vampire", "Yaoi",
+               "Yuri"])
       .range([0, widthToolTip])
       .padding(0.1);
     const yToolTip = d3.scaleLinear()
       .range([heightToolTip, 0]);
-    toolTip
-      .append('text')
-        .attr('id', 'tool-tip-title');
+
     toolTip
       .append('rect')
         .attr('id', 'tool-tip-border')
@@ -137,6 +136,11 @@ export default class StreamGraph extends React.Component {
         .attr('fill', 'white')
         .attr('stroke', 'black')
         .attr('stroke-width', 1);
+    toolTip
+      .append('text')
+        .attr('id', 'tool-tip-title')
+        .attr('font-weight', 'bold')
+        .attr('transform', 'translate(-20, -10)')
     toolTip
       .append('g')
         .attr('id', 'tool-tip-x-axis')
@@ -165,7 +169,11 @@ export default class StreamGraph extends React.Component {
         update('rating', loadYearToRatingData(dataFiltered));
 
         /*
-         * Description: Use `mode` to specify the loaded data structure.
+         * Function:
+         *   update(mode, data)
+         *
+         * Description:
+         *   Use `mode` to specify the loaded data structure.
          *
          * Input:
          *   mode (String): Either `rating` or `genre`.
@@ -188,8 +196,11 @@ export default class StreamGraph extends React.Component {
           // Update the pre-defined visualization variables.
           svg.select('#title')
             .text(function() {
-              if (mode === 'rating') return 'Age Restriction Rating';
-              else if (mode === 'genre') return 'Genre';
+              if (mode === 'rating') {
+                return 'Age Restriction Rating'
+              } else if (mode === 'genre') {
+                return 'Age Restriction Rating: ' + data.key;
+              };
             })
           y
             .domain([0, d3.max(data.map(d => {  // Update the domain of y-axis accordingly.
@@ -205,6 +216,7 @@ export default class StreamGraph extends React.Component {
             .transition()
             .call(d3.axisLeft(y))
 
+          // Construct layers.
           layers.enter()
             .append('path')
               .attr('class', 'layers')
@@ -226,29 +238,32 @@ export default class StreamGraph extends React.Component {
               .on('mousemove', function(e, d) {
                 svg.select('#brush').lower();
 
-                if (mode === 'genre') {
-                  toolTip
-                    .attr('opacity', 1);
-                  toolTip.raise();
-
-                  const dataElement = loadElementByGenreData(d, e);
+                if (mode === 'genre') {  // Show tool-tip view.
+                  const dataElement = loadElementByGenreData(
+                    d, Math.round(xInverse(e.x)));
                   const bars = toolTip.selectAll('.bars')
                     .data(dataElement, d => {
-                      return d.value.length;
+                      return d;
                     });
 
-                  // const yearSelected = Math.round(xInverse(e.x));
-                  // const genreSelected = d['key'];
-
+                  // Update visualization based on data.
+                  const yToolTipMax = d3.max(dataElement.map(d => {
+                    return d.value.length;
+                  }));
+                  console.log(yToolTipMax)
+                  toolTip.raise()
+                    .attr('opacity', 1);
                   toolTip.select('#tool-tip-title')
                     .text(d['key'] + " in " + Math.round(xInverse(e.x)));
                   toolTip.select('#tool-tip-y-axis')
                     .transition()
-                      .call(d3.axisLeft(yToolTip
-                        .domain([0, d3.max(dataElement.map(d => {
-                          return d.value.length;
-                        }))])));
+                      .call(
+                        d3.axisLeft(
+                            yToolTip
+                              .domain([0, yToolTipMax]))
+                          .ticks(yToolTipMax));
 
+                  // Construct tool-tip bar plot.
                   bars.enter()
                     .append('rect')
                       .attr('class', 'bars')
@@ -261,6 +276,8 @@ export default class StreamGraph extends React.Component {
                         return yToolTip(0) - yToolTip(d.value.length);
                       })
                       .attr('fill', 'steelblue');
+
+                  // Adjust the position of tool-tip based on cursor.
                   toolTip
                     .attr(
                       'transform',
@@ -269,6 +286,22 @@ export default class StreamGraph extends React.Component {
                     .attr(
                       'transform',
                       'translate(' + (-marginToolTip) + ',' + (-marginToolTip) + ')');
+                  if (e.x > 500) {  // If cursoe is on the right
+                    toolTip         //  side, show tool-tip on the left.
+                      .attr(
+                        'transform', function(d) {
+                          return this.getAttribute('transform') +
+                            'translate(' + (-300) + ',0)';
+                        })
+                  }
+                  if (e.y < 250) {  // If cursoe is on the top
+                    toolTip         //  side, show tool-tip on the bottom.
+                      .attr(
+                        'transform', function(d) {
+                          return this.getAttribute('transform') +
+                            'translate(0,' + (200) + ')';
+                        })
+                  }
 
                   bars.exit().remove();
                 }
@@ -321,111 +354,6 @@ export default class StreamGraph extends React.Component {
           legends.exit().remove();
 
           svg.select('#brush').raise();
-        }
-
-        function loadYearToRatingData(data) {
-          const dataYearToRating = [];
-
-          for (let year = FILTER_YEAR_MIN; year <= FILTER_YEAR_MAX; year++) {
-            let item = {
-              'year': year,
-              'G': [],
-              'PG': [],
-              'PG-13': [],
-              'R': []
-              // 'R+': [],
-              // 'Rx': []
-            };
-            data.forEach(row => {
-              if (row['year_from'] == year) {
-                if (['R', 'R+', 'Rx'].includes(row['rating'])) {
-                  item['R'].push(row);
-                } else {
-                  item[row['rating']].push(row);
-                }
-              }
-            });
-            dataYearToRating.push(item);
-          }
-          return dataYearToRating;
-        }
-
-        function loadYearToGenreByRatingData(dataByRating) {
-          const rating = dataByRating['key'];
-          // const genres = ["Action", "Adventure", "Cars", "Comedy", "Dementia",
-          //   "Demons", "Drama", "Ecchi", "Fantasy", "Game", "Harem", "Hentai",
-          //   "Historical", "Horror", "Josei", "Kids", "Magic", "Martial Arts",
-          //   "Mecha", "Military", "Music", "Mystery", "Parody", "Police",
-          //   "Psychological", "Romance", "Samurai", "School", "Sci-Fi", "Seinen",
-          //   "Shoujo", "Shoujo Ai", "Shounen", "Shounen Ai", "Slice of Life",
-          //   "Space", "Sports", "Super Power", "Supernatural", "Thriller",
-          //   "Vampire", "Yaoi", "Yuri"];
-          const genres = [
-            'Action', 'Adult', 'Adventure', 'Comedy', 'Drama',
-            'Fantasy', 'Kids', 'Romance', 'School', 'Sci-Fi',
-            'Seinen', 'Shounen', 'Slice of Life',
-            'Supernatural', 'Other'];
-          const dataYearToGenreByRating = [];
-
-          dataByRating.forEach(d => {
-            let item = {
-              'year': d.data['year']
-            };
-            genres.forEach(genre => {
-              item[genre] = [];
-            });
-
-            genres.forEach(genre => {
-              d.data[rating].forEach(dd => {
-                if (dd[genre] == 1) {
-                  item[genre].push(dd);
-                }
-              })
-            });
-            dataYearToGenreByRating.push(item);
-          })
-          return dataYearToGenreByRating;
-        }
-
-        function loadElementByGenreData(d, e) {
-          const dataElement = [];
-          const dataByGenre = loadYearToGenreByRatingData(d);
-          const yearSelected = Math.round(xInverse(e.x));
-          const genreSelected = d['key'];
-          const elements = ["Cars", "Dementia",
-            "Demons", "Ecchi", "Game", "Harem",
-            "Historical", "Horror", "Josei", "Magic", "Martial Arts",
-            "Mecha", "Military", "Music", "Mystery", "Parody", "Police",
-            "Psychological", "Samurai",
-            "Shoujo", "Shoujo Ai", "Shounen Ai",
-            "Space", "Sports", "Super Power", "Thriller",
-            "Vampire", "Yaoi", "Yuri"];
-
-          // Extract selected year's data.
-          let dataRaw;
-          for (let i = 0; i < dataByGenre.length; i++) {
-            if (dataByGenre[i]['year'] == yearSelected) {
-              dataRaw = dataByGenre[i];
-              break;
-            }
-          }
-
-          elements.forEach(elem => {
-            let item = {
-              'key': elem,
-              'value': []
-            };
-            dataElement.push(item);
-          })
-          dataRaw[genreSelected].forEach(anime => {
-            for (let i = 0; i < elements.length; i++) {
-              if (anime[elements[i]] == 1) {
-                dataElement[i]['value'].push(anime)
-              }
-            }
-          });
-
-          return dataElement;
         }
       })
   }
