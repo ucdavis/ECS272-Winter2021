@@ -8,6 +8,7 @@ import Geo from './Geo';
 import ParallelCoordinate from "./ParallelCoordinate";
 import ImageSKY from "./ImageSKY";
 import Stat_view from "./Stat_view";
+import Stat_view_second from "./Stat_view_second";
 import key from "./api_key.json";
 
 
@@ -32,6 +33,7 @@ ReactDOM.render(
         <Route path = "/parallelCoordinate" component={ParallelCoordinate}/>
         <Route path = "/imageSky" component={ImageSKY}/>
         <Route path = "/Stat_view" component={Stat_view}/>
+        <Route path = "/Stat_view_second" component={Stat_view_second}/>
       </Switch>
     </Router>
 

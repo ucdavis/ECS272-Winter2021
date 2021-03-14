@@ -84,6 +84,17 @@
 
 }
 
+#tooltip2{
+    display: block;
+    min-width: 100px; 
+    min-height: 50px;
+    left:50vw;
+    top:50vh; 
+    font-size: 2em;
+    position: absolute;
+
+}
+
 /* .GeoSKYPageLayout .SKYcontainer .controlPanel{
     display:flex;
     flex-basis: 25%;

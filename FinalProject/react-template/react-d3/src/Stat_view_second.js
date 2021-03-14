@@ -3,10 +3,10 @@ import "./Stat_view.css";
 import * as d3 from "d3";
 import { index } from 'd3';
 
-import BarChart2 from './BarChart2';
+import BarChart3 from './BarChart3';
 
 
-class Stat_view extends React.Component{
+class Stat_view_second extends React.Component{
   constructor(props){
     super(props);
 
@@ -41,11 +41,11 @@ class Stat_view extends React.Component{
     if(start == "Geo"){
         return (
           <div className="GeoSKYPageLayout">
-          <h1 className="header">Scatter Line</h1>
+          <h1 className="header">Bar Chart</h1>
           <div className="SKYcontainer">
             <div className="SKY">
-                <div id="tooltip"></div>
-                <BarChart2 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
+                <div id="tooltip2"></div>
+                <BarChart3 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
             </div>
 
 
@@ -56,11 +56,11 @@ class Stat_view extends React.Component{
     }else{
         return (
             <div className="PCSKYPageLayout">
-              <h1 className="header">Scatter Line</h1>
+              <h1 className="header">Bar Chart</h1>
               <div className="SKYcontainer">
                 <div className="SKY">
-                  <div id="tooltip"></div>
-                  <BarChart2 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
+                  <div id="tooltip2"></div>
+                  <BarChart3 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
                 </div>
               </div>
             </div>
@@ -72,4 +72,4 @@ class Stat_view extends React.Component{
 
 }
 
-export default Stat_view;
+export default Stat_view_second;

@@ -5,7 +5,7 @@ import {getData_old, getData_for_country, pack} from "./GetData";
 class BarChart3 extends Component {
 
     componentDidMount() {
-        this.drawChart("USA");
+        this.drawChart(this.props.iso);
     }
 
     drawChart(iso) {
@@ -43,10 +43,10 @@ class BarChart3 extends Component {
              * Visualization codes start here
              * ********************************/
             var width = 600;
-            var height = 400;
+            var height = 600;
             var margin = {left: 80, right: 80, top: 60, bottom: 50}
 
-            var svg = d3.select('#container1b')
+            var svg = d3.select('.SKY')
                 .append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
