@@ -13,7 +13,6 @@ class BarChart2 extends Component {
     drawChart() {
         //getData1();
 
-
         getData(function () {
             console.log('loading finished');
             var datapack = getData_for_country(pack,"USA");
@@ -22,7 +21,7 @@ class BarChart2 extends Component {
             var c = "USA"
             /*********************************
              * Visualization codes start here
-             * ********************************/
+             * *******************************/
             var width = 1600;
             var height = 600;
             var margin = {left: 80, right: 80, top: 60, bottom: 50}
@@ -248,7 +247,10 @@ class BarChart2 extends Component {
                 )
 
         });
+    //getData(()=>(console.log('aaaa')))
     }
+
+
 
 
     render() {

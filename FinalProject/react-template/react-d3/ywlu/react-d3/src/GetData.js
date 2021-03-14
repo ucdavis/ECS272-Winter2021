@@ -7,7 +7,7 @@ export var pack = {};
 export function getData_for_country(dpack, iso) {
 
     var output = dpack
-    output.data = dpack.data.filter(function (data) {
+    output.data = output.data.filter(function (data) {
 
         return data.iso === iso;
     });
@@ -146,6 +146,7 @@ export async function getData( _callback) {
             return data.iso === c;
         });
          */
+        data = data2
 
         //console.log(data)
         data.sort((a, b) => (a.date > b.date) ? 1 : -1)
