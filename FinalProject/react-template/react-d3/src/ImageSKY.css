@@ -144,3 +144,20 @@ input[type="range"]{
     height: 10px;
     background: grey;
   }
+
+  .home {
+    background-color:#038cfc;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    height: 5vh;
+    width: 10vw;
+  }

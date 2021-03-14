@@ -392,7 +392,7 @@ class ImageSKY extends React.Component{
                   <h6>Zero confirm, zero vaccination, zero death:</h6>
                   <div className="zero_proportion"></div>
                 </div>
-                
+                <a className="home" href={"/Stat_view?start=Geo&country="+this.state.data[0].name}>Next</a>
             </div>
 
           </div>
@@ -423,8 +423,17 @@ class ImageSKY extends React.Component{
                       <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
                       <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].daily_vaccinated-this.state.data[this.state.index_array[0]].daily_vaccinated:"N/A"}</h6>
                     </div>
-                    <div className="rectangle"></div>
-
+                    <div className="info_window">
+                      <h6>death proportion:</h6>
+                      <div className="death_proportion"></div>
+                      <h6>confirmation proportion:</h6>
+                      <div className="confirmation_proportion"></div>
+                      <h6>vaccination proportion:</h6>
+                      <div className="vaccination_proportion"></div>
+                      <h6>Zero confirm, zero vaccination, zero death:</h6>
+                      <div className="zero_proportion"></div>
+                    </div>
+                    <a className="home" href={"/Stat_view?start=Parall&country="+this.state.data[0].name}>Next</a>
                 </div>
 
               </div>
