@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
-import {getData, pack} from "./GetData.js"
-import {getData1} from "./GetData1.js"
+import {getData, getData_for_country, pack} from "./GetData.js"
+
 
 class BarChart2 extends Component {
 
@@ -14,12 +14,12 @@ class BarChart2 extends Component {
         //getData1();
 
 
-        getData('USA',function () {
+        getData(function () {
             console.log('loading finished');
-            var datapack = pack;
+            var datapack = getData_for_country(pack,"USA");
             var data = datapack.data
             var CList = datapack.CList
-            var c = datapack.selectedC
+            var c = "USA"
             /*********************************
              * Visualization codes start here
              * ********************************/
