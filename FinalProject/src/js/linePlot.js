@@ -11,7 +11,7 @@ export function linePlot(target_country = "United States"){
         d3.select("#line").selectAll("*").remove()
         var margin = {top: 10, right: 60, bottom: 30, left: 30},
             width = 500 - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom;
+            height = 250 - margin.top - margin.bottom;
 
         var svg = d3.select("#line")
             .append("svg")
@@ -20,6 +20,13 @@ export function linePlot(target_country = "United States"){
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
+        svg.append("text")
+                .attr("x", (width / 2))             
+                .attr("y", margin.top + height)
+                .attr("text-anchor", "middle")  
+                .style("font-size", "16px") 
+                .style("text-decoration", "bold")  
+                .text("Domestic and Internation flight in " + target_country);
     
 
         var x = d3.scaleTime()
@@ -33,7 +40,7 @@ export function linePlot(target_country = "United States"){
         svg.append("g")
             .attr("class","x-axis")
             .attr("transform", "translate(0," + (height - margin.bottom) + ")")
-            .call(d3.axisBottom(x).tickFormat(displayFormat))
+            .call(d3.axisBottom(x).ticks(width / 80).tickSizeOuter(0))
             .selectAll("text")
             //.attr("transform", "translate(50)")
 

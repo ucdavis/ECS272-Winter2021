@@ -5,6 +5,7 @@ import new_airports from "../assets/airports/airport_detail2.csv"
 import new_flight from "../assets/flights/flight_month.csv"
 import worldtopo from "../assets/data/world-topo-min.json"
 import average_lat_lon from "../assets/country/country_average_latitude_longitude.csv"
+import { chord } from "./chord";
 
 export function casestudy(target_cty = "United States"){
         const urls = {
@@ -26,9 +27,9 @@ export function casestudy(target_cty = "United States"){
         flights: new_flight
         };
 
-        var margin = {top:50, right:50, bottom:100, left:20},
+        var margin = {top:100, right:10, bottom:100, left:20},
                 width = 800 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+                height = 700 - margin.top - margin.bottom;
 
         d3.csv(average_lat_lon).then(function(central){
             //filter out the specific country
@@ -86,7 +87,7 @@ export function casestudy(target_cty = "United States"){
                     voronoi:  svg.append("g").attr("id", "voronoi").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")")
                 };
 
-                const tooltip = svg.append("text").attr("id", "tooltip").style("display", "none").attr("transform", "translate(" + margin.left * 2 + "," + 1.2 * height + ")");
+                const tooltip = svg.append("text").attr("id", "tooltip").style("display", "none").attr("transform", "translate(" + margin.left * 2 + "," + 1 * height + ")");
 
                 //////// slider /////////
                 var formatDateIntoMonthOutput = d3.timeFormat("%y/%m");
@@ -108,7 +109,7 @@ export function casestudy(target_cty = "United States"){
                 
                 var slider = svg.append("g")
                     .attr("class", "slider")
-                    .attr("transform", "translate(" + (margin.left + width / 5) + "," + height/5 + ")");
+                    .attr("transform", "translate(" + (margin.left + width / 5) + "," + (margin.top + height/9) + ")");
                 
                 slider.append("line")
                     .attr("class", "track")
@@ -506,6 +507,7 @@ export function casestudy(target_cty = "United States"){
                     console.log(new_flight)
                     console.log(airports0)
                     drawAPF(airports0, new_flight)
+                    chord(target_cty, formatDateIntoMonth(h))
                 }
 
                 //extent base

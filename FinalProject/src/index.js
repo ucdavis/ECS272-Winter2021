@@ -7,11 +7,12 @@ import {worldmap} from "./js/worldmap"
 import {casestudy} from "./js/casestudy"
 import {test} from "./js/test"
 import { linePlot } from './js/linePlot';
+import { chord } from './js/chord';
 //drawLine("#main")
 //flightCountryLine("#country")
 //chord("#chord")
 //connection("#fig2")
 worldmap()
-//casestudy()
 //test()
 //linePlot()
+//chord()
