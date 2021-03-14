@@ -4,7 +4,8 @@ import {withScriptjs} from "react-google-maps";
 import key from "./api_key.json";
 import React from 'react';
 import {getData, getData_for_country,pack} from "./GetData.js";
-
+import * as d3 from "d3";
+import demodata from "./datasets/demodata.json";
 
 const mapStyles = {
     height:"100%",
@@ -16,29 +17,29 @@ const mapStyles = {
 class Ggmap extends React.Component{
     constructor(props){
         super(props);
-        // let url = new URL(window.location.href);
-        // let iso = url.searchParams.get("iso");
-        getData(()=>console.log("hi"));
-        let max_confirm = d3.max(pack.CList,data=>data.total_case);
-        let max_vaccination_rate = d3.max(pack.CList,data=>data.total_vac/data.population);
-        let max_death_rate = d3.max(pack.CList,data=>data.total_deaths/data.total_case);
-        let data_array = pack.CList;
+        let data_array = demodata.CList;
+        // console.log(data_array);
+        let mean_vaccination_rate = d3.mean(data_array,data=>data.total_vac/data.population);
+        let mean_death_rate = d3.mean(data_array,data=>data.total_deaths/data.total_case);
+        console.log("mean death rate: ",mean_death_rate);
         let size_scale = d3.scaleLinear()
                             .domain([d3.min(data_array,data=>data.total_case),d3.max(data_array,data=>data.total_case)])
-                            .range([0,50])
-        for(let i = 0; i<data_array;i++){
-            if(data_array[i].total_deaths/data_array[i].total_case == max_vaccination_rate){
-                data_array[i].url = "./death_emoji.png";
-            }else if(data_array.total_vac/data.population == max_vaccination_rate){
-                data_array[i].url = "./vaccination_emoji.png";
+                            .range([1,5])
+        for(let i = 0; i<data_array.length;i++){
+        
+            if(data_array[i].total_deaths/data_array[i].total_case >= mean_death_rate){
+                data_array[i].url = "/death_emoji.png";
+                console.log("death",data_array[i]);
+            }else if(data_array[i].total_vac/data_array[i].population >= mean_vaccination_rate){
+                data_array[i].url = "/vaccination_emoji.png";
             }else{
-                data_array[i].url = "./sick_emoji.png";
+                data_array[i].url = "/sick_emoji.png";
             }
-            data_array[i].m_width = size_scale(data_array[i].total_case);
-            data_array[i].m_height = size_scale(data_array[i].total_case);
+            data_array[i].m_width = size_scale(data_array[i].total_case)*10;
+            data_array[i].m_height = size_scale(data_array[i].total_case)*10;
 
         }
-        
+        // console.log(data_array);
         this.state = {
             array:data_array,
             selected_index: 0,
@@ -51,7 +52,7 @@ class Ggmap extends React.Component{
 
     }
     handle_click(data){
-        window.location.replace("/Stat_view?iso="+data.name);
+        window.location.replace("/Stat_view?country="+data.name);
     }
 
     handle_change(event){
@@ -74,7 +75,7 @@ class Ggmap extends React.Component{
                             lat:this.state.array[this.state.selected_index].lat,
                             lng:this.state.array[this.state.selected_index].lng
                         }}
-                        zoom = {2}
+                        zoom = {5}
                         // ref={(ref) => {
                         //     this.mapRef = ref;
                         // }}

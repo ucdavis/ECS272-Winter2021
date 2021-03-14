@@ -2,17 +2,27 @@ import React from 'react';
 import "./ImageSKY.css";
 import * as d3 from "d3";
 import { index } from 'd3';
-
+import demodata from "./datasets/demodata.json";
 
 class ImageSKY extends React.Component{
   constructor(props){
     super(props);
+    let url = new URL(window.location.href);
+    let name = url.searchParams.get("country");
+    if(name ==null||name == undefined){
+      name = "United States";
+    }
+    let origin_data = demodata.data;
+    let data = origin_data.filter(data=>data.name);
+    for(let i=0; i< data.length;i++){
+      data[i].real_date = String(new Date(data[i].date));
+      let sum = data[i].new_cases+data[i].new_deaths+data[i].people_vaccinated;
+      data[i].death = 100*(data[i].new_deaths/sum);
+      data[i].confirmation = 100*(data[i].new_cases/sum);
+      data[i].vaccination = 100*(data[i].people_vaccinated/sum);
+    }
     this.state ={
-      data:[
-        {date:1, real_date:"1-1-2021", death:20,death_case:20,confirmation:80,confirmation_case:80, vaccination:0,vaccination_case:0},
-        {date:2, real_date:"1-2-2021", death:50,death_case:50,confirmation:0, confirmation_case:0,vaccination:50,vaccination_case:50},
-        {date:3, real_date:"1-3-2021", death:40,death_case:40,confirmation:30,confirmation_case:30, vaccination:30,vaccination_case:30},
-      ],
+      data:data,
       at:1,
       index_array:[]
 
@@ -78,10 +88,24 @@ class ImageSKY extends React.Component{
        .data(data)
        .enter()
        .append("rect")
-       .style("fill","red")
+       .style("fill",data=>{
+        if(isNaN(data.death)){
+          return "grey";
+        }
+        return "red";
+       })
        .attr("x",0)
        .attr("y",(data,index)=>(100-(index+1)*height)+"%")
-       .attr("width",data=>data.death+"%")
+       .attr("width",data=>{
+        if(isNaN(data.death)||data.death<0){
+          // console.log(data);
+          if(data.death<0){
+            console.log(data);
+          }
+          return "100%";
+        }
+
+        return data.death+"%";})
        .attr("height",height+"%")
        .attr("stroke","black")
        .attr("stroke-width","0.3")
@@ -95,7 +119,7 @@ class ImageSKY extends React.Component{
        .on("click",this.handle_click)
        .append("title")
        .text(data=>{
-         return "date: "+data.real_date+"\n death case: "+data.death_case;
+         return "date: "+data.real_date+"\n death case: "+data.new_deaths;
        });
 
     svg.selectAll("confirmation")
@@ -103,9 +127,20 @@ class ImageSKY extends React.Component{
        .enter()
        .append("rect")
        .style("fill","yellow")
-       .attr("x",data=>data.death+"%")
+       .attr("x",data=>{
+        if(isNaN(data.death)){
+          return "0%"
+         }
+         return data.death+"%";})
        .attr("y",(data,index)=>(100-(index+1)*height)+"%")
-       .attr("width",data=>data.confirmation+"%")
+       .attr("width",data=>{ 
+        if(isNaN(data.confirmation)||data.confirmation<0){
+          if(data.confirmation<0){
+            console.log(data);
+          }
+          return "0%";
+        }
+         return data.confirmation+"%";})
        .attr("height",height+"%")
        .attr("stroke","black")
        .attr("stroke-width","0.3")
@@ -118,7 +153,7 @@ class ImageSKY extends React.Component{
       .on("click",this.handle_click)
        .append("title")
        .text(data=>{
-         return "date: "+data.real_date+"\n confirmation case: "+data.confirmation_case;
+         return "date: "+data.real_date+"\n confirmation case: "+data.new_cases;
        });
 
     
@@ -127,9 +162,21 @@ class ImageSKY extends React.Component{
        .enter()
        .append("rect")
        .style("fill","blue")
-       .attr("x",data=>data.death+data.confirmation+"%")
+       .attr("x",data=>{
+         if(isNaN(data.death)||isNaN(data.confirmation)){
+          return "0%"
+         }
+         return data.death+data.confirmation+"%"})
        .attr("y",(data,index)=>(100-(index+1)*height)+"%")
-       .attr("width",data=>data.vaccination+"%")
+       .attr("width",data=>{
+        if(isNaN(data.vaccination)||data.vaccination<0){
+          if(data.vaccination<0){
+            console.log(data);
+          }
+
+          return "0%";
+        } 
+        return data.vaccination+"%";})
        .attr("height",height+"%")
        .attr("stroke","black")
        .attr("stroke-width","0.3")
@@ -142,7 +189,7 @@ class ImageSKY extends React.Component{
        .on("click",this.handle_click)
        .append("title")
        .text(data=>{
-         return "date: "+data.real_date+"\n vaccination case: "+data.vaccination_case;
+         return "date: "+data.real_date+"\n vaccination case: "+data.people_vaccinated;
        });
 
   }
@@ -294,7 +341,7 @@ class ImageSKY extends React.Component{
   //           .attr("cx",x_scale(data.day)+"%")
   //           .attr("cy",(95 - y_scale(data.vaccination_count))+"%")
   //           .append('title')
-  //           .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_total_vaccination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
+  //           .text("day:"+data.day+"\n"+"vaccination_count:"+data.vaccination_count+"\n"+"percentage_of_people_vaccinatedcination:"+((data.vaccination_count/d3.sum(myData,data=>data.vaccination_count)*100)).toFixed(3));
 
   //       console = d3.select("#vaccination_console");
   //       let console_text_arr = console.text().split(":");
@@ -313,7 +360,7 @@ class ImageSKY extends React.Component{
     if(start == "Geo"){
         return (
           <div className="GeoSKYPageLayout">
-          <h1 className="header">Tetris Sky</h1>
+          <h1 className="header">Customized Design View: Tetris Sky</h1>
           <div className="SKYcontainer">
             <div className="SKY">
     
@@ -322,18 +369,18 @@ class ImageSKY extends React.Component{
               <div className="info_window">
                   <h6>From date: {this.state.data[0].real_date}</h6>
                   <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
-                  <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.confirmation_case)}</h6>
-                  <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.death_case)}</h6>
-                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.vaccination_case)}</h6>
+                  <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
+                  <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
+                  <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.people_vaccinated)}</h6>
 
                 </div>
-                <input type="range" min="1" max={this.state.data.length} step="1" value={this.state.at} onChange={this.handle_slider} />
+                <input type="range" min="1" max={this.state.data.length}  value={this.state.at} onChange={this.handle_slider} />
                 <div className="info_window">
                   <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
                   <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
-                  <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].confirmation_case-this.state.data[this.state.index_array[0]].confirmation_case:"N/A"}</h6>
-                  <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].death_case-this.state.data[this.state.index_array[0]].death_case:"N/A"}</h6>
-                  <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].vaccination_case-this.state.data[this.state.index_array[0]].vaccination_case:"N/A"}</h6>
+                  <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
+                  <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
+                  <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].people_vaccinated-this.state.data[this.state.index_array[0]].people_vaccinated:"N/A"}</h6>
                 </div>
             </div>
 
@@ -344,7 +391,7 @@ class ImageSKY extends React.Component{
     }else{
         return (
             <div className="PCSKYPageLayout">
-              <h1 className="header">Tetris Sky</h1>
+              <h1 className="header">Customized Design View: Tetris Sky</h1>
               <div className="SKYcontainer">
                 <div className="SKY">
         
@@ -353,18 +400,18 @@ class ImageSKY extends React.Component{
                   <div className="info_window">
                       <h6>From date: {this.state.data[0].real_date}</h6>
                       <h6>To date: {this.state.data[this.state.at-1].real_date}</h6>
-                      <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.confirmation_case)}</h6>
-                      <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.death_case)}</h6>
-                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.vaccination_case)}</h6>
+                      <h6>Total confirmation case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_cases)}</h6>
+                      <h6>Total death case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.new_deaths)}</h6>
+                      <h6>Total vaccination case:{d3.sum(this.state.data.slice(0,this.state.at),data=>data.people_vaccinated)}</h6>
 
                     </div>
-                    <input type="range" min="1" max={this.state.data.length} step="1" value={this.state.at} onChange={this.handle_slider} />
+                    <input type="range" min="1" max={this.state.data.length} value={this.state.at} onChange={this.handle_slider} />
                     <div className="info_window">
                       <h6>Compare from date: {this.state.index_array[0]!=null?this.state.data[this.state.index_array[0]].real_date:"N/A"}</h6>
                       <h6>Compare to date:  {this.state.index_array[1]!=null?this.state.data[this.state.index_array[1]].real_date:"N/A"}</h6>
-                      <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].confirmation_case-this.state.data[this.state.index_array[0]].confirmation_case:"N/A"}</h6>
-                      <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].death_case-this.state.data[this.state.index_array[0]].death_case:"N/A"}</h6>
-                      <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].vaccination_case-this.state.data[this.state.index_array[0]].vaccination_case:"N/A"}</h6>
+                      <h6>Confirmation case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_cases-this.state.data[this.state.index_array[0]].new_cases:"N/A"}</h6>
+                      <h6>Death case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].new_deaths-this.state.data[this.state.index_array[0]].new_deaths:"N/A"}</h6>
+                      <h6>vaccination case status: {this.state.index_array.length==2?this.state.data[this.state.index_array[1]].people_vaccinated-this.state.data[this.state.index_array[0]].people_vaccinated:"N/A"}</h6>
                     </div>
                 </div>
 
