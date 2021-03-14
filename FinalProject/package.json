@@ -36,6 +36,7 @@
     "d3-geo-voronoi": "^1.6.0",
     "d3-simple-slider": "^1.10.3",
     "d3-voronoi": "^1.1.4",
+    "d3fc": "^15.1.2",
     "file-loader": "^6.2.0",
     "install": "^0.13.0",
     "jquery": "^3.5.1",

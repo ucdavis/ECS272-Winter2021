@@ -1,9 +1,11 @@
 import * as d3 from "d3";
 import * as topojson from "topojson"
+import * as fc from "d3fc"
 import worldtopo from "../assets/data/world-topo-min.json"
 import capitals from "../assets/data/country-capitals.csv"
+import totalflight from "../assets/data/final_line.csv"
 import {casestudy} from "./casestudy"
-import {linePlot, LinePlot} from "./linePlot"
+
 export function worldmap(){
     
     d3.select(window).on("resize", throttle);
@@ -20,7 +22,7 @@ export function worldmap(){
     
     var graticule = d3.geoGraticule();
 
-    //var tooltip = d3.select("#container").append("div").attr("class", "tooltip hidden");
+    var max_legend = 70000
 
     setup(width,height);
 
@@ -34,150 +36,232 @@ export function worldmap(){
       svg = d3.select("#container").append("svg")
           .attr("width", width)
           .attr("height", height)
+          .attr("id", "map_svg")
           .call(zoom)
-          .append("g");
     
       g = svg.append("g");
     
     }
-    console.log(1)
-    console.log(worldtopo)
+   
     var countries = topojson.feature(worldtopo, worldtopo.objects.countries).features;
     topo = countries;
-    draw(topo);
-    /*
-    d3.json("../assets/data/world-topo-min.json", function(error, world) {
-        console.log(3)
+    //draw(topo, "2019-12");
 
-      var countries = topojson.feature(world, world.objects.countries).features;
+    //////// slider /////////
+    var formatDateIntoMonth = d3.timeFormat("%Y-%m")
+    var formatDate = d3.timeFormat("%b %Y");
     
-      topo = countries;
-      draw(topo);
+    var startDate = new Date("2019-12-02"),
+        endDate = new Date("2021-01-01");
     
-    });
-    */
-   function draw(topo) {
+    ////////// slider //////////
+    var currentValue = 0;
+    var targetValue = width * 0.2;
+        
+    var x = d3.scaleTime()
+        .domain([startDate, endDate])
+        .range([0, targetValue])
+        .nice(12)
+        .clamp(true);
+    
+    var slider = svg.append("g")
+        .attr("class", "slider")
+        .attr("transform", "translate(" + ( width / 10) + "," + (height *7 /8) + ")");
+    
+    slider.append("line")
+        .attr("class", "track")
+        .attr("x1", x.range()[0])
+        .attr("x2", x.range()[1])
+    .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-inset")
+    .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-overlay")
+        .call(d3.drag()
+            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start drag", function(event, d) {
+            currentValue = event.x;
+            update(x.invert(currentValue)); 
+            })
+        );
+    
+    var handle = slider.insert("circle", ".track-overlay")
+        .attr("class", "handle")
+        .attr("r", 9);
+    
+    var label = slider.append("text")  
+        .attr("class", "label")
+        .attr("text-anchor", "middle")
+        .text(formatDate(startDate))
+        .attr("transform", "translate(0," + (-25) + ")")
 
-    svg.append("path")
+    // update map accordingly
+    function update(h) {
+          // update position and text of label according to slider scale
+          handle.attr("cx", x(h));
+          label
+          .attr("x", x(h))
+          .text(formatDate(h));
+          draw(topo, formatDateIntoMonth(h))
+      }
+
+    // main function to draw map
+    function draw(topo, month = "2019-12") {
+    const promises = [
+      d3.csv(totalflight),
+      d3.csv(capitals)
+          ];
+    Promise.all(promises).then(function(values){
+      var total = values[0]
+      var airport = values[1]
+
+      total = total.filter(d => d.Month == month)
+      svg.append("path")
        .datum(graticule)
        .attr("class", "graticule")
        .attr("d", path);
-  
-  
-    g.append("path")
-     .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
-     .attr("class", "equator")
-     .attr("d", path);
-  
-    console.log(2)
-    console.log(topo)
-    var country = g.selectAll(".country").data(topo);
-    //g.append("g").attr("class", "gpoint")
-    var label = d3.select("#container").append("div")
-                .attr('class', 'd3-tooltip')
-                .style('position', 'absolute')
-                .style('z-index', '10')
-                .style('visibility', 'hidden')
-                .style('padding', '10px')
-                .style('background', 'rgba(0,0,0,0.6)')
-                .style('border-radius', '4px')
-                .style('color', '#fff')
-                .text('a simple tooltip');
-    /*
-    var label = g.append("g")
-                 .attr("class", "labeltooltip")
-                 .attr("display", "none");
-    */
-    /*
-    var tooltipBackground = label.append("rect")
-                                 .attr("fill", "#e8e8e8")
-                                 .attr("width", 30)
-                                 .attr("height", 20)
-    */
-    //var labelText = label.append("text").attr("class", "labeltext")
-    //offsets for tooltips
-    var offsetL = document.getElementById('container').offsetLeft+20;
-    var offsetT = document.getElementById('container').offsetTop+10;
-    country.enter()
+      
+      //remove the original map 
+      g.selectAll("*").remove();
+      g.append("path")
+        .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
+        .attr("class", "equator")
+        .attr("d", path);
+    
+
+      var country = g.selectAll(".country").data(topo);
+      var label = d3.select("#container").append("div")
+                  .attr('class', 'd3-tooltip')
+                  .style('position', 'absolute')
+                  .style('z-index', '10')
+                  .style('visibility', 'hidden')
+                  .style('padding', '10px')
+                  .style('background', 'rgba(0,0,0,0.6)')
+                  .style('border-radius', '4px')
+                  .style('color', '#fff')
+                  .text('a simple tooltip')
+                
+      //color map 
+      var color =  d3.scaleSequential(d3.interpolateOrRd)
+                      .domain([0, max_legend])
+
+      country.enter()
         .insert("path")
         .attr("class", "country")
         .attr("d", path)
         .attr("id", function(d,i) { return d.properties.name; })
         .attr("title", function(d,i) { return d.id; })
-        .style("fill", function(d, i) { return d.properties.color; })
+        .style("fill", function(d, i) { return fetchcolor(d.properties.name) }) // d.properties.color//fetchcolor(d.properties.name)
         .on("mouseover", function(d, i){
-            var mouse = d3.pointer(event, this).map( function(d) { return parseInt(d); } );
-            /*
-            label.attr("display", null)
-            labelText.attr("x", mouse[0]+25)
-                     .attr("y", mouse[1]+5)
-                     .text(this.id)
-            */
-           label.attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-                .style('visibility', 'visible')
-                .html(this.id)
+            //var mouse = d3.pointer(event, this).map( function(d) { return parseInt(d); } );
+           label.style('visibility', 'visible')
+                .html(this.id + " total flight: " + fetchtotal(this.id))
         })
         .on("mouseout", function(d, i){
-            //label.attr("display", "none")
             label.style('visibility', 'hidden')
         })
         .on("click", click);
 
-    
-  
-    //tooltips
-    /*
-    country
-      .on("mousemove", function(d,i) {
-  
-        var mouse = d3.pointer(svg.node()).map( function(d) { return parseInt(d); } );
-        console.log(mouse)
-        tooltip.classed("hidden", false)
-               .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-               .html(d.properties.name);
-  
+        //draw airports
+        airport.forEach(function(row){
+          addpoint(row.CapitalLongitude, row.CapitalLatitude, row.CapitalName)
         })
-       .on("mouseout",  function(d,i) {
-          tooltip.classed("hidden", true);
-        }); 
-    */
-    /*
-    country
-       .on("mouseover", function(d) {
-     var mouse = d3.pointer(event, svg.node()).map( function(d) { return parseInt(d); } );
-     console.log(6)
-     console.log(event, svg.node())
-     tooltip.classed("hidden", false)
-            .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-            .html(d.properties.name);
+        
+        //draw legend
+        drawLegend([0,max_legend], color)
 
-     })
-       .on("mouseout",  function(d,i) {
-       tooltip.classed("hidden", true);
-     }); 
-     */
-    
-    //EXAMPLE: adding some capitals from external CSV file
-    /*
-    var Capitals = d3.csv(capitals)
-    console.log(Capitals)
-    Capitals.forEach(function(i){
-        addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName );
-      });
-    */
-    /*  
-    d3.csv("../assets/data/country-capitals.csv", function(err, capitals) {
-  
-      capitals.forEach(function(i){
-        addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName );
-      });
-  
-    });
-    */
-   d3.csv(capitals, function(row){
-       //console.log(row)
-       addpoint(row.CapitalLongitude, row.CapitalLatitude, row.CapitalName)
-   })
+        function fetchcolor(cty){
+          let temp = total.filter(d => d.Name == cty)
+          let val
+          if (temp.length > 0){
+             val = temp[0].total_count
+          }else{
+             val = 0
+          }
+          return color(val)
+        }
+
+        function fetchtotal(cty){
+          let temp = total.filter(d => d.Name == cty)
+          let val
+          if (temp.length > 0){
+             val = temp[0].total_count
+          }else{
+             val = 0
+          }
+          return val
+        }
+
+        
+        function drawLegend(domain, color){
+          const min = domain[0]
+          const max = domain[1]
+          const width = 30
+          const height = 100
+          //var container= d3.select("#testmove")
+          //var color =  d3.scaleSequential(d3.interpolateOrRd).domain(domain)
+           // Band scale for x-axis
+          const xScale = d3
+           .scaleBand()
+           .domain([0, 1])
+           .range([0, width]);
+         
+          // Linear scale for y-axis
+          const yScale = d3
+           .scaleLinear()
+           .domain(domain)
+           .range([height, 0]);
+      
+      
+      
+          // An array interpolated over our domain where height is the height of the bar
+          const expandedDomain = d3.range(min, max, (max - min) / height);
+      
+          // Defining the legend bar
+          const svgBar = fc
+            .autoBandwidth(fc.seriesSvgBar())
+            .xScale(xScale)
+            .yScale(yScale)
+            .crossValue(0)
+            .baseValue((_, i) => (i > 0 ? expandedDomain[i - 1] : 0))
+            .mainValue(d => d)
+            .decorate(selection => {
+              selection.selectAll("path").style("fill", d => color(d));
+            });
+      
+          // Drawing the legend bar
+          //const legendSvg = container.append("svg").attr("width", 500).attr("height", 500);
+        
+          const legendBar = svg
+            .append("g")
+            .datum(expandedDomain)
+            .call(svgBar)
+            .attr("transform", "translate(50," + 400 + ")");
+      
+      
+      
+          // Defining our label
+          const axisLabel = fc
+            .axisRight(yScale)
+            .tickValues([...domain, (domain[1] + domain[0]) / 2]);
+      
+          // Drawing and translating the label
+          const barWidth = Math.abs(legendBar.node().getBoundingClientRect().x);
+      
+      
+          // Hiding the vertical line
+          svg.append("g")
+            //.attr("transform", `translate(${barWidth})`)
+            .attr("transform", "translate(" + (50+10)+ "," + 400 + ")")
+            .datum(expandedDomain)
+            .call(axisLabel)
+            .select(".domain")
+            .attr("visibility", "hidden");
+      
+      
+      
+                        }
+      
+    })  
   }
   
   

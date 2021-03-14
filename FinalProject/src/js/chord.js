@@ -1,18 +1,17 @@
 import * as d3 from "d3";
-import { format } from "d3";
 import flightChord from "../assets/flights/flight_int_month.csv"
 
 
 
-export async function chord(target_cty = "United States", month = "201912"){
+export async function chord(target_cty = "China", month = "201912"){
     var parseDate = d3.timeParse("%Y%m")
     var mon = parseDate(month)
     var formatDate = d3.timeFormat("%b, %Y")
     var margin = {top: 50, right: 60, bottom: 10, left: 0},
             width = 600 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+            height = 420 - margin.top - margin.bottom;
 
-    const innerRadius = Math.min(width, height) * 0.5 - 45
+    const innerRadius = Math.min(width, height) * 0.5 - 50
     const outerRadius = innerRadius + 10
     const ribbon = d3.ribbonArrow()
                    .radius(innerRadius - 1)
@@ -36,8 +35,58 @@ export async function chord(target_cty = "United States", month = "201912"){
           value : Number(d.value)
         }
         });
-    var data = data0.filter(d => (d.name_origin_country == target_cty || d.name_destination_country == target_cty) && d.month == month && d.value > 300)
-    console.log(data0)
+    var data = data0.filter(d => (d.name_origin_country == target_cty || d.name_destination_country == target_cty) && d.month == month )
+    console.log(data)
+    var total = 0
+    data.forEach(d => {
+      total += d.value
+    })
+    var thres = total / data.length * 0.6
+    console.log(thres)
+    data = data.filter(d => d.value > thres)
+
+    /*
+    const thres = 300
+    var data = []
+    var OtherSource = 0
+    var OtherTarget = 0 
+    var iso_cty 
+    data0.forEach(d => {
+      let processedObj
+      // larger than thres push to data
+      if (d.value > thres && (d.name_origin_country == target_cty || d.name_destination_country == target_cty) && d.month == month ){
+        processedObj = {
+          source: d.source,
+          target: d.target,
+          value: d.value
+        }
+        data.push(processedObj)
+      }else{
+        if (d.name_origin_country == target_cty){
+          iso_cty = d.source
+          OtherSource += d.value
+        }else{
+          OtherTarget += d.value
+        }
+      }
+      //smaller than threshold 
+    })
+    console.log(data)
+    //data.push(["source": "Others"])
+    data.push({
+      source: "Others",
+      target: iso_cty,
+      value: OtherSource
+    })
+    data.push({
+      source: iso_cty, 
+      target: "Others",
+      value: OtherTarget
+    })
+
+    */
+
+
     console.log(data)
   
     

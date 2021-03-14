@@ -1,30 +1,19 @@
 import * as d3 from "d3";
 import * as d3g from "d3-geo-voronoi";
 import * as topojson from "topojson";
-import new_airports from "../assets/airports/airport_detail2.csv"
-import new_flight from "../assets/flights/flight_month.csv"
+import source_airports from "../assets/airports/airport_detail2.csv"
+import source_flight from "../assets/flights/flight_month.csv"
 import worldtopo from "../assets/data/world-topo-min.json"
 import average_lat_lon from "../assets/country/country_average_latitude_longitude.csv"
 import { chord } from "./chord";
 
 export function casestudy(target_cty = "United States"){
         const urls = {
-        // source: https://observablehq.com/@mbostock/u-s-airports-voronoi
-        // source: https://github.com/topojson/us-atlas
-        //map: "https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json",
-        //map: "http://localhost:3000/src/assets/country/states-albers-10m.json",
+        //source: airports
+        airports: source_airports,
       
         // source: https://gist.github.com/mbostock/7608400
-        //airports: "http://localhost:3000/src/assets/airports/airports.csv",
-          //"https://gist.githubusercontent.com/mbostock/7608400/raw/e5974d9bba45bc9ab272d98dd7427567aafd55bc/airports.csv",
-        //airports: source_airports,
-        airports: new_airports,
-      
-        // source: https://gist.github.com/mbostock/7608400
-        //flights: "http://localhost:3000/src/assets/airports/flights.csv",
-         // "https://gist.githubusercontent.com/mbostock/7608400/raw/e5974d9bba45bc9ab272d98dd7427567aafd55bc/flights.csv"
-        //flights: source_flights
-        flights: new_flight
+        flights: source_flight
         };
 
         var margin = {top:100, right:10, bottom:100, left:20},
@@ -35,10 +24,9 @@ export function casestudy(target_cty = "United States"){
             //filter out the specific country
             central = central.filter(d => d.name_country == target_cty)[0]
             const hypotenuse = Math.sqrt(width * width + height * height);
-
-            //const projection = d3.geoAlbers().scale(100).translate([480,300]); //1280 480 300
+            //projection to the central longitude and latitude
             const projection = d3.geoMercator().scale(500).center([central.longitude,central.latitude])
-            var parseDate = d3.timeParse("%Y%m");
+            var parseDate = d3.timeParse("%Y%m"); // parse Date to read flight info.
             const scales = {
                 // used to scale airport bubbles
                 airports: d3.scaleSqrt()
@@ -65,26 +53,20 @@ export function casestudy(target_cty = "United States"){
                 const cty = d.name_country
                 return cty == target_cty
                 });
-
-                //const svg  = d3.select("svg");
+                //remove all 
                 d3.select("#case").selectAll("*").remove()
-
-                //and svg
                 var svg = d3.select("#case")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
-
-                //define width and height 
-                //const width  = parseInt(svg.attr("width"));
-                //const height = parseInt(svg.attr("height"));
 
                 // have these already created for easier drawing
                 const g = {
                     basemap:  svg.append("g").attr("id", "basemap").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
                     flights:  svg.append("g").attr("id", "flights").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
                     airports: svg.append("g").attr("id", "airports").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
-                    voronoi:  svg.append("g").attr("id", "voronoi").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")")
+                    voronoi:  svg.append("g").attr("id", "voronoi").attr("transform", "translate(" + margin.left * 0.1 + "," + margin.top + ")"),
+                    slider:   svg.append("g").attr("class", "slider").attr("transform", "translate(" + (margin.left + width / 5) + "," + (margin.top + height/7) + ")")
                 };
 
                 const tooltip = svg.append("text").attr("id", "tooltip").style("display", "none").attr("transform", "translate(" + margin.left * 2 + "," + 1 * height + ")");
@@ -107,11 +89,9 @@ export function casestudy(target_cty = "United States"){
                     .nice(12)
                     .clamp(true);
                 
-                var slider = svg.append("g")
-                    .attr("class", "slider")
-                    .attr("transform", "translate(" + (margin.left + width / 5) + "," + (margin.top + height/9) + ")");
                 
-                slider.append("line")
+                
+                g.slider.append("line")
                     .attr("class", "track")
                     .attr("x1", x.range()[0])
                     .attr("x2", x.range()[1])
@@ -120,14 +100,14 @@ export function casestudy(target_cty = "United States"){
                 .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
                     .attr("class", "track-overlay")
                     .call(d3.drag()
-                        .on("start.interrupt", function() { slider.interrupt(); })
+                        .on("start.interrupt", function() { g.slider.interrupt(); })
                         .on("start drag", function(event, d) {
                         currentValue = event.x;
                         update(x.invert(currentValue)); 
                         })
                     );
                 
-                slider.insert("g", ".track-overlay")
+                g.slider.insert("g", ".track-overlay")
                     .attr("class", "ticks")
                     .attr("transform", "translate(0," + 18 + ")")
                 .selectAll("text")
@@ -139,11 +119,11 @@ export function casestudy(target_cty = "United States"){
                     .attr("text-anchor", "middle")
                     .text(function(d) { return formatDateIntoMonthOutput(d); });
                 
-                var handle = slider.insert("circle", ".track-overlay")
+                var handle = g.slider.insert("circle", ".track-overlay")
                     .attr("class", "handle")
                     .attr("r", 9);
                 
-                var label = slider.append("text")  
+                var label = g.slider.append("text")  
                     .attr("class", "label")
                     .attr("text-anchor", "middle")
                     .text(formatDate(startDate))
@@ -163,10 +143,8 @@ export function casestudy(target_cty = "United States"){
                 // load and draw base map
                 //d3.json(urls.map).then(drawMap);
                 drawMap(country)
+                //control the extent w.r.t the date 201912
                 const extentAirport = baselineExtent(airports0, flights0.filter(d => d.Date == "201912"))
-                //console.log(extentAirport)
-
-                //drawAPF(airports, flights)
 
                 function drawAPF(airports, flights){
                     // convert airports array (pre filter) into map for fast lookup
