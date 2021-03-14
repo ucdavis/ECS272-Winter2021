@@ -31,6 +31,8 @@ export async function getData( _callback) {
                 total_deaths: Number(row['total_deaths']),
                 new_cases: Number(row['new_cases']),
                 new_deaths: Number(row['new_deaths']),
+                population: Number(row['population'])
+
             }
         })
         var data2 = csv2.map(row => {
@@ -60,6 +62,7 @@ export async function getData( _callback) {
             rv.total_deaths = (result[0] !== undefined) ? result[0].total_deaths : null;
             rv.new_cases = (result[0] !== undefined) ? result[0].new_cases : null;
             rv.new_deaths = (result[0] !== undefined) ? result[0].new_deaths : null;
+            rv.population = (result[0] !== undefined) ? result[0].population : null;
 
             var result = datag.filter(function (rc) {
                 return rc.iso === rv.iso;
@@ -97,10 +100,17 @@ export async function getData( _callback) {
 
         var filteredC = [];
 
+        function getpopulation(iso){
+            var n = data2.find(x => x.iso === iso)
+            if (n !== undefined)
+                return n.population
+            return 0
+        }
         datag.forEach(function (d) {
             filteredC.push({
                 name: d.name,
                 iso: d.iso,
+                population:getpopulation(d.iso),
                 total_case: holderC[d.iso],
                 total_vac: holderV[d.iso],
                 lat: d.lat,
