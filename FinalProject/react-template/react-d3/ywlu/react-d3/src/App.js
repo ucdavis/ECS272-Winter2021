@@ -47,9 +47,8 @@ class App extends React.Component {
                 </div>
                 <div padding-top="50px">
                     <div id="container1b">
-                        <BarChart2 width={this.state.width} height={this.state.height}/>
 
-                        <BarChart3 width={this.state.width} height={this.state.height}/>
+                        <BarChart4 width={this.state.width} height={this.state.height}/>
 
 
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
+import {getData_old,pack} from "./GetData";
 
 class BarChart4 extends Component {
 
@@ -8,84 +9,11 @@ class BarChart4 extends Component {
     }
 
     drawChart() {
-        d3.csv(this.props.data)
-            .then(csv => {
-                // log csv in browser console
-                //console.log(csv);
+        getData_old(function () {
 
                 // create data by selecting two columns from csv
-                var data = csv.map(row => {
-                    return {
-                        iyear: Number(row['iyear']),
-                        nkill: Number(row['nkill']),
-                        nwound: Number(row['nwound']),
-                        region: Number(row['region']),
-                        attacktype1: Number(row['attacktype1']),
-                        weaptype1: Number(row['weaptype1'])
-                    }
-                })
 
-                var filtered = data.filter(function (el) {
-                    return (el.nkill > 5) || (el.nwound > 5);
-                });
-
-                data = filtered;
-
-                var ndict = {
-                    "iyear": "Time(year)",
-                    "region": "Region",
-                    "weaptype1": "Weapon Type",
-                    "attacktype1": "Type of Attack",
-                    "nkill": "Victim Killed",
-                    "nwound": "Victim Wounded"
-
-                };
-
-                var atkdict = {
-                    1: "Assassination",
-                    2: "Armed Assault",
-                    3: "Bombing/Explosion",
-                    4: "Hijacking",
-                    5: "Hostage Taking I",
-                    6: "Hostage Taking II",
-                    7: "Facility Attack",
-                    8: "Unarmed Assault",
-                    9: "Unknown"
-                };
-
-                var regdict = {
-                    1: "North America",
-                    2: "Central America & C",
-                    3: "South America",
-                    4: "East Asia",
-                    5: "Southeast Asia",
-                    6: "South Asia",
-                    7: "Central Asia",
-                    8: "Western Europe",
-                    9: "Eastern Europe",
-                    10:"ME & North Africa",
-                    11:"Sub-Saharan Africa",
-                    12:"Australasia & Oceania"
-
-                };
-
-                var weapdict = {
-                    1: "Biological",
-                    2: "Chemical",
-                    3: "Radiological",
-                    4: "???",
-                    5: "Firearms",
-                    6: "Explosives",
-                    7: "Fake Weapons",
-                    8: "Incendiary",
-                    9: "Melee",
-                    10:"Vehicle",
-                    11:"Sabotage Equipment",
-                    12:"other",
-                    13:"unknown"
-
-                };
-
+               var data = pack.CList
 
                 /*********************************
                  * Visualization codes start here
@@ -94,24 +22,26 @@ class BarChart4 extends Component {
                 var height = 500;
                 var margin = {left: 10, right: 10, top: 40, bottom: 40}
 
-                var svg = d3.select('#container2b')
+                var svg = d3.select('#container1b')
                     .append('svg')
                     .attr('width', width + margin.left + margin.right)
                     .attr('height', height + margin.top + margin.bottom)
 
                 var view = svg.append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                var i = 0
+                data.forEach(function (rv) {
+                    rv.index =i++}
 
-
-               // console.log(data[3]);
+                )
+               console.log(data);
 
                 var dimensions = [
-                    'iyear',
-                    'region',
-                    'weaptype1',
-                    'attacktype1',
-                    'nkill',
-                    'nwound'];
+                    'index',
+                    'total_case',
+                    'total_deaths',
+                    'total_vac',
+                    ];
 
                 var y = {}
                 var i = 0;
@@ -146,10 +76,10 @@ class BarChart4 extends Component {
                     .style("fill", "none")
                     .style("stroke", d => {
                         var cs = d3.scaleLinear()
-                            .domain([0, 250, 1500])
+                            .domain([0, 50000, 200000])
                             .range(["lightyellow", "red", "black"]);
 
-                        return cs(d.nkill)
+                        return cs(d.total_case)
                     })
                     .style("opacity", 0.1)
                     .attr("stroke-width", 2)
@@ -162,30 +92,9 @@ class BarChart4 extends Component {
                         return "translate(" + x(d) + ")";
                     })
                     .each(function (d) {
-                        if(d == "iyear"){
-                            d3.select(this).call(d3.axisLeft().scale(y[d])
-                                .tickFormat(function(d) { return d; })
-                            );
-                        }
-                        else if(d == "region"){
-                            d3.select(this).call(d3.axisLeft().scale(y[d])
-                                .tickFormat(function(d) { return regdict[d]; })
-                            );
-                        }
-                        else if(d == "attacktype1"){
-                            d3.select(this).call(d3.axisLeft().scale(y[d])
-                                .tickFormat(function(d) { return atkdict[d]; })
-                            );
-                        }
-                        else if(d == "weaptype1"){
-                            d3.select(this).call(d3.axisLeft().scale(y[d])
-                                .tickFormat(function(d) { return weapdict[d]; })
-                            );
-                        }
-                        else
-                        {
+
                             d3.select(this).call(d3.axisLeft().scale(y[d]));
-                        }
+
 
                     })
 
@@ -194,7 +103,7 @@ class BarChart4 extends Component {
                     .attr("y", -10)
                     .text(function (d) {
                         console.log(d)
-                        return ndict[d];
+                        return d;
                     })
                     .style("fill", "black")
 
