@@ -39,8 +39,8 @@ export async function getData( _callback) {
             return {
                 iso: row['iso_code'],
                 date: Date.parse(row['date']),
-                people_vaccinated: Number(row['people_vaccinated']),
-                people_fully_vaccinated: Number(row['people_fully_vaccinated'])
+                daily_vaccinated: Number(row['daily_vaccinations']),
+                total_vaccinated: Number(row['total_vaccinations'])
             }
         })
         var datag = csvgeo.map(row => {
@@ -54,8 +54,7 @@ export async function getData( _callback) {
 
         data2.forEach(function (rv) {
             var result = data.filter(function (rc) {
-                return rc
-                    .iso === rv.iso && rc.date === rv.date;
+                return rc.iso === rv.iso && rc.date === rv.date;
             });
 
             rv.total_cases = (result[0] !== undefined) ? result[0].total_cases : null;
@@ -80,23 +79,6 @@ export async function getData( _callback) {
                 });
          */
 
-        var holderV = {};
-        var holderC = {};
-
-        data2.forEach(function (d) {
-            if (holderV.hasOwnProperty(d.iso)) {
-                holderV[d.iso] = holderV[d.iso] + d.people_vaccinated;
-            } else {
-                holderV[d.iso] = d.people_vaccinated;
-            }
-            if (holderC.hasOwnProperty(d.iso)) {
-                holderC[d.iso] = holderC[d.iso] + d.new_cases;
-            } else {
-                holderC[d.iso] = d.new_cases;
-            }
-        });
-        // console.log(datag)
-
 
         var filteredC = [];
 
@@ -106,14 +88,16 @@ export async function getData( _callback) {
                 iso: d.iso,
                 population:(data.find(x => x.iso === d.iso) !== undefined) ? data.find(x => x.iso === d.iso).population : 0,
                 total_deaths:(data.find(x => x.iso === d.iso) !== undefined) ? data.reverse().find(x => x.iso === d.iso).total_deaths : 0,
-                total_case: holderC[d.iso],
-                total_vac: holderV[d.iso],
+                total_cases: (data.find(x => x.iso === d.iso) !== undefined) ? data.find(x => x.iso === d.iso).total_cases : 0,
+                total_vac: (data2.find(x => x.iso === d.iso) !== undefined) ? data2.reverse().find(x => x.iso === d.iso).total_vaccinated : 0,
                 lat: d.lat,
                 lng: d.lng
             });
         })
+        data.reverse()
+        data2.reverse()
         filteredC = filteredC.filter(function (rc) {
-            return rc.total_case !== undefined;
+            return rc.total_cases !== undefined && rc.population !== 0;
         });
         //console.log(filteredC)
         filteredC.forEach(function (d) {

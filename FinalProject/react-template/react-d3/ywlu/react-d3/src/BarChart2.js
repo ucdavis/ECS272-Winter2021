@@ -19,7 +19,7 @@ class BarChart2 extends Component {
             var data = getData_for_country(pack.data,"USA");
             var CList = datapack.CList
             var c = "USA"
-            console.log(d3.max(pack.CList, d => d.total_vac/d.population))
+            //console.log(d3.max(pack.CList, d => d.total_vac/d.population))
             /*********************************
              * Visualization codes start here
              * *******************************/
@@ -87,7 +87,7 @@ class BarChart2 extends Component {
                     return x(d.date)
                 })
                 .attr("cy", function (d) {
-                    return y(d.people_vaccinated)
+                    return y(d.daily_vaccinated)
                 })
                 .attr("r", 8)
                 .attr("fill", "blue")
@@ -102,7 +102,7 @@ class BarChart2 extends Component {
                     return x(d.date)
                 })
                 .attr("cy", function (d) {
-                    return y(d.people_fully_vaccinated)
+                    return y(d.total_vaccinated)
                 })
                 .attr("r", 8)
                 .attr("fill", "green")
@@ -199,7 +199,7 @@ class BarChart2 extends Component {
                         return x(d.date)
                     })
                     .y(function (d) {
-                        return y(d.people_vaccinated)
+                        return y(d.daily_vaccinated)
                     })
                 )
             var l4 = view.append("path")
@@ -215,7 +215,7 @@ class BarChart2 extends Component {
                         return x(d.date)
                     })
                     .y(function (d) {
-                        return y(d.people_fully_vaccinated)
+                        return y(d.total_vaccinated)
                     })
                 )
             // x axis
