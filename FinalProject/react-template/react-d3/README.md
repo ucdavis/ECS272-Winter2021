@@ -16,13 +16,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm install react-bootstrap`
+### `npm install #react-google-map`
 
-Download bootstrap for advance data visualization method.
-
-### `npm i d3-svg-legend -S`
-
-Download a standard d3 color legend module for latest d3 version
+Download react googlemap for customizing advance map visualization method.
 
 
 ### `npm test`
