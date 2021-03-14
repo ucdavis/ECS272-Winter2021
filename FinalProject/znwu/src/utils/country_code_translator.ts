@@ -1,8 +1,8 @@
-export function eventCountryToGeologyCountry(eventCountry: string) {
+export function dataCountryToGeologyCountry(eventCountry: string) {
   return a[eventCountry] || eventCountry;
 }
 
-const a: { [eventCountry: string]: string | undefined } = {
+const a: { [dataCountry: string]: string | undefined } = {
   // Barbados: "",
   "Bosnia and Herzegovina": "Bosnia and Herz.",
   // "Cabo Verde": "",

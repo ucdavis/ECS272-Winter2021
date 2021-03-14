@@ -8,48 +8,10 @@ import { groupBy } from "../../utils/groupBy";
 import "./side_panel.scss";
 import { Typography, Space } from "antd";
 import { ParCoord } from "../par_coord/par_coord";
+import { icons } from "../../icons/icons";
 
 const { Text, Link } = Typography;
 const { Option } = Select;
-
-type Category = "victim" | "attack";
-type Measure = "casualties" | "cases";
-
-type VictimType =
-  | "Goverment"
-  | "Civillian"
-  | "Military"
-  | "Terrorist"
-  | "Other";
-
-export const victimTypes = [
-  "Goverment",
-  "Civillian",
-  "Military",
-  "Terrorist",
-  "Other",
-];
-type AttackType =
-  | "Hijacking"
-  | "Bombing/Explosion"
-  | "Kidnapping"
-  | "Barricade Incident"
-  | "Assassination"
-  | "Armed Assault"
-  | "Unarmed Assualt"
-  | "Facility/Infrastructure Attack"
-  | "Unknown";
-
-export const generalVictimType = (key: string) => {
-  let code = parseInt(key) || 20;
-  if ([1, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 18, 19, 21].indexOf(code) !== -1)
-    return "Civillian";
-  if ([2, 3, 7].indexOf(code) !== -1) return "Goverment";
-  if ([4].indexOf(code) !== -1) return "Military";
-  if ([17, 22].indexOf(code) !== -1) return "Terrorist";
-  if ([13, 20].indexOf(code) !== -1) return "Other";
-  return "Other";
-};
 
 export const foodTypeColor = d3
   .scaleOrdinal()
@@ -72,6 +34,8 @@ export const foodTypeColor = d3
 
 export const SidePanel = (props: {
   data: DataEntry[];
+  onFactorChanged: (factor?: string) => void;
+  factor?: string;
 }) => {
   // const [category, setCategory] = useState<Category>("victim");
 
@@ -111,55 +75,95 @@ export const SidePanel = (props: {
     };
   }, [props.data]);
 
+  const countryColor = d3
+    .scaleOrdinal()
+    .domain(props.data.map((datum) => datum.Country))
+    .range(d3.schemeAccent);
+
   return (
-    <div>
-      <Text className="subtitle">Terrorism Overview</Text>
-      <div
-        style={{
-          // margin: "0 auto",
-          display: "flex",
-          flexDirection: "row",
-          flexFlow: "row",
-          width: "100%",
-          justifyContent: "center",
-        }}
-      >
-        {/* <table style={{ marginTop: "20px" }}>
+    <div
+      style={{
+        // margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        height: '100%',
+        // flexFlow: "row",
+        width: "100%",
+        // justifyContent: "center",
+      }}
+    >
+      <div style={{ height: "50%", margin: 0 }}>
+        <Text className="subtitle">
+          Showing {props.data.map((datum) => datum.Country).join(", ")}
+        </Text>
+        {props.data.length == 1 ? (
+          <div>
+            Food composition (kg)
+            {/* <table style={{ marginTop: "20px" }}>
           <tr>
-            <td>Category: </td>
+          <td>Category: </td>
             <td>
-              <Select
-                defaultValue="victim"
-                style={{ width: "100%" }}
-                onChange={setCategory}
-                size="small"
-              >
-                <Option value="victim">By Victim Type</Option>
-                <Option value="attack">By Attack Type</Option>
-              </Select>
+            <Select
+            defaultValue="victim"
+            style={{ width: "100%" }}
+            onChange={setCategory}
+            size="small"
+            >
+            <Option value="victim">By Victim Type</Option>
+            <Option value="attack">By Attack Type</Option>
+            </Select>
             </td>
-          </tr>
-          <tr>
+            </tr>
+            <tr>
             <td>Measure: </td>
             <td>
-              <Select
-                defaultValue="casualties"
-                style={{ width: "100%" }}
-                onChange={setMeasure}
-                size="small"
-              >
-                <Option value="casualties">By Casualties</Option>
-                <Option value="cases">By Case Count</Option>
-              </Select>
+            <Select
+            defaultValue="casualties"
+            style={{ width: "100%" }}
+            onChange={setMeasure}
+            size="small"
+            >
+            <Option value="casualties">By Casualties</Option>
+            <Option value="cases">By Case Count</Option>
+            </Select>
             </td>
-          </tr>
-        </table> */}
-        <div style={{ flexGrow: 1 }}>
-          <DonutChart data={chartData}></DonutChart>
-        </div>
+            </tr>
+          </table> */}
+            <div style={{ flexGrow: 1 }}>
+              <DonutChart data={chartData}></DonutChart>
+            </div>
+          </div>
+        ) : (
+          <div>
+            Comparison
+            <table style={{ marginTop: "20px" }}>
+              {props.data.map((datum) => (
+                <tr>
+                  <td>
+                    <div
+                      style={{
+                        height: "20px",
+                        width: "20px",
+                        backgroundColor: countryColor(datum.Country) as string,
+                      }}
+                    />
+                  </td>
+                  <td>{datum.Country} </td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        )}
       </div>
-      <Text className="subtitle">Case Composition</Text>
-      <ParCoord data={props.data} />
+      <div style={{ height: "50%", marginTop: 'auto' }}>
+        <Text className="subtitle">Details</Text>
+        <ParCoord
+          data={props.data}
+          onFactorChanged={props.onFactorChanged}
+          factor={props.factor}
+          countryColor={countryColor}
+        />
+      </div>
     </div>
   );
 };

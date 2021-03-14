@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { schemeGnBu } from "d3";
 import { useEffect, useRef } from "react";
-import { foodTypeColor, victimTypes } from "../side_panel/side_panel";
+import { foodTypeColor, } from "../side_panel/side_panel";
 
 const replacementName: any = {
   Animal: "Meat & Animal Product",
@@ -36,11 +36,6 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
       .domain(Object.keys(props.data))
       .range(d3.schemeDark2);
 
-    if (
-      Object.keys(props.data).every((key) => victimTypes.indexOf(key) !== -1)
-    ) {
-      color = foodTypeColor;
-    }
 
     var pie = d3
       .pie()

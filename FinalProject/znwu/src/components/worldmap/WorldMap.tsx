@@ -7,15 +7,65 @@ import { GeometryCollection, Objects, Topology } from "topojson-specification";
 import { GeoJsonProperties } from "geojson";
 import { DataEntry } from "../../data";
 import React from "react";
-import { generalVictimType, foodTypeColor } from "../side_panel/side_panel";
 
 let world: Topology = require("../../datasets/countries-110m.json");
 
 type Country = GeometryCollection<GeoJsonProperties>;
 
-type TimeSpan = {
-  start: Date;
-  end: Date;
+const width = 938;
+const height = 500;
+const xyz = [width / 2, height / 1.5, 1];
+const projection = d3
+  .geoMercator()
+  .scale(150)
+  // .scale((width + 1) / 2 / Math.PI)
+  .translate([width / 2, height / 1.5])
+  .precision(0.1);
+const path = d3.geoPath().projection(projection);
+
+const domain = [0, 10];
+
+const deathRateColor = d3
+  .scaleLinear()
+  .domain(domain)
+  //@ts-ignore
+  .range(["white", "red"]);
+
+const xmargin = 40;
+const ymargin = 40;
+
+function get_xyz(d: Country | undefined) {
+  return path.centroid(d as any);
+  var bounds = path.bounds(d as any);
+  var w_scale = (bounds[1][0] - bounds[0][0]) / width;
+  var h_scale = (bounds[1][1] - bounds[0][1]) / height;
+  var z = 0.96 / Math.max(w_scale, h_scale);
+  var x = (bounds[1][0] + bounds[0][0]) / 2;
+  var y = (bounds[1][1] + bounds[0][1]) / 2 + height / z / 6;
+  return [x, y, z];
+}
+
+const continents = ["AF", "AS", "EU", "NA", "SA", "OC", "UNKNOWN"];
+
+const continentNames = {
+  AF: "Africa",
+  AS: "Asia",
+  EU: "Europe",
+  NA: "North America",
+  SA: "South America",
+  OC: "Oceana",
+};
+
+const continentColor: any = {
+  NA: "#1f77b4",
+  // AS: "#ff7f0e",
+  EU: "#2ca02c",
+  SA: "#9467bd",
+  AF: "#8c564b",
+  OC: "#e377c2",
+  UNKNOWN: "#7f7f7f",
+  AS: "#bcbd22",
+  // "#17becf"
 };
 
 const WorldMap = (props: {
@@ -25,74 +75,192 @@ const WorldMap = (props: {
   type: "map" | string;
 }) => {
   const ref = useRef(null);
-  let width = 938;
-  let height = 500;
+  const div = useMemo(() => <div ref={ref} />, []);
+
   let countries = useRef<string[]>([]);
 
-  const xyz = [width / 2, height / 1.5, 1];
-
-  useEffect(() => {
-    console.log("drawing")
+  const countryData = useMemo(() => {
     const countryData = topojson.feature(
       world,
       world.objects.countries as GeometryCollection<GeoJsonProperties>
     ).features;
 
+    countryData.forEach(
+      (country) => (country.properties!.geo = get_xyz(country as any))
+    );
     for (const country of props.data) {
       let match = countryData.find(
         (geoCountry) => geoCountry.properties!.name === country.Country
       );
       if (!match) {
-        console.log(country.Country);
+        // console.log(country.Country);
       } else {
         match.properties!.stat = country;
       }
     }
+    return countryData;
+  }, [props.data]);
 
-    // let country: string | undefined = undefined;
-    let projection = d3
-      .geoMercator()
-      .scale(150)
-      // .scale((width + 1) / 2 / Math.PI)
-      .translate([width / 2, height / 1.5])
-      .precision(0.1);
+  const validCountryData = useMemo(() => {
+    const validCountryData = countryData.filter(
+      (datum) => datum.properties!.stat?.Confirmed_abs
+    );
+    validCountryData.sort(
+      (a, b) =>
+        -a.properties!.stat.Confirmed_abs + b.properties!.stat.Confirmed_abs
+    );
+    return validCountryData;
+  }, [countryData]);
 
-    // const domain = d3.extent(data, function (d) {
-    //   return d.properties!.ncasualties as number;
-    // }) as [number, number];
-    // domain[0] = 0;
-    // domain[1] = Math.max(domain[1] ?? 0, props.limit);
-    const domain = [0, 10];
+  let [svg, setSvg] = useState<d3.Selection<
+    SVGSVGElement,
+    any,
+    any,
+    any
+  > | null>(null);
 
-    var color = d3
-      .scaleLinear()
-      .domain(domain)
-      //@ts-ignore
-      .range(["white", "red"]);
+  useEffect(() => {
+    if (!ref.current) return;
+    const svg = d3.select(ref.current).append("svg");
+    setSvg(svg);
+    return () => {
+      svg.remove();
+    };
+  }, [ref.current]);
 
-    var path = d3.geoPath().projection(projection);
-    // var graticule = d3.geoGraticule();
-
-    var svg = d3
-      .select(ref.current)
-      .append("svg")
-      .attr("preserveAspectRatio", "xMidYMid")
-      .attr("viewBox", "0 0 " + width + " " + height);
-    // .attr("width", width)
-    // .attr("height", height);
-
+  useEffect(() => {
+    if (!svg) return;
     svg
+      .attr("preserveAspectRatio", "xMidYMid")
+      .attr("viewBox", "0 0 " + width + " " + height)
       .append("rect")
       .attr("class", "background")
       .attr("width", width)
       .attr("height", height);
-    // .on("click", country_clicked);
+  }, [svg]);
 
-    var g = svg.append("g");
+  let [gMap, setGMap] = useState<d3.Selection<
+    SVGGElement,
+    any,
+    any,
+    any
+  > | null>(null);
+  useEffect(() => {
+    if (!svg) return;
+    const g = svg?.append("g");
+    setGMap(g);
+    return () => {
+      g.remove();
+    };
+  }, [svg]);
 
-    var tooltip = d3.select(ref.current).append("div").attr("class", "tooltip");
+  let [gBub, setGBub] = useState<d3.Selection<
+    SVGGElement,
+    any,
+    any,
+    any
+  > | null>(null);
+  useEffect(() => {
+    if (!svg) return;
+    const gb = svg?.append("g");
+    setGBub(gb);
+    return () => {
+      gb.remove();
+    };
+  }, [svg]);
 
-    g.append("g")
+  let [gCor, setGCor] = useState<d3.Selection<
+    SVGGElement,
+    any,
+    any,
+    any
+  > | null>(null);
+  useEffect(() => {
+    if (!svg) return;
+    const gCor = svg.append("g");
+    setGCor(gCor);
+    return () => {
+      gCor.remove();
+    };
+  }, [svg, props.type]);
+
+  function country_clicked(event: any, d: Country) {
+    if (!gMap || !svg) return;
+    let xyz = [width / 2, height / 1.5, 1];
+    let newCountry = (d?.properties as any)?.name;
+    if (countries.current.indexOf(newCountry) !== -1) {
+      gMap.selectAll("[id='" + newCountry + "']").classed("active", false);
+      countries.current = countries.current.filter(
+        (country) => country != newCountry
+      );
+      props.onSelectionChanged(countries.current);
+    } else {
+      gMap
+        .selectAll("[id='" + newCountry + "']")
+        .attr("class", "active")
+        .raise();
+      countries.current = [...countries.current, newCountry];
+      props.onSelectionChanged(countries.current);
+    }
+  }
+
+  // Draw continent keys
+  useEffect(() => {
+    if (!svg) return;
+    const keyElementWidth = 100;
+    const keyElementHeight = 30;
+    const keyWidth = keyElementWidth * (continents.length - 1);
+    const continentKeyScale = d3
+      .scaleBand()
+      .domain(continents.filter((continent) => continent != "UNKNOWN"))
+      .range([width - keyWidth, width]);
+
+    svg
+      .append("g")
+      .attr("class", "continent-key")
+      // .attr("transform", "translate(0," + height + ")")
+      .selectAll("g")
+      .data(continents.filter((continent) => continent != "UNKNOWN"))
+      .enter()
+      .append("g")
+      .attr("class", "continent-key-element");
+
+    d3.selectAll("g.continent-key-element")
+      .append("rect")
+      .attr("width", keyElementWidth)
+      .attr("height", keyElementHeight)
+      .attr("x", function (d: any) {
+        return continentKeyScale(d) as any;
+      })
+      .attr("fill", function (d: any) {
+        return continentColor[d] as any;
+      });
+
+    d3.selectAll("g.continent-key-element")
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("x", function (d: any) {
+        return (continentKeyScale(d) as number) + keyElementWidth / 2;
+      })
+      .text(function (d: any) {
+        return (continentNames as any)[d] || continentNames;
+      })
+      .attr("fill", "white");
+
+    // The text BBox has non-zero values only after rendering
+    d3.selectAll("g.continent-key-element text").attr("y", function (d) {
+      var textHeight = (this as any).getBBox().height;
+      // The BBox.height property includes some extra height we need to remove
+      var unneededTextHeight = 4;
+      return (keyElementHeight + textHeight) / 2 - unneededTextHeight;
+    });
+  }, [svg]);
+
+  // Draw world map background
+  useEffect(() => {
+    if (!svg || !gMap || gMap.empty()) return;
+    gMap
+      .append("g")
       .attr("id", "countries")
       .selectAll("path")
       .data(countryData)
@@ -103,51 +271,15 @@ const WorldMap = (props: {
       .attr("fill", (d) => {
         let stat = d.properties!.stat as DataEntry | undefined;
         if (stat) {
-          return color(stat.Confirmed);
+          return deathRateColor(stat.DeathRate);
         }
         return null;
       })
-      .on("click", country_clicked as any)
-      // .on("mousemove", function (event, d) {
-      //   tooltip
-      //     .html(
-      //       d.properties!.name +
-      //         " casualties: <br/>" +
-      //         (d.properties!.ncasualties ?? 0)
-      //     )
-      //     .style("top", d3.pointer(event, svg)[1] + "px")
-      //     .style("left", d3.pointer(event, svg)[0] + 10 + "px")
-      //     .raise();
-      // })
-      // .on("mouseout", function () {
-      //   tooltip.html(null).lower();
-      // });
-    const ge = g.append("g").attr("id", "events");
+      .on("click", country_clicked as any);
 
-    if (xyz) {
-      g.attr(
-        "transform",
-        "translate(" +
-          projection.translate() +
-          ")scale(" +
-          xyz[2] +
-          ")translate(-" +
-          xyz[0] +
-          ",-" +
-          xyz[1] +
-          ")"
-      );
-    }
-    for (const country of countries.current) {
-      g.select("[id='" + country + "']")
-        .raise()
-        .attr("class", "active");
-      // console.log(country.current);
-    }
-
-    const pl = 50;
-    const pt = height - 50;
-    const linearGradient = svg
+    const pl = 30;
+    const pt = 40;
+    const linearGradient = gMap
       .append("defs")
       .append("linearGradient")
       .attr("id", "linearColor")
@@ -165,86 +297,194 @@ const WorldMap = (props: {
     linearGradient
       .append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", "red");
+      .attr("stop-color", "#d62728");
 
-    svg
+    gMap
       .append("rect")
       .attr("x", pl - 30)
       .attr("y", pt - 40) // 83 is the height of the rectangle
       //Width and height of rectangle
       .attr("width", 180)
-      .attr("height", 56)
+      .attr("height", 50)
       //Set the color by referring to the id above
       .style("fill", "white");
-    svg
+    gMap
       .append("rect")
       //x. Coordinates of the upper left corner of the Y rectangle
       .attr("x", pl)
       .attr("y", pt - 10) // 83 is the height of the rectangle
       //Width and height of rectangle
       .attr("width", 100)
-      .attr("height", 16)
+      .attr("height", 10)
       //Set the color by referring to the id above
       .style("fill", "url(#" + linearGradient.attr("id") + ")");
     //Set text
 
     // Data initial value
-    svg
+    gMap
       .append("text")
       .attr("x", pl - 20)
       .attr("y", pt)
       .text(0)
       .classed("linear-text", true);
     // visualMap title
-    svg
+    gMap
       .append("text")
       .attr("x", pl + 20)
       .attr("y", pt - 20) // 8 for padding
-      .text("Casualties:")
+      .text("Death Rate:")
       .classed("linear-text", true);
     //Data terminal value
-    svg
+    gMap
       .append("text")
       .attr("x", pl + 100)
       .attr("y", pt) // 12 is the font size
-      .text(domain[1])
+      .text(domain[1] + "%")
       .classed("linear-text", true);
+  }, [gMap, props.data]);
 
-    function country_clicked(event: any, d: Country) {
-      let xyz = [width / 2, height / 1.5, 1];
-      let newCountry = (d?.properties as any)?.name;
-      if (countries.current.indexOf(newCountry) !== -1) {
-        g.selectAll("[id='" + newCountry + "']").classed("active", false);
-        countries.current = countries.current.filter(
-          (country) => country != newCountry
-        );
-        props.onSelectionChanged(countries.current);
+  useEffect(() => {
+    if (!gMap) return;
+    for (const country of countries.current) {
+      gMap
+        .select("[id='" + country + "']")
+        .raise()
+        .attr("class", "active");
+    }
+  }, [gMap, countries.current]);
+
+  useEffect(() => {
+    console.log([gCor, props.type])
+    if (!gCor || props.type === "map") return;
+    const xExtent = d3.extent(props.data, function (d) {
+      return (d as any)[props.type === "map" ? "Obesity" : props.type];
+    }) as [number, number];
+    xExtent[0] = Math.min(xExtent[0], 0);
+    xExtent[1] = Math.max(1, Math.ceil(xExtent[1]));
+    const x = d3
+      .scaleLinear()
+      .domain(xExtent)
+      .range([xmargin, width - xmargin]);
+    const y = d3
+      .scaleLinear()
+      .domain([0, 10])
+      .range([height - ymargin, ymargin]);
+    gCor
+      .append("g")
+      .attr("transform", "translate(0," + (height-ymargin) + ")")
+      .call(d3.axisBottom(x));
+    gCor.append("g").attr("transform", "translate(" + (xmargin) + ", 0)").call(d3.axisLeft(y));
+
+  }, [gCor, props.data, props.type]);
+
+  // Hide/show map
+  useEffect(() => {
+    if (props.type != "map") {
+      gMap?.transition().duration(1000).attr("opacity", 0);
+    } else {
+      gMap?.transition().duration(1000).attr("opacity", 1);
+    }
+  }, [gMap, props.type]);
+
+  useEffect(() => {
+    if (!gBub) return;
+    gBub
+      .attr("id", "bubbles")
+      .selectAll("circle")
+      .data(validCountryData)
+      .enter()
+      .append("circle")
+      .attr("id", (d) => "circ" + d.properties!.name)
+      .attr("r", (d) => Math.sqrt(d.properties!.stat.Confirmed_abs) / 2000 + 1)
+      // .attr("cx", (d) => d.properties!.geo[0])
+      // .attr("cy", (d) => d.properties!.geo[1])
+      .attr("pointer-events", "none")
+      .attr("fill", (d) => {
+        // let stat = d.properties!.stat as DataEntry | undefined;
+        // if (stat) {
+        //   return color(stat.Confirmed);
+        // }
+        // return null;
+        return continentColor[d.properties!.stat.Continent] as any;
+      })
+      .on("click", country_clicked as any);
+  }, [props.data, gBub]);
+
+  useEffect(() => {
+    if (!gBub) return;
+    const xExtent = d3.extent(props.data, function (d) {
+      return (d as any)[props.type === "map" ? "Obesity" : props.type];
+    }) as [number, number];
+    xExtent[0] = Math.min(xExtent[0], 0);
+    xExtent[1] = Math.max(1, Math.ceil(xExtent[1]));
+    const x = d3
+      .scaleLinear()
+      .domain(xExtent)
+      .range([xmargin, width - xmargin]);
+    const y = d3
+      .scaleLinear()
+      .domain([0, 10])
+      .range([height - ymargin, ymargin]);
+    function getX(d: any, type: string) {
+      if (type == "map") {
+        return d.properties!.geo[0];
       } else {
-        g.selectAll("[id='" + newCountry + "']")
-          .attr("class", "active")
-          .raise();
-        countries.current = [...countries.current, newCountry];
-        props.onSelectionChanged(countries.current);
+        return x(d.properties!.stat[type]);
       }
     }
+    gBub
+      .attr("id", "bubbles")
+      .selectAll("circle")
+      .transition()
+      .duration(1000)
+      .attr("cx", (d: any) => getX(d, props.type))
+      .attr("cy", (d: any) =>
+        props.type == "map"
+          ? d.properties!.geo[1]
+          : y(d.properties!.stat.DeathRate)
+      );
+  }, [props.data, gBub, props.type]);
 
-    function get_xyz(d: Country | undefined) {
-      var bounds = path.bounds(d as any);
-      var w_scale = (bounds[1][0] - bounds[0][0]) / width;
-      var h_scale = (bounds[1][1] - bounds[0][1]) / height;
-      var z = 0.96 / Math.max(w_scale, h_scale);
-      var x = (bounds[1][0] + bounds[0][0]) / 2;
-      var y = (bounds[1][1] + bounds[0][1]) / 2 + height / z / 6;
-      return [x, y, z];
-    }
+  // useEffect(() => {
+  //   // .on("click", country_clicked);
 
-    return function cleanup() {
-      svg.remove();
-      tooltip.remove();
-    };
-  }, [props.data]);
+  //   var tooltip = d3.select(ref.current).append("div").attr("class", "tooltip");
 
-  const div = useMemo(() => <div ref={ref} />, []);
+  //   // .on("mousemove", function (event, d) {
+  //   //   tooltip
+  //   //     .html(
+  //   //       d.properties!.name +
+  //   //         " casualties: <br/>" +
+  //   //         (d.properties!.ncasualties ?? 0)
+  //   //     )
+  //   //     .style("top", d3.pointer(event, svg)[1] + "px")
+  //   //     .style("left", d3.pointer(event, svg)[0] + 10 + "px")
+  //   //     .raise();
+  //   // })
+  //   // .on("mouseout", function () {
+  //   //   tooltip.html(null).lower();
+  //   // });
+
+  //   // if (xyz) {
+  //   //   g.attr(
+  //   //     "transform",
+  //   //     "translate(" +
+  //   //       projection.translate() +
+  //   //       ")scale(" +
+  //   //       xyz[2] +
+  //   //       ")translate(-" +
+  //   //       xyz[0] +
+  //   //       ",-" +
+  //   //       xyz[1] +
+  //   //       ")"
+  //   //   );
+  //   // }
+
+  //   return function cleanup() {
+  //     svg.remove();
+  //     tooltip.remove();
+  //   };
+  // }, [props.data]);
 
   return div;
 };

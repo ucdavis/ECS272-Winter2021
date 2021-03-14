@@ -11,7 +11,9 @@ const { Title, Text } = Typography;
 export const Overview = () => {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 
-  const [focuedFactors, setFocusedFactors] = useState<string | null>(null);
+  const [focuedFactor, setFocusedFactor] = useState<string | undefined>(
+    undefined
+  );
 
   const [data_ready] = usePromise(() => data, []);
 
@@ -23,11 +25,9 @@ export const Overview = () => {
     );
   }, [selectedCountries, data_ready]);
 
-  console.log(data_ready);
-
   return (
     <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-      <div style={{ width: "55%", paddingTop: "10px" }}>
+      <div style={{ width: "70%", paddingTop: "10px" }}>
         <Title style={{ textAlign: "center" }} level={5}>
           Global Terrorism Map
         </Title>
@@ -35,15 +35,15 @@ export const Overview = () => {
           <WorldMap
             data={data_ready || []}
             onSelectionChanged={setSelectedCountries}
-            type="map"
+            type={focuedFactor || "map"}
           />
         </div>
       </div>
-      <div style={{ width: "45%", padding: "10px" }}>
-        {selectedCountries.length === 0 ? (
+      <div style={{ width: "30%", padding: "10px" }}>
+        {!detailData || detailData.length == 0 ? (
           "Please select a country to view details"
         ) : (
-          <SidePanel data={detailData} />
+          <SidePanel data={detailData} onFactorChanged={setFocusedFactor} factor={focuedFactor}/>
         )}
       </div>
     </div>

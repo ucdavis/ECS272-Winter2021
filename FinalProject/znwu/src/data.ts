@@ -1,14 +1,17 @@
 import * as d3 from "d3";
 //@ts-ignore
 import datapath from "./datasets/Food_Supply_Quantity_kg_Data.csv";
-import { eventCountryToGeologyCountry } from "./utils/country_code_translator";
+//@ts-ignore
+import countryCode from "./datasets/countries.csv";
 
+import { dataCountryToGeologyCountry } from "./utils/country_code_translator";
 function processData() {
-  return d3.csv(datapath).then((csv) => {
-    const _data = (csv as unknown) as any[];
+  return Promise.all( [d3.csv(datapath), d3.csv(countryCode)]).then(([dataCsv, countryCodeCsv]) => {
+    const _data = (dataCsv as unknown) as any[];
     for (let entry of _data) {
-      entry.Country = eventCountryToGeologyCountry(entry.Country);
-      entry.Alcohol = parseFloat(entry["Alcoholic Beverage"]) || 0;
+      entry.Country = dataCountryToGeologyCountry(entry.Country);
+      entry.Continent = countryCodeCsv.find((country) => country.CountryName === entry.Country)?.ContinentCode || 'UNKNOWN';
+      entry.Alcohol = parseFloat(entry["Alcoholic Beverages"]) || 0;
       entry.Animal =
         (parseFloat(entry["Animal fats"]) || 0) +
         (parseFloat(entry["Animal Products"]) || 0) +
@@ -32,7 +35,7 @@ function processData() {
       entry.Sugar =
         (parseFloat(entry["Sugar & Sweeteners"]) || 0) +
         (parseFloat(entry["Sugar Crops"]) || 0);
-      entry.Nuts = parseFloat(entry["Treeuts"]) || 0;
+      entry.Nuts = parseFloat(entry["Treenuts"]) || 0;
       entry.Obesity = parseFloat(entry["Obesity"]);
       entry.Confirmed = parseFloat(entry["Confirmed"]);
       entry.Deaths = parseFloat(entry["Deaths"]);
@@ -42,6 +45,10 @@ function processData() {
       entry.Active = parseFloat(entry["Active"]) || 0;
 
       entry.Undernourished_txt = entry.Undernourished;
+
+      entry.DeathRate = entry.Deaths/entry.Confirmed * 100;
+
+      entry.Confirmed_abs = Math.floor(entry.Confirmed * entry.Population);
 
       entry.Undernourished =
         parseFloat(entry.Undernourished) ||
@@ -82,8 +89,10 @@ export interface DataEntry {
   Undernourished: number;
   Undernourished_txt: number;
   Confirmed: number;
+  Confirmed_abs: number;
   Deaths: number;
   Recovered: number;
   Active: number;
   Population: number;
+  DeathRate: number;
 }
