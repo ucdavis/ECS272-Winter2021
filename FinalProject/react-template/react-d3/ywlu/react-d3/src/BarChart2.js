@@ -14,7 +14,7 @@ class BarChart2 extends Component {
         //getData1();
 
 
-        getData(function () {
+        getData('USA',function () {
             console.log('loading finished');
             var datapack = pack;
             var data = datapack.data

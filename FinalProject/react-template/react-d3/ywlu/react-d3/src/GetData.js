@@ -3,7 +3,7 @@ import data from './datasets/owid-covid-data.csv';
 import data2 from './datasets/country_vaccinations.csv';
 import data3 from './datasets/countries_codes_and_coordinates.csv';
 export var pack = {};
-export async function getData(_callback) {
+export async function getData(get_iso, _callback) {
     Promise.all([
         d3.csv(data),
         d3.csv(data2),
@@ -120,10 +120,13 @@ export async function getData(_callback) {
         data2 = data2.filter(function (data) {
             return data.date !== null;
         });
+        /**
         var c = datag[Math.floor(Math.random() * Math.floor(datag.length))].iso
         while (filteredC.find(x => x.iso === c) === undefined || filteredC.find(x => x.iso === c).total_case === 0) {
             c = datag[Math.floor(Math.random() * Math.floor(datag.length))].iso;
         }
+         */
+        var c = get_iso
 
         data = data2.filter(function (data) {
 
