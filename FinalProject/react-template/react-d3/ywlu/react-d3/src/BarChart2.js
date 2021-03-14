@@ -19,7 +19,7 @@ class BarChart2 extends Component {
             var data = getData_for_country(pack.data,"USA");
             var CList = datapack.CList
             var c = "USA"
-            console.log(d3.max(pack.CList, d => d.total_vac/d.population))
+            //console.log(d3.max(pack.CList, d => d.total_vac/d.population))
             /*********************************
              * Visualization codes start here
              * *******************************/
