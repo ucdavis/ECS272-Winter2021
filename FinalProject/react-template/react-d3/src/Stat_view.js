@@ -28,13 +28,6 @@ class Stat_view extends React.Component{
 
 
 
-  draw_sk_tetris(){
-
-
-  }
-
-
-
   render(){
     let url_info = this.get_url_param();
     let start = url_info["start"];
@@ -47,8 +40,7 @@ class Stat_view extends React.Component{
                 <div id="tooltip"></div>
                 <BarChart2 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
             </div>
-
-
+            <a className="stat_view_home" href={"/Stat_view_second?start=Geo&iso="+url_info["iso"]}>Next</a>
           </div>
         </div>
 
@@ -57,12 +49,13 @@ class Stat_view extends React.Component{
         return (
             <div className="PCSKYPageLayout">
               <h1 className="header">Scatter Line</h1>
+              <a className="stat_view_home" href={"/Stat_view_second?start=Parall&iso="+url_info["iso"]}>Next</a>
               <div className="SKYcontainer">
                 <div className="SKY">
                   <div id="tooltip"></div>
                   <BarChart2 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
+                  </div>
                 </div>
-              </div>
             </div>
             );        
     }
