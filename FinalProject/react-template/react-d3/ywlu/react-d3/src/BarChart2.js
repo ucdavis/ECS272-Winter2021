@@ -15,10 +15,11 @@ class BarChart2 extends Component {
 
         getData(function () {
             console.log('loading finished');
-            var datapack = getData_for_country(pack,"USA");
-            var data = datapack.data
+            var datapack = pack
+            var data = getData_for_country(pack.data,"USA");
             var CList = datapack.CList
             var c = "USA"
+            console.log(d3.max(pack.CList, d => d.total_vac/d.population))
             /*********************************
              * Visualization codes start here
              * *******************************/
@@ -92,7 +93,7 @@ class BarChart2 extends Component {
                 .attr("fill", "blue")
                 .attr('opacity', 0.8)
 
-            var scatterPlot3 = view.append("g")
+            var scatterPlot4 = view.append("g")
                 .selectAll("dot")
                 .data(data)
                 .enter()
@@ -185,7 +186,7 @@ class BarChart2 extends Component {
                         return y(d.total_cases)
                     })
                 )
-            var l2 = view.append("path")
+            var l3 = view.append("path")
                 .datum(data)
                 .attr("fill", "none")
                 .attr("stroke", "gray")
@@ -201,7 +202,7 @@ class BarChart2 extends Component {
                         return y(d.people_vaccinated)
                     })
                 )
-            var l2 = view.append("path")
+            var l4 = view.append("path")
                 .datum(data)
                 .attr("fill", "none")
                 .attr("stroke", "gray")
