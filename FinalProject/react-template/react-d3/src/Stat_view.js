@@ -10,16 +10,19 @@ class ImageSKY extends React.Component{
   constructor(props){
     super(props);
 
-
+    this.state={
+      width:"100%",
+      height:"100%"
+    }
 
   }
 
 
   get_url_param(){
     let url = new URL(window.location.href);
-    let start = url.searchParams.get("start");
     return {
-        start: start
+        start: url.searchParams.get("start"),
+        iso:url.searchParams.get("iso")
     };
   }
 
@@ -33,14 +36,16 @@ class ImageSKY extends React.Component{
 
 
   render(){
-    let start = this.get_url_param()["start"];
+    let url_info = this.get_url_param();
+    let start = url_info["start"];
     if(start == "Geo"){
         return (
           <div className="GeoSKYPageLayout">
-          <h1 className="header">Tetris Sky</h1>
+          <h1 className="header">Scatter Line</h1>
           <div className="SKYcontainer">
             <div className="SKY">
-                <BarChart2 width={this.state.width} height={this.state.height}/>
+                <div id="tooltip"></div>
+                <BarChart2 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
             </div>
 
 
@@ -51,10 +56,11 @@ class ImageSKY extends React.Component{
     }else{
         return (
             <div className="PCSKYPageLayout">
-              <h1 className="header">Tetris Sky</h1>
+              <h1 className="header">Scatter Line</h1>
               <div className="SKYcontainer">
                 <div className="SKY">
-        
+                  <div id="tooltip"></div>
+                  <BarChart2 width={this.state.width} height={this.state.height} iso={url_info["iso"]}/>
                 </div>
               </div>
             </div>
