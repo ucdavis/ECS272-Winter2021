@@ -100,17 +100,12 @@ export async function getData( _callback) {
 
         var filteredC = [];
 
-        function getpopulation(iso){
-            var n = data2.find(x => x.iso === iso)
-            if (n !== undefined)
-                return n.population
-            return 0
-        }
         datag.forEach(function (d) {
             filteredC.push({
                 name: d.name,
                 iso: d.iso,
-                population:getpopulation(d.iso),
+                population:(data.find(x => x.iso === d.iso) !== undefined) ? data.find(x => x.iso === d.iso).population : 0,
+                total_deaths:(data.find(x => x.iso === d.iso) !== undefined) ? data.reverse().find(x => x.iso === d.iso).total_deaths : 0,
                 total_case: holderC[d.iso],
                 total_vac: holderV[d.iso],
                 lat: d.lat,
