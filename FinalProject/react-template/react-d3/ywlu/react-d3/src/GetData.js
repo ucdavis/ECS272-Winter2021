@@ -136,7 +136,7 @@ export async function getData( _callback) {
         console.log("good");
 
         data2 = data2.filter(function (data) {
-            return data.date !== null;
+            return data.date !== null && data.iso !== "";
         });
         /**
         var c = datag[Math.floor(Math.random() * Math.floor(datag.length))].iso
