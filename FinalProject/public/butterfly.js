@@ -15,7 +15,7 @@ function ShowStudentInfo(id, x, y) {
     const student = GetStudentById(id);
     console.log(student);
     var info_box = document.getElementById("info-box");
-    info_box.textContent = student.id;
+    info_box.textContent = student.com[phase-1];
     info_box.style.top = y + 10;
     info_box.style.left = x + 10;
     info_box.style.display = "flex";
@@ -193,31 +193,7 @@ function UpdateButterflies() {
     }
 }
 
-function Draw() {
-    UpdateButterflies();
-    
-    // container.viewBox.baseVal.x += 10;
-    vb_dx = view_box_x - parseInt(container.viewBox.baseVal.x);
 
-    if(vb_dx > 0) {
-        container.viewBox.baseVal.x += Math.sqrt(vb_dx);
-    } else if (vb_dx < 0) {
-        container.viewBox.baseVal.x -= Math.sqrt(-vb_dx);
-    }
-    
-
-    
-    var matches = document.getElementById("inner").style.backgroundColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    var rgb_src = {r: parseInt(matches[1]), g:parseInt(matches[2]), b:parseInt(matches[3])};
-    var rgb_dest = hexToRgb(background_colors[1]);
-
-    var rgb = {r: Math.ceil(rgb_src.r + (rgb_dest.r - rgb_src.r) * 0.1), g: Math.ceil(rgb_src.g + (rgb_dest.g - rgb_src.g) * 0.1), b: Math.ceil(rgb_src.b + (rgb_dest.b - rgb_src.b)*0.1)}
-
-    // document.getElementById("inner").style.backgroundColor = "rgb("+rgb.r+','+rgb.g+','+rgb.b+")";
-
-    console.log();
-    setTimeout(() => { Draw();  }, 1000 / 160);
-}
 
 // setTimeout(() => { CreateButterflies(); Draw();  }, 1000);
 
@@ -233,26 +209,9 @@ container.addEventListener("click", (e)=>{
     pt.y = e.offsetY;
 
     pt_new = pt.matrixTransform(container.getCTM().inverse());
+    pt_new.x = Math.round(pt_new.x);
+    pt_new.y = Math.round(pt_new.y);
     console.log(pt_new);
 });
 
 
-var tree_1 = document.getElementById("tree_1");
-
-tree_1.addEventListener("click", (e)=>{
-    for(var i=0; i<drag_centers.length; i++) {
-        drag_centers[i][0] = drag_centers_original[i][0];
-    }
-    view_box_x = 0;
-    tree_type = 'sat';
-});
-
-var tree_2 = document.getElementById("tree_2");
-
-tree_2.addEventListener("click", (e)=>{
-    for(var i=0; i<drag_centers.length; i++) {
-        drag_centers[i][0] = drag_centers_original[i][0] + 1500;
-    }
-    view_box_x = 1500;
-    tree_type = 'eff';
-});
