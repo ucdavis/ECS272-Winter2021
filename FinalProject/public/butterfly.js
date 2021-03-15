@@ -298,8 +298,16 @@ function UpdateButterflies() {
         var vy_i = butterfly_i.getAttributeNS(null, 'vy');
 
         var angle = Math.atan2(vy_i, vx_i) / Math.PI * 180 + 90;
+        var da = (angle - rotate_i);
+        da = Math.abs(da) < 180?da:(da>0?da-360:da+360);
+        var new_rotate = da * 0.01 + rotate_i;
+        if(new_rotate > 360) {
+            new_rotate -= 360;
+        } else if(new_rotate < 0) {
+            new_rotate += 360;
+        }
 
-        butterfly_i.setAttributeNS(null, 'transform', 'translate(' + x_i + ' ' + y_i + ') scale(' + scale_i[0] + ' ' + scale_i[1] + ') rotate(' + ((angle - rotate_i) * 0.02 + rotate_i) + ')');
+        butterfly_i.setAttributeNS(null, 'transform', 'translate(' + x_i + ' ' + y_i + ') scale(' + scale_i[0] + ' ' + scale_i[1] + ') rotate(' + new_rotate + ')');
 
 
         butterfly_i.setAttributeNS(null, 'vx', parseFloat(butterfly_i.getAttributeNS(null, 'vx')) * 0.8 + drag_force.x + repulsive_force.x);
