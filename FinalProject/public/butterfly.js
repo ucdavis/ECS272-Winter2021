@@ -122,6 +122,8 @@ function CreateButterflies(students) {
         var butterfly = document.createElementNS(svgns, "g");
         butterfly.setAttributeNS(null, 'id', student.id);
         butterfly.setAttributeNS(null, 'class', 'butterfly');
+        butterfly.setAttributeNS(null, 'status', 0);
+        butterfly.setAttributeNS(null, 'seed', Math.random());
         butterfly.setAttributeNS(null, 'r', 23 * Math.sqrt(year_factor));
         butterfly.setAttributeNS(null, 'vx', 0);
         butterfly.setAttributeNS(null, 'vy', 0);
@@ -187,6 +189,18 @@ function UpdateButterflies() {
         var butterfly_i = butterflies[i];
         var student_i = GetStudentById(butterfly_i.getAttributeNS(null, 'id'));
         var drag_center = drag_centers[student_i[tree_type][phase - 1] - 1];
+        drag_center = [drag_center[0], drag_center[1]];
+
+
+        var status = butterfly_i.getAttributeNS(null, 'status');
+        if(status != '0') {
+            status = butterfly_i.getAttributeNS(null, 'seed');
+            status = parseFloat(status);
+            var dist = width_offset * (status + 1);
+            status = status * -Math.PI;
+            drag_center[0] = drag_center[0] + dist * Math.cos(status);
+            drag_center[1] = drag_center[1] + dist * Math.sin(status);
+        }
 
         splitted = butterfly_i.getAttributeNS(null, 'transform').split(')');
 
@@ -255,9 +269,6 @@ function UpdateButterflies() {
             repulsive_force.x *= 0.1;
             repulsive_force.y *= 0.1;
         }
-        
-
-
 
         drag_magnitude = Math.sqrt(drag_force.x * drag_force.x + drag_force.y * drag_force.y);
         if(drag_magnitude > 0) {
@@ -265,11 +276,23 @@ function UpdateButterflies() {
             drag_force.y = drag_force.y * 0.05 * (Math.random() * 0.8 + 0.2);  
         }
 
+        if(status != '0') {
+            drag_force.x *= 0.3;
+            drag_force.y *= 0.3;
+        }
+        // width_offset
+        // if() {
+        //     var dx = 1000 + view_box_x - x_i;
+        //     var dy = 500 - y_i;
+        //     var d = Math.sqrt(dx*dx+dy*dy);
+        //     drag_force.x = -dx * (1/d) * 10;
+        //     drag_force.y = -dy * (1/d) * 10;
+        // }
+
         x_i += parseFloat(butterfly_i.getAttributeNS(null, 'vx')) * 0.1;
         y_i += parseFloat(butterfly_i.getAttributeNS(null, 'vy')) * 0.1;
 
-        // console.log(Math.atan2(y_i, x_i) / Math.PI * 180);
-
+        // console.log(Math.atan2(y_i, x_i) / Math.PI * 180);        
         
         var vx_i = butterfly_i.getAttributeNS(null, 'vx');
         var vy_i = butterfly_i.getAttributeNS(null, 'vy');

@@ -301,12 +301,14 @@ function UpdateButterfliesVisibility() {
         var butterfly = butterflies[i];
         var student = GetStudentById(butterfly.id);
         if(filters.gender[student.gender] && filters.major[student.major]) {
-            const year_factor = Math.sqrt(student.year) * 0.5;
-            butterfly.setAttributeNS(null, 'r', 23 * Math.sqrt(year_factor));
-            butterfly.setAttributeNS(null, 'visibility', 'visible');
+            // const year_factor = Math.sqrt(student.year) * 0.5;
+            // butterfly.setAttributeNS(null, 'r', 23 * Math.sqrt(year_factor));
+            // butterfly.setAttributeNS(null, 'visibility', 'visible');
+            butterfly.setAttributeNS(null, 'status', 0);
         } else {
-            butterfly.setAttributeNS(null, 'r', 0);
-            butterfly.setAttributeNS(null, 'visibility', 'hidden');
+            // butterfly.setAttributeNS(null, 'r', 0);
+            // butterfly.setAttributeNS(null, 'visibility', 'hidden');
+            butterfly.setAttributeNS(null, 'status', Math.random());
         }
     }
 }
@@ -374,7 +376,7 @@ function IntroButton() {
         document.getElementById("intro-overlay").style.opacity = "0";
         setTimeout(() => {
             document.getElementById("intro-overlay").style.display = "none";
-        }, 500);
+        }, 800);
     }
 }
 
