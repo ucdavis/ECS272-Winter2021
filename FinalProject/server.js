@@ -59,6 +59,14 @@ const ProcessGender = (gender) => {
     }
 }
 
+const ProcessMajor = (major) => {
+    if(major.toLowerCase().includes('design')) {
+        return('Design')
+    } else {
+        return('NonDesign')
+    }
+}
+
 xlsx2json('dataset.xlsx').then(jsonArray => {
     raw_data = []
     table_json = jsonArray[0];
@@ -70,16 +78,18 @@ xlsx2json('dataset.xlsx').then(jsonArray => {
         line.P = RateToNum(line.P);
         line.Q = RateToNum(line.Q);
         line.G = ProcessGender(line.G);
-        
+        line.K = ProcessMajor(line.K);
+
         if(line.A == 1) {
             line.L = YearToNum(line.L);
-            raw_data.push({id:line.E, gender:line.G, year:line.L, sat:[line.O,0,0], eff:[line.P,0,0], sig:[line.Q,0,0]});
+            raw_data.push({id:line.E, gender:line.G, race:line.H, income:line.J, major:line.K, tool:line.M, tool_text:line.N, year:line.L, sat:[line.O,0,0], eff:[line.P,0,0], sig:[line.Q,0,0], com:[line.R,0,0]});
         } else if(line.A == 2 || line.A == 3) {
             for(let j=0; j<raw_data.length; j++) {
                 if(raw_data[j].id == line.E) {
                     raw_data[j].sat[parseInt(line.A) - 1] = line.O;
                     raw_data[j].eff[parseInt(line.A) - 1] = line.P;
                     raw_data[j].sig[parseInt(line.A) - 1] = line.Q;
+                    raw_data[j].com[parseInt(line.A) - 1] = line.R;
                 }
             }
         }
