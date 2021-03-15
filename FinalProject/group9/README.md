@@ -1,72 +1,41 @@
+# Money doesn't ensure security
+
+Group 9
+Member: Jinyoung Pung, Min Sung Kim
+
+# Abstract
+
+"To live in peace one must be blind, deaf, and mute". Although worldwide nations have continuously increased their military expenditure over time to enhance their security, we are still living in the world with complex and diverse threats. One of the promising ways to prevent and overcome the threats is multinational cooperation. In our narrative storytelling, we show the existing threat in the real world and emphasize the importance of multinational cooperation. To this end, we visualized the correlation between GDP and military expenditure, the number of military disputes over the world, and the comparison between the military expenditure of alliance/disputed countries. For evaluation, we used TeamViewer to observe user behavior, such as how long users stay on which page, and collected feedback through questionnaires.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 First run `npm i` to install the necessary dependencies. If you do not have npm please install both [Node.js and Npm](https://nodejs.org/en/)
 
-## Available Scripts
-
-In the project directory, you can run:
+In the project directory, you run below command to start the app:
 
 ### `npm start`
 
-Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# References
 
-### `npm test`
+We referenced below tasks:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Interactive geographic map:
+https://observablehq.com/@richdayandnight/one-chart-a-day-zoom-in-to-per-country-in-the-world-map
 
-### `npm run build`
+Clusted circle:
+https://observablehq.com/@mbostock/clustered-bubbles
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Zoomable circle packing:
+https://observablehq.com/@d3/zoomable-circle-packing
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Scatter plot animation:
+https://observablehq.com/@uwdata/introduction-to-d3-part-2
+https://gist.github.com/adry34160/abe0bda4ea2f7e8efbd63bd2d419ef15
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Cumulative area chart:
+https://observablehq.com/@didoesdigital/25-may-2020-cumulative-area-chart-in-d3-with-tooltips
+https://observablehq.com/@palewire/cumulative-line-chart
