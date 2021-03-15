@@ -18,7 +18,7 @@ import img3 from "./images/Global COVID-19 Cases Per Capita.webp";
 import img4 from "./images/good-vs-bad-food-unhealthy-junk-iStock_000058524328_Medium.jpg";
 import img5 from "./images/EUS9VAaWsAMug35.jpg";
 import img6 from "./images/obesity-may-increase-risk-of-covid-19-complications-722x406.jpg";
-import img7 from "./images/mark-fletcher-brown-nN5L5GXKFz8-unsplash.jpg"
+import img7 from "./images/mark-fletcher-brown-nN5L5GXKFz8-unsplash.jpg";
 import { icons } from "./icons/icons";
 
 const { Title, Text } = Typography;
@@ -65,12 +65,19 @@ const App: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>Covid strikes</td>
-                  <td>Protection, Distancing</td>
-                  <td>Global Pandemic</td>
+                  <td>
+                    <h4>Covid strikes</h4>
+                  </td>
+                  <td>
+                    <h4>Protection, Distancing</h4>
+                  </td>
+                  <td>
+                    <h4>Global Pandemic</h4>
+                  </td>
                 </tr>
               </tbody>
             </table>
+            <div className="source">Image credit: Healthline, VOA</div>
           </div>
         </div>
         <div className="each-fade">
@@ -90,12 +97,19 @@ const App: React.FC = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td>Covid Susceptibility and Diet Habit</td>
-                  <td>Alcohol Intake</td>
-                  <td>Obesity</td>
+                  <td>
+                    <h4>Covid Susceptibility and Diet Habit</h4>
+                  </td>
+                  <td>
+                    <h4>Alcohol Intake</h4>
+                  </td>
+                  <td>
+                    <h4>Obesity</h4>
+                  </td>
                 </tr>
               </tbody>
             </table>
+            <div className="source">Image credit: Havard, WHO, EverydayHealth</div>
           </div>
         </div>
         <div className="each-fade">

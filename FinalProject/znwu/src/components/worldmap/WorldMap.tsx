@@ -32,7 +32,7 @@ const deathRateColor = d3
   //@ts-ignore
   .range(["white", "red"]);
 
-const xmargin = 40;
+const xmargin = 80;
 const ymargin = 40;
 
 function get_xyz(d: Country | undefined) {
@@ -431,7 +431,7 @@ const WorldMap = (props: {
       .attr("text-anchor", "middle")
       .attr(
         "transform",
-        "translate(" + 20 + "," + height / 2 + ") rotate(-90)"
+        "translate(" + (xmargin-20) + "," + height / 2 + ") rotate(-90)"
       );
   }, [gCor, props.data, props.type]);
 
