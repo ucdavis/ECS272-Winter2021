@@ -102,7 +102,7 @@ export default class StreamGraph extends React.Component {
             })
             .on('end', function (e) {  // Drop the vertical line to the nearest tick.
               const yearSelected = Math.round(xInverse(e.x));
-
+              console.log(e)
               d3.select(this)
                 .attr('x1', x(yearSelected))
                 .attr('x2', x(yearSelected));
@@ -240,7 +240,7 @@ export default class StreamGraph extends React.Component {
 
                 if (mode === 'genre') {  // Show tool-tip view.
                   const dataElement = loadElementByGenreData(
-                    d, Math.round(xInverse(e.x)));
+                    d, Math.round(xInverse(e.offsetX)));
                   const bars = toolTip.selectAll('.bars')
                     .data(dataElement, d => {
                       return d;
@@ -254,7 +254,7 @@ export default class StreamGraph extends React.Component {
                   toolTip.raise()
                     .attr('opacity', 1);
                   toolTip.select('#tool-tip-title')
-                    .text(d['key'] + " in " + Math.round(xInverse(e.x)));
+                    .text(d['key'] + " in " + Math.round(xInverse(e.offsetX)));
                   toolTip.select('#tool-tip-y-axis')
                     .transition()
                       .call(
@@ -281,12 +281,12 @@ export default class StreamGraph extends React.Component {
                   toolTip
                     .attr(
                       'transform',
-                      'translate(' + e.x + ',' + (e.y - heightToolTip) + ')');
+                      'translate(' + (e.offsetX + 50) + ',' + (e.offsetY - heightToolTip) + ')');
                   toolTip.select('#tool-tip-border')
                     .attr(
                       'transform',
                       'translate(' + (-marginToolTip) + ',' + (-marginToolTip) + ')');
-                  if (e.x > 500) {  // If cursoe is on the right
+                  if (e.offsetX > 500) {  // If cursoe is on the right
                     toolTip         //  side, show tool-tip on the left.
                       .attr(
                         'transform', function(d) {
@@ -294,7 +294,7 @@ export default class StreamGraph extends React.Component {
                             'translate(' + (-300) + ',0)';
                         })
                   }
-                  if (e.y < 250) {  // If cursoe is on the top
+                  if (e.offsetY < 250) {  // If cursoe is on the top
                     toolTip         //  side, show tool-tip on the bottom.
                       .attr(
                         'transform', function(d) {
