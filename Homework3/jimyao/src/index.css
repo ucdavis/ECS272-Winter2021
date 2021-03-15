@@ -1,0 +1,207 @@
+*   {
+  margin:0;
+  padding:0;
+}
+
+html, body {
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+header {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  max-width: none;
+  top: 0;
+  left: 0;
+}
+
+#pad {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
+  font-size: 1.3em;
+  font-family: 'Roboto';
+  font-weight: 300;
+}
+
+div {
+  background-color: white;
+  font-family: 'Roboto';
+  font-weight: 300;
+}
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+#display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  background-color: #f5f5f5;
+}
+
+#left-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+#right-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+
+
+#year-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  width: 1000px;
+}
+
+#year-view-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin: 0;
+  width: 1000px;
+}
+
+
+
+#year-detail-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  width: 1000px;
+  flex-direction: column;
+}
+
+#year-detail-view-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 1000px;
+  flex-direction: row;
+}
+
+.title {
+  font-size: 1.2em;
+  font-weight: 500;
+  width: 100%;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.subtitle {
+  color: #333333;
+  font-weight: 300;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.toggle-btn {
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8em;
+  user-select: none;
+  transition: 1s;
+  width: 40px;
+  margin-bottom: 5px;
+}
+
+#toggle-panel {
+  display: flex;
+  /* justify-content: center;
+  align-items: center; */
+  flex-direction: column-reverse;
+}
+
+#top-10-song-view, #top-10-artist-view {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  width: 400px;
+  height: 347px;
+}
+
+.toggle-hint {
+  display: block;
+  position: relative;
+  top: -10px;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #4c4c4c;
+}
+
+.hint {
+  text-shadow: 0 0 5px white;
+  fill: #222222;
+}
+
+.toggle-help {
+  display: block;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #4c4c4c;
+}
+
+.toggle-help-text {
+  display: block;
+  position: relative;
+  font-size: 0.6em;
+  font-weight: 500;
+  color: #2c2c2c;
+}
