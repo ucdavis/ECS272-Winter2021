@@ -13,24 +13,41 @@ import { icons } from "../../icons/icons";
 const { Text, Link } = Typography;
 const { Option } = Select;
 
-export const foodTypeColor = d3
-  .scaleOrdinal()
-  .domain([
-    "Alcohol",
-    "Animal",
-    "Vegetables",
-    "Fruits",
-    "Nuts",
-    "FishSeafood",
-    "Cereals",
-    "Milk",
-    "StarchyRoots",
-    "Sugar",
-    "Eggs",
-    "Oil",
-    "Others",
-  ])
-  .range(d3.schemeDark2);
+// export const foodTypeColor = d3
+//   .scaleOrdinal()
+//   .domain([
+//     "Alcohol",
+//     "Animal",
+//     "Vegetables",
+//     "Fruits",
+//     "Nuts",
+//     "FishSeafood",
+//     "Cereals",
+//     "Milk",
+//     "StarchyRoots",
+//     "Sugar",
+//     "Eggs",
+//     "Oil",
+//     "Others",
+//   ])
+//   .range(d3.schemeDark2);
+
+export const foodTypeColor = (type: string) =>
+  (({
+    Alcohol: "#9900cc",
+    Animal: "#f9906f",
+    Vegetables: "#136d15",
+    Fruits: "#8db600",
+    Nuts: "#4b291d",
+    FishSeafood: "#3333cc",
+    Cereals: "#f5deb3",
+    Milk: "#189cc4",
+    StarchyRoots: "#907A70",
+    Sugar: "#ff0800",
+    Eggs: "#ffa631",
+    Oil: "#dbcf5c",
+    Others: "grey",
+  } as any)[type] || "grey");
 
 export const SidePanel = (props: {
   data: DataEntry[];

@@ -31,11 +31,11 @@ export const DonutChart = (props: { data: { [key: string]: number } }) => {
       .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    var color = d3
-      .scaleOrdinal()
-      .domain(Object.keys(props.data))
-      .range(d3.schemeDark2);
-
+    // var color = d3
+    //   .scaleOrdinal()
+    //   .domain(Object.keys(props.data))
+    //   .range(d3.schemeDark2);
+    const color = foodTypeColor;
 
     var pie = d3
       .pie()
