@@ -10,10 +10,12 @@ class ImageSKY extends React.Component{
     let url = new URL(window.location.href);
     let name = url.searchParams.get("country");
     if(name ==null||name == undefined){
-      name = "United States";
+      name = "USA";
     }
+    console.log(name);
     let origin_data = demodata.data;
-    let data = origin_data.filter(data=>(data.name==name));
+    console.log(origin_data[0].iso);
+    let data = origin_data.filter(data=>(data.iso==name));
     console.log(data[0]);
     for(let i=0; i< data.length;i++){
       data[i].real_date = String(new Date(data[i].date));

@@ -53,7 +53,7 @@ class Ggmap extends React.Component{
 
     }
     handle_click(data){
-        window.location.replace("/ImageSKY?country="+data.name);
+        window.location.replace("/ImageSKY?country="+data.iso);
     }
 
     handle_change(event){
@@ -124,7 +124,7 @@ class Ggmap extends React.Component{
               <div className="legend_container">
                 <div className="legend" style={{ background: `url(${legend}) no-repeat`}}/>
               </div>
-              <a className="home" href={"ImageSKY/?start=Geo&country="+this.state.array[this.state.selected_index].name}>Next</a>
+              <a className="home" href={"ImageSKY/?start=Geo&country="+this.state.array[this.state.selected_index].iso}>Next</a>
             </div>
           </div>
           
