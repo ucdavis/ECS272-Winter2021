@@ -495,7 +495,7 @@ export async function drawMap(){
 
     function wrap_lines(text, boxwidth) {
         ctx.fillStyle = "#000000";
-        ctx.font = "20px Courier New";
+        ctx.font = "bold 20px Courier New";
 
         var words = text.split(" ");
         var lines = [];
@@ -612,7 +612,7 @@ export async function drawMap(){
         ctx.stroke();
 
         ctx.fillStyle = "#000000";
-        ctx.font = "30px Courier New";
+        ctx.font = "bold 30px Courier New";
         ctx.fillText(year,year_pos.x, year_pos.y);
 
         if(year < endyear){
@@ -736,7 +736,7 @@ export async function drawMap(){
         }
 
         ctx.fillStyle = "#0000FF";
-        ctx.font = "30px Courier New";
+        ctx.font = "bold 30px Courier New";
         ctx.fillText(String(stage + 1) + "/" + String(stages),width/2 - 30, year_pos.y);
 
         if(stage < stages - 1){
