@@ -1,0 +1,106 @@
+.geoPageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.geoPageLayout .header{
+    flex-basis: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #038cfc;
+    font-weight: bold;
+    display: flex;
+}
+
+.geoPageLayout .GMcontainer{
+    flex-basis: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    background-color: #038cfc;
+    display: flex;
+    flex-direction: row;
+}
+.geoPageLayout .GMcontainer .map{
+    display: flex;
+    flex-basis: 80%;
+    height: 95%;
+    background-color: white;
+}
+
+.geoPageLayout .GMcontainer .controlPanel{
+    display:flex;
+    flex-basis: 15%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+.geoPageLayout .GMcontainer .controlPanel .info_window{
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    flex-direction: column;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 100%;
+    margin-top: 10%;
+    padding: 5% 5% 5% 5%;
+}
+.legend_container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    height: 100%;
+    flex-direction: row;
+    margin-top: 10%;
+}
+.legend_container .legend{
+    width:100%;
+    height: 100%;
+}
+
+
+.geoPageLayout .GMcontainer .controlPanel select{
+    width: 90%;
+}
+
+.home {
+    background-color:#038cfc;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    height: 5vh;
+    width: 10vw;
+  }
+
+  .home:hover{
+    text-decoration: none;  
+  }
+
+  a{
+      text-decoration: none;
+  }
+
+  a:hover{
+    text-decoration: none;    
+  }
+
+
+

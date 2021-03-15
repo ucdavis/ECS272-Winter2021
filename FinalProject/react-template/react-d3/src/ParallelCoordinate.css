@@ -1,0 +1,59 @@
+.PCpageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+    background-color: black;
+}
+
+.PCpageLayout .header{
+    flex-basis: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    display: flex;
+}
+
+.PCpageLayout .PCcontainer{
+    flex-basis: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.PCpageLayout .PCcontainer .PC{
+    display: flex;
+    flex-basis: 95%;
+    width: 95%;
+    background-color: white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
+    align-items: center;
+    justify-content: center;
+}
+
+.google_map_home {
+    background-color:white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 5vh;
+    width: 10vw;
+    position: absolute;
+    top:2vh;
+    right: 2vw;
+  }
