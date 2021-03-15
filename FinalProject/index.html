@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+
+#col-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+#container {
+    display: flex;
+    flex-direction: row;
+}
+circle.swatch  {
+    r: 3.5;
+}
+
+.label {
+    font: 10px sans-serif;
+}
+
+body {
+    top: 0;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+text {
+    font-family: proxima-nova;
+    font-size: 12px;
+    fill: #666;
+}
+.ticks text {
+    font-size: 10px;
+}
+
+.countries {
+    fill: #333333;
+}
+.ticks {
+    font-size: 10px;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+    stroke-linecap: round;
+}
+
+.track {
+    stroke: #000;
+    stroke-opacity: 0.3;
+    stroke-width: 10px;
+}
+
+.track-inset {
+    stroke: #dcdcdc;
+    stroke-width: 8px;
+}
+
+.track-overlay {
+    pointer-events: stroke;
+    stroke-width: 50px;
+    stroke: transparent;
+    cursor: crosshair;
+}
+
+.handle {
+    fill: #fff;
+    stroke: #000;
+    stroke-opacity: 0.5;
+    stroke-width: 1.25px;
+}
+
+.titals {
+    font-weight: bold;
+}
+#desc {
+    margin-top: 50px;
+    font-size: 14px;
+}
+#desc text {
+    font-size: 17px;
+    padding-left: 30px;
+}
+
+#narration-box {
+    width: 920px;
+    height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    position: relative;
+    margin-bottom: 15px;
+    background-color: black;
+}
+#narration-text {
+    color: white;
+}
+
+#forward-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: black;
+    border: black;
+    color: white;
+}
+
+#backward-button {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: black;
+    border: black;
+    color: white;
+}
+
+label {
+    font-size: 12px;
+}
+select {
+    font-size: 12px;
+}
+button {
+    font-size: 12px;
+}
+#line-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+#lineplot {
+    margin-bottom: 10px;
+}
+</style>
+    </head>
+    <body>
+        <div id='container'>
+            <div id="col-container">
+                <div id="narration-box">
+                    <button type='button' id='forward-button'>></button>
+                    <button type='button' id='backward-button'><</button>
+                </div>
+                <div id='line-buttons'>
+                    <div>
+                        <label for="year1">select year 1:</label>
+                        <select id="selectyear1"></select>
+                    </div>
+                    <div>
+                        <label for="year2">select year 2:</label>
+                        <select id="selectyear2"></select>
+                    </div>
+                    <div>
+                        <label for="display-button">toggle map display mode</label>
+                        <button id='display-button' type='button'>absolute</button>
+                    </div>
+                </div>
+                <div id="lineplot"></div>
+                <div id='spikemap'></div>
+            </div>
+            <div id='dotplot'></div>
+        </div>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+        <script src="https://unpkg.com/d3-simple-slider"></script>
+
+        <!-- <script src="https://d3js.org/d3.v6.min.js"></script> -->
+        <script>
+
+const state_msg = new Map([
+        ['Washington','<strong>Washington</strong><br><br>Gov. Jay Inslee on Feb. 25 announced a temporary pause to any region in his "Healthy Washington" plan returning to the first phase and tighter restrictions, keeping eight regions in the plan\'s Phase 2. The plan allows regions to reopen when they meet certain hospitalization and case metrics. The entire state is now in Phase 2, which allows restaurants to resume indoor service at 25% capacity up until 11 p.m., but bars that serve only alcohol must stay closed. Indoor fitness centers and entertainment venues can also also open at 25% capacity.<br><br><strong>Stay-at-home order: Started March 23, 2020; ended on May 4, 2020</strong>'],
+        ['Oregon','<strong>Oregon</strong><br><br>Some counties will stay in Oregon\'s "high-risk" category for COVID-19 restrictions next week, even if data show they should move back to "extreme risk." Gov. Kate Brown has changed the process for counties facing moves back to "extreme risk" to allow a two-week extension, her office said March 4. "High risk" means indoor dining is allowed with reduced occupancy; inside visitation are allowed at long-term care facilities; and occupancy limits were expanded at churches, indoor fitness and entertainment venues. Brown allowed limited opening of gyms and other facilities offering indoor activities in counties considered at extreme risk of COVID-19 spread, beginning Jan. 29. Oregon relaxed guidelines for school reopenings on Jan. 19.<br><br><strong>Stay-at-home order: Started March 23, 2020</strong>'],
+        ['California','<strong>California</strong><br><br>Seven more counties joined those eligible to open indoor operations at restaurant dining rooms, gyms, movie theaters, museums, zoos, and aquariums March 2. Gov. Gavin Newsom\'s office on Feb. 6 issued revised guidelines for indoor church services after the Supreme Court lifted the state\'s ban on indoor worship during the coronavirus pandemic, but left in place restrictions on singing and chanting. Newsom announced the lifting of the stay-at-home order for all of the state\'s regions. Restaurants can resume outdoor dining and hair salons and libraries can reopen with restrictions.<br><br><strong>Stay-at-home order: Started March 19, 2020</strong>'],
+        ['Idaho','<strong>Idaho</strong><br><br>Gov. Brad Little announced a return to Stage 3 on Feb. 2, allowing indoor gatherings of 50 people or fewer and outdoor gatherings at 25% capacity. Idaho schools began allowing two fans per athlete into high school sporting events. The state had previously moved back to Stage 3 of reopening and reimposed restrictions including gathering restrictions and stricter rules for bars and restaurants, after being in the fourth and final phase for months.<br><br><strong>Stay-at-home order: Started March 25, 2020; ended on April 30, 2020</strong>'],
+        ['Nevada','<strong>Nevada</strong><br><br>Starting Feb. 15, Nevada\'s capacity limits increased for many public spaces. Libraries, museums, art galleries, aquariums and zoos moved to 50 percent capacity. Indoor dining at restaurants and bars are capped at 35% capacity, and will increase to 50% March 15. Sisolak strengthened Nevada\'s mask mandate by requiring people to wear a face covering during private gatherings indoors and outdoors, and when around people who are not part of the immediate household.<br><br><strong>Stay-at-home order: Started March 31, 2020; ended on May 15, 2020</strong>'],
+        ['Utah','<strong>Utah</strong><br><br>Gov. Spencer Cox predicted gatherings without masks will be allowed by July, but said in early March that he does not want to lift all restrictions until more residents are vaccinated. High school sports were allowed to continue in December with restrictions. Former Gov. Gary Herbert on Nov. 23 lifted restrictions on social gatherings despite continued high rates of COVID-19 transmission and hospitalizations. Herbert had previously introduced a new tiered "Transmission Index" that will be used to place each Utah county into one of three levels of alert.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Arizona','<strong>Arizona</strong><br><br>Gov. Doug Ducey has ordered that all schools must return to in-person learning this month, saying "students need to be back in the classroom." Ducey previously relaxed regulations on restaurants to encourage a shift from indoor to outdoor dining. And he declared that businesses that repeatedly disregard safety guidelines would face closure. The governor did not implement a statewide curfew or a shutdown or put a stop to athletic events – all measures recommended by public health researchers and medical providers. He also did not put in place a statewide mask mandate.<br><br><strong>Stay-at-home order: Started March 30, 2020; ended on May 15, 2020</strong>'],
+        ['Montana','<strong>Montana</strong><br><br>Gov. Greg Gianforte said he will lift the statewide mask mandate put in place by his predecessor Steve Bullock on Feb. 12. Gianforte on Jan. 15 removed health mandates issued by Bullock, saying the restrictions are harmful to the state\'s businesses. Restaurants, bars, breweries, distilleries and casinos are no longer subject to a 10 p.m. curfew. Gianforte also removed capacity limits for businesses: under Bullock, those venues were limited to 50% capacity.<br><br><strong>Stay-at-home order: Started March 26, 2020; ended on April 24, 2020</strong>'],
+        ['Wyoming','<strong>Wyoming</strong><br><br>Gov. Mark Gordon will lift Wyoming\'s mask mandate March 16, and will "resume normal operations" for bars, restaurants, theaters and gyms. The mask requirement has been in place since early December. Starting March 1, Wyoming lifted all restrictions on personal care businesses. Gordon on Feb. 15 had extended Wyoming\'s face mask requirement, but loosened restrictions on restaurants, gyms and public gatherings. He lifted public health orders that required Wyoming bars and restaurants to close at 10 p.m. on Jan. 9, and gyms could increase capacity from 10 to 25 people.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Colorado','<strong>Colorado</strong><br><br>Gov. Jared Polis and state health department Executive Director Jill Hunsaker Ryan released new metrics that will allow more counties to move into less-restrictive levels and make it easier for counties to move between restriction levels. Many counties eased into a less restrictive set of rules Jan. 4, reopening restaurants to limited indoor dining and once again allowing small personal gatherings. Businesses certified in the state\'s 5-Star — or Level Up — program can operate under Level Blue restrictions, regardless of what level their county is operating under, if 70% of those age 70 and older have received at least one vaccine. Level Blue restrictions allow for greater capacity in restaurants, gyms, retail and other businesses.<br><br><strong>Stay-at-home order: Started March 26, 2020; ended on May 8, 2020</strong>'],
+        ['New Mexico','<strong>New Mexico</strong><br><br>New Mexico loosened some public health restrictions on business and public activities Feb. 24, adjusting the state\'s framework of public health orders based on county-level prevalence of COVID-19 and test positivity. Additionally, the state has added a color to its red-yellow-green scheme measuring county-level transmission of the SARS-CoV-2 coronavirus, a step Gov. Michelle Lujan Grisham had predicted in her most recent news conference on the pandemic response. The new Turquoise level will indicate the lowest level of restrictions on business activity and gathering. More school districts in New Mexico could bring students back to classrooms in early February. New Mexico also now allows college teams to practice in New Mexico as long as they are following testing protocols.<br><br><strong>Stay-at-home order: Started March 24, 2020; ended on May 15, 2020</strong>'],
+        ['North Dakota','<strong>North Dakota</strong><br><br>North Dakota\'s mask mandate expired Jan. 18. Starting Jan. 8, restaurants, bars and event venues were allowed to operate at 65% capacity, not to exceed 200 people. Banquet, ballroom and event venues, which have been limited to 25% capacity, will be able to start operating at 50%. Borgum on Nov. 14 had mandated the wearing of masks in businesses and indoor spaces in their states, following increased pressure from doctors, nurses and other health care professionals.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['South Dakota','<strong>South Dakota</strong><br><br>Gov. Kristi Noem has repeatedly said she won\'t issue a statewide mask requirement and has voiced doubts about health experts who say face coverings prevent infections from spreading. Noem\'s "Back to Normal Plan" lays out actions for residents, employers, schools and health care providers once four criteria categories are met, including a downward trajectory of documented coronavirus cases for 14 days in an area with sustained community spread.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Nebraska','<strong>Nebraska</strong><br><br>On Jan. 30, Nebraska moved from the "blue" to "green phase," increasing capacity for indoor gatherings, including youth extracurricular activities, from 75% to 100%. The state had been in "blue" since Dec. 24.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Kansas','<strong>Kansas</strong><br><br>The Kansas State Department of Education now recommends the state\'s school districts allow middle and high school students to return to five-day-a-week, in-person classes — if certain health precautions are followed. Gov. Laura Kelly extended the expiration date of Kansas\' COVID-19 emergency declaration to March 31. Of note, however, will be new, more permanent restrictions on the Democratic governor\'s emergency powers by the majority-GOP Legislature. Kelly won\'t be able to issue any emergency orders shutting down businesses or limiting gatherings.<br><br><strong>Stay-at-home order: Started March 30, 2020; ended on May 3, 2020</strong>'],
+        ['Oklahoma','<strong>Oklahoma</strong><br><br>Gov. Kevin Stitt extended a state of emergency order, but lifted a nighly 11 p.m. curfew in place for bars and restaurants. In December, he detailed new limits on public gatherings and indoor sporting events. Gatherings such as weddings, funerals and parties are limited to 50% capacity. Attendance at indoor youth sporting is limited to four spectators per participant or 50% of building capacity.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Texas','<strong>Texas</strong><br><br>Gov. Greg Abbott said March 2 it\'s time to "open Texas 100%" and end the statewide mask order, citing declining hospitalizations across the state as more people are vaccinated against the coronavirus. Abbott issued a new executive order, which will take effect March 10 and rescind most of his earlier orders, including restrictions on business occupancy and the July 2 statewide mask order. In some hospital regions, restaurants and private businesses have been required to reduce capacity from 75% to 50%, and any bars that were allowed to open under previous guidance from Abbott were required to close.<br><br><strong>Stay-at-home order: Started April 2, 2020; ended on April 30, 2020</strong>'],
+        ['Minnesota','<strong>Minnesota</strong><br><br>Gov. Tim Walz eased indoor crowd restrictions starting Feb. 13. Wedding receptions and private indoor gatherings can increase to 50 people or 25% capacity. Restaurants can host up to 250 people but must operate at no more than 50% capacity. Restaurants can also remain open until 11 p.m. instead of 10 p.m. Bars, restaurants and other venues were reopened with restrictions on Jan. 11. Every elementary school in the state could choose to operate in person beginning Jan. 18 if they are able to implement strategies such as requiring staff to wear face shields and offering regular testing. Group classes could resume Jan. 4, as well as youth and adult sport practices. Outdoor entertainment venues can open at 25% capacity.<br><br><strong>Stay-at-home order: Started March 27, 2020; ended on May 4, 2020</strong>'],
+        ['Iowa','<strong>Iowa</strong><br><br>Gov. Kim Reynolds lifted the state\'s limited mask requirement Feb. 7, along with the social distancing requirements and other COVID-19 mitigation measures she had in place for businesses and social gatherings. Reynolds signed a requirement Jan. 28 for Iowa schools to give parents the option to send their children to school five days a week. As of Jan. 7, Iowa high schools no longer have to limit the amount of fans in attendance at sporting events.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Missouri','<strong>Missouri</strong><br><br>Missouri senators on Feb. 10 began airing proposed legislation to limit the power of local officials to impose health orders. Republican state lawmakers unhappy with some of the restrictions cities and counties are imposing to fight COVID-19 are now looking to give themselves veto power. Gov. Mike Parson let his statewide social distancing order lapse June 9, leaving it to local governments to impose limits on public life amid the coronavirus outbreak. In areas without their own orders, the decision means social distancing requirements for restaurants and retailers will end and people will no longer be legally required to stay 6 feet apart from non-family members in public.<br><br><strong>Stay-at-home order: Started April 6, 2020; ended on May 3, 2020</strong>'],
+        ['Arkansas','<strong>Arkansas</strong><br><br>Gov. Asa Hutchinson on Feb. 26 said he is changing his public health directives to guidelines, meaning they will no longer be mandatory. The exception is the mask mandate which will continue through March 31 but will end if certain conditions are met. Hutchinson lifted some restrictions Feb. 16 on indoor and outdoor events.<br><br><strong>Stay-at-home order: Never issued</strong>'],
+        ['Louisiana','<strong>Louisiana</strong><br><br>Louisiana bars can open and live indoor music will return for the first time in more than a year as Gov. John Bel Edwards loosens COVID-19 restrictions but leaves his statewide mask mandate in place. Edwards announced his decision March 2 to move a Phase 3 reopening as coronavirus cases and hospitalizations have plummeted over the past month. Starting March 3, restaurants, gyms and other events could increase capacity.<br><br><strong>Stay-at-home order: Started March 23, 2020; ended on May 14, 2020</strong>'],
+        ['Wisconsin','<strong>Wisconsin</strong><br><br>Gov. Tony Evers on Feb. 4 issued a new health emergency order requiring face masks in public indoor places just an hour after Wisconsin Republican lawmakers eliminated the same mandate. Evers on Nov. 10 signed an executive order asking Wisconsin reidents to stay home and encouraging businesses to take additional steps to protect workers, customers, and the surrounding community.<br><br><strong>Stay-at-home order: Started March 25, 2020; ended on May 26, 2020</strong>'],
+        ['Illinois','<strong>Illinois</strong><br><br>All of Illinois moved into Phase 4 as of Feb. 4, the least-strict level before the economy is allowed to reopen completely. In Phase 4, indoor service at bars can resume, with an occupancy limit of 25% or 25 people, and only six people can be at a table at a time. Bars and restaurants must stop serving alcohol at 11 p.m., and must be closed by midnight under Phase 4 mitigations. Retail and personal care services have capacity limits of 50%.<br><br><strong>Stay-at-home order: Started March 21, 2020; ended on May 30, 2020</strong>'],
+        ['Kentucky','<strong>Kentucky</strong><br><br>Kentucky schools must reopen to some form of in-person instruction by the end of March after Gov. Andy Beshear signed state legislation into law March 4. Kentucky restaurants and bars were able to reopen their indoor services at 50% capacity starting Dec. 14.<br><br><strong>Stay-at-home order: Started March 26, 2020</strong>'],
+        ['Tennessee','<strong>Tennessee</strong><br><br>Tennessee lifted its state-specific visitation restrictions to long-term care facilities, effective Feb. 28. Gov. Bill Lee has added grandparents of athletes and teachers to the list of fans eligible to attend high school sports contests, including basketball and wrestling. A new executive order (No. 74) allows that game, school and facility administrators along with athletic officials can still attend games along with coaching and team personnel. Parents and guardians along with other immediate household members are also allowed to attend. The order also does away with a 10-person public gathering restriction in place since Dec. 20. Lee recommends county mayors enact mask mandates.<br><br><strong>Stay-at-home order: Started April 2, 2020; ended on April 30, 2020</strong>'],
+        ['Mississippi','<strong>Mississippi</strong><br><br>Gov. Tate Reeves signed a new executive order afternoon removing all mask mandates in Mississippi, deciding to instead encourage mask-wearing and other restrictions rather than mandating them. The order goes into effect at 5 p.m. March 3. The only rules that will remain in this order are a capacity limit of 50% on indoor arenas, and those that govern K-12 schools.<br><br><strong>Stay-at-home order: Started April 3, 2020; ended on May 11, 2020</strong>'],
+        ['Michigan','<strong>Michigan</strong><br><br>Restaurants can accept twice as many indoor diners, shops and businesses can also allow more customers and private gatherings may involve more people under a new state health order set to take effect March 5. The state will also ease mandates on nursing home visitors, allowing those who have received a negative COVID-19 test to visit their loved ones. Michigan began allowing indoor dining on a limited basis starting Feb. 1. Casinos, movie theaters, bowling alleys and similar venues were allowed to reopen Dec. 21, with some restrictions in place. High schools were allowed to resume in-person classes that week, as well.<br><br><strong>Stay-at-home order: Started March 24, 2020; ended on June 5, 2020</strong>'],
+        ['Indiiana','<strong>Indiiana</strong><br><br>An additional 22 Indiana counties will not face the state\'s county-level COVID-19 restrictions governing social gatherings, the state health department\'s latest map update shows. There are now 31 counties shaded blue on the state\'s advisory-level map as of March 3. The update means those blue counties will no longer face social gathering capacity restrictions, but they must obey social distancing and mask-wearing protocols. Counties in red or orange on the state\'s coronavirus dashboard website now have a 25% capacity limit on social gatherings. Gov. Eric Holcomb placed limits on social gatherings and school events for most of the state, and he also made available $20 million to local officials to help ensure businesses adhere to the state\'s mask and social distancing requirements.<br><br><strong>Stay-at-home order: Started March 25, 2020; ended on May 1, 2020</strong>'],
+        ['West Virginia','<strong>West Virginia</strong><br><br>Gov. Jim Justice ordered to loosen pandemic restrictions on March 5 at restaurants, bars and most businesses to allow full capacity at those establishments where social distancing is possible. The state\'s mask mandate will remain in effect.<br><br><strong>Stay-at-home order: Started March 24, 2020; ended on May 4, 2020</strong>'],
+        ['North Carolina','<strong>North Carolina</strong><br><br>Outdoor stadiums were allowed to operate at 30 percent capacity beginning Feb. 26, an easing of restrictions that previously capped outdoor gatherings at 100 people. Indoor sporting events are also allowed to have crowds at 30 percent capacity with a maximum of 250 spectators under the new executive order. Indoor events currently have a 25-fan limit. Bars and taverns may also reopen. Gyms, museums, aquariums, barbers, retail establishments, restaurants, breweries and wineries may all operate at 50% capacity with safety protocols still in place. For restaurants, that keeps capacity stable. But a new executive order also relaxes restrictions on alcohol sales, moving the stop time for on-site beverage sales from 9 p.m. to 11 p.m.<br><br><strong>Stay-at-home order: Started March 30, 2020; ended on May 8, 2020</strong>'],
+        ['Alabama','<strong>Alabama</strong><br><br>Gov. Kay Ivey on Jan. 21 extended a statewide mask mandate order through March 5 amid state struggles with COVID-19 and the delivery of vaccines. Ivey said she does not plan to shut down businesses. She also also announced two changes to occupancy rates and business social distancing rules beginning Nov. 8.<br><br><strong>Stay-at-home order: Started April 4, 2020; ended on April 30, 2020</strong>'],
+        ['New York','<strong>New York</strong><br><br>New York state will soon relax limits on gatherings at homes as well as smaller arts, entertainment and sporting venues as coronavirus cases continued to decline, Gov. Andrew Cuomo said March 3. The new rules will allow event venues of under 10,000 patrons to reopen at up to 33% capacity, up to a maximum of 100 people indoors and 200 people outdoors. If attendees can provide proof of a negative COVID-19 test result within 72 hours before entry, those caps increase to 150 people and 500 people, respectively. It takes effect April 2. Further, new rules will allow social gatherings in public spaces of up to 100 people indoors or 200 people outdoors, up from the current 50 person cap. They will also allow 10 people indoors or 25 people outdoors at residential homes, up from the current 10. The changes take effect March 22. New York City movie theaters could reopen at 25% capacity March 5. New York ended the curfew for bars and restaurants to 11 p.m. beginning Feb. 14, allowing establishments to stay open another hour. New York City restaurants were allowed open indoor dining at 25% capacity the same day.<br><br><strong>Stay-at-home order: Started March 22, 2020; ended on May 15, 2020</strong>'],
+        ['Ohio','<strong>Ohio</strong><br><br>Ohio officials are moving to relax COVID-19 safety restrictions to permit school proms, graduations, weddings, sports and other spring events to accommodate more people as hospitalizations decline and vaccinations increase. The state plans to soon announce guidelines for indoor venues to permit people at 25% of capacity while outdoor settings, such as sports stadiums, will be allowed to admit crowds of 30% of capacity. Bar and restaurant owners are looking forward to serving customers late at night again after a statewide 11 p.m. curfew expired Feb. 11.<br><br><strong>Stay-at-home order: Started March 23, 2020; ended on May 30, 2020</strong>'],
+        ['Virginia','<strong>Virginia</strong><br><br>Beginning March 1, the midnight-to-5 a.m. curfew was removed, and outdoor gatherings at non-sports or entertainment venues were raised from 10 people to 25 people. The capacity for outdoor sports and/or entertainment venues, such as baseball diamonds and amphitheaters, could increase to 30% of the facilities\' capacities, not to exceed 1,000 people. Gov. Ralph Northram on Feb. 17 increased the number of people who can attend outdoor sporting events to 250 people.<br><br><strong>Stay-at-home order: Started March 30, 2020; ended on June 10, 2020</strong>'],
+        ['South Carolina','<strong>South Carolina</strong><br><br>Starting March 1, limits on mass gatherings were lifted in South Carolina, and bars and restaurants are allowed to resume selling alcohol after 11 p.m. South Carolina restaurants can now operate at full capacity inside their dining rooms, as of Oct. 2. Residents of South Carolina\'s nursing homes and assisted-living facilities are able to visit with their loved ones again — but only outside — under guidelines. Movie theaters, arenas, stadiums and other large venues throughout South Carolina can reopen with severe restrictions.<br><br><strong>Stay-at-home order: Started April 7, 2020; ended on May 12, 2020</strong>'],
+        ['Georgia','<strong>Georgia</strong><br><br>Gov. Brian Kemp on extended Georgia\'s state of emergency another 30 days. It will expire March 7. Businesses must continue operating with social distancing and sanitation guidelines until Feb. 28.<br><br><strong>Stay-at-home order: Started April 3, 2020; ended on April 30, 2020</strong>'],
+        ['Connecticut','<strong>Connecticut</strong><br><br>Gov. Ned Lamont announced March 4 that Connecticut will lift capacity restrictions for many businesses starting March 19, though guidelines on masks, spacing and cleaning protocols will remain in effect. Restaurants still have an 11 p.m., and theater venues still have capacity limits of 50%.<br><br><strong>Stay-at-home order: Started March 23, 2020; ended on May 20, 2020</strong>'],
+        ['Pennsylvania','<strong>Pennsylvania</strong><br><br>The state on March 1 revised its guidelines and will allow indoor venues to permit people at 15% of capacity while outdoor settings, such as sports stadiums, will be allowed to admit crowds of 20% of capacity. The 20% of maximum occupancy is permitted only if attendees and workers are able to comply with the 6-foot physical distancing requirement. Before, indoor events had been limited to 10 percent of maximum occupancy for a facility, with an absolute cap of 500, and outdoor venues had previously been limited to 15 percent of maximum occupancy, with an absolute cap of 2,500. Gov. Tom Wolf lifted his temporary ban on indoor dining and school sports, reopening fitness centers and other indoor recreational businesses as scheduled on Jan. 4.<br><br><strong>Stay-at-home order: Started April 1, 2020; ended on May 8, 2020</strong>'],
+        ['Maryland','<strong>Maryland</strong><br><br>Restaurants and bars in Maryland can stay open past 10 p.m. starting Feb. 1, Gov. Larry Hogan said, citing improving COVID-19 metrics. Indoor dining is still limited to 50% capacity. Hogan on Jan. 21 called on all schools in the state to resume in-person learning by March 1, if not sooner.<br><br><strong>Stay-at-home order: Started March 30, 2020; ended on May 15, 2020</strong>'],
+        ['D.C.','<strong>D.C.</strong><br><br>Some museums in D.C. are reopening, while the Smithsonians remain closed. Indoor dining could resume in D.C. starting Jan. 22. The ban had started Dec. 23, along with closures to museums and libraries. Mayor Murial Bowser announced "adjustments" to D.C.\'s phase two reopening guidelines Nov. 23, including limits to indoor and outdoor gatherings, restrictions to indoor group exercise classes, and prohibiting restaurants to sell alcohol after 10 p.m.<br><br><strong>Stay-at-home order: Started April 1, 2020; ended on May 29, 2020</strong>'],
+        ['Florida','<strong>Florida</strong><br><br>Florida has not implemented any new restrictions. On Nov. 25, DeSantis extended a September executive order aimed at preventing business shutdowns during the pandemic. The order barred local emergency ordinances that could "prevent an individual from working or from operating a business." It also prevented local governments from requiring restaurants to operate below 50% indoor capacity and required local governments to quantify the economic impact and the public-health need for limits on indoor capacity below 100%.<br><br><strong>Stay-at-home order: Started March 20, 2020; ended on April 30, 2020</strong>'],
+        ['Vermont','<strong>Vermont</strong><br><br>Starting Feb. 23, Vermonters who are fully vaccinated and travel outside the state do not need to quarantine upon return, Gov. Phil Scott announced Feb. 19. Vermont officials allowed high school and youth sports competition starting Feb. 12 — with additional safety measures in place. Starting Nov. 14, bars and social clubs were closed to in-person service but can offer take-out. Restaurants must close to in-person service by 10 p.m. each night. The state is requiring restaurants, gyms, museums, and other establishments to keep a daily log of visitors.<br><br><strong>Stay-at-home order: Started March 24, 2020; ended on May 15, 2020</strong>'],
+        ['Rhode Island','<strong>Rhode Island</strong><br><br>With reported cases of COVID-19 tapering off — at least for now — Rhode Island loosened social-gathering limits and allowed bar areas to reopen starting Feb. 12. Gov. Gina Raimondo lifted early closure rules for restaurants Jan. 29, two days earlier than initially planned. Raimondo signed an executive order Jan. 20 that would allow high school sports to begin games and competitions Jan. 22. Beginning December 21, Rhode Island slowly began to dial up activity while continuing to maintain necessary social and commercial restrictions, including limiting indoor restaurant dining to single households and capacity restrictions of 50%.<br><br><strong>Stay-at-home order: Started March 28, 2020; ended on May 8, 2020</strong>'],
+        ['New Jersey','<strong>New Jersey</strong><br><br>Gov. Phil Murphy loosened more gathering restrictions March 3, allowing indoor receptions to soon expand capacity limits to 35%, not exceed more than 150 people. As of Feb. 22, houses of worship around New Jersey could admit parishioners to up to 50% of their normal capacity. Large entertainment venues with 5,000 fixed seats or more were also allowed to open at 10% capacity for indoor events and 15% for outdoor venues starting March 1. Murphy had slightly relaxed indoor restrictions in New Jersey on Feb. 5 by increasing capacity limits from the current 25% up to 35% and allowing restaurants to stay open past 10 p.m.<br><br><strong>Stay-at-home order: Started March 21, 2020</strong>'],
+        ['Delaware','<strong>Delaware</strong><br><br>Delaware on March 3 announced it will begin to allow visitors at long-term care facilities. In February, Gov. John Carney eased gathering limits to public indoor events and gyms. The new rules allow for a maximum of 25 people or 50% of the stated fire occupancy restrictions, whichever is less, though organizers may ​submit a plan to the Division of Public Health to host larger events up to 150 people. Outdoor gatherings are limited to 50 people or up to 250 with an approved plan from DPH. Capacity limits at restaurants and other indoor venues will loosened Feb. 12. Curfew for Delaware bars and restaurants ended Jan. 8, and the state eased restrictions on sports competitions. Delaware requires people who are indoors with anyone outside their immediate household to wear a mask. This is in addition to the state\'s current mask order, which requires everyone out in public to wear a mask.<br><br><strong>Stay-at-home order: Started March 24, 2020; ended on May 15, 2020</strong>'],
+        ['Maine','<strong>Maine</strong><br><br>Gov. Janet Mills announced she would end the 9 p.m. early closing time for businesses, effective Feb. 1. Mills had on Jan. 4 extended the curfew, which had been in place since Nov. 19. Mills on Dec. 11 issued an order requiring operators of all indoor public spaces to keep those who refuse masks from entering or remaining in their venue. She had issued an executive order Nov. 5 requiring people to wear a face covering regardless of whether they can physically distance from others.<br><br><strong>Stay-at-home order: Started April 2, 2020; ended on May 31, 2020</strong>'],
+        ['New Hampshire','<strong>New Hampshire</strong><br><br>Starting March 8, all K-12 schools must provide the option of in-person learning at least 2 days a week. Gov. Chris Sununu\'s reopening task force reopening task force recommended updated guidance for summer camp operators, including keeping children in small groups. Sununu on Nov. 19 announced a statewide face mask order, requiring people over five years old to wear a mask in public spaces — indoors or outdoors — if they can\'t maintain social distancing. The order was effective Nov. 20.<br><br><strong>Stay-at-home order: Started March 27, 2020; ended on June 15, 2020</strong>'],
+        ['Massachusetts','<strong>Massachusetts</strong><br><br>Massachusetts returned to Phase 3, Step 2 of reopening March 1, removing restrictions for restaurant capacity and allowing a number of indoor venues to reopen with restrictions. The state is slated to move to Phase 4 on March 22. Gov. Charlie Baker had previously increased capacity limits to restaurants, close-contact personal services, movie theaters, casinos, fitness centers and other spaces to 40% on Feb. 8. A 9:30 p.m. curfew on businesses and the state\'s <br><strong>stay-at-home advisory expired Feb. 1.<br><br><strong>Stay-at-home order: Started April 24, 2020; ended on May 18, 2020</strong>'],
+        ['Puerto Rico','<strong>Puerto Rico</strong><br><br>Gov. Pedro Pierluisi announced Puerto Rico public and private schools that comply with Health Department guidelines can return to in-person classes beginning March 1. Pierluisi on Jan. 5 said he would reopen beaches, marinas and pools, eliminate a Sunday lockdown and shorten a curfew that has been in place since the pandemic began to control the number of COVID-19 cases. Pierluisi stressed alcohol will be banned at beaches and other places, and that social distancing is required between people who are not family members, with no large groups allowed to gather. Meanwhile, the new curfew will run from 11 p.m. to 5 a.m. and face masks remain mandatory.<br><br><strong>Stay-at-home order: Started March 15, 2020; ended on May 3, 2020</strong>'],
+        ['Hawaii','<strong>Hawaii</strong><br><br>Hawaii lawmakers are considering a bill that would standardize the state\'s pandemic travel restrictions across the islands, a departure from the current system that allows individual counties to create their own modified safety measures. Hawaii\'s governor has said he is cautious about loosening air travel restrictions for people who have received a coronavirus vaccine, while stressing that new virus variants are not widespread in the state.<br><br><strong>Stay-at-home order: Started March 25, 2020; ended on May 31, 2020</strong>'],
+    ]);
+
+const narration = ['It has been over a year since the corona virus breakout in the United States. Across the country, officials are rolling out a patchwork of restrictions on social distancing. The orders vary by state, county and even city. Restrictions are ramping up in many areas as cases surge nationwide. At the height of restrictions in late March and early April, more than 310 million Americans were under directives ranging from "shelter in place" to "stay at home."',
+                   'One unintended upside to this response, the air quality has been widely reported to have improved countrywide. This visualization is intended to demonstrate this phenomenon by examine the SO2 level country wide.',
+                   'The line plot below plots the daily country average SO2 index. The shaded area demonstrates the 2018-2020 three year daily high and low SO2 index. We can clearly observe that the country average SO2 index is at three year low in the majority of days.',
+                   'We can observe that, before California issued stay-at-home order March 9, 2020, the SO2 index stayed in the middle part of the three year range. However, after the stay-at-home order has been issued, the 2020\'s SO2 index quickly dropped and almost consistently stayed at the bottom all the way until October.  It\'s worth mentioning that California had its worst wild fire in history in 2020, which is probably the cause of the bad air quality after October.',
+                   'We can better observe the impact of people staying at home on SO2 index with the "relative display mode". Which displays the relative difference of 2020\'s SO2 index and previous reference year\'s.',
+                   'During the period of mid March (when most states issued stay-at-home order) and mid May (when most states lifted stay-at-home order), we can observe that most states were having better (average) SO2 index compare to the reference year of 2019. We can see that this remains true even for some states that didn\'t issue stay-at-home order, such as South Dakota, which probably indicate that people were consciously staying at home even without the state government issuing the order.',
+                   'We can also see that there\'s not much consistency with the comparison of 2019 and 2018 for the same period, which further verified the positive impact of stay-at-home to air quality.',
+                   'Now you can go on and explore :)'
+                ];
+
+const map_margin = {top: 0, right: 0, bottom: 0, left: 0},
+    map_width = 960 - map_margin.left - map_margin.right,
+    map_height = 700 - map_margin.top - map_margin.bottom;
+// const map_width = 450;
+// const map_height = 300;
+const line_margin = {top: 25, right: 0, bottom: 13, left: 30},
+    line_width = 960 - line_margin.left - line_margin.right,
+    line_height = 200 - line_margin.top - line_margin.bottom;
+
+const dot_margin = {top: 40, right: 0, bottom: 0, left: 120},
+    dot_width = 400 - dot_margin.left - dot_margin.right,
+    dot_height = 1050 - dot_margin.top - dot_margin.bottom;
+
+
+
+let mapsvg = d3.select('#spikemap')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, map_width, map_height])
+                    // .attr('id', 'map')
+
+                    .attr("width", map_width + map_margin.left + map_margin.right)
+                    .attr("height", map_height + map_margin.top + map_margin.bottom)
+                    // // .append("g")
+                    // .attr("transform",
+                    //     "translate(" + map_margin.left + "," + map_margin.top + ")");
+
+let dotplt = d3.select('#dotplot')
+                    .append('svg')
+                    // .attr("viewBox", [0, 0, dot_width, dot_height])
+                    // .attr('id', 'map')
+                    .attr("width", dot_width + dot_margin.left + dot_margin.right)
+                    .attr("height", dot_height + dot_margin.top + dot_margin.bottom)
+                    // // .append("g")
+                    // .attr("transform",
+                    //     "translate(" + dot_margin.left + "," + dot_margin.top + ")");
+
+let linesvg = d3.select("#lineplot")
+                    .append("svg")
+                    // .attr("viewBox", [0, 0, stream_width, stream_height])
+                    .attr("width", line_width + line_margin.left + line_margin.right)
+                    .attr("height", line_height + line_margin.top + line_margin.bottom)
+                    // // .append("g")
+                    // .attr("transform",
+                    //     "translate(" + stream_margin.left + "," + stream_margin.top + ")");
+
+let nar_text = d3.select("#narration-box")
+                .append('text')
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("id", "narration-text")
+                .text(narration[0])
+
+let formatDate = d3.timeFormat("%b %Y");
+
+
+let year1_group = ['2020', '2019', '2018'];
+let year2_group = ["N/A", '2020', '2019', '2018'];
+
+d3.select("#selectyear1")
+    .selectAll('options')
+    .data(year1_group)
+    .enter()
+    .append('option')
+    .text(function (d) {return d;})
+    .attr("value", function (d) {return d;});
+
+d3.select("#selectyear2")
+    .selectAll('options')
+    .data(year2_group)
+    .enter()
+    .append('option')
+    .text(function (d) {return d;})
+    .attr("value", function (d) {return d;});
+
+d3.queue()
+    .defer(d3.json, 'states-albers-10m.json')
+    .defer(d3.csv, 'so2_stat.csv')
+    .defer(d3.csv, 'so2_out.csv')
+    .await(main);
+
+function main(error, us, stat_f, out_f) {
+    // global config
+    const start_date_2022 = '01/01/2022';
+    const start_date_2021 = '01/01/2021';
+    const start_date_2020 = '01/01/2020';
+    const start_date_2019 = '01/01/2019';
+    const start_date_2018 = '01/01/2018';
+
+    let selected_year1 = '2020';
+    let selected_year2 = 'N/A';
+    let nar_page = 0;
+
+    let year1_lb = start_date_2020;
+    let year1_ub = start_date_2021;
+
+    let year2_lb = -1;
+    let year2_ub = -1;
+
+    let cur_date = '01/01/2020';
+    let cur_state = 'country total';
+    let selected_states = []
+    // let date_changed = false;
+    const state_color = d3.scaleOrdinal(d3.schemeDark2)
+    const state_color2 = d3.scaleOrdinal(d3.schemeTableau10)
+
+    let line_ordinal = d3.scaleOrdinal();
+    let update_map = false;
+    let brush_selected = false;
+    let extent = [-1, -1];
+    let display_mode = 0; // absolute
+    let max_line_height = 0;
+
+
+    function prog_select_year1(selection) {
+        document.getElementById('selectyear1').value = selection;
+        select_year1();
+    }
+
+    function prog_select_year2(selection) {
+        document.getElementById('selectyear2').value = selection;
+        select_year2();
+    }
+
+    function reset_page() {
+        gb.call(brush.move, null);
+        reset_manuel_update = true;
+        prog_select_year1('2020');
+        prog_select_year2('N/A');
+        d3.selectAll(".state").style("opacity", 1);
+        if (display_mode == 1) {
+            toggle_display_mode();
+        }
+
+        reset_manuel_update = false;
+        update_map = true;
+        update(new Date(cur_date));
+
+        let temp_selected_states = [...selected_states];
+        for (const state of temp_selected_states) {
+            remove_state(state);
+        }
+        add_state('country total');
+    }
+
+    function auto_play_page() {
+        nar_text.text(narration[nar_page]);
+
+        if (nar_page == 0) {
+            // reset_page();
+        }
+
+        else if (nar_page == 1) {
+            // reset_page();
+        }
+
+        else if (nar_page == 2) {
+            reset_page();
+        }
+
+        else if (nar_page == 3) {
+            reset_page();
+            add_state('California');
+        }
+
+        else if (nar_page == 4) {
+            reset_page();
+            prog_select_year2('2019');
+            toggle_display_mode();
+        }
+
+        else if (nar_page == 5) {
+            reset_page();
+            prog_select_year2('2019');
+            toggle_display_mode();
+            gb.call(brush.move, [line_x(new Date('03/10/2020')), line_x(new Date('05/10/2020'))]);
+        }
+
+        else if (nar_page == 6) {
+            reset_page();
+            prog_select_year1('2019');
+            prog_select_year2('2018');
+            toggle_display_mode();
+            gb.call(brush.move, [line_x(new Date('03/10/2020')), line_x(new Date('05/10/2020'))]);
+        }
+
+        else if (nar_page == 7) {
+            reset_page();
+        }
+    }
+
+    // narration
+    d3.select('#forward-button')
+        .on('click', function() {
+            if (nar_page < narration.length-1) {
+                nar_page += 1;
+                auto_play_page();
+            }
+        });
+
+    d3.select('#backward-button')
+        .on('click', function() {
+            if (nar_page > 0) {
+                nar_page -= 1;
+                auto_play_page();
+            }
+        });
+
+    linesvg.append("g")
+            .attr("class", "line_legendOrdinal")
+            .attr("transform", "translate(" + 100 + "," + line_margin.top + ")");
+
+    let line_legendOrdinal = d3.legendColor()
+                        .shapePadding(50)
+                        .orient('horizontal')
+                        .shape("line")
+                        .shapeWidth(70)
+                        .labelWrap(70)
+                        .scale(line_ordinal);
+
+
+    // line plot
+    let line_x = d3.scaleUtc()
+                .domain([new Date('01/01/2020'), new Date('12/31/2020')])
+                .range([line_margin.left, line_width - line_margin.right])
+
+    let state_max = []
+
+    let line_y = d3.scaleLinear()
+                    .domain([0, state_max[0]])
+                    .range([line_height - line_margin.bottom, line_margin.top])
+
+    let line_y_ax = linesvg.append("g")
+                    .attr("transform", "translate(" + line_margin.left + ",0)")
+                    .call(d3.axisLeft(line_y));
+
+
+    add_state('country total');
+
+    function add_state(state) {
+        if (selected_states[0] == 'country total') {
+            remove_state('country total');
+        }
+
+        selected_states.push(state);
+        state_max.push(d3.max(stat_f.filter(
+            d => d.STATE == state), d => parseFloat(d.HIGH)));
+        append_plots(state);
+        update_selected_states();
+    }
+
+    function remove_state(state) {
+        let sid = selected_states.indexOf(state);
+        selected_states[sid] = '';
+        state_max[sid] = 0;
+        remove_plots(state)
+
+        for (const s of selected_states) {
+            if (s != '') { // if exist valid state
+                update_selected_states();
+                return;
+            }
+        }
+
+        selected_states = []
+        state_max = []
+        if (state != 'country total') {
+            add_state('country total');
+        }
+    }
+
+    function remove_plots(state) {
+        linesvg.select('#' + state.split(' ').join('') + "-area").remove()
+        linesvg.select('#' + state.split(' ').join('') + "-line").remove()
+        linesvg.select('#' + state.split(' ').join('') + "-line2").remove()
+
+        linesvg.select('#' + state.split(' ').join('') + "-circle").remove()
+        linesvg.select('#' + state.split(' ').join('') + "-text").remove()
+        linesvg.select('#' + state.split(' ').join('') + "-circle2").remove()
+        linesvg.select('#' + state.split(' ').join('') + "-text2").remove()
+    }
+
+    function append_plots(state) {
+        linesvg.append("path")
+                .datum(stat_f.filter(function(d){
+                    let flag = (d.STATE == state);
+                    flag = flag && new Date(d.DATE) >= new Date(year1_lb);
+                    flag = flag && new Date(d.DATE) < new Date(year1_ub);
+                    return flag;}).sort((a, b) => (new Date(a.DATE) - new Date(b.DATE))))
+                // .transition().duration(1000)
+                .attr("fill", d => state_color(selected_states.indexOf(state)))
+                .attr("stroke", d => state_color(selected_states.indexOf(state)))
+                .attr("stroke-width", 1.5)
+                .attr("opacity", 0.2)
+                .attr("id", state.split(' ').join('') + "-area")
+                .attr("d", d3.area()
+                    .x(function(d) {
+                        let temp_date = d.DATE.split('/');
+                        temp_date[2] = '2020';
+                        temp_date = temp_date.join('/');
+                        return line_x(new Date(temp_date));
+                    })
+                    .y0(d => (line_height - line_margin.bottom))
+                    .y1(d => (line_height - line_margin.bottom)));
+
+        linesvg.append("path")
+                .datum(out_f.filter(function(d){
+                    let flag = (d.STATE == state);
+                    flag = flag && new Date(d.DATE) >= new Date(year1_lb);
+                    flag = flag && new Date(d.DATE) < new Date(year1_ub);
+                    return flag;}).sort((a, b) => (new Date(a.DATE) - new Date(b.DATE))))
+                // .transition().duration(1000)
+                .attr("fill", "none")
+                .attr("stroke", state_color(selected_states.indexOf(state)))
+                .attr("stroke-width", 1.5)
+                .attr("stroke-linejoin", "round")
+                .attr("stroke-linecap", "round")
+                .attr("id", state.split(' ').join('') + "-line")
+                .attr("d", d3.line()
+                    .x(function(d) {
+                        let temp_date = d.DATE.split('/');
+                        temp_date[2] = '2020';
+                        temp_date = temp_date.join('/');
+                        return line_x(new Date(temp_date));
+                    })
+                    .y(line_height - line_margin.bottom));
+
+        linesvg.append('circle')
+                .attr("cx", function(d) {
+                                let temp_date = cur_date.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                .attr("cy", line_height - line_margin.bottom)
+                .attr("id", state.split(' ').join('') + "-circle")
+                .attr("fill", state_color(selected_states.indexOf(state)))
+                .attr("r", 3.5);
+
+        linesvg.append('text')
+                .attr("x", function(d) {
+                                let temp_date = cur_date.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                .attr("y", line_height - line_margin.bottom)
+                .attr("id", state.split(' ').join('') + "-text")
+
+        let line2_filtered = out_f.filter(function(d){
+                                                let flag = (d.STATE == state);
+                                                flag = flag && new Date(d.DATE) >= new Date(year2_lb);
+                                                flag = flag && new Date(d.DATE) < new Date(year2_ub);
+                                                return flag;});
+
+        linesvg.append("path")
+                .datum(line2_filtered.sort((a, b) => (new Date(a.DATE) - new Date(b.DATE))))
+                // .transition().duration(1000)
+                .attr("fill", "none")
+                .attr("stroke", d => state_color2(selected_states.indexOf(state)+3))
+                .attr("stroke-width", 1.5)
+                .attr("stroke-linejoin", "round")
+                .attr("stroke-linecap", "round")
+                .attr("id", state.split(' ').join('') + "-line2")
+                .attr("d", d3.line()
+                    .x(function(d) {
+                        let temp_date = d.DATE.split('/');
+                        temp_date[2] = '2020';
+                        temp_date = temp_date.join('/');
+                        return line_x(new Date(temp_date));
+                    })
+                    .y(d => (line_height - line_margin.bottom)));
+
+        linesvg.append('circle')
+                .attr("cx", function(d) {
+                                let temp_date = cur_date.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                .attr("cy", line_height - line_margin.bottom)
+                .attr("id", state.split(' ').join('') + "-circle2")
+                .attr("fill", state_color(selected_states.indexOf(state)))
+                        // .attr("width", function(d) {console.log(1);return 1;})
+                .attr("r", 3.5);
+
+        linesvg.append('text')
+                .attr("x", function(d) {
+                                let temp_date = cur_date.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                .attr("y", line_height - line_margin.bottom)
+                .attr("id", state.split(' ').join('') + "-text2")
+
+        if (line2_filtered.length == 0) {
+            linesvg.select('#' + state.split(' ').join('') + "-circle2").style('opacity', 0);
+            linesvg.select('#' + state.split(' ').join('') + "-text2").style('opacity', 0);
+        }
+    }
+
+    function update_selected_states() {
+        if (selected_states[0] != 'country total') {
+            d3.selectAll(".state").transition().duration(1000).style("opacity", 0.2);
+        }
+        else {
+            d3.selectAll(".state").transition().duration(1000).style("opacity", 1);
+        }
+
+        line_y.domain([0, d3.max(state_max)]);
+        line_y_ax.transition().duration(1000).call(d3.axisLeft(line_y));
+
+        let legend_domain = []
+        let legend_range = []
+
+        selected_states.forEach(function(state){
+            if (state != '') {
+                if (state != 'country total') {
+                    d3.select("#"+state.split(' ').join('')).transition().duration(1000).style("opacity", 1);
+                }
+
+                legend_domain.push(state + ' ' + selected_year1)
+                legend_range.push(state_color(selected_states.indexOf(state)))
+                if (selected_year2 != 'N/A') {
+                    legend_domain.push(state + ' ' + selected_year2)
+                    legend_range.push(state_color2(selected_states.indexOf(state)+3))
+                }
+
+                linesvg.select('#' + state.split(' ').join('') + "-area")
+                        .datum(stat_f.filter(function(d){
+                            let flag = (d.STATE == state);
+                            flag = flag && new Date(d.DATE) >= new Date(year1_lb);
+                            flag = flag && new Date(d.DATE) < new Date(year1_ub);
+                            return flag;}).sort((a, b) => (new Date(a.DATE) - new Date(b.DATE))))
+                        .transition().duration(1000)
+                        .attr("fill", d => state_color(selected_states.indexOf(state)))
+                        .attr("stroke", d => state_color(selected_states.indexOf(state)))
+                        .attr("stroke-width", 1.5)
+                        .attr("opacity", 0.2)
+                        .attr("d", d3.area()
+                            .x(function(d) {
+                                let temp_date = d.DATE.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                            .y0(d => line_y(parseFloat(d.HIGH)))
+                            .y1(d => line_y(parseFloat(d.LOW))));
+
+                linesvg.select('#' + state.split(' ').join('') + "-line")
+                        .datum(out_f.filter(function(d){
+                            let flag = (d.STATE == state);
+                            flag = flag && new Date(d.DATE) >= new Date(year1_lb);
+                            flag = flag && new Date(d.DATE) < new Date(year1_ub);
+                            return flag;}).sort((a, b) => (new Date(a.DATE) - new Date(b.DATE))))
+                        .transition().duration(1000)
+                        .attr("fill", "none")
+                        .attr("stroke", d => state_color(selected_states.indexOf(state)))
+                        .attr("stroke-width", 1.5)
+                        .attr("opacity", 1)
+                        .attr("stroke-linejoin", "round")
+                        .attr("stroke-linecap", "round")
+                        .attr("d", d3.line()
+                            .x(function(d) {
+                                let temp_date = d.DATE.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                            .y(d => line_y(parseFloat(d.DAILY_AQI_VALUE))));
+
+                let line2_filtered = out_f.filter(function(d){
+                                        let flag = (d.STATE == state);
+                                        flag = flag && new Date(d.DATE) >= new Date(year2_lb);
+                                        flag = flag && new Date(d.DATE) < new Date(year2_ub);
+                                        return flag;});
+
+                if (line2_filtered.length == 0) {
+                    linesvg.select('#' + state.split(' ').join('') + "-circle2").style('opacity', 0);
+                    linesvg.select('#' + state.split(' ').join('') + "-text2").style('opacity', 0);
+                } else {
+                    linesvg.select('#' + state.split(' ').join('') + "-circle2").style('opacity', 1);
+                    linesvg.select('#' + state.split(' ').join('') + "-text2").style('opacity', 1);
+                }
+
+                linesvg.select('#' + state.split(' ').join('') + "-line2")
+                        .datum(line2_filtered.sort((a, b) => (new Date(a.DATE) - new Date(b.DATE))))
+                        .transition().duration(1000)
+                        .attr("fill", "none")
+                        .attr("stroke", d => state_color2(selected_states.indexOf(state)+3))
+                        .attr("stroke-width", 1.5)
+                        .attr("opacity", 1)
+                        .attr("stroke-linejoin", "round")
+                        .attr("stroke-linecap", "round")
+                        .attr("d", d3.line()
+                            .x(function(d) {
+                                let temp_date = d.DATE.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                            .y(d => line_y(parseFloat(d.DAILY_AQI_VALUE))));
+            }
+
+            update_line_circle()
+        });
+
+        line_ordinal.domain(legend_domain)
+                    .range(legend_range);
+
+        try {
+            linesvg.select(".line_legendOrdinal")
+                    .call(line_legendOrdinal);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    let reset_manuel_update = false;
+    function select_year1() {
+        // recover the option that has been chosen
+        selected_year1 = document.getElementById('selectyear1').value;
+        if (selected_year1 == '2021') {
+            year1_lb = start_date_2021;
+            year1_ub = start_date_2022;
+        }
+        else if (selected_year1 == '2020') {
+            year1_lb = start_date_2020;
+            year1_ub = start_date_2021;
+        }
+        else if (selected_year1 == '2019') {
+            year1_lb = start_date_2019;
+            year1_ub = start_date_2020;
+        }
+        else if (selected_year1 == '2018') {
+            year1_lb = start_date_2018;
+            year1_ub = start_date_2019;
+        }
+        if (!reset_manuel_update) {
+            update_map = true;
+            update(new Date(cur_date));
+            update_selected_states();
+        }
+    }
+    d3.select("#selectyear1").on("change", select_year1)
+
+    function select_year2() {
+        // recover the option that has been chosen
+        selected_year2 = document.getElementById('selectyear2').value;
+        if (selected_year2 == '2021') {
+            year2_lb = start_date_2021;
+            year2_ub = start_date_2022;
+        }
+        else if (selected_year2 == '2020') {
+            year2_lb = start_date_2020;
+            year2_ub = start_date_2021;
+        }
+        else if (selected_year2 == '2019') {
+            year2_lb = start_date_2019;
+            year2_ub = start_date_2020;
+        }
+        else if (selected_year2 == '2018') {
+            year2_lb = start_date_2018;
+            year2_ub = start_date_2019;
+        }
+        else if (selected_year2 == 'N/A') {
+            if (display_mode == 1) {
+                toggle_display_mode();
+            }
+
+            year2_lb = -1;
+            year2_ub = -1;
+        }
+        if (!reset_manuel_update) {
+            update_map = true;
+            update(new Date(cur_date));
+            update_selected_states();
+        }
+    }
+    d3.select("#selectyear2").on("change", select_year2)
+
+
+    // draw map
+    let states = topojson.feature(us, us.objects.states).features;
+    let borders = topojson.mesh(
+        us,
+        us.objects.states,
+        (a,b) => a == b ? 'coast' : d3.extent([a.id, b.id]).join('-')
+        );
+    // let projection = d3.geoAlbers().fitSize([10, 10], us),
+    let path = d3.geoPath();
+
+    let so2_aqi_abs_max = 100;
+
+    let state_aqi = new Map();
+    let prev_state_aqi = new Map();
+    out_f.forEach(function(d){
+        if (d.DATE == cur_date) {
+            state_aqi.set(d.STATE, parseFloat(d.DAILY_AQI_VALUE));
+        }
+    });
+
+
+    // Define the div for the tooltip
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("width", '300px')
+        .style("height", '350px')
+        .style("opacity", 0);
+
+
+
+    let mouseenter_state = function(d) {
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", .9);
+        tooltip.html(state_msg.get(d.properties.name))
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+    }
+
+    let mouseleave_state = function(d) {
+        tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+    }
+
+    let click_state = function(state) {
+        // if state not in selected states
+        let sid = selected_states.indexOf(state.properties.name);
+        if (sid == -1) { // add state plot
+            add_state(state.properties.name);
+        }
+        else { // remove state plot
+            remove_state(state.properties.name);
+        }
+    }
+
+
+    // states
+    function getColor(state) {
+        if (display_mode == 0) {
+            return d3.interpolateRdYlGn(1 - state_aqi.get(state) / so2_aqi_abs_max);
+        }
+
+        let ret_color = d3.interpolateRdYlGn(0.5 - state_aqi.get(state) / prev_state_aqi.get(state));
+        if (ret_color == 'rgb(0, 0, 0)') {
+            return d3.interpolateRdYlGn(0.5);
+        }
+        return ret_color;
+    }
+
+    let map_states = mapsvg.append('g')
+        .classed('us_map', true)
+        .selectAll(".us_map")
+        .data(states)
+        .enter()
+        .append("path")
+        // .attr("class", "state")
+        .attr("fill", d => getColor(d.properties.name))
+        .attr("d", path)
+        .on("mouseenter", mouseenter_state)
+        .on("mouseleave", mouseleave_state)
+        .on("click", click_state)
+        // .attr("color", d => d3.interpolateRdYlGn(d.DAILY_AQI_VALUE))
+        .attr("class", "state")
+        .attr("id", d => d.properties.name.split(' ').join(''));
+
+    // boarders
+    mapsvg.append('g')
+        .classed('boarders', true)
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr('stroke-width', 0.1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", path(borders));
+
+
+    function toggle_display_mode() {
+        if (display_mode == 0 && selected_year2 != 'N/A') {
+            display_mode = 1;
+            document.getElementById('display-button').innerHTML = 'relative';
+
+            // change legend
+            linear.domain([10, -10])
+                .range([d3.interpolateRdYlGn(0), d3.interpolateRdYlGn(1)]);
+            mapsvg.select(".map_legendOrdinal")
+                    .call(map_legendOrdinal2);
+        }
+        else if (display_mode == 1) {
+            display_mode = 0;
+            document.getElementById('display-button').innerHTML = 'absolute';
+
+            // change legend
+            linear.domain([so2_aqi_abs_max, 0])
+                    .range([d3.interpolateRdYlGn(0), d3.interpolateRdYlGn(1)]);
+            mapsvg.select(".map_legendOrdinal")
+                    .call(map_legendOrdinal);
+        }
+
+        if (!reset_manuel_update) {
+            update_map = true;
+            update(new Date(cur_date));
+        }
+    }
+
+    d3.select('#display-button')
+        .on('click', toggle_display_mode);
+
+
+    let linear = d3.scaleLinear()
+                .domain([so2_aqi_abs_max, 0])
+                .range([d3.interpolateRdYlGn(0), d3.interpolateRdYlGn(1)]);
+
+    mapsvg.append("g")
+            .attr("class", "map_legendOrdinal")
+            .attr("transform", "translate(" + (map_width-100) + "," + (map_height-230) + ")");
+
+
+    let map_legendOrdinal = d3.legendColor()
+                        // .shapePadding(10)
+                        .orient('vertical')
+                        // .labelWrap(70)
+                        .scale(linear);
+
+    let map_legendOrdinal2 = d3.legendColor()
+                        // .shapePadding(10)
+                        .orient('vertical')
+                        // .labelWrap(70)
+                        .scale(linear)
+                        .labels(['2x refer year','','1x refer year','','1/2x refer year'])
+
+    mapsvg.select(".map_legendOrdinal")
+            .call(map_legendOrdinal);
+
+
+
+
+    // dot plot
+    let keys = stat_f.columns.slice(2);
+
+    let dot_ordinal = d3.scaleOrdinal()
+                        .domain(keys)
+                        .range(d3.schemeSpectral[keys.length]);
+
+    dotplt.append("g")
+            .attr("class", "dot_legendOrdinal")
+            .attr("transform", "translate(" + 280 + ",90)");
+
+    let dot_legendOrdinal = d3.legendColor()
+                        .shapePadding(10)
+                        .orient('vertical')
+                        .shape('circle')
+                        .labelWrap(70)
+                        .scale(dot_ordinal);
+
+    dotplt.select(".dot_legendOrdinal")
+            .call(dot_legendOrdinal);
+
+
+    let dot_x = d3.scaleLinear()
+                .domain([0, d3.max(stat_f.filter(d => d.DATE == cur_date), d => parseFloat(d.HIGH))])
+                .rangeRound([dot_margin.left, dot_width - dot_margin.right]);
+
+    let dot_y = d3.scalePoint()
+                // .domain(stat_f.filter(d => d.DATE == cur_date).map(d => d.STATE).sort((a,b) => d3.ascending(parseFloat(a.LOW), parseFloat(a.LOW))))
+                .domain(stat_f.filter(d => d.DATE == cur_date).sort((a, b) => (parseFloat(a.LOW) - parseFloat(b.LOW))).map(d => d.STATE))
+                .rangeRound([dot_margin.top, dot_height - dot_margin.bottom])
+                .padding(1);
+
+    let dot_color = d3.scaleOrdinal()
+                .domain(keys)
+                .range(d3.schemeSpectral[keys.length])
+                .unknown("#ccc");
+
+
+    let dot_g = dotplt.append("g")
+        .attr("text-anchor", "end")
+        .style("font", "10px sans-serif")
+        .selectAll("g")
+        .data(stat_f.filter(d => d.DATE == cur_date).sort((a, b) => (parseFloat(a.LOW) - parseFloat(b.LOW))))
+        .enter()
+        .append("g")
+        .attr("transform", (d, i) => `translate(0,${dot_y(d.STATE)})`);
+
+    let dot_line = dot_g.append("line")
+                        .attr("stroke", "#aaa")
+                        .attr("x1", d => dot_x(parseFloat(d.LOW)))
+                        .attr("x2", d => dot_x(parseFloat(d.HIGH)));
+
+    let dot_cir = dot_g.append("g")
+                        .selectAll("circle")
+                        .data(d => d3.cross(keys, [d]))
+                        .enter()
+                        .append("circle")
+                        .attr("cx", ([k, d]) => dot_x(parseFloat(d[k])))
+                        .attr("fill", ([k]) => dot_color(k))
+                        .attr("r", 3.5);
+
+    let dot_txt = dot_g.append("text")
+                        .attr("dy", "0.35em")
+                        .attr("x", d => dot_x(parseFloat(d.LOW)) - 6)
+                        .text((d, i) => d.STATE);
+
+    dotplt.append("g")
+        .attr("transform", `translate(0,${dot_margin.top })`)
+        .attr('id', 'dot_axis')
+        .call(d3.axisTop(dot_x))
+        .call(g => g.select(".domain").remove())
+
+
+
+    // time slider
+    function getDateString(date) {
+        return [('0' + (date.getMonth() + 1)).slice(-2),
+                ('0' + date.getDate()).slice(-2),
+                selected_year1].join('/');
+    }
+
+
+    function update_line_circle() {
+        selected_states.forEach(function(state){
+            if (state != '') {
+                let cur_d = out_f.filter(function(d){return d.STATE == state && d.DATE == cur_date;})[0];
+                linesvg.select('#' + state.split(' ').join('') + "-circle")
+                        .attr("cx", function(d) {
+                                        let temp_date = cur_date.split('/');
+                                        temp_date[2] = '2020';
+                                        temp_date = temp_date.join('/');
+                                        return line_x(new Date(temp_date));
+                                    })
+                        .attr("cy", line_y(parseFloat(cur_d.DAILY_AQI_VALUE)))
+                        .attr("fill", state_color(selected_states.indexOf(state)));
+
+                linesvg.select('#' + state.split(' ').join('') + "-text")
+                        .attr("x", function(d) {
+                                let temp_date = cur_date.split('/');
+                                temp_date[2] = '2020';
+                                temp_date = temp_date.join('/');
+                                return line_x(new Date(temp_date));
+                            })
+                        .attr("y", line_y(parseFloat(cur_d.DAILY_AQI_VALUE)))
+                        .text(parseFloat(cur_d.DAILY_AQI_VALUE).toFixed(2));
+
+
+                let cur_date2 = cur_date.split('/');
+                cur_date2[2] = selected_year2;
+                cur_date2 = cur_date2.join('/');
+                let cur_d2 = out_f.filter(function(d){return d.STATE == state && d.DATE == cur_date2;})[0];
+                if (cur_d2 !== undefined) {
+                    linesvg.select('#' + state.split(' ').join('') + "-circle2")
+                            .attr("cx", function(d) {
+                                            let temp_date = cur_date.split('/');
+                                            temp_date[2] = '2020';
+                                            temp_date = temp_date.join('/');
+                                            return line_x(new Date(temp_date));
+                                        })
+                            .attr("cy", line_y(parseFloat(cur_d2.DAILY_AQI_VALUE)))
+                            .attr("fill", state_color2(selected_states.indexOf(state)+3));
+
+                    linesvg.select('#' + state.split(' ').join('') + "-text2")
+                            .attr("x", function(d) {
+                                    let temp_date = cur_date.split('/');
+                                    temp_date[2] = '2020';
+                                    temp_date = temp_date.join('/');
+                                    return line_x(new Date(temp_date));
+                                })
+                            .attr("y", line_y(parseFloat(cur_d2.DAILY_AQI_VALUE)))
+                            .text(parseFloat(cur_d2.DAILY_AQI_VALUE).toFixed(2));
+                }
+            }
+        });
+    }
+
+    let aqi_calc_mode = 0; // date mode
+
+    function calc_state_aqi() {
+        if (aqi_calc_mode == 0) { // date mode
+            if (display_mode == 0) {
+                out_f.filter(d => d.DATE == cur_date).forEach(function(d) {
+                    state_aqi.set(d.STATE, parseFloat(d.DAILY_AQI_VALUE));
+                });
+            }
+            else {
+                for (const [k, v] of state_aqi.entries()) {
+                    state_aqi.set(k, 0);
+                }
+
+                for (const [k, v] of prev_state_aqi.entries()) {
+                    prev_state_aqi.set(k, 0);
+                }
+
+                let mmdd = cur_date.split('/').splice(0,2).join('/');
+                let cur_date2 = mmdd + '/' + selected_year2;
+                let filtered_data = out_f.filter(d => (d.DATE == cur_date));
+                filtered_data.forEach(function(d){
+                    state_aqi.set(d.STATE, parseFloat(d.DAILY_AQI_VALUE));
+                });
+
+                let filtered_data2 = out_f.filter(d => (d.DATE == cur_date2));
+                filtered_data2.forEach(function(d){
+                    prev_state_aqi.set(d.STATE, parseFloat(d.DAILY_AQI_VALUE));
+                });
+
+                for (const [k, v] of state_aqi.entries()) {
+                    state_aqi.set(k, v - prev_state_aqi.get(k));
+                }
+            }
+        }
+        else { // range mode
+            let date_lb = getDateString(line_x.invert(extent[0]));
+            let date_ub = getDateString(line_x.invert(extent[1]));
+            let day_range = (new Date(date_ub) - new Date(date_lb)) / (1000 * 3600 * 24);
+
+            let date2_lb = date_lb.split('/');
+            date2_lb[2] = selected_year2;
+            date2_lb = date2_lb.join('/');
+
+            let date2_ub = date_ub.split('/');
+            date2_ub[2] = selected_year2;
+            date2_ub = date2_ub.join('/');
+
+            for (const [k, v] of state_aqi.entries()) {
+                state_aqi.set(k, 0);
+                prev_state_aqi.set(k, 0)
+            }
+            let filtered_data = out_f.filter(d => (new Date(d.DATE) >= new Date(date_lb)) && (new Date(d.DATE) <= new Date(date_ub)));
+            // abs
+            if (display_mode == 0) {
+                filtered_data.forEach(function(d) {
+                    state_aqi.set(d.STATE, state_aqi.get(d.STATE) + parseFloat(d.DAILY_AQI_VALUE));
+                });
+
+                for (const [k, v] of state_aqi.entries()) {
+                    state_aqi.set(k, v / day_range);
+                }
+            }
+            // rel
+            else {
+                for (const [k, v] of state_aqi.entries()) {
+                    state_aqi.set(k, 0);
+                }
+
+                for (const [k, v] of prev_state_aqi.entries()) {
+                    prev_state_aqi.set(k, 0);
+                }
+
+                let filtered_data2 = out_f.filter(d => (new Date(d.DATE) >= new Date(date2_lb)) && (new Date(d.DATE) <= new Date(date2_ub)));
+                filtered_data.forEach(function(d) {
+                    state_aqi.set(d.STATE, state_aqi.get(d.STATE) + parseFloat(d.DAILY_AQI_VALUE));
+                });
+
+                filtered_data2.forEach(function(d) {
+                    prev_state_aqi.set(d.STATE, prev_state_aqi.get(d.STATE) + parseFloat(d.DAILY_AQI_VALUE));
+                });
+
+                for (const [k, v] of state_aqi.entries()) {
+                    state_aqi.set(k, (v-prev_state_aqi.get(k)) / day_range);
+                    prev_state_aqi.set(k, prev_state_aqi.get(k) / day_range);
+                }
+            }
+        }
+    }
+
+
+    function update(val) {
+        let date = getDateString(val);
+        if ((date == cur_date) && !update_map) {return;}
+        cur_date = date;
+        // date_changed = true;
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // update dot plot
+        let dataFiltered = stat_f.filter(d => d.DATE == cur_date).sort((a, b) => (parseFloat(a.LOW) - parseFloat(b.LOW)));
+        dot_g.data(dataFiltered).select("line");
+        dot_line.attr("x1", d => dot_x(parseFloat(d.LOW)))
+                .attr("x2", d => dot_x(parseFloat(d.HIGH)))
+        // console.log(dot_g.selectAll("circle"))
+        dot_g.selectAll("circle").remove();
+
+        // dot_g.data(dataFiltered)
+        dot_g.append("g")
+            .selectAll("circle")
+            .data(d => d3.cross(keys, [d]))
+            .enter()
+            .append("circle")
+            .attr("cx", ([k, d]) => dot_x(parseFloat(d[k])))
+            .attr("fill", ([k]) => dot_color(k))
+            .attr("r", 3.5);
+
+        dot_g.data(dataFiltered).select("text");
+        dot_txt.transition().duration(1000)
+            .attr("dy", "0.35em")
+            .attr("x", d => dot_x(parseFloat(d.LOW)) - 6)
+            .text((d, i) => d.STATE);
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // update line circle
+        update_line_circle();
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // update map
+        calc_state_aqi();
+        map_states.attr("fill", d => getColor(d.properties.name));
+
+        update_map = false;
+    }
+
+    let slider = linesvg.append('g')
+                        .attr('transform', `translate(0,${line_height})`)
+                        .call(d3.sliderBottom(line_x)
+                            // .step(60 * 60 * 24 * 7)
+                            // .step(10)
+                            .ticks(12)
+                            .displayValue(true)
+                            .displayFormat(d3.timeFormat("%B %d"))
+                            .on('onchange', value => update(value))
+                        );
+
+    const brush = d3.brushX()
+        .extent([[line_margin.left, line_margin.top], [line_width - line_margin.right, line_height - line_margin.bottom]])
+        .on("end", brushended);
+
+    const gb = linesvg.append("g")
+        .call(brush)
+        // .call(brush.move, defaultSelection);
+
+    function brushended() {
+        extent = d3.event.selection;
+
+        // cancel brushing
+        if (!extent) {
+            update_map = true;
+            aqi_calc_mode = 0;
+            update(new Date(cur_date));
+            return;
+        }
+
+        aqi_calc_mode = 1;
+        calc_state_aqi();
+        map_states.attr("fill", d => getColor(d.properties.name));
+        // if (!selection) {
+        // gb.call(brush.move, defaultSelection);
+        // }
+    }
+}
+        </script>
+    </body>
+</html>
