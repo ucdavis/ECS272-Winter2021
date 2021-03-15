@@ -1,10 +1,15 @@
 # Instructions
 
-The Global terrorism dataset is too big to push into Github (158MB>=100MB). And only Github Enterprise support Git LFS features.
-
-1. Please download the dataset from https://www.kaggle.com/START-UMD/gtd/download . Extract the file `globalterrorismdb_0718dist.csv` and copy it to `/src/datasets`
+1. `cd FinalProject/znwu`
 2. `npm install`
 3. `npm start`
 
 # Expected Screenshot
-![](./screenshot.png)
+![](./screenshots/1.png)
+![](./screenshots/2.png)
+![](./screenshots/3.png)
+![](./screenshots/4.png)
+![](./screenshots/5.png)
+![](./screenshots/6.png)
+![](./screenshots/7.png)
+![](./screenshots/8.png)
