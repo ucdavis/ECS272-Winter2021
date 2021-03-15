@@ -410,9 +410,9 @@ export async function drawMap(){
     }
 
     function dblclick(e){
-        if(stage < stages - 1){
+        /*if(stage < stages - 1){
             return;
-        }
+        }*/
 
         ctx.rect(0, year_pos.y - 420, 540, 440);
 
