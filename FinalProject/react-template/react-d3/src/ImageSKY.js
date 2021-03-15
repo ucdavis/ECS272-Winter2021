@@ -396,7 +396,7 @@ class ImageSKY extends React.Component{
                   <h6>Zero confirm, zero vaccination, zero death:</h6>
                   <div className="zero_proportion"></div>
                 </div>
-                <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[this.state.at].iso}>Next</a>
+                <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[0].iso}>Next</a>
             </div>
 
           </div>
@@ -440,7 +440,7 @@ class ImageSKY extends React.Component{
                       <h6>Zero confirm, zero vaccination, zero death:</h6>
                       <div className="zero_proportion"></div>
                     </div>
-                    <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[this.state.at].iso}>Next</a>
+                    <a className="home" href={"/Stat_view?start=Parall&iso="+this.state.data[0].iso}>Next</a>
                 </div>
 
               </div>
