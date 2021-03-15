@@ -288,7 +288,7 @@ export async function drawMap(){
             if(selected == -1){
                 flow = parseInt(sp[i]["flow"]);
             }
-            else if(parseInt(stories[stage]["only"]) == 0){
+            else if(parseInt(stories[stage]["only"]) == 0 && stage < stages - 1){
                 flow = parseInt(sp[i]["flow"]);
             }
             else{
