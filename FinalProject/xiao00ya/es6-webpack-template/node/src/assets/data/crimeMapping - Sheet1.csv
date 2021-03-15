@@ -1,0 +1,40 @@
+fineTypes,coarseType1,coarseType
+WEAPON LAWS,WEAPON LAWS,weapon laws
+WARRANTS,WARRANTS,warrants
+NON-CRIMINAL,NON-CRIMINAL,non-criminal
+ASSAULT,Personal Crimes,personal crimes
+OTHER OFFENSES,Other,other
+MISSING PERSON,Personal Crimes,personal crimes
+LARCENY/THEFT,Property Crimes,property crimes
+BURGLARY,Property Crimes,property crimes
+STOLEN PROPERTY,Property Crimes,property crimes
+ROBBERY,Property Crimes,property crimes
+FRAUD,Financial ,financial 
+DRUG/NARCOTIC,Statutory Crimes,statutory crimes
+VEHICLE THEFT,Property Crimes,property crimes
+RECOVERED VEHICLE,Property Crimes,property crimes
+VANDALISM,Property Crimes,property crimes
+ARSON,Personal Crimes,personal crimes
+PROSTITUTION,Statutory Crimes,statutory crimes
+SECONDARY CODES,SECONDARY CODES,secondary codes
+SUSPICIOUS OCC,SUSPICIOUS OCc,suspicious occ
+DRUNKENNESS,Statutory Crimes,statutory crimes
+TRESPASS,TRESPASS,trespass
+"SEX OFFENSES, NON FORCIBLE",Statutory Crimes,statutory crimes
+"SEX OFFENSES, FORCIBLE",Statutory Crimes,statutory crimes
+RUNAWAY,RUNAWAY,runaway
+KIDNAPPING,Personal Crimes,personal crimes
+DISORDERLY CONDUCT,Statutory Crimes,statutory crimes
+DRIVING UNDER THE INFLUENCE,Statutory Crimes,statutory crimes
+FORGERY/COUNTERFEITING,Financial ,financial 
+EMBEZZLEMENT,Financial ,financial 
+BRIBERY,Financial ,financial 
+FAMILY OFFENSES,FAMILY OFFENSES,family offenses
+GAMBLING,Financial ,financial 
+SUICIDE,SUICIDE,suicide
+LIQUOR LAWS,LIQUOR LAWS,liquor laws
+EXTORTION,Property Crimes,property crimes
+LOITERING,Statutory Crimes,statutory crimes
+TREA,TRESPASS,trespass
+BAD CHECKS,Financial ,financial 
+PORNOGRAPHY/OBSCENE MAT,Statutory Crimes,statutory crimes

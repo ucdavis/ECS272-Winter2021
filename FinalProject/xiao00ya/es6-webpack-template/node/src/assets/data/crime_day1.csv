@@ -1,0 +1,379 @@
+category,dayOfWeek,count
+WEAPON LAWS,Monday,223
+WEAPON LAWS,Tuesday,222
+WEAPON LAWS,Wednesday,269
+WEAPON LAWS,Thursday,227
+WEAPON LAWS,Friday,271
+WEAPON LAWS,Saturday,200
+WEAPON LAWS,Sunday,246
+WARRANTS,Monday,808
+WARRANTS,Tuesday,908
+WARRANTS,Wednesday,927
+WARRANTS,Thursday,905
+WARRANTS,Friday,826
+WARRANTS,Saturday,822
+WARRANTS,Sunday,718
+NON-CRIMINAL,Monday,2404
+NON-CRIMINAL,Tuesday,2428
+NON-CRIMINAL,Wednesday,2470
+NON-CRIMINAL,Thursday,2521
+NON-CRIMINAL,Friday,2882
+NON-CRIMINAL,Saturday,2722
+NON-CRIMINAL,Sunday,2439
+ASSAULT,Monday,1865
+ASSAULT,Tuesday,1873
+ASSAULT,Wednesday,1852
+ASSAULT,Thursday,1782
+ASSAULT,Friday,2082
+ASSAULT,Saturday,2157
+ASSAULT,Sunday,1966
+OTHER OFFENSES,Monday,2806
+OTHER OFFENSES,Tuesday,2988
+OTHER OFFENSES,Wednesday,3041
+OTHER OFFENSES,Thursday,2752
+OTHER OFFENSES,Friday,2974
+OTHER OFFENSES,Saturday,2583
+OTHER OFFENSES,Sunday,2455
+MISSING PERSON,Monday,555
+MISSING PERSON,Tuesday,638
+MISSING PERSON,Wednesday,600
+MISSING PERSON,Thursday,624
+MISSING PERSON,Friday,761
+MISSING PERSON,Saturday,631
+MISSING PERSON,Sunday,529
+LARCENY/THEFT,Monday,5503
+LARCENY/THEFT,Tuesday,5473
+LARCENY/THEFT,Wednesday,5503
+LARCENY/THEFT,Thursday,5538
+LARCENY/THEFT,Friday,6477
+LARCENY/THEFT,Saturday,6384
+LARCENY/THEFT,Sunday,5531
+BURGLARY,Monday,840
+BURGLARY,Tuesday,804
+BURGLARY,Wednesday,813
+BURGLARY,Thursday,891
+BURGLARY,Friday,947
+BURGLARY,Saturday,769
+BURGLARY,Sunday,738
+STOLEN PROPERTY,Monday,145
+STOLEN PROPERTY,Tuesday,135
+STOLEN PROPERTY,Wednesday,138
+STOLEN PROPERTY,Thursday,110
+STOLEN PROPERTY,Friday,113
+STOLEN PROPERTY,Saturday,97
+STOLEN PROPERTY,Sunday,144
+ROBBERY,Monday,462
+ROBBERY,Tuesday,437
+ROBBERY,Wednesday,455
+ROBBERY,Thursday,463
+ROBBERY,Friday,459
+ROBBERY,Saturday,510
+ROBBERY,Sunday,513
+FRAUD,Monday,401
+FRAUD,Tuesday,385
+FRAUD,Wednesday,329
+FRAUD,Thursday,414
+FRAUD,Friday,407
+FRAUD,Saturday,385
+FRAUD,Sunday,314
+DRUG/NARCOTIC,Monday,608
+DRUG/NARCOTIC,Tuesday,670
+DRUG/NARCOTIC,Wednesday,664
+DRUG/NARCOTIC,Thursday,644
+DRUG/NARCOTIC,Friday,548
+DRUG/NARCOTIC,Saturday,558
+DRUG/NARCOTIC,Sunday,551
+VEHICLE THEFT,Monday,903
+VEHICLE THEFT,Tuesday,881
+VEHICLE THEFT,Wednesday,929
+VEHICLE THEFT,Thursday,856
+VEHICLE THEFT,Friday,999
+VEHICLE THEFT,Saturday,936
+VEHICLE THEFT,Sunday,915
+RECOVERED VEHICLE,Monday,111
+RECOVERED VEHICLE,Tuesday,135
+RECOVERED VEHICLE,Wednesday,116
+RECOVERED VEHICLE,Thursday,122
+RECOVERED VEHICLE,Friday,108
+RECOVERED VEHICLE,Saturday,78
+RECOVERED VEHICLE,Sunday,66
+VANDALISM,Monday,1205
+VANDALISM,Tuesday,1134
+VANDALISM,Wednesday,1170
+VANDALISM,Thursday,1135
+VANDALISM,Friday,1350
+VANDALISM,Saturday,1322
+VANDALISM,Sunday,1273
+ARSON,Monday,46
+ARSON,Tuesday,38
+ARSON,Wednesday,42
+ARSON,Thursday,46
+ARSON,Friday,39
+ARSON,Saturday,46
+ARSON,Sunday,29
+PROSTITUTION,Monday,21
+PROSTITUTION,Tuesday,29
+PROSTITUTION,Wednesday,37
+PROSTITUTION,Thursday,354
+PROSTITUTION,Friday,136
+PROSTITUTION,Saturday,47
+PROSTITUTION,Sunday,17
+SECONDARY CODES,Monday,260
+SECONDARY CODES,Tuesday,278
+SECONDARY CODES,Wednesday,273
+SECONDARY CODES,Thursday,263
+SECONDARY CODES,Friday,271
+SECONDARY CODES,Saturday,235
+SECONDARY CODES,Sunday,261
+SUSPICIOUS OCC,Monday,826
+SUSPICIOUS OCC,Tuesday,870
+SUSPICIOUS OCC,Wednesday,839
+SUSPICIOUS OCC,Thursday,853
+SUSPICIOUS OCC,Friday,836
+SUSPICIOUS OCC,Saturday,809
+SUSPICIOUS OCC,Sunday,749
+DRUNKENNESS,Monday,45
+DRUNKENNESS,Tuesday,48
+DRUNKENNESS,Wednesday,48
+DRUNKENNESS,Thursday,64
+DRUNKENNESS,Friday,85
+DRUNKENNESS,Saturday,91
+DRUNKENNESS,Sunday,84
+TRESPASS,Monday,265
+TRESPASS,Tuesday,290
+TRESPASS,Wednesday,314
+TRESPASS,Thursday,253
+TRESPASS,Friday,267
+TRESPASS,Saturday,225
+TRESPASS,Sunday,198
+"SEX OFFENSES, NON FORCIBLE",Monday,1
+"SEX OFFENSES, NON FORCIBLE",Tuesday,8
+"SEX OFFENSES, NON FORCIBLE",Wednesday,6
+"SEX OFFENSES, NON FORCIBLE",Thursday,12
+"SEX OFFENSES, NON FORCIBLE",Friday,3
+"SEX OFFENSES, NON FORCIBLE",Saturday,6
+"SEX OFFENSES, NON FORCIBLE",Sunday,4
+"SEX OFFENSES, FORCIBLE",Monday,111
+"SEX OFFENSES, FORCIBLE",Tuesday,128
+"SEX OFFENSES, FORCIBLE",Wednesday,98
+"SEX OFFENSES, FORCIBLE",Thursday,159
+"SEX OFFENSES, FORCIBLE",Friday,140
+"SEX OFFENSES, FORCIBLE",Saturday,169
+"SEX OFFENSES, FORCIBLE",Sunday,135
+RUNAWAY,Monday,26
+RUNAWAY,Tuesday,25
+RUNAWAY,Wednesday,20
+RUNAWAY,Thursday,20
+RUNAWAY,Friday,15
+RUNAWAY,Saturday,18
+RUNAWAY,Sunday,16
+KIDNAPPING,Monday,36
+KIDNAPPING,Tuesday,37
+KIDNAPPING,Wednesday,26
+KIDNAPPING,Thursday,33
+KIDNAPPING,Friday,35
+KIDNAPPING,Saturday,44
+KIDNAPPING,Sunday,46
+DISORDERLY CONDUCT,Monday,88
+DISORDERLY CONDUCT,Tuesday,130
+DISORDERLY CONDUCT,Wednesday,126
+DISORDERLY CONDUCT,Thursday,92
+DISORDERLY CONDUCT,Friday,76
+DISORDERLY CONDUCT,Saturday,81
+DISORDERLY CONDUCT,Sunday,65
+DRIVING UNDER THE INFLUENCE,Monday,37
+DRIVING UNDER THE INFLUENCE,Tuesday,37
+DRIVING UNDER THE INFLUENCE,Wednesday,36
+DRIVING UNDER THE INFLUENCE,Thursday,50
+DRIVING UNDER THE INFLUENCE,Friday,73
+DRIVING UNDER THE INFLUENCE,Saturday,75
+DRIVING UNDER THE INFLUENCE,Sunday,70
+FORGERY/COUNTERFEITING,Monday,93
+FORGERY/COUNTERFEITING,Tuesday,108
+FORGERY/COUNTERFEITING,Wednesday,103
+FORGERY/COUNTERFEITING,Thursday,118
+FORGERY/COUNTERFEITING,Friday,80
+FORGERY/COUNTERFEITING,Saturday,66
+FORGERY/COUNTERFEITING,Sunday,51
+EMBEZZLEMENT,Monday,22
+EMBEZZLEMENT,Tuesday,28
+EMBEZZLEMENT,Wednesday,20
+EMBEZZLEMENT,Thursday,26
+EMBEZZLEMENT,Friday,31
+EMBEZZLEMENT,Saturday,24
+EMBEZZLEMENT,Sunday,17
+BRIBERY,Monday,9
+BRIBERY,Tuesday,9
+BRIBERY,Wednesday,11
+BRIBERY,Thursday,6
+BRIBERY,Friday,11
+BRIBERY,Saturday,9
+BRIBERY,Sunday,11
+FAMILY OFFENSES,Monday,4
+FAMILY OFFENSES,Tuesday,6
+FAMILY OFFENSES,Wednesday,3
+FAMILY OFFENSES,Thursday,9
+FAMILY OFFENSES,Friday,11
+FAMILY OFFENSES,Saturday,9
+FAMILY OFFENSES,Sunday,11
+GAMBLING,Monday,0
+GAMBLING,Tuesday,6
+GAMBLING,Wednesday,7
+GAMBLING,Thursday,2
+GAMBLING,Friday,2
+GAMBLING,Saturday,1
+GAMBLING,Sunday,2
+SUICIDE,Monday,12
+SUICIDE,Tuesday,9
+SUICIDE,Wednesday,6
+SUICIDE,Thursday,6
+SUICIDE,Friday,12
+SUICIDE,Saturday,11
+SUICIDE,Sunday,13
+LIQUOR LAWS,Monday,15
+LIQUOR LAWS,Tuesday,26
+LIQUOR LAWS,Wednesday,24
+LIQUOR LAWS,Thursday,23
+LIQUOR LAWS,Friday,22
+LIQUOR LAWS,Saturday,30
+LIQUOR LAWS,Sunday,16
+EXTORTION,Monday,14
+EXTORTION,Tuesday,6
+EXTORTION,Wednesday,8
+EXTORTION,Thursday,10
+EXTORTION,Friday,10
+EXTORTION,Saturday,7
+EXTORTION,Sunday,5
+LOITERING,Monday,7
+LOITERING,Tuesday,6
+LOITERING,Wednesday,5
+LOITERING,Thursday,5
+LOITERING,Friday,7
+LOITERING,Saturday,7
+LOITERING,Sunday,5
+TREA,Monday,1
+TREA,Tuesday,1
+TREA,Wednesday,0
+TREA,Thursday,0
+TREA,Friday,1
+TREA,Saturday,0
+TREA,Sunday,0
+BAD CHECKS,Monday,4
+BAD CHECKS,Tuesday,7
+BAD CHECKS,Wednesday,3
+BAD CHECKS,Thursday,7
+BAD CHECKS,Friday,4
+BAD CHECKS,Saturday,7
+BAD CHECKS,Sunday,2
+PORNOGRAPHY/OBSCENE MAT,Monday,1
+PORNOGRAPHY/OBSCENE MAT,Tuesday,1
+PORNOGRAPHY/OBSCENE MAT,Wednesday,1
+PORNOGRAPHY/OBSCENE MAT,Thursday,0
+PORNOGRAPHY/OBSCENE MAT,Friday,0
+PORNOGRAPHY/OBSCENE MAT,Saturday,1
+PORNOGRAPHY/OBSCENE MAT,Sunday,0
+weapon laws,Monday,223
+weapon laws,Tuesday,222
+weapon laws,Wednesday,269
+weapon laws,Thursday,227
+weapon laws,Friday,271
+weapon laws,Saturday,200
+weapon laws,Sunday,246
+warrants,Monday,808
+warrants,Tuesday,908
+warrants,Wednesday,927
+warrants,Thursday,905
+warrants,Friday,826
+warrants,Saturday,822
+warrants,Sunday,718
+non-criminal,Monday,2404
+non-criminal,Tuesday,2428
+non-criminal,Wednesday,2470
+non-criminal,Thursday,2521
+non-criminal,Friday,2882
+non-criminal,Saturday,2722
+non-criminal,Sunday,2439
+personal crimes,Monday,2502
+personal crimes,Tuesday,2586
+personal crimes,Wednesday,2520
+personal crimes,Thursday,2485
+personal crimes,Friday,2917
+personal crimes,Saturday,2878
+personal crimes,Sunday,2570
+other,Monday,2806
+other,Tuesday,2988
+other,Wednesday,3041
+other,Thursday,2752
+other,Friday,2974
+other,Saturday,2583
+other,Sunday,2455
+property crimes,Monday,9183
+property crimes,Tuesday,9005
+property crimes,Wednesday,9132
+property crimes,Thursday,9125
+property crimes,Friday,10463
+property crimes,Saturday,10103
+property crimes,Sunday,9185
+financial ,Monday,529
+financial ,Tuesday,543
+financial ,Wednesday,473
+financial ,Thursday,573
+financial ,Friday,535
+financial ,Saturday,492
+financial ,Sunday,397
+statutory crimes,Monday,919
+statutory crimes,Tuesday,1057
+statutory crimes,Wednesday,1021
+statutory crimes,Thursday,1380
+statutory crimes,Friday,1068
+statutory crimes,Saturday,1035
+statutory crimes,Sunday,931
+secondary codes,Monday,260
+secondary codes,Tuesday,278
+secondary codes,Wednesday,273
+secondary codes,Thursday,263
+secondary codes,Friday,271
+secondary codes,Saturday,235
+secondary codes,Sunday,261
+suspicious occ,Monday,826
+suspicious occ,Tuesday,870
+suspicious occ,Wednesday,839
+suspicious occ,Thursday,853
+suspicious occ,Friday,836
+suspicious occ,Saturday,809
+suspicious occ,Sunday,749
+trespass,Monday,266
+trespass,Tuesday,291
+trespass,Wednesday,314
+trespass,Thursday,253
+trespass,Friday,268
+trespass,Saturday,225
+trespass,Sunday,198
+runaway,Monday,26
+runaway,Tuesday,25
+runaway,Wednesday,20
+runaway,Thursday,20
+runaway,Friday,15
+runaway,Saturday,18
+runaway,Sunday,16
+family offenses,Monday,4
+family offenses,Tuesday,6
+family offenses,Wednesday,3
+family offenses,Thursday,9
+family offenses,Friday,11
+family offenses,Saturday,9
+family offenses,Sunday,11
+suicide,Monday,12
+suicide,Tuesday,9
+suicide,Wednesday,6
+suicide,Thursday,6
+suicide,Friday,12
+suicide,Saturday,11
+suicide,Sunday,13
+liquor laws,Monday,15
+liquor laws,Tuesday,26
+liquor laws,Wednesday,24
+liquor laws,Thursday,23
+liquor laws,Friday,22
+liquor laws,Saturday,30
+liquor laws,Sunday,16
