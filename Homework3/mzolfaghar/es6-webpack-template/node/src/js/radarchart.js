@@ -1,5 +1,3 @@
-//Reference: VisualCinnamon.com: Alangrafu and Nadieh Bremer --> inspired idea
-
 import { RadarChart } from "./radar";
 import * as d3 from "d3";
 
