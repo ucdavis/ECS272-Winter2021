@@ -1,0 +1,25 @@
+.header {
+    background: #585858;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.item {
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: table-cell;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.item:hover {
+    background: #b8b8b8;
+}
+
+.item:active{
+    background: white;
+    color: #383838;
+}
