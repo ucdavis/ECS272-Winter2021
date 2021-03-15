@@ -5,16 +5,22 @@ groups = [];
 phase = 1;
 cur_tree = 1;
 color_category = 'gender';
-background_colors = ["#E4DBCF", "#A3ADA4", "D9DBDB"];
+background_colors = ["#E4DBCF", "#d3dDd4", "D9DBDB"];
 view_box_x = 0;
 tree_type = 'sat';
 width_offset = 10000;
+cur_show_id = 0;
+intro_page = 0;
 
 filters = {
     gender: {
         Male: true,
         Female: true,
         Other: true
+    }, 
+    major: {
+        Design: true,
+        NonDesign: true
     }
 }
 
@@ -26,8 +32,29 @@ trees_x = [0, 10000, -10000];
 UpdateWidthOffset();
 UpdateTreesX();
 PlaceTrees();
+UpdateTreeHint(1, false);
+
 
 document.getElementById("inner").style.backgroundColor = background_colors[0];
+
+drag_centers_original = [[485, 506],[1450, 404],[677, 342],[1228, 225],[927, 111]];
+drag_centers = [[485, 506],[1450, 404],[677, 342],[1228, 225],[927, 111]];
+
+// Retrieve Data
+fetch(window.location.href + 'data')
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+    students = data;
+    for(let i=0; i<students.length; i++) {
+        student_indices[students[i].id] = i;
+    }
+    console.log(student_indices);
+    butterflies = CreateButterflies(students);
+
+    // groups = GroupButterflies('sat');
+    setTimeout(() => { Draw();  }, 1000);
+});
 
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -75,23 +102,7 @@ function GoToPhase(i) {
 
 }
 
-drag_centers_original = [[485, 506],[1450, 404],[677, 342],[1228, 225],[927, 111]];
-drag_centers = [[485, 506],[1450, 404],[677, 342],[1228, 225],[927, 111]];
 
-// Retrieve Data
-fetch(window.location.href + 'data')
-.then(response => response.json())
-.then(data => {
-    console.log(data);
-    students = data;
-    for(let i=0; i<students.length; i++) {
-        student_indices[students[i].id] = i;
-    }
-    console.log(student_indices);
-    butterflies = CreateButterflies(students);
-    // groups = GroupButterflies('sat');
-    setTimeout(() => { Draw();  }, 1000);
-});
 
 
 function UpdateViewBox() {
@@ -111,7 +122,7 @@ function UpdateBackgroundColor() {
     var rgb_src = {r: parseInt(matches[1]), g:parseInt(matches[2]), b:parseInt(matches[3])};
     var rgb_dest = hexToRgb(background_colors[phase - 1]);
 
-    var rgb = {r: Math.ceil(rgb_src.r + (rgb_dest.r - rgb_src.r) * 0.1), g: Math.ceil(rgb_src.g + (rgb_dest.g - rgb_src.g) * 0.1), b: Math.ceil(rgb_src.b + (rgb_dest.b - rgb_src.b)*0.1)}
+    var rgb = {r: Math.ceil(rgb_src.r + (rgb_dest.r - rgb_src.r) * 0.25), g: Math.ceil(rgb_src.g + (rgb_dest.g - rgb_src.g) * 0.25), b: Math.ceil(rgb_src.b + (rgb_dest.b - rgb_src.b)*0.25)}
 
     document.getElementById("inner").style.backgroundColor = "rgb("+rgb.r+','+rgb.g+','+rgb.b+")";
 }
@@ -211,35 +222,91 @@ window.addEventListener('resize', (e)=>{
     PlaceTrees();
 });
 
+
+
+function ChangeColor(type) {
+    if(type == 'major') {
+        color_category = 'major';
+        document.getElementById("major-filter-box").style.display = "flex";
+        document.getElementById("gender-filter-box").style.display = "none";
+    } else if(type == 'gender') {
+        color_category = 'gender';
+        document.getElementById("major-filter-box").style.display = "none";
+        document.getElementById("gender-filter-box").style.display = "flex";
+    }
+    ChangeColorTimer(type);
+}
+
+function ChangeColorTimer(type) {
+    var button_gender = document.getElementById("button-gender");
+    var button_major = document.getElementById("button-major");
+    if(type == 'major') {
+        for(var i=0; i<butterflies.length; i++) {
+            var butterfly = butterflies[i];
+            var student = GetStudentById(butterfly.id);
+
+            butterfly.children[1].setAttributeNS(null, 'fill', color_scheme.major[student.major].left);
+            butterfly.children[2].setAttributeNS(null, 'fill', color_scheme.major[student.major].right);
+        }
+        
+        button_major.style.backgroundImage = "linear-gradient(to right, #ac97b2, #959faa)";
+        button_major.style.color = "#ffffff";
+        button_gender.style.backgroundImage = "linear-gradient(to right, #eeeeee, #eeeeee)";
+        button_gender.style.color = "#747474";
+
+    } else if(type == 'gender') {
+        for(var i=0; i<butterflies.length; i++) {
+            var butterfly = butterflies[i];
+            var student = GetStudentById(butterfly.id);
+
+            butterfly.children[1].setAttributeNS(null, 'fill', color_scheme.gender[student.gender].left);
+            butterfly.children[2].setAttributeNS(null, 'fill', color_scheme.gender[student.gender].right);
+        }
+        
+        button_gender.style.backgroundImage = "linear-gradient(to right, #7497b2, #b77375)";
+        button_gender.style.color = "#ffffff";
+        button_major.style.backgroundImage = "linear-gradient(to right, #eeeeee, #eeeeee)";
+        button_major.style.color = "#747474";
+    }
+}
+
 function ToggleGenderFilter(key) {
     if(filters.gender[key] == true) {
         filters.gender[key] = false;
         document.getElementById('button-' + key).style.backgroundColor = "#eeeeee";
         document.getElementById('button-' + key).style.color = "#747474";
-        UpdateButterfliesVisibility('gender', key, false);
     } else {
         filters.gender[key] = true;
         document.getElementById('button-' + key).style.backgroundColor = color_scheme.gender[key].left;
         document.getElementById('button-' + key).style.color = "#ffffff";
-        UpdateButterfliesVisibility('gender', key, true);
     }
+    UpdateButterfliesVisibility();
 }
 
-function UpdateButterfliesVisibility(type, key, visibility) {
+function ToggleMajorFilter(key) {
+    if(filters.major[key] == true) {
+        filters.major[key] = false;
+        document.getElementById('button-' + key).style.backgroundColor = "#eeeeee";
+        document.getElementById('button-' + key).style.color = "#747474";
+    } else {
+        filters.major[key] = true;
+        document.getElementById('button-' + key).style.backgroundColor = color_scheme.major[key].left;
+        document.getElementById('button-' + key).style.color = "#ffffff";
+    }
+    UpdateButterfliesVisibility();
+}
+
+function UpdateButterfliesVisibility() {
     for(var i=0; i<butterflies.length; i++) {
         var butterfly = butterflies[i];
         var student = GetStudentById(butterfly.id);
-        if(type == 'gender') {
-            if(student.gender == key) {
-                if(visibility) {
-                    const year_factor = Math.sqrt(student.year) * 0.5;
-                    butterfly.setAttributeNS(null, 'r', 23 * Math.sqrt(year_factor));
-                    butterfly.setAttributeNS(null, 'visibility', 'visible');
-                } else {
-                    butterfly.setAttributeNS(null, 'r', 0);
-                    butterfly.setAttributeNS(null, 'visibility', 'hidden');
-                }
-            }
+        if(filters.gender[student.gender] && filters.major[student.major]) {
+            const year_factor = Math.sqrt(student.year) * 0.5;
+            butterfly.setAttributeNS(null, 'r', 23 * Math.sqrt(year_factor));
+            butterfly.setAttributeNS(null, 'visibility', 'visible');
+        } else {
+            butterfly.setAttributeNS(null, 'r', 0);
+            butterfly.setAttributeNS(null, 'visibility', 'hidden');
         }
     }
 }
@@ -252,14 +319,81 @@ tree_1.addEventListener("mouseleave", (e)=>{
     UpdateTreeHint(1, false);
 });
 
-// tree_2.addEventListener("click", (e)=>{
-//     SwitchTree(2);
-// });
+tree_2.addEventListener("mouseenter", (e)=>{
+    UpdateTreeHint(2, true);
+});
 
-// tree_3.addEventListener("click", (e)=>{
-//     SwitchTree(3);
-// });
+tree_2.addEventListener("mouseleave", (e)=>{
+    UpdateTreeHint(2, false);
+});
+
+tree_3.addEventListener("mouseenter", (e)=>{
+    UpdateTreeHint(3, true);
+});
+
+tree_3.addEventListener("mouseleave", (e)=>{
+    UpdateTreeHint(3, false);
+});
 
 function UpdateTreeHint(tree, hint) {
-    document.getElementById('hint_' + tree).setAttributeNS(null, 'opacity', hint?1:0.4);
+    for(var i=1; i<=3; i++) {
+        if(i == cur_tree) {
+            document.getElementById('hint_' + i).setAttributeNS(null, 'opacity', 0.2);
+        } else {
+            document.getElementById('hint_' + i).setAttributeNS(null, 'opacity', 0);
+        }
+    }
+    if(tree == cur_tree) {
+        document.getElementById('hint_' + tree).setAttributeNS(null, 'opacity', hint?0.7:0.2);
+    }
 }
+
+function IntroButton() {
+    if(intro_page == 0) {
+        document.getElementById("intro-title").style.transform = "translateY(-20px)";
+        document.getElementById("intro-title").style.opacity = "0";
+        document.getElementById("intro-subtitle").style.transform = "translateY(-20px)";
+        document.getElementById("intro-subtitle").style.opacity = "0";
+    
+        
+        setTimeout(() => {
+            document.getElementById("intro-title").style.display = "none";
+            document.getElementById("intro-subtitle").style.display = "none";
+            document.getElementById("help-box").style.display = "flex";
+            document.getElementById("help-box").style.transform = "translateY(20px)";
+            document.getElementById("help-box").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("help-box").style.transform = "translateY(0px)";
+                document.getElementById("help-box").style.opacity = "1";
+            }, 100);
+            intro_page = 1;
+        }, 500);
+    } else {
+        document.getElementById("help-box").style.transform = "translateY(-20px)";
+        document.getElementById("help-box").style.opacity = "0";
+        document.getElementById("intro-overlay").style.opacity = "0";
+        setTimeout(() => {
+            document.getElementById("intro-overlay").style.display = "none";
+        }, 500);
+    }
+}
+
+function ShowHelp() {
+    document.getElementById("intro-overlay").style.display = "flex";
+    
+    setTimeout(() => {
+        document.getElementById("intro-overlay").style.opacity = "1";
+        document.getElementById("help-box").style.transform = "translateY(0px)";
+        document.getElementById("help-box").style.opacity = "1";
+    }, 100);
+}
+
+document.getElementById("corner-help-box").addEventListener("mouseenter", (e)=>{
+    document.getElementById("corner-help-box").style.width = "100px";
+    document.getElementById("corner-help-box-hidden").style.width = "59px";
+});
+
+document.getElementById("corner-help-box").addEventListener("mouseleave", (e)=>{
+    document.getElementById("corner-help-box").style.width = "40px";
+    document.getElementById("corner-help-box-hidden").style.width = "0px";
+});

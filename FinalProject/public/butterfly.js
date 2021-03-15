@@ -5,24 +5,112 @@ container = document.getElementById("container");
 
 color_scheme = {
     gender: {
-        Male: {left: "#7497b2", right: "#b8cbd8"},
-        Female: {left: "#b77375", right: "#ccb2b3"},
-        Other: {left: "#747474", right: "#cccccc"}
+        Male: {left: "#7497b2", right: "#94B7D2"},
+        Female: {left: "#b77375", right: "#d79395"},
+        Other: {left: "#747474", right: "#949494"}
+    },
+    major: {
+        Design: {left: "#ac97b2", right:"#ccb7d2"},
+        NonDesign: {left: "#959faa", right: "#b5bfca"}
     }
 };
 
-function ShowStudentInfo(id, x, y) {
+function ShowStudentInfo(id) {
+    if(!id.includes('R')) {
+        id = cur_show_id;
+    }
+    const student = GetStudentById(id);
+    console.log(id);
+    document.getElementById("student-gender-text").textContent = student.gender;
+    document.getElementById("student-gender-text").style.color = color_scheme.gender[student.gender].left;
+
+    var year = "";
+    if(student.year == 1) {
+        year = "Freshman";
+    } else if(student.year == 2) {
+        year = "Sophomore ";
+    } else if(student.year == 3) {
+        year = "Junior";
+    } else if(student.year == 4) {
+        year = "Senior";
+    } else {
+        year = "Undisclosed";
+    }
+    document.getElementById("student-year-text").textContent = year;
+
+
+    document.getElementById("student-major-text").textContent = student.major=="Design"?"Design":"Non-Design";
+    document.getElementById("student-major-text").style.color = color_scheme.major[student.major].left;
+    document.getElementById("student-ethnicity-text").textContent = student.race;
+
+    var tool = student.tool;
+    
+    if(tool.includes("Others (Please specify)")) {
+        console.log("GSDFD");
+        tool = tool.replace("Others (Please specify)", student.tool_text);
+        
+    }
+
+    tool = tool.replaceAll(',', ' ');
+
+    console.log(tool);
+
+    document.getElementById("student-tool-text").textContent = tool;
+
+    document.getElementById("student-left-wing").setAttributeNS(null, 'fill', color_scheme[color_category][student[color_category]].left);
+    document.getElementById("student-right-wing").setAttributeNS(null, 'fill', color_scheme[color_category][student[color_category]].right);
+
+    var overlay = document.getElementById("student-overlay");
+    overlay.style.display = "flex";
+    overlay.style.backgroundColor = 'rgba(255,255,255,0.95)';
+    overlay.style.opacity = 0;
+
+    var info_boxes = document.getElementsByClassName("student-info-box");
+    for(var i=0; i<info_boxes.length; i++) {
+        info_boxes[i].style.transform = "translateY(20px)";
+        info_boxes[i].style.opacity = "0";
+    }
+    
+    setTimeout(() => { ShowStudentInfoDelay();  }, 100);
+    // overlay.style.opacity = 0.8;
+}
+
+function ShowStudentInfoDelay() {
+    document.getElementById("student-overlay").style.opacity = 1;
+    var info_boxes = document.getElementsByClassName("student-info-box");
+    for(var i=0; i<info_boxes.length; i++) {
+        info_boxes[i].style.transform = "translateY(0px)";
+        info_boxes[i].style.opacity = "1";
+    }
+}
+
+function HideStudentInfo() {
+    var info_boxes = document.getElementsByClassName("student-info-box");
+    for(var i=0; i<info_boxes.length; i++) {
+        document.getElementsByClassName("student-info-box")[i].style.transform = "translateY(20px)";
+        document.getElementsByClassName("student-info-box")[i].style.opacity = "0";
+    }
+    document.getElementById("student-overlay").style.opacity = 0;
+    setTimeout(() => { HideStudentInfoDelay();  }, 1000);
+}
+
+function HideStudentInfoDelay() {
+    document.getElementById("student-overlay").style.display = "none";
+}
+
+function ShowStudentComment(id, x, y) {
+    cur_show_id = id;
     const student = GetStudentById(id);
     console.log(student);
-    var info_box = document.getElementById("info-box");
+    var info_box = document.getElementById("comment-box");
     info_box.textContent = student.com[phase-1];
     info_box.style.top = y + 10;
     info_box.style.left = x + 10;
     info_box.style.display = "flex";
 }
 
-function HideStudentInfo() {
-    var info_box = document.getElementById("info-box");
+function HideStudentComment() {
+    var info_box = document.getElementById("comment-box");
     info_box.style.display = "none";
 }
 
@@ -40,12 +128,16 @@ function CreateButterflies(students) {
         // butterfly.setAttributeNS(null, 'transform', 'translate(36 45.5) scale(0.1 0.1)');
         butterfly.setAttributeNS(null, 'transform', 'translate(' + Math.random()*1920 + ' ' + Math.random()*600 + ') scale(' + 0.1 * year_factor + ' ' + 0.1 * year_factor + ') rotate(' + (Math.random() * 100 - 50) + ')');
         
+        butterfly.addEventListener("click", (event)=>{
+            ShowStudentInfo(event.target.id);
+        });
+
         butterfly.addEventListener("mouseenter", (event)=>{
-            ShowStudentInfo(event.target.id, event.pageX, event.pageY);
+            ShowStudentComment(event.target.id, event.pageX, event.pageY);
         });
 
         butterfly.addEventListener("mouseleave", (event)=>{
-            HideStudentInfo();
+            HideStudentComment();
         });
 
         var animation = document.createElementNS(svgns, "animateTransform");
@@ -71,6 +163,7 @@ function CreateButterflies(students) {
         right_wing.setAttributeNS(null, 'd', "M1098.74,619.6a161.51,161.51,0,0,0,2.42,33.95c2.17,12.14,6,25.55,28.84,69.6,22.14,42.75,26.36,45.27,30.54,45.59,19.81,1.52,36-46.53,37.36-50.43,3.6-10.67,14.85-44-.72-57.95-4.33-3.89-9.67-5.31-14.06-5.82,7.1-.58,19.9-2.76,29.83-12.36,12.89-12.48,13.09-29.91,13.35-52.14.32-28.44.53-47.18-10.66-53.83-17-10.13-49.69,14.09-69.6,28.84a221.6,221.6,0,0,0-25.71,22.3Z")
         right_wing.setAttributeNS(null, 'transform', "translate(-952.31 -533.8)");
         right_wing.setAttributeNS(null, 'fill', color_scheme.gender[student.gender].right);
+        right_wing.setAttributeNS(null, 'transition', 'fill .4s ease');
     
         butterfly.appendChild(left_wing);
         butterfly.appendChild(right_wing);

@@ -6,10 +6,277 @@ body {
     user-select: none;
 }
 
+#intro-overlay {
+    position: fixed;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    /* margin: 0;
+    left: 0;
+    top: 0; */
+    background-color: #F4EBdF;
+    color: black;
+    fill:black;
+    z-index: 3;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 1s;
+}
+
+#intro-title {
+    font-family: 'Roboto Slab', serif;
+    font-size: 4.5em;
+    font-weight: 500;
+    transition: 0.5s;
+}
+
+#intro-subtitle {
+    margin-top: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2em;
+    font-weight: 300;
+    transition: 0.5s;
+}
+
+#intro-next-btn {
+    position: absolute;
+    height: 50px;
+    bottom: 100px;
+    cursor: pointer;
+    transition: 1s;
+}
+
+#intro-next-btn:hover {
+    z-index: 3;
+    transform: translateY(10px);
+}
+
+#help-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    transition: 0.5s;
+    z-index: 3;
+    pointer-events:none;
+}
+
+#left, #right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 50%;
+    max-width: 1000px;
+    
+}
+
+.help-title {
+    /* position: absolute;
+    top: 100px; */
+    font-family: 'Roboto Slab', serif;
+    font-size: 2.5em;
+    font-weight: 500;
+    transition: 0.5s;
+    margin-bottom: 30px;
+    margin-top: 60px;
+}
+
+.year-text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9em;
+    font-weight: 400;
+    color: #746B5F;
+}
+
+.year-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width: 120px;
+}
+
+.year-box {
+    display: flex; align-items: center; justify-content: space-evenly; width: 600px;
+}
+
+.color-box {
+    display: flex; align-items: center; justify-content: center; width: 550px;
+    margin-bottom: 20px;
+}
+
+.color-scheme-title {
+    width: 100px;
+    font-size: 1em;
+    font-weight: 400;
+    align-items: center; justify-content: center; text-align: center;
+    color: #746B5F;
+}
+
+.color-scheme-text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color:#ffffff;
+    padding: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8em;
+    font-weight: 400;
+    height: 70px;
+    width: 100px;
+}
+
+.color-scheme-sample {
+    height: 10px;
+    width: 10px;
+    border-radius: 15px;
+    margin-right: 5px;
+}
+
+#sample_container {
+    height: 700px;
+    width: 700px;
+}
+
+#student-overlay {
+    position: fixed;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    /* margin: 0;
+    left: 0;
+    top: 0; */
+    z-index: 3;
+    align-items: center;
+    justify-content: center;
+    transition: 1s;
+}
+
+#student-overlay-inner {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#student-overlay-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.student-overlay-title {
+    width: 600px;
+    margin: 10px;
+    margin-left: 100px;
+    margin-bottom: 40px;
+    font-weight: 900;
+    font-size: 1.5em;
+}
+
+.student-info-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 600px;
+    margin: 5px;
+    margin-left: 100px;
+    transition: 0.5s;
+}
+
+.student-info-type {
+    align-items: center;
+    justify-content: left;
+    width: 300px;
+    font-weight: 300;
+    font-size: 0.8em;
+    text-align: right;
+}
+
+.student-info-text {
+    align-items: center;
+    justify-content: left;
+    margin-left: 20px;
+    width: 700px;
+    font-weight: 500;
+    font-size: 0.8em;
+    text-align: left;
+}
+
+#student-overlay-close-button {
+    cursor: pointer;
+    border: 2px solid black;
+    margin-top: 100px;
+    padding: 5px 40px 5px 40px;
+    color: black;
+    font-weight: 300;
+    font-size: 1em;
+    transition: 0.5s;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#student-overlay-close-button:hover {
+    color: white;
+    background-color: rgba(0, 0, 0, 1);
+}
+
 #inner {
     background-color: #E4DBCF;
     margin: 0;
     padding: 0;
+}
+
+#corner-help-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.2em;
+    font-weight: 300;
+    transition: 0.5s;
+    z-index: 2;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#corner-help-box-visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+#corner-help-box-hidden {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    width: 0px;
+    height: 40px;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8em;
+    font-weight: 300;
+    color: black;
+    transition: 0.5s;
 }
 
 #container {
@@ -27,7 +294,6 @@ header {
     margin: 10px;
     width: calc(100% - 20px);
     height: 13%;
-    
 }
 
 .header-outer-box {
@@ -87,7 +353,7 @@ footer:hover {
     opacity: 1;
 }
 
-#info-box {
+#comment-box {
     border-radius: 5px;
     max-width: 500px;
     padding: 10px 15px 10px 15px;
@@ -106,6 +372,7 @@ footer:hover {
 
 .phase-title {
     margin-right: 50px;
+    font-weight: 400;
 }
 
 .phase-outer-box {
@@ -177,10 +444,10 @@ footer:hover {
 }
 
 .tree_name {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto Slab', serif;
     background-color: #E4DBCF;
     fill: white;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 5em;
 }
 
@@ -189,10 +456,17 @@ footer:hover {
     background-color: #E4DBCF;
     fill: white;
     font-weight: 500;
-    font-size: 9em;
+    font-size: 8em;
 }
 
-#hint_1 {
+.explain {
+    font-family: 'Roboto', sans-serif;
+    fill: #746B5F;
+    font-weight: 400;
+    font-size: 2em;
+}
+
+#hint_1, #hint_2, #hint_3 {
     transition: 1s ease;
 }
 
