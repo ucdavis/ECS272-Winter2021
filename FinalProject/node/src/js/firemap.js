@@ -414,6 +414,9 @@ svg.append("circle").attr("id",'legend_circle').attr("cx",30).attr("cy",0).attr(
 //svg.append("circle").attr("id",'legend_circle').attr("cx",30).attr("cy",0).attr("r", 3).attr('fill',function(d){ return myColor("acousticness")}).style('opacity',0.6)
 svg.append("text").attr("id",'legend_text').attr("x", 35).attr("y", 1).text("Weather Measurement").style("font-size", "10px").attr("alignment-baseline","middle")  
 
+svg.append("text").attr("id",'title').attr("x", 0).attr("y", -30).text("Interactions between air temperature and wind speed").style("font-size", "15px").attr("font-weight",900).attr("alignment-baseline","middle")  
+
+
 points.append("g")
 .attr("class", "brush")
 .call(brush);
@@ -797,8 +800,9 @@ function RadarChart(parent_selector, data, options) {
                   .attr('transform', `translate(${cfg.legend.translateX},${cfg.legend.translateY})`)
                   .attr("x", cfg.w - 110)
                   .attr("y", 5)
-                  .attr("font-size", "10px")
-                  .attr("fill", "#404040")
+                  .attr("font-size", "15px")
+                  .attr("font-weight",900)
+                  .attr("fill", "black")
                   .text(cfg.legend.title);
           }
           let legend = legendZone.append("g")
@@ -840,7 +844,7 @@ function SpiderChart(data,id,selected){
       return e.name == selected;
   })
 
-  console.log(data_filter)
+  //console.log(data_filter)
 
 
     const margin = { top: 30, right: 50, bottom: 50, left: 80 },
@@ -860,7 +864,7 @@ function SpiderChart(data,id,selected){
               //color:d3.scaleOrdinal(d3.schemeAccent),
               color: d3.scaleOrdinal().range(["#BB2411","pink","#DFFF00","#B8D612","#33F529","#40E0D0","#6495ED","#123BD6","#5A1664","#CACFD2"]),
 				format: '.0f',
-				legend: { title: 'Wind direction of the day:', translateX: -180, translateY: 5 },
+				legend: { title: 'Wind direction of the day', translateX: -180, translateY: 10 },
 			};
 
       // Draw the chart with the RadarChart
@@ -871,3 +875,253 @@ function SpiderChart(data,id,selected){
 
 
 }
+
+//Draw donutChart
+    d3.json("CampFire_building.geojson").then(function (data) {
+        var building = data.features;
+        //console.log(building);
+
+        var damage = [];
+
+        var slice = ["No Damage", "Affected (1-9%)", "Destroyed (>50%)", "Minor (10-25%)", "Major (26-50%)"];
+
+        for (var i = 0; i < building.length; i++) {
+            var temp = building[i].properties.DAMAGE;
+            if (temp !== null) {
+                if (damage[temp] == null) {
+                    damage[temp] = 1;
+                } else {
+                    damage[temp] = damage[temp] + 1;
+                }
+
+            }
+        }
+        console.log(damage);
+
+
+        const dataMap = [];
+        for (var j = 0; j < slice.length; j++) {
+            var obj = {
+                key: slice[j],
+                value: damage[slice[j]]
+            }
+            dataMap.push(obj);
+        }
+
+        // Visualization codes start here
+
+        // set the dimensions and margins of the graph
+        var width = 450
+        var height = 450
+        var margin = 70
+
+        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+
+        var radius = Math.min(width, height) / 2 - margin
+
+        // append the svg object to the div called 'my_dataviz'
+        var svg = d3.select('#container')
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+
+        // set the color scale
+        var color = d3.scaleOrdinal()
+            .domain(slice)
+        //    .range(d3.schemeDark2);
+              .range(["#283747","#69039C","#E0213B","#2033B8","#20BD55"])
+
+
+        // Compute the position of each group on the pie:
+        var pie = d3.pie()
+            .sort(null) // Do not sort group by size  
+            .value(function (d) { return d.value; })
+        var data_ready = pie(dataMap);
+
+        console.log(data_ready)
+
+
+        // The arc generator
+
+        var arc = d3.arc()
+            .innerRadius(radius * 0.5)         // This is the size of the donut hole 
+            .outerRadius(radius * 0.8)
+
+        // Another arc that won't be drawn. Just for labels positioning
+
+        var outerArc = d3.arc()
+            .innerRadius(radius * 0.7)
+            .outerRadius(radius * 0.7)
+
+        // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+
+        var donutplot = svg
+            .selectAll('allSlices')
+            .data(data_ready)
+            .enter()
+            .append('path')
+            .attr('d', arc)
+            .attr('fill', function (d) { return (color(d.data.key)) })
+            .attr("stroke", "white")
+            .style("stroke-width", "2px")
+            .style("opacity", 0.7);
+
+        svg
+            .selectAll('allPolylines')
+            .data(data_ready)
+            .enter()
+            .append('polyline')
+            .attr("stroke", "black")
+            .style("fill", "none")
+            .attr("stroke-width", 0.5)
+            .attr('points', function (d) {
+                var posA = arc.centroid(d) // line insertion in the slice
+                var posB = outerArc.centroid(d) // line break: we use the other arc generator that has been built only for that
+                var posC = outerArc.centroid(d); // Label position = almost the same as posB
+                var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
+                posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
+                return [posA, posB, posC]
+            })
+
+        svg
+            .selectAll('allLabels')
+            .data(data_ready)
+            .enter()
+            .append('text')
+            .text(function (d) { console.log(d.data.key); return d.data.key })
+            .attr('transform', function (d) {
+                var pos = outerArc.centroid(d);
+                var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+                pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+                return 'translate(' + pos + ')';
+            })
+            .style('font-size', '8px')
+            .style('text-anchor', function (d) {
+                var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 //d.startAngle + (d.endAngle - d.startAngle) / 2
+                return (midangle < Math.PI ? 'start' : 'end')
+            })
+
+    });
+
+//Draw StreamChart
+   
+        d3.json("CampFire_building.geojson").then(function (data) {
+
+            var building = data.features;
+            //console.log(building);
+            var days = ["2018-11-08", "2018-11-09", "2018-11-10", "2018-11-11", "2018-11-12", "2018-11-13", "2018-11-14", "2018-11-15", "2018-11-16", "2018-11-17", "2018-11-18", "2018-11-19", "2018-11-20"];
+            var damage = [];
+
+            var slice = ["No Damage", "Affected (1-9%)", "Destroyed (>50%)", "Minor (10-25%)", "Major (26-50%)"];
+
+            for (var i = 0; i < days.length; i++) {
+                days[i] = [];
+                for (var j = 0; j < slice.length; j++) {
+                    days[i][slice[j]] = 0;
+                }
+            }
+
+            for (i = 0; i < building.length; i++) {
+
+                var temp = building[i].properties.DAMAGE;
+                var date = building[i].properties.YRJD - 2018312;
+
+                if (temp !== null) {
+                    days[date][temp] = days[date][temp] + 1;
+                }
+            }
+            //console.log(days);
+
+
+            var date = ["2018-11-08", "2018-11-09", "2018-11-10", "2018-11-11", "2018-11-12"];
+            //console.log(slice);
+            var dataMap = [];
+            for (i = 0; i < 5; i++) {
+                var obj = {
+                    day: i + 1,
+                    "No Damage": days[i]["No Damage"],
+                    "Affected (1-9%)": days[i]["Affected (1-9%)"],
+                    "Destroyed (>50%)": days[i]["Destroyed (>50%)"],
+                    "Minor (10-25%)": days[i]["Minor (10-25%)"],
+                    "Major (26-50%)": days[i]["Major (26-50%)"],
+                }
+                dataMap.push(obj);
+            }
+            //console.log(dataMap);
+            // Visualization codes start here
+
+            var width = 300;
+            var height = 300;
+            var margin = { top: 0, right: 20, bottom: 30, left: 20 };
+
+            var svg = d3.select('#container')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+
+
+            var series = d3.stack()
+                .keys(slice)
+                .offset(d3.stackOffsetWiggle)
+                .order(d3.stackOrderInsideOut)
+                (dataMap);
+
+            //console.log(series);
+
+            var area = d3.area()
+                .x(d => x(d.data.day))
+                .y0(d => y(d[0]))
+                .y1(d => y(d[1]))
+
+            var x = d3.scaleLinear()
+                .domain([1, 5])
+                .range([margin.left, width])
+
+            var y = d3.scaleLinear()
+                .domain([d3.min(series, d => d3.min(d, d => d[0])), d3.max(series, d => d3.max(d, d => d[1]))])
+                .range([height - margin.bottom, margin.top])
+
+
+            var color = d3.scaleOrdinal()
+                .domain(slice)
+                //.range(d3.schemeCategory10)
+                .range(["#283747","#69039C","#E0213B","#2033B8","#20BD55"])
+
+
+
+            var xAxis = (g => g
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(x).ticks(width / 100).tickSizeOuter(0))
+                .call(g => g.select(".domain").remove())
+            );
+
+            var chart = svg.append("g")
+                .selectAll("path")
+                .data(series)
+                .join("path")
+                .attr("fill", ({ key }) => color(key))
+                .attr("d", area)
+                .append("title")
+                .text(({ key }) => key);
+
+            svg.append("g")
+                .call(xAxis)
+                .call(g =>
+                    g.select(".tick:last-of-type text")
+                        .clone()
+                        .attr("text-anchor", "middle")
+                        .attr("x", -(width - margin.left - margin.right) / 2)
+                        .attr("y", margin.bottom - 10)
+                        .attr("font-weight", "bold")
+                        .text("Building Destructions in the First Five Days")
+                );
+
+            for (i = 0; i < slice.length; i++) {
+                var yValue = 30 + i * 15;
+                svg.append("circle").attr("cx", 200).attr("cy", yValue).attr("r", 4).style("fill", color(slice[i]))
+                svg.append("text").attr("x", 220).attr("y", yValue).text(slice[i]).style("font-size", "10px").attr("alignment-baseline", "middle")
+            }
+
+        });

@@ -32,9 +32,10 @@ h1 {
     left: 0px;
   }
 
+
 #map__text {
     margin: 20px 0 10px 20px;
-    width: 800px;
+    width: 300px;
     position:absolute;
     top: 0px;
     left: 100px;
@@ -44,7 +45,7 @@ h1 {
 
   #temp_text {
     margin: 20px 0 10px 20px;
-    width: 800px;
+    width: 300px;
     position:absolute;
     top: 30px;
     left: 100px;
@@ -54,7 +55,7 @@ h1 {
 
   #fuel_text {
     margin: 20px 0 10px 20px;
-    width: 800px;
+    width: 300px;
     position:absolute;
     top: 60px;
     left: 100px;
@@ -64,7 +65,7 @@ h1 {
 
   #wind_text {
     margin: 20px 0 10px 20px;
-    width: 800px;
+    width: 300px;
     position:absolute;
     top: 90px;
     left: 100px;
@@ -74,7 +75,7 @@ h1 {
 
   #degree_text {
     margin: 20px 0 10px 20px;
-    width: 800px;
+    width: 300px;
     position:absolute;
     top: 120px;
     left: 100px;
@@ -85,15 +86,20 @@ h1 {
   #scatter{
     background-color: #C0C6C6;
     position:relative;
-    top: 400px;
+    top: 800px;
   }
 
   #radar{
     background-color: #C0C6C6;
     position:relative;
-    top: 400px;
+    top: 800px;
   }
 
+  #container{
+  width: 915px;
+  height: 400px;
+  background-color: #C0C6C6;
+}
 
 
 .help-tip{
