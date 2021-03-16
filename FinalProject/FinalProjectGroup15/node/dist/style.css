@@ -1,0 +1,254 @@
+/*body {
+  background: url(co2Background.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}*/
+
+
+/*.container {
+  width: 890px;
+}*/
+
+/*.container{
+  opacity: 1;
+}*/
+
+#graphic {
+  padding-top: 60px;
+}
+
+
+#sections {
+  position: relative;
+  display: inline-block;
+  width: 250px;
+  top: 0px;
+  z-index: 90;
+  padding-bottom: 200px;
+}
+
+.step {
+  margin-bottom: 200px;
+  font-family: "TiemposTextWeb-Regular","Georgia";
+  font-size: 16px;
+  line-height: 23px;
+  color: #767678;
+  background: white;
+  opacity: 50%;
+  border-radius: 25px;
+  padding: 20px;
+
+}
+
+#sections .title {
+  font-family: Arial,Helvetica,"san-serif";
+  font-size: 35px;
+  font-weight: bold;
+  margin-bottom: 2px;
+  margin-left: 150px;
+  color: #262626;
+  line-height: 1.2em;
+}
+
+/*#extra-space {
+  height: 300px;
+}*/
+
+#vis {
+  display: inline-block;
+  position: fixed;
+  top: 60px;
+  z-index: 1;
+  margin-left: 0;
+  left:830px;
+  width: 920px;
+  background: white;
+  opacity: 80%;
+  border-radius: 25px;
+  /* height: 600px; */
+  /* width: 600px; */
+  /* background-color: #ddd; */
+}
+
+#vis .title {
+  font-size:120px;
+  text-anchor: middle;
+}
+
+#vis .sub-title {
+  font-size:80px;
+  text-anchor: middle;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #666;
+  shape-rendering: crispEdges;
+}
+
+.highlight {
+  fill: #008080;
+  font-weight: bold;
+}
+
+.cough-arrow {
+  stroke: #000;
+  stroke-width: 4px;
+
+}
+
+.innerText{
+  float: left;
+  margin-left: 0px;
+  font-size: larger;
+  padding-top: 30px;
+  background: white;
+  opacity: 80%;
+  border-radius: 25px;
+  padding: 20px;
+}
+
+.numbers{
+  float: right;
+  font-size: 25;
+  font-style: normal;
+  margin-left: 100px;
+}
+
+
+
+
+
+
+/* ---- reset ---- */
+body {
+  margin: 0;
+  font: normal 75% Arial, Helvetica, sans-serif;
+}
+canvas {
+  display: block;
+  vertical-align: bottom;
+}
+/* ---- tsparticles container ---- */
+#tsparticles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.github {
+  bottom: 10px;
+  right: 10px;
+  position: fixed;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0 12px 6px 12px;
+  border: 1px solid #000;
+}
+
+.github a:hover,
+.github a:link,
+.github a:visited,
+.github a:active {
+  color: #000;
+  text-decoration: none;
+}
+
+.github img {
+  height: 30px;
+}
+
+.github #gh-project {
+  font-size: 20px;
+  padding-left: 5px;
+  font-weight: bold;
+  vertical-align: bottom;
+}
+
+
+.flame {
+    width: 10em;
+    height: 12em;
+    font-size: 24px;
+}
+
+.flame {
+    position: relative;
+}
+
+.flame span {
+    position: absolute;
+    width: 5em;
+    height: 5em;
+    background: radial-gradient(
+        orangered 20%,
+        rgba(255, 69, 0, 0) 70%
+    );
+    border-radius: 50%;
+    bottom: 0;
+}
+.flame {
+    --particles: 3;
+}
+
+.flame span {
+    left: calc((var(--n) - 1) * 5em / var(--particles));
+}
+
+.flame span:nth-child(1) {
+  --n: 1;
+}
+
+.flame span:nth-child(2) {
+  --n: 2;
+}
+
+.flame span:nth-child(3) {
+  --n: 3;
+}
+.flame span {
+    mix-blend-mode: screen;
+}
+
+.flame span {
+    animation: rise 1s ease-in infinite;
+}
+
+@keyframes rise {
+    from {
+        transform: translateY(0) scale(1);
+        filter: opacity(0);
+    }
+
+    25% {
+        filter: opacity(1);
+    }
+
+    to {
+        transform: translateY(-10em) scale(0);
+        filter: opacity(0);
+    }
+}
+
+.flame span {
+    animation-delay: calc(var(--rnd) * 1s);
+}
+
+.flame span:nth-child(1) {
+  --n: 1;
+  --rnd: 0.1234;
+}
+
+.flame span:nth-child(2) {
+  --n: 2;
+  --rnd: 0.3456;
+}
+
+.flame span:nth-child(3) {
+  --n: 3;
+  --rnd: 0.6789;
+}
