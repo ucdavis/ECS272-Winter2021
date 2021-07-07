@@ -1,0 +1,19 @@
+{
+	"name": "jaeyun",
+	"version": "1.0.0",
+	"description": "ecs272_homework2",
+	"main": "app.js",
+	"scripts": {},
+	"author": "Jaewan Yun",
+	"license": "MIT",
+	"dependencies": {
+		"compression": "^1.7.4",
+		"cookie-parser": "^1.4.5",
+		"express": "^4.17.1",
+		"express-minify": "^1.0.0",
+		"html-minifier": "^4.0.0",
+		"morgan": "^1.10.0",
+		"pug": "^3.0.0",
+		"uglify-es": "^3.3.9"
+	}
+}
