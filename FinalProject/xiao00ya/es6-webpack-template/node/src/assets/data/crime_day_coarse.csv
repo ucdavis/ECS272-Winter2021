@@ -1,0 +1,106 @@
+category,dayOfWeek,count
+weapon laws,Monday,223
+weapon laws,Tuesday,222
+weapon laws,Wednesday,269
+weapon laws,Thursday,227
+weapon laws,Friday,271
+weapon laws,Saturday,200
+weapon laws,Sunday,246
+warrants,Monday,808
+warrants,Tuesday,908
+warrants,Wednesday,927
+warrants,Thursday,905
+warrants,Friday,826
+warrants,Saturday,822
+warrants,Sunday,718
+non-criminal,Monday,2404
+non-criminal,Tuesday,2428
+non-criminal,Wednesday,2470
+non-criminal,Thursday,2521
+non-criminal,Friday,2882
+non-criminal,Saturday,2722
+non-criminal,Sunday,2439
+personal crimes,Monday,2502
+personal crimes,Tuesday,2586
+personal crimes,Wednesday,2520
+personal crimes,Thursday,2485
+personal crimes,Friday,2917
+personal crimes,Saturday,2878
+personal crimes,Sunday,2570
+other,Monday,2806
+other,Tuesday,2988
+other,Wednesday,3041
+other,Thursday,2752
+other,Friday,2974
+other,Saturday,2583
+other,Sunday,2455
+property crimes,Monday,9183
+property crimes,Tuesday,9005
+property crimes,Wednesday,9132
+property crimes,Thursday,9125
+property crimes,Friday,10463
+property crimes,Saturday,10103
+property crimes,Sunday,9185
+financial ,Monday,529
+financial ,Tuesday,543
+financial ,Wednesday,473
+financial ,Thursday,573
+financial ,Friday,535
+financial ,Saturday,492
+financial ,Sunday,397
+statutory crimes,Monday,919
+statutory crimes,Tuesday,1057
+statutory crimes,Wednesday,1021
+statutory crimes,Thursday,1380
+statutory crimes,Friday,1068
+statutory crimes,Saturday,1035
+statutory crimes,Sunday,931
+secondary codes,Monday,260
+secondary codes,Tuesday,278
+secondary codes,Wednesday,273
+secondary codes,Thursday,263
+secondary codes,Friday,271
+secondary codes,Saturday,235
+secondary codes,Sunday,261
+suspicious occ,Monday,826
+suspicious occ,Tuesday,870
+suspicious occ,Wednesday,839
+suspicious occ,Thursday,853
+suspicious occ,Friday,836
+suspicious occ,Saturday,809
+suspicious occ,Sunday,749
+trespass,Monday,266
+trespass,Tuesday,291
+trespass,Wednesday,314
+trespass,Thursday,253
+trespass,Friday,268
+trespass,Saturday,225
+trespass,Sunday,198
+runaway,Monday,26
+runaway,Tuesday,25
+runaway,Wednesday,20
+runaway,Thursday,20
+runaway,Friday,15
+runaway,Saturday,18
+runaway,Sunday,16
+family offenses,Monday,4
+family offenses,Tuesday,6
+family offenses,Wednesday,3
+family offenses,Thursday,9
+family offenses,Friday,11
+family offenses,Saturday,9
+family offenses,Sunday,11
+suicide,Monday,12
+suicide,Tuesday,9
+suicide,Wednesday,6
+suicide,Thursday,6
+suicide,Friday,12
+suicide,Saturday,11
+suicide,Sunday,13
+liquor laws,Monday,15
+liquor laws,Tuesday,26
+liquor laws,Wednesday,24
+liquor laws,Thursday,23
+liquor laws,Friday,22
+liquor laws,Saturday,30
+liquor laws,Sunday,16

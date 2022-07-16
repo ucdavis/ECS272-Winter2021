@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homework 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>    
+  </head>
+  <body >
+    <div>
+      <h1>Analyze the Crimes in San Francisco</h1>
+      <!-- <p>    Overview - Crime History (move mouse to an area, the type of crime will appear) </p> -->
+      <!-- <div id="bar"></div> -->
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" id = "bar"> <b>Overview- Crime History</b> (move mouse to an area, the type of crime will appear. Color correlates with counts.)
+                <select id="change_level">
+                    <option value="1" selected>Coarse Category (of crime)</option>
+                    <option value="2">Detailed Category (of crime)</option>
+                </select>
+              <!-- ![](../src/assets/images/es6.png) -->
+              <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+              <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+              <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+              
+            </div>
+        </div>
+        <div class="row">
+          <div id = "bar1" class="col-sm-6" > <b>Crime-Time View</b>
+              <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+              <select id="change_chart">
+                  <option value="1" selected>WEAPON LAWS</option>
+                  <option value="2">WARRANTS</option>
+                  <option value="3">ROBBERY</option>
+                  <option value="4">VEHICLE THEFT</option>
+                  <option value="5">NON-CRIMINAL</option>
+              </select>
+              <div> The number of crimes (in a specific type) over the day of week.</div>
+              <!-- <div class="container">                  
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Crime Types
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+                    </ul>
+                  </div>
+                </div>          -->
+          </div>
+          <div id = "bar2" class="col-sm-6" ><b>Crime-Location View</b> (Move mouse to an area, counts appear. Color correlates with crime counts) 
+              <select id="change_map">
+                  <option value="1" selected>Property Crimes </option>
+                  <option value="2">Personal Crimes</option>
+                  <option value="3">Statutory Crimes</option>
+              </select>
+              <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <script src="./bundle.js"></script>
+  </body>
+</html>

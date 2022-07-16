@@ -1,0 +1,80 @@
+<!-- <!DOCTYPE html>
+<html> -->
+<!-- <script src="go.js"></script> -->
+<!-- <script src="https://unpkg.com/gojs/release/go-debug.js"></script> -->
+<!-- <script src="./go-debug.js"></script> -->
+<!-- <script src="./bundle.js"></script> -->
+<div id = "storyboard1">
+  <div id="testDiv"
+      style="width:400px; height:150px; background-color: #DAE4E4;">
+  </div>
+  <div id="sample">
+      <div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 460px; background: whitesmoke"></div>
+      <p>
+        This sample creates a state chart to story-board an online shopping experience.
+      </p>
+      <p>
+        The text is editable for both the nodes and the links.
+        The user can draw as many links from one node to another node as desired,
+        and the links can be reshaped or deleted when selected.
+        Double-clicking in the background of the diagram creates a new node.
+        The mouse wheel is set to zoom in and out instead of scroll.
+      </p>
+      <p>
+        This sample customizes the <a>Part.selectionAdornmentTemplate</a>
+        of the node to a template that contains a button
+        The button is positioned to be at the Top-Right corner of the node by
+        being in a Spot Panel with its <a>GraphObject.alignment</a> property set to Spot.TopRight.
+      </p>
+      <p>
+        The Button's <a>GraphObject.click</a> method creates a new node data,
+        adds it to the model, and creates a link from the original node data to the new node data.
+        All of this is done inside a transaction, so that it can be undone by the user
+        (Ctrl+Z and Ctrl+Y will undo and redo transactions). After the node is created,
+        <a>Diagram.scrollToRect</a> is called in case it is off-screen.
+      </p>
+      <div>
+        <div>
+          <button id="SaveButton" onclick="save()">Save</button>
+          <button onclick="load()">Load</button>
+          Diagram Model saved in JSON format:
+        </div>
+        <textarea id="mySavedModel" style="width:100%;height:300px">{ "class": "go.GraphLinksModel",
+    "nodeKeyProperty": "id",
+    "nodeDataArray": [
+    {"id":-1, "loc":"155 -138", "category":"Start"},
+    {"id":0, "loc":"190 15", "text":"Shopping"},
+    {"id":1, "loc":"353 32", "text":"Browse Items"},
+    {"id":2, "loc":"353 166", "text":"Search Items"},
+    {"id":3, "loc":"512 12", "text":"View Item"},
+    {"id":4, "loc":"661 17", "text":"View Cart"},
+    {"id":5, "loc":"644 171", "text":"Update Cart"},
+    {"id":6, "loc":"800 96", "text":"Checkout"},
+    {"id":-2, "loc":"757 229", "category":"End"}
+    ],
+    "linkDataArray": [
+      { "from": -1, "to": 0, "text": "Visit online store" },
+      { "from": 0, "to": 1,  "progress": "true", "text": "Browse" },
+      { "from": 0, "to": 2,  "progress": "true", "text": "Use search bar" },
+      { "from": 1, "to": 2,  "progress": "true", "text": "Use search bar" },
+      { "from": 2, "to": 3,  "progress": "true", "text": "Click item" },
+      { "from": 2, "to": 2,  "text": "Another search", "curviness": 20 },
+      { "from": 1, "to": 3,  "progress": "true", "text": "Click item" },
+      { "from": 3, "to": 0,  "text": "Not interested", "curviness": -100 },
+      { "from": 3, "to": 4,  "progress": "true", "text": "Add to cart" },
+      { "from": 4, "to": 0,  "text": "More shopping", "curviness": -150 },
+      { "from": 4, "to": 5,  "text": "Update needed", "curviness": -50 },
+      { "from": 5, "to": 4,  "text": "Update made" },
+      { "from": 4, "to": 6,  "progress": "true", "text": "Proceed" },
+      { "from": 6, "to": 5,  "text": "Update needed" },
+      { "from": 6, "to": -2, "progress": "true", "text": "Purchase made" }
+    ]
+  }
+      </textarea>
+      </div>
+    </div>
+
+
+  <div id="weava-permanent-marker" date="1615019343367"></div>
+  </storyboard1>
+<!-- </html> -->

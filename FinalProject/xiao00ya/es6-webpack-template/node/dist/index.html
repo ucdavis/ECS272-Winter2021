@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The procedure of finishing XX task
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>    
+  </head>
+  <body >
+    <!-- page1 -->
+    <div style="display:none" id="page1">
+      <h1>Analyze the Crimes in San Francisco</h1>
+      <!-- <p>    Overview - Crime History (move mouse to an area, the type of crime will appear) </p> -->
+      <!-- <div id="bar"></div> -->
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" id = "bar"> <b>Overview- Crime History</b> (move mouse to an area, the type of crime will appear. Color correlates with counts.)
+                <!-- <select id="change_level">
+                    <option value="1" selected>Coarse Category (of crime)</option>
+                    <option value="2">Detailed Category (of crime)</option>
+                </select> -->
+              <!-- ![](../src/assets/images/es6.png) -->
+              <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+              <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+              <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+              
+            </div>
+        </div>
+        <div class="row">
+          <div id = "bar1" class="col-sm-6" > <b>Crime-Time View</b>
+              <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+              <!-- <select id="change_chart">
+                  <option value="1" selected>WEAPON LAWS</option>
+                  <option value="2">WARRANTS</option>
+                  <option value="3">ROBBERY</option>
+                  <option value="4">VEHICLE THEFT</option>
+                  <option value="5">NON-CRIMINAL</option>
+                  <option value="6">The selection in Overview</option>
+              </select> -->
+              <!-- Adjust Y-axis <input type="checkbox" id="myCheck"> -->
+              <div> The number of crimes (in a specific type) over the day of week.</div>
+              <!-- <div class="container">                  
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Crime Types
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+                    </ul>
+                  </div>
+                </div>          -->
+          </div>
+          <div id = "bar2" class="col-sm-6" ><b>Crime-Location View</b> (Move mouse to an area, counts appear. Color correlates with crime counts) 
+              <!-- <select id="change_map">
+                  <option value="1" selected>Property Crimes </option>
+                  <option value="2">Personal Crimes</option>
+                  <option value="3">Statutory Crimes</option>
+                  <option value="4">The selection in Overview</option>
+              </select> -->
+              <!-- Display crime locations <input type="checkbox" id="showLocation"> -->
+              <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+          </div>
+        </div>
+        <button id="next" class="button button1">Next</button>
+        <p id="demo"></p>
+      </div>
+    </div>
+
+    <!-- page2 -->
+    <div style="display:none" id = "page2">
+      <!-- <div id="testDiv"
+      style="width:400px; height:150px; background-color: #DAE4E4;"></div> -->
+      <div id="testDiv" style="border: solid 1px black; width: 90%; height: 400px; background: whitesmoke"></div>
+
+      <!-- <textarea id="mySavedModel" style="width:80%;height:80%">{ "class": "go.GraphLinksModel",
+          "nodeKeyProperty": "id",
+          "nodeDataArray": [
+          {"id":-1, "loc":"155 -138", "category":"Start"},
+          {"id":0, "loc":"190 15", "text":"Shopping"},
+          {"id":1, "loc":"353 32", "text":"Browse Items"},
+          {"id":2, "loc":"353 166", "text":"Search Items"},
+          {"id":3, "loc":"512 12", "text":"View Item"},
+          {"id":4, "loc":"661 17", "text":"View Cart"},
+          {"id":5, "loc":"644 171", "text":"Update Cart"},
+          {"id":6, "loc":"800 96", "text":"Checkout"},
+          {"id":-2, "loc":"757 229", "category":"End"}
+          ],
+          "linkDataArray": [
+            { "from": -1, "to": 0, "text": "Visit online store" },
+            { "from": 0, "to": 1,  "progress": "true", "text": "Browse" },
+            { "from": 0, "to": 2,  "progress": "true", "text": "Use search bar" },
+            { "from": 1, "to": 2,  "progress": "true", "text": "Use search bar" },
+            { "from": 2, "to": 3,  "progress": "true", "text": "Click item" },
+            { "from": 2, "to": 2,  "text": "Another search", "curviness": 20 },
+            { "from": 1, "to": 3,  "progress": "true", "text": "Click item" },
+            { "from": 3, "to": 0,  "text": "Not interested", "curviness": -100 },
+            { "from": 3, "to": 4,  "progress": "true", "text": "Add to cart" },
+            { "from": 4, "to": 0,  "text": "More shopping", "curviness": -150 },
+            { "from": 4, "to": 5,  "text": "Update needed", "curviness": -50 },
+            { "from": 5, "to": 4,  "text": "Update made" },
+            { "from": 4, "to": 6,  "progress": "true", "text": "Proceed" },
+            { "from": 6, "to": 5,  "text": "Update needed" },
+            { "from": 6, "to": -2, "progress": "true", "text": "Purchase made" }
+          ]
+        } -->
+            <!-- </textarea> -->
+    
+    </div>
+
+    <!-- page3 -->
+    <div style="display:none" id = "page3">
+      <div class="row">
+          <div class="col-sm-12" id = "hierarchy"> <b>Topic Hierarchy</b> 
+              <!-- <select id="change_level">
+                  <option value="1" selected>Coarse Category (of crime)</option>
+                  <option value="2">Detailed Category (of crime)</option>
+              </select> -->
+            <!-- ![](../src/assets/images/es6.png) -->
+            <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+            <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+            <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+            
+          </div>
+      </div>
+    </div>
+    <!-- page4 universe-->
+    <div style="display:none" id = "page4">
+      <div class="row">
+          <div class="col-sm-12" id = "universe"> <b>Knowledge Universe</b> 
+              <!-- <select id="change_level">
+                  <option value="1" selected>Coarse Category (of crime)</option>
+                  <option value="2">Detailed Category (of crime)</option>
+              </select> -->
+            <!-- ![](../src/assets/images/es6.png) -->
+            <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+            <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+            <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+            
+          </div>
+      </div>
+    </div>
+    <div style="display:block" id = "page5">
+      <div class="row">
+          <div class="col-sm-12" id = "collaboration"> <b>Collaboration Patterns</b> 
+              <!-- <select id="change_level">
+                  <option value="1" selected>Coarse Category (of crime)</option>
+                  <option value="2">Detailed Category (of crime)</option>
+              </select> -->
+            <!-- ![](../src/assets/images/es6.png) -->
+            <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+            <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+            <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+           
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-6" id = "reference"> <b>Editing Behaviors Distribution -- Adding Reference</b> 
+            <!-- <select id="change_level">
+                <option value="1" selected>Coarse Category (of crime)</option>
+                <option value="2">Detailed Category (of crime)</option>
+            </select> -->
+          <!-- ![](../src/assets/images/es6.png) -->
+          <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+          <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+          <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+         
+        </div>
+        <div class="col-sm-6" id = "media"> <b>Editing Behaviors Distribution-- Adding Media </b> 
+          <!-- <select id="change_level">
+              <option value="1" selected>Coarse Category (of crime)</option>
+              <option value="2">Detailed Category (of crime)</option>
+          </select> -->
+        <!-- ![](../src/assets/images/es6.png) -->
+        <!-- <img src="../src/assets/images/es6.png" class="img-fluid" alt="Responsive image"> -->
+        <!-- <img src="./es6.png" class="img-fluid" alt="Responsive image"> -->
+        <!-- <img src="https://www.w3schools.com/bootstrap/paris.jpg" class="img-fluid" alt="Responsive image"> -->
+       
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-6" id = "info"> <b>Editing Behaviors Distribution -- Adding Information</b> 
+          </div>
+          <div class="col-sm-6" id = "revert"> <b>Editing Behaviors Distribution-- Reversion </b> 
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6" id = "rem_info"> <b>Editing Behaviors Distribution -- Removing Information</b> 
+        </div>
+        <div class="col-sm-6" id = "rem_media"> <b>Editing Behaviors Distribution-- Removing Media </b> 
+        </div>
+    </div>
+        
+
+
+    </div>
+    <script src="./bundle.js"></script>
+  </body>
+</html>

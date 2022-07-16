@@ -1,0 +1,88 @@
+h1 {
+    /* margin: 14px; */
+    color: rgb(10, 3, 3);
+    font-size: 17px;
+}
+/* title {
+    /* margin: 14px; */
+    /* color: rgb(10, 3, 3);
+    font-size: 18px;
+} */ 
+/* p {
+    background-color: rgb(232, 232, 232);
+    margin: 14px;
+    font-size: 14px;
+    /* font-weight: bold; */
+/* } */ 
+body {
+    background-color: rgb(232, 232, 232);
+}
+.row {
+    /* font-size: 14px; */
+    background-color: rgb(255, 255, 255);
+}
+.col-sm-6 {
+    font-size: 14px;
+    background-color: rgb(232, 232, 232);
+    grid-row-gap: 50px;
+    grid-column-gap:20px;
+  }
+.col-sm-12 {
+    font-size: 14px;
+    background-color: rgb(232, 232, 232);
+    grid-row-gap: 50px;
+    grid-column-gap:20px;
+  }
+
+/* On mouse hover, lighten state color */
+path:hover {
+	fill-opacity: .7;
+}
+
+/* Style for Custom Tooltip */
+div.tooltip {   
+ 	position: absolute;           
+	text-align: center;           
+	/* width: 60px;                  
+	height: 28px;                  */
+    padding: 2px;    
+    color: #313639;         
+    /* font-size: 12px sans-serif;         */
+    font-size: 1.3rem;
+	background: white;   
+    /* border: 0px; */
+    border:1px solid #313639;      
+	border-radius: 8px;           
+	pointer-events: none;         
+}
+
+div.tooltip-donut {
+    position: absolute;
+    text-align: center;
+    padding: .5rem;
+    background: #FFFFFF;
+    color: #313639;
+    border: 1px solid #313639;
+    border-radius: 8px;
+    pointer-events: none;
+    font-size: 1.3rem;
+}
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  
+  .button1 {border-radius: 12px;}
+
+  #myDiagramDiv {
+	background-color: #F8F8F8;
+	border: 1px solid #aaa;
+}
