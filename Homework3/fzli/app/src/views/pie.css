@@ -1,0 +1,17 @@
+polyline{
+  opacity: .3;
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+
+select {
+  display: inline-block;
+}
+
+#dimList {
+  position: absolute;
+  top: 150px;
+  left: 30px;
+}
+
