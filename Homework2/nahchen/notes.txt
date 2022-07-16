@@ -1,0 +1,16 @@
+1. install node.js (it will also have npm installed)
+2. use npm to do   https://nodejs.org/en/knowledge/getting-started/npm/what-is-npm/
+   It can help with command-line utility for interacting with said repository that aids in package installation, version management, and dependency management
+3. bootstrap https://www.npmjs.com/package/bootstrap 
+4. Run npm install to install the Node.js dependencies
+5. Run npm start to compile CSS and JavaScript files, generate our docs, and watch for changes.
+6. Open http://localhost:3001/ in your browser,
+
+
+
+-tips:
+1. to quit npm start, just press control+C
+2. want to run javascript in terminal, run node so that it will jump there
+
+-More details about templates 
+https://www.freecodecamp.org/news/how-to-use-es6-modules-and-why-theyre-important-a9b20b480773/
