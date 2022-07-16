@@ -1,0 +1,43 @@
+.pageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.leftView{
+    flex-basis: 50%;
+    background-color: #038cfc;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 2em;
+}
+
+.leftView:hover{
+    font-size: 4em;
+}
+
+.rightView{
+    flex-basis: 50%;
+    background-color:white;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 2em;
+}
+
+.rightView:hover{
+    font-size: 4em;
+}
+
+.rightView header{
+    font-weight: bold;
+}
+
+.leftView header{
+    font-weight: bold;
+    color: white;
+}

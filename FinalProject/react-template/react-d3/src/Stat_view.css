@@ -1,0 +1,183 @@
+.GeoSKYPageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.GeoSKYPageLayout .header{
+    flex-basis: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #038cfc;
+    font-weight: bold;
+    display: flex;
+}
+
+.GeoSKYPageLayout .SKYcontainer{
+    display: flex;
+    flex-basis: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    background-color: #038cfc;
+    flex-direction: row;
+}
+.GeoSKYPageLayout .SKYcontainer .SKY{
+    display: flex;
+    flex-basis: 95%;
+    height: 95%;
+    background-color: white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
+}
+
+.PCSKYPageLayout{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+    background-color: black;
+}
+
+
+.PCSKYPageLayout .header{
+    flex-basis: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    display: flex;
+}
+
+.PCSKYPageLayout .SKYcontainer{
+    flex-basis: 90%;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    background-color:white;
+    display: flex;
+    flex-direction: row;
+}
+.PCSKYPageLayout .SKYcontainer .SKY{
+    display: flex;
+    flex-basis: 95%;
+    height: 95%;
+    background-color: white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
+}
+
+#tooltip{
+    display: block;
+    min-width: 100px; 
+    min-height: 50px;
+    left:40vw;
+    top:20vh; 
+    position: absolute;
+
+}
+
+#tooltip2{
+    display: block;
+    min-width: 100px; 
+    min-height: 50px;
+    left:50vw;
+    top:50vh; 
+    font-size: 2em;
+    position: absolute;
+
+}
+
+.GeoSKYPageLayout .SKYcontainer .controlPanel{
+    display:flex;
+    flex-basis: 25%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.PCSKYPageLayout .SKYcontainer .controlPanel{
+    display:flex;
+    flex-basis: 25%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid black;
+}
+
+/* .GeoSKYPageLayout .SKYcontainer .controlPanel{
+    display:flex;
+    flex-basis: 25%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+
+} */
+
+/* .PCSKYPageLayout .SKYcontainer .controlPanel{
+    display:flex;
+    flex-basis: 25%;
+    height: 95%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid black;
+} */
+
+/* .controlPanel .info_window{
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    flex-direction: column;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 100%;
+    padding: 5% 5% 5% 5%;
+    flex-basis: 20%;
+}
+
+input[type="range"]{
+    transform: rotate(270deg);
+    width: 30vh;
+    flex-basis: 40%;
+
+
+} */
+
+.stat_view_home {
+    background-color:white;
+    border: black;
+    border-radius: 1px;
+    border-style: solid;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 5vh;
+    width: 10vw;
+    position: absolute;
+    top:2vh;
+    right: 2vw;
+  }
