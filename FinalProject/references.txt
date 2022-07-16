@@ -1,0 +1,11 @@
+references:
+https://observablehq.com/@d3/dot-plot
+https://bl.ocks.org/alandunning/cfb7dcd7951826b9eacd54f0647f48d3
+https://bl.ocks.org/dnprock/5215cc464cfb9affd283
+https://bl.ocks.org/jadiehm/0d341b74bef30889c893a3b14cbeb974
+https://www.pnas.org/content/117/32/18984
+https://d3-legend.susielu.com/
+https://www.usatoday.com/storytelling/coronavirus-reopening-america-map/#caseload
+https://observablehq.com/@d3/dot-plot
+https://github.com/d3/d3-brush#brush_on
+https://observablehq.com/@d3/focus-context
