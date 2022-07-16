@@ -1,0 +1,17 @@
+export const translateFactor: { [factor: string]: string } = {
+  DeathRate: "Death rate from COVID (%)",
+  Obesity: "Obesity rate (%)",
+  Undernourished: "Undernourished rate (%)",
+  Alcohol: "Alcohol beverages intake by kg (%)",
+  Animal: "Meat & animal product intake by kg (%)",
+  Vegetables: "Vegetables intake by kg (%)",
+  Fruits: "Fruits intake by kg (%)",
+  Nuts: "Nuts intake by kg (%)",
+  FishSeafood: "Fish & Seafood intake by kg (%)",
+  Cereals: "Cereals intake by kg (%)",
+  Milk: "Milk intake by kg (%)",
+  StarchyRoots: "Starchy Roots intake by kg (%)",
+  Sugar: "Sugar intake by kg (%)",
+  Eggs: "Eggs intake by kg (%)",
+  Oil: "Oil intake by kg (%)",
+};
