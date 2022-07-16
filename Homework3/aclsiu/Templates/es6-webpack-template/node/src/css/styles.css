@@ -1,0 +1,42 @@
+body {
+    background-color: #f1f1f1;
+}
+
+h1 {
+    color: darkslategray;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 5px;
+}
+
+form {
+    margin-left: 10px;
+    bottom: 0;
+    position: absolute;
+}
+
+.container1 {
+    display: inline-block;
+    position: relative;
+}
+
+.container2 {
+    display: inline-block;
+    position: absolute;
+}
+
+select {
+    right: 0;
+    margin-right: 10px;
+    margin-top: 20px;
+    position: absolute;
+    height: 20px;
+}
+
+.container3 {
+    top: 400px;
+    display: inline;
+    bottom: 0;
+    position: absolute;
+}
