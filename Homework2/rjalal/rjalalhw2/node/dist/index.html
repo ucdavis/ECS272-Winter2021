@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Homework 2</title>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <!-- 
+  <div id="timeSilder"></div>
+  <div id="bar"></div>
+  -->
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-sm">
+      </div>
+      <div class="col-sm">
+        <h2>GLOBAL TERROR INCIDENTS</h2>
+      </div>
+      <div class="col-sm">
+      </div>
+    </div>
+    <!--
+    <div style="padding-left: 350px;">
+      <div style="width: 1050px; border-style: double;">
+        <p>There are 3 visualizations presented here:</p>
+        <p>1. The world choropleth gives an overview of the total number of terror incidents that have occured
+          throughout the world, beginning from 2011</p>
+        <p>2. The barchart picks up top 10 countries based on the number incidents from the map, beginning from 2011</p>
+        <p>3. The streamGraph represents the type of terror incidents that have occured across the selected country year
+          wise</p>
+      </div>
+    </div>
+  -->
+    <div class="row">
+      <div class="col-sm">
+      </div>
+      <div class="col-sm">
+        <div id="timeSilder" style="padding-left: 55px"></div>
+        <!-- <p style="padding-left: 70px;font-size: small;">(Slide the scale to view year wise incidents on the map below) 
+        </p> -->
+      </div>
+      <div class="col-sm">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+      </div>
+      <div class="col-sm">
+        <div style="padding-left: 70px;">
+          <svg id="worldLegend" width="960px" height="100px"></svg>
+        </div>
+
+      </div>
+      <div class="col-sm">
+      </div>
+    </div>
+    <div class="row">
+      <p style="padding-left:600px;font-size: small;">*Hover on the countries to view the total incidents that occured
+        there</p>
+      <div style="width: 100%;height: 600px;">
+        <div id="bar"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-sm">
+            <h4>Top 10 Countries Affected by terrorism</h4>
+          </div>
+          <div class="col-sm">
+            <!-- <p style="font-size: small;">(Data is taken from the above Map)</p> -->
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <div id="timeSilderBar"></div>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small; padding-top: 20px;"> This barchart picks up the top 10 countries for every year that are worst affected by terrorism from the above map</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-sm">
+            <h4>Types of Terror Incidents Per Country</h4>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small;">(Legend is provided below the Steam Graph)</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <div style="padding-top: 20px;">
+              Select Country <select id="selectButton"></select>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p style="font-size: small;"> The total incidents per year for each country are comprised of the attacks shown by this streamGraph </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <p style="font-weight: bold;">Number of terror incidents</p>
+        <div id="barChart1"></div>
+        <p style="padding-left: 400px; font-weight: bold;">Countries</p>
+      </div>
+      <div class="col-sm">
+        <p style="font-weight: bold;">Number of terror incidents</p>
+        <div id="streamGraph"></div>
+        <p style="padding-left: 400px; font-weight: bold;">Years</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+      </div>
+      <div class="col-sm">
+        <svg id="streamLegend" width="800px" height="800px"></svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="./bundle.js"></script>
+
+</body>
+
+</html>
