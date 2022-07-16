@@ -1,0 +1,191 @@
+h1 {
+    color: rgb(0, 140, 255);
+    font-size: 30px;
+}
+
+.country:hover{
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+.text{
+    font-size:10px;
+    text-transform:capitalize;
+  }
+#container {
+    margin:10px 10%;
+    border:2px solid #000;
+    border-radius: 5px;
+    height:100%;
+    overflow:hidden;
+    background: #F0F8FF;
+  }
+.hidden { 
+    display: none; 
+  }
+div.tooltip {
+    color: #222; 
+    background: #fff; 
+    padding: .5em; 
+    text-shadow: #f5f5f5 0 1px 0;
+    border-radius: 2px; 
+    box-shadow: 0px 0px 2px 0px #a6a6a6; 
+    opacity: 0.9; 
+    position: absolute;
+  }
+.labeltooltip {
+    color: #222; 
+    background: #fff; 
+    padding: .5em; 
+    text-shadow: #f5f5f5 0 1px 0;
+    border-radius: 2px; 
+    box-shadow: 0px 0px 2px 0px #a6a6a6; 
+    opacity: 0.9; 
+    position: absolute;
+}
+.labeltext {
+    color: #222; 
+    background: #fff; 
+    padding: .5em; 
+    text-shadow: #f5f5f5 0 1px 0;
+    border-radius: 2px; 
+    box-shadow: 0px 0px 2px 0px #a6a6a6; 
+    opacity: 0.9; 
+    position: absolute;
+    font-size: 10px;
+}
+
+.graticule {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+  }
+.equator {
+    stroke: #ccc;
+    stroke-width: 1px;
+  }
+  
+
+ /* css for edge bundling chart */
+ .land {
+  fill: #dddddd;
+}
+
+.border {
+  fill: none;
+  stroke-width: 1px;
+}
+
+.interior {
+  stroke: white;
+}
+
+.exterior {
+  stroke: #bbbbbb;
+}
+
+.airport {
+  fill: white;
+  opacity: 0.6;
+  stroke: #252525;
+}
+
+.flight {
+  fill: none;
+  stroke: #252525;
+  stroke-width: 1px;
+  stroke-opacity: 0.1;
+}
+
+.voronoi {
+  fill: none;
+  stroke: none;
+  stroke-width: 1px;
+}
+
+.highlight {
+  opacity: 1 !important;
+  stroke: red !important;
+  stroke-width: 2px !important;
+  stroke-opacity: 0.8 !important;
+}
+
+g#voronoi {
+  pointer-events: all;
+}
+
+/* shadow trick from bl.ocks.org */
+#tooltip {
+  font-size: 10pt;
+  font-weight: 900;
+  fill: rgb(92, 146, 227);
+  text-shadow: 1px 1px 0 #252525, 1px -1px 0 #252525, -1px 1px 0 #252525, -1px -1px 0 #252525;
+} 
+
+
+/* style for animation */
+
+#play-button {
+  position: absolute;
+  top: 140px;
+  left: 50px;
+  background: #f08080;
+  padding-right: 26px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  margin: 0;
+  padding: 0 12px;
+  width: 60px;
+  cursor: pointer;
+  height: 30px;
+}
+
+#play-button:hover {
+  background-color: #696969;
+}    
+
+.ticks {
+  font-size: 10px;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+.track-inset {
+  stroke: #dcdcdc;
+  stroke-width: 8px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  stroke: transparent;
+  cursor: crosshair;
+}
+
+.handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: 0.5;
+  stroke-width: 1.25px;
+}
+
+/* linechart */
+.y-axis line {
+	opacity:.2;
+}
+.y-axis path {
+	display:none;
+}
+
+
