@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+
+<title>Youth Dataset</title>
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-color.v2.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v2.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+
+<script src="sankey.js"></script>
+<!-- Create a div where the graph will take place -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style media="screen">
+
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  box-sizing: border-box;background: radial-gradient(1.5em 6.28571em at 1.95em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(1.5em 6.28571em at -0.45em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 1.5em 5.5em, radial-gradient(2.3em 4.57143em at 2.99em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(2.3em 4.57143em at -0.69em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 55%) 2.3em 4em, radial-gradient(3.5em 6.28571em at 4.55em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(3.5em 6.28571em at -1.05em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 3.5em 5.5em, radial-gradient(#15ffa5, #00ced1);
+
+}
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+body {
+  padding-top: 0.5em;
+
+  font: normal 1em / 1.5em BlinkMacSystemFont, -apple-system, 'Segoe UI', roboto, helvetica, arial, sans-serif;
+}
+.grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.3fr 1.7fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+  "title title"
+  "parallel parallel"
+  "histogram treemap";
+}
+
+.title {
+  grid-area: title;
+  font-size: 27;
+}
+
+.histogram {
+  grid-area: histogram;
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 5px;
+  background: white;
+  opacity: 90%;
+}
+
+.parallel {
+  grid-area: parallel;
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 5px;
+
+  background: white;
+  opacity: 90%;
+}
+
+.histogramOptions { grid-area: histogramOptions; }
+
+.parallelOptions { grid-area: parallelOptions; }
+
+.treemap {
+  grid-area: treemap;
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 5px;
+
+  background: white;
+  opacity: 90%;
+}
+
+.description {
+  grid-area: description;
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 5px;
+
+  background: white;
+  opacity: 90%;
+}
+
+li {
+  float: left;
+  margin: 0 10px;
+}
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,1);
+  z-index: 1;
+  cursor: pointer;
+  opacity: 90%;
+}
+
+#text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+.node rect {
+  cursor: pointer;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+  font-size: 9px;
+  font-weight: bolder;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+.gradient-link {
+      fill: none;
+      stroke-opacity: .5;
+    }
+
+.link:hover {
+  stroke-opacity: .5;
+}
+.selected {
+  opacity: 1 !important;
+  stroke: black;
+  stroke-width: 1px;
+}
+</style>
+
+<body>
+
+  <div class="grid-container">
+    <div class="Title"><strong>Youth Dataset</strong>
+      <button onclick="onC()">Help</button>
+    </div>
+    <div class="histogram" id="histogram">
+      <strong>  Histogram</strong>
+      <br>
+      <label >Attribute</label>
+      <div id="Hist">
+
+      </div>
+      <div hidden>
+        <label># bins</label>
+        <input type="number" min="1" max="100" step="1" value="5" id="nBin">
+      </div>
+
+    </div>
+
+    <div class="parallel" id="Parallel">
+      <strong>  Sankey graph</strong>
+      <br>
+      Click on the nodes to select a subset of the data
+    </div>
+
+    <div class="histogramOptions">
+
+    </div>
+
+    <div class="treemap" id="treeMap">
+      <strong>Scatter Plot</strong>
+      <br>
+
+      <div id="scatter_x">
+        <label >X-axis</label>
+      </div>
+      <div id="scatter_y">
+        <label >Y-axis</label>
+      </div>
+    </div>
+    <div hidden class="description">
+      <strong>Description</strong>
+      <br>
+      <div style="font-size: 11px">
+        Genres Explorer is a dashboard to explore the <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks" >Spotify dataset</a> on kaggle website. Each row represents a sound track and the columns are attributes calculated for each track.
+        The dataset is organized by genre and the visualization is meant to explore each genre and the relationship between its attribute.
+        <br>
+        The plots is showing only the gneres selected below. However, You can add more genres to explore.
+        <br>
+        Useful links:
+        <a href="https://raw.githubusercontent.com/shokrof/ECS272-Winter2021/main/Homework2/meshokrof/genres">List of all genres</a>, <button onclick="onC()">Column Description</button>
+
+      </div>
+
+      <br>
+      List of Displayed Genre:
+      <div id="genres"></div>
+      <div>
+        Add new Genre:
+        <input type="string"  value="" id="newGenre">
+
+        <button id="genresAdd" style="padding: 0; border: none; background: none;"> <i style="color:green" class="fa fa-plus"></i></button>
+      </div>
+    </div>
+    <div id= "overlayColumn" class="overlay" onclick="offC()">
+      <div id="text">
+        <strong>For more description about the columns <a href="https://github.com/shokrof/ECS272-Winter2021/blob/main/Homework3/meshokrof/columns.csv">follow this link</a></strong>
+        <br>
+        Click on the nodes on the sankey graph to choose a subset of the data to be visualized.
+        <br>
+        The heatmap the darker is more.
+      </div>
+    </div>
+
+
+
+
+    <script>
+    function onC() {
+      document.getElementById("overlayColumn").style.display = "block";
+    }
+
+    function offC() {
+      document.getElementById("overlayColumn").style.display = "none";
+    }
+    </script>
+
+  </body>
+
+  <script src="main.js"></script>

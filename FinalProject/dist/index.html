@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Climate Change</title>
+
+
+    <!-- <link rel="stylesheet" type="text/css" href="bootstrap.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.20.0/tsparticles.min.js"></script>
+    <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+    <!--
+    <style>
+        @import url("../src/css/bootstrap.min.css");
+        @import url("../src/css/style.css");
+    </style>
+-->
+</head>
+
+<body>
+    <!-- -->
+
+    <div id="tsparticles"></div>
+    <!-- https://github.com/matteobruni/tsparticles -->
+    <!--
+    <div class="github">
+        <a class="btn btn-link" href="https://github.com/matteobruni/tsparticles" title="Find more info on GitHub">
+            <img class="img-fluid" id="gh-mark"
+                src="https://cdn.matteobruni.it/images/particles/GitHub-Mark-120px-plus.png" alt="">
+            <span id="gh-project">Made with tsParticles</span>
+        </a>
+        <div style="text-align: center">
+            <a class="github-button" href="https://github.com/matteobruni/tsparticles" data-icon="octicon-star"
+                data-show-count="true" aria-label="Star matteobruni/tsparticles on GitHub">Star</a>
+            <a class="github-button" href="https://github.com/matteobruni/tsparticles/fork"
+                data-icon="octicon-repo-forked" data-show-count="true"
+                aria-label="Fork matteobruni/tsparticles on GitHub">Fork</a>
+        </div>
+    </div>
+-->
+    <!-- <div id="tsparticles"></div> -->
+    <!-- <div class="flame">;
+    <span></span>
+    <span></span>
+    <span></span>
+</div> -->
+    <div class="container" style="width:100%">
+        <div id='graphic'>
+            <div id='sections' style="width: 650px;">
+
+                <section class="step">
+
+                </section>
+                <section class="step" >
+                    <span>
+                        <div class="title"  >DO YOU KNOW?</div>
+                    </span>
+                </section>
+                <section class="step">
+                    <div class="title">GROWTH OF CO2 EMISSION</div>
+                    <span class="innerText">
+                        Ever since the beginning of industrial revolution. The CO2 emission has increased drastically.
+                        We can see how the levels of CO2 in the atmosphere has gone up since 1850.
+                    </span>
+                </section>
+                <div id="barSep"></div>
+                <section class="step" id="barChart">
+                    <div class="title">CO2 AND TEMPERATURE TRACKER</div>
+                    <span class="innerText">
+                       The barchart on the right tracks the growth of CO2 and temperature with each passing year <br><br>
+
+                    </span>
+                </section>
+
+
+                <section class="step" id="barSection">
+                    <div class="title">TOP EMITTERS</div>
+                    <span class="innerText">
+                        If we examine the top CO2 emitters for 2017. We can see that China tops the list followed by
+                        United States and EU.
+                    </span>
+                </section>
+                <section class="step" id="pieChart">
+                    <div class="title">COLLECTIVE CONTRIBUTION</div>
+                    <span class="innerText">
+                        On closely examining the percentage contribution of China, US and EU, we came to know that their
+                        collective contribution to the CO2 emission is
+                        more than 50%. And this followed by emerging giants like India and Russia while others
+                        contribution is 36%.
+                    </span>
+                </section>
+
+
+
+                <section class="step">
+                    <div class="title">INTERACTIVE MAP</div>
+                    <span class="innerText">
+                        Find more stories from the data.
+                        <br>
+                        <label> Period </label>
+                        <select id="map_period">
+                            <option selected=true value="1850-1900">1850-1900 </option>
+                            <option value="1900-1950">1900-1950 </option>
+                            <option value="1950-2013">1950-2013 </option>
+                        </select>
+                        <br>
+                        <label> Display </label>
+                        <select id="map_display">
+                            <option selected=true value="temperature">Temperature </option>
+                            <option value="co2"> CO2 </option>
+                        </select>
+
+                    </span>
+                </section>
+                <section class="step">
+                    <div class="title">SOLUTION</div>
+                    <span class="innerText">
+                        - The developed countries should start reducing their CO2 emissions and the rest of the world will follow <br><br>
+                        - Low carbon technology should be cheap and available, since this will reduce the developing countries' dependence on fossil fuels <br><br>
+                        - Climate change is a global problem and no country alone can fix it <br><br>
+                        - So who's responsible is not a simple question as it seems, it is a daft question <br><br>
+                    </span>
+                </section>
+            </div>
+            <div id='vis'  class="visual">
+              <select class ="animals" id="countriesToDisplay">
+                <option value = 'USA' selected> USA</option>
+                <option value = 'NorthEurope' > North Europe</option>
+                <option value = 'WestEurope'>West Europe</option>
+                <option value = 'SouthEurope'> South Europe</option>
+                <option value = 'NorthEurope'> North Europe</option>
+                <option value = 'MiddleEast'> Middle East</option>
+                <option value = 'Africa'> Africa</option>
+                <option value = 'Asia'> Asia</option>
+                <option value = 'SouthAmerica'> South America</option>
+                <option value = 'Australia'> Australia</option>
+              </select>
+                <div id="img" style = "margin-left: auto;margin-right: auto;width: 50%;"></div>
+		<div id='vis' class="visual">
+                <div id="img"></div>
+            </div>
+
+            <div id="extra-space">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <!-- <script src="./bundle.js"></script> -->
+
+
+    <script src="scroller.js"></script>
+    <script src="sections.js"></script>
+    <script src="dataProcess.js"></script>
+    <scrip src="test.js"></scrip>
+
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+</body>
+
+</html>
