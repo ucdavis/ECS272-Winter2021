@@ -1,0 +1,28 @@
+donut-container {
+    font-family: "Roboto", sans-serif;
+    color: #333333;
+}
+
+/* styling for the donut slices*/
+path {
+    shape-rendering: geometricPrecision;
+}
+
+.donut-title {
+    font-size: 80%;
+    text-align: center;
+}
+
+.tooltip-circle {
+    height: 100%;
+    border-radius: 100%;
+    text-align: center;
+    line-height: 200px;
+    font-size: 30px;
+}
+.tooltip-text {
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+}
